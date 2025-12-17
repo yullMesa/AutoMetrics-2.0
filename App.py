@@ -1,5 +1,7 @@
 import sys
 import os
+os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--disable-gpu --no-sandbox"
+os.environ["QT_OPENGL"] = "software"
 from PySide6.QtWidgets import (QApplication, QDialog, QMainWindow, QVBoxLayout, QWidget,
                                QMenuBar,QStatusBar,QStackedWidget,QSizePolicy,QTableWidget,
                                QTableWidgetItem,QLayout,QFrame)
