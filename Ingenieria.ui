@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1735</width>
+    <height>1041</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Ingenieria</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QStackedWidget" name="stackedWidget">
+    <property name="geometry">
+     <rect>
+      <x>-1</x>
+      <y>-1</y>
+      <width>1741</width>
+      <height>981</height>
+     </rect>
+    </property>
+    <widget class="QWidget" name="page"/>
+    <widget class="QWidget" name="page_2"/>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1735</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuDashboard">
+    <property name="title">
+     <string>Dashboard</string>
+    </property>
+    <addaction name="actionGraf_ca"/>
+   </widget>
+   <widget class="QMenu" name="menuGesti_n_De_Requisito">
+    <property name="title">
+     <string>Gestión De Requisito</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuDise_o_Y_Modelado">
+    <property name="title">
+     <string>Diseño Y Modelado</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuLista_De_Materiales">
+    <property name="title">
+     <string>Lista De Materiales</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuControl_De_Cambios">
+    <property name="title">
+     <string>Control De Cambios</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuAseguramiento_De_Calidad">
+    <property name="title">
+     <string>Aseguramiento De Calidad</string>
+    </property>
+   </widget>
+   <addaction name="menuDashboard"/>
+   <addaction name="menuGesti_n_De_Requisito"/>
+   <addaction name="menuDise_o_Y_Modelado"/>
+   <addaction name="menuLista_De_Materiales"/>
+   <addaction name="menuControl_De_Cambios"/>
+   <addaction name="menuAseguramiento_De_Calidad"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionGraf_ca">
+   <property name="text">
+    <string>Grafíca</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
