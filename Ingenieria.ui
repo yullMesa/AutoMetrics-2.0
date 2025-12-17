@@ -1,47 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>Ingenieria</class>
+ <widget class="QMainWindow" name="Ingenieria">
+  <property name="windowModality">
+   <enum>Qt::WindowModality::NonModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1735</width>
-    <height>1020</height>
+    <width>1864</width>
+    <height>1225</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>16777215</width>
+    <height>16777215</height>
+   </size>
   </property>
   <property name="windowTitle">
    <string>Ingenieria</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">/* Color de fondo de la ventana */
+QMainWindow {
+    background-color: #0b0b0b;
+}
+
+/* Estilo para la barra de menús */
+QMenuBar {
+    background-color: #1a1a1a;
+    color: #ffffff; /* Letras blancas */
+    border-bottom: 1px solid #333333;
+}
+
+/* Estilo para los ítems del menú al pasar el mouse */
+QMenuBar::item:selected {
+    background-color: #00ccff; /* Color neón de tu diseño */
+    color: black;
+}
+
+/* Estilo para los menús desplegables */
+QMenu {
+    background-color: #1a1a1a;
+    color: white;
+    border: 1px solid #333333;
+}
+
+QMenu::item:selected {
+    background-color: #00ccff;
+    color: black;
+}</string>
+  </property>
+  <property name="documentMode">
+   <bool>false</bool>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QStackedWidget" name="stackedWidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>-1</x>
-      <y>-1</y>
-      <width>1741</width>
-      <height>981</height>
+      <x>-161</x>
+      <y>-11</y>
+      <width>2091</width>
+      <height>1241</height>
      </rect>
     </property>
-    <widget class="QWidget" name="page">
-     <widget class="QFrame" name="frame">
-      <property name="geometry">
-       <rect>
-        <x>-11</x>
-        <y>-1</y>
-        <width>1751</width>
-        <height>1061</height>
-       </rect>
-      </property>
-      <property name="frameShape">
-       <enum>QFrame::Shape::StyledPanel</enum>
-      </property>
-      <property name="frameShadow">
-       <enum>QFrame::Shadow::Raised</enum>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="page_2"/>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QStackedWidget" name="stackedWidget">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <widget class="QWidget" name="page">
+        <widget class="QFrame" name="frame">
+         <property name="geometry">
+          <rect>
+           <x>159</x>
+           <y>-81</y>
+           <width>2021</width>
+           <height>1371</height>
+          </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::Shape::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Shadow::Raised</enum>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_2"/>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -49,12 +122,12 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1735</width>
+     <width>1864</width>
      <height>33</height>
     </rect>
    </property>
    <property name="sizePolicy">
-    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
      <horstretch>0</horstretch>
      <verstretch>0</verstretch>
     </sizepolicy>
