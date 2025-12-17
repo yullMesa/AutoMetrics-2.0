@@ -6,20 +6,51 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1873</width>
-    <height>906</height>
+    <width>1379</width>
+    <height>945</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* Fondo general del diálogo más oscuro */
+QDialog {
+    background-color: #050505; /* Un negro profundo para que el neón resalte al máximo */
+}
+
+/* Estilo para los ToolButtons */
+QToolButton {
+    background-color: #121212; /* Fondo gris muy oscuro para cada celda */
+    color: #ffffff;
+    border: 2px solid #1a1a1a;
+    border-radius: 15px; /* Bordes redondeados */
+    padding: 10px;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* EFECTO HOVER: Azul/Morado al pasar el mouse */
+QToolButton:hover {
+    background-color: #1a1a2e; /* Un tono azul noche */
+    border: 2px solid #6a0dad; /* Borde morado neón */
+    color: #00d4ff; /* Texto azul cian */
+}
+
+/* Estilo cuando el botón es presionado */
+QToolButton:pressed {
+    background-color: #000000;
+    border: 2px solid #00d4ff;
+}</string>
   </property>
   <widget class="QWidget" name="gridLayoutWidget">
    <property name="geometry">
     <rect>
      <x>-1</x>
      <y>-1</y>
-     <width>1881</width>
-     <height>911</height>
+     <width>1381</width>
+     <height>941</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -33,7 +64,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>14</pointsize>
+        <pointsize>-1</pointsize>
         <bold>true</bold>
        </font>
       </property>
@@ -69,7 +100,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>14</pointsize>
+        <pointsize>-1</pointsize>
         <bold>true</bold>
        </font>
       </property>
@@ -105,7 +136,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>14</pointsize>
+        <pointsize>-1</pointsize>
         <bold>true</bold>
        </font>
       </property>
@@ -141,7 +172,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>14</pointsize>
+        <pointsize>-1</pointsize>
         <bold>true</bold>
        </font>
       </property>
@@ -177,7 +208,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>14</pointsize>
+        <pointsize>-1</pointsize>
         <bold>true</bold>
        </font>
       </property>
@@ -213,7 +244,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>14</pointsize>
+        <pointsize>-1</pointsize>
         <bold>true</bold>
        </font>
       </property>
@@ -249,7 +280,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>14</pointsize>
+        <pointsize>-1</pointsize>
         <bold>true</bold>
        </font>
       </property>
@@ -285,7 +316,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>14</pointsize>
+        <pointsize>-1</pointsize>
         <bold>true</bold>
        </font>
       </property>
@@ -321,7 +352,7 @@
       </property>
       <property name="font">
        <font>
-        <pointsize>14</pointsize>
+        <pointsize>-1</pointsize>
         <bold>true</bold>
        </font>
       </property>
