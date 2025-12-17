@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Dialog</class>
- <widget class="QDialog" name="Dialog">
+ <class>Rol</class>
+ <widget class="QDialog" name="Rol">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>1379</width>
-    <height>945</height>
+    <height>937</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>AutoMetrics 2.0 - Selección de Módulo</string>
   </property>
   <property name="styleSheet">
    <string notr="true">/* Fondo general del diálogo más oscuro */
@@ -43,6 +43,9 @@ QToolButton:pressed {
     background-color: #000000;
     border: 2px solid #00d4ff;
 }</string>
+  </property>
+  <property name="windowFilePath">
+   <string>AutoMetrics 2.0 - Selección de Módulo</string>
   </property>
   <widget class="QWidget" name="gridLayoutWidget">
    <property name="geometry">
