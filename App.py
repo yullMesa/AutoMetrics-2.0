@@ -1,9 +1,13 @@
 import sys
 import os
-from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QVBoxLayout, QWidget,QMenuBar,QStatusBar,QStackedWidget,QSizePolicy
+from PySide6.QtWidgets import (QApplication, QDialog, QMainWindow, QVBoxLayout, QWidget,
+                               QMenuBar,QStatusBar,QStackedWidget,QSizePolicy,QTableWidget,
+                               QTableWidgetItem,QLayout,QFrame)
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile,Qt
-
+import pandas as pd
+import plotly.express as px
+from PySide6.QtWebEngineWidgets import QWebEngineView
 import recursos_rc 
 
 class IngenieriaWindow(QMainWindow):
@@ -11,10 +15,25 @@ class IngenieriaWindow(QMainWindow):
         super().__init__()
         loader = QUiLoader()
         ui_file = QFile("Ingenieria.ui")
+        if not ui_file.open(QFile.ReadOnly): return
+        self.ui_content = loader.load(ui_file)
+        ui_file.close()
+
+        # Configuración básica
+        self.setFixedSize(1300, 1000)
+        self.setCentralWidget(self.ui_content.findChild(QWidget, "centralwidget"))
         
-        if not ui_file.open(QFile.ReadOnly):
-            print("No se pudo abrir Ingenieria.ui")
-            return
+        # Elementos de la UI
+        self.stack = self.ui_content.findChild(QStackedWidget, "stackedWidget")
+        self.menu_bar = self.ui_content.findChild(QMenuBar)
+        
+        if self.menu_bar:
+            self.setMenuBar(self.menu_bar)
+            # Conectar la acción del Menú "Dashboard"
+            # Asegúrate que en Designer la acción se llame 'actionDashboard'
+            self.action_dash = self.ui_content.findChild(object, "actionDashboard")
+            if self.action_dash:
+                self.action_dash.triggered.connect(self.cargar_dashboard)
             
         # 1. Cargamos el contenido SIN pasar 'self' para evitar el RuntimeError
         self.ui_content = loader.load(ui_file)
@@ -42,22 +61,25 @@ class IngenieriaWindow(QMainWindow):
                     color: black;
                 }
             """)
-        self.stack = self.ui_content.findChild(QStackedWidget, "stackedWidget")
 
-        if self.stack:
-            # 1. Hacer que el stackedWidget sea elástico
-            self.stack.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-            
-            # 2. Si no pusiste layout en Designer, lo ponemos por código
-            if self.centralWidget().layout() is None:
-                from PySide6.QtWidgets import QVBoxLayout
-                layout = QVBoxLayout(self.centralWidget())
-                layout.addWidget(self.stack)
-                layout.setContentsMargins(0, 0, 0, 0) # Cero bordes
+    def cargar_dashboard(self):
+        # 1. Crear la gráfica (usa 'include' para asegurar que cargue sin internet)
+        df = pd.DataFrame({'x': [1, 2, 3], 'y': [10, 20, 15]})
+        fig = px.line(df, x='x', y='y', template="plotly_dark")
+        
+        # IMPORTANTE: usa include_plotlyjs='include'
+        html_content = fig.to_html(include_plotlyjs='include', full_html=True)
 
-        # 4. PANTALLA COMPLETA
-        self.showMaximized()
-
+        # 2. Buscar el widget y cargar el contenido
+        web_widget = self.ui_content.findChild(QWebEngineView, "web_dashboard")
+        
+        if web_widget:
+            web_widget.setHtml(html_content)
+            # Forzar que el stackedWidget muestre la página correcta
+            # page_3 suele ser el índice 0 si es la primera
+            self.stack.setCurrentIndex(0) 
+            web_widget.show() # Asegurar que sea visible
+       
 
 class InicioDialog(QDialog):
     """Clase para el menú de selección (QDialog)"""

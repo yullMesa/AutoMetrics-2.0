@@ -69,16 +69,22 @@ QMenu::item:selected {
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
-   <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="maximumSize">
+    <size>
+     <width>2000</width>
+     <height>2000</height>
+    </size>
+   </property>
+   <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>-161</x>
-      <y>-11</y>
-      <width>2091</width>
-      <height>1241</height>
+      <x>-21</x>
+      <y>-91</y>
+      <width>1911</width>
+      <height>1281</height>
      </rect>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="sizePolicy">
@@ -87,31 +93,64 @@ QMenu::item:selected {
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <widget class="QWidget" name="page">
-        <widget class="QFrame" name="frame">
+       <widget class="QWidget" name="page_3">
+        <widget class="QWidget" name="horizontalLayoutWidget_2">
          <property name="geometry">
           <rect>
-           <x>159</x>
-           <y>-81</y>
-           <width>2021</width>
-           <height>1371</height>
+           <x>19</x>
+           <y>69</y>
+           <width>1871</width>
+           <height>1201</height>
           </rect>
          </property>
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::Shape::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Shadow::Raised</enum>
-         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QFrame" name="frame">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="horizontalLayoutWidget_3">
+             <property name="geometry">
+              <rect>
+               <x>-11</x>
+               <y>9</y>
+               <width>2081</width>
+               <height>1181</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <item>
+               <widget class="QWebEngineView" name="cargar_dashboard">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="url">
+                 <url>
+                  <string>about:blank</string>
+                 </url>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </widget>
-       <widget class="QWidget" name="page_2"/>
+       <widget class="QWidget" name="page_4"/>
       </widget>
      </item>
     </layout>
@@ -142,7 +181,7 @@ QMenu::item:selected {
     <property name="title">
      <string>Dashboard</string>
     </property>
-    <addaction name="actionGraf_ca"/>
+    <addaction name="actionDashboard"/>
    </widget>
    <widget class="QMenu" name="menuGesti_n_De_Requisito">
     <property name="title">
@@ -177,12 +216,19 @@ QMenu::item:selected {
    <addaction name="menuAseguramiento_De_Calidad"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="actionGraf_ca">
+  <action name="actionDashboard">
    <property name="text">
     <string>Grafíca</string>
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QWebEngineView</class>
+   <extends>QWidget</extends>
+   <header location="global">QtWebEngineWidgets/QWebEngineView</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
