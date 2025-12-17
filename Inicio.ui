@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1379</width>
-    <height>937</height>
+    <width>1370</width>
+    <height>1140</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -53,7 +53,7 @@ QToolButton:pressed {
      <x>-1</x>
      <y>-1</y>
      <width>1381</width>
-     <height>941</height>
+     <height>1208</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -94,7 +94,7 @@ QToolButton:pressed {
      </widget>
     </item>
     <item row="1" column="1">
-     <widget class="QToolButton" name="toolButton_5">
+     <widget class="QToolButton" name="toolComprar">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -130,7 +130,7 @@ QToolButton:pressed {
      </widget>
     </item>
     <item row="2" column="0">
-     <widget class="QToolButton" name="toolButton_2">
+     <widget class="QToolButton" name="toolRendimiento">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -166,7 +166,7 @@ QToolButton:pressed {
      </widget>
     </item>
     <item row="1" column="0">
-     <widget class="QToolButton" name="toolButton_3">
+     <widget class="QToolButton" name="toolGestion">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -202,7 +202,7 @@ QToolButton:pressed {
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QToolButton" name="toolButton_4">
+     <widget class="QToolButton" name="toolInnovacion">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -238,7 +238,7 @@ QToolButton:pressed {
      </widget>
     </item>
     <item row="2" column="1">
-     <widget class="QToolButton" name="toolButton_6">
+     <widget class="QToolButton" name="toolRiesgo">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -274,7 +274,7 @@ QToolButton:pressed {
      </widget>
     </item>
     <item row="2" column="2">
-     <widget class="QToolButton" name="toolButton_7">
+     <widget class="QToolButton" name="toolFlota">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -310,7 +310,7 @@ QToolButton:pressed {
      </widget>
     </item>
     <item row="1" column="2">
-     <widget class="QToolButton" name="toolButton_8">
+     <widget class="QToolButton" name="toolCapital">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -346,7 +346,7 @@ QToolButton:pressed {
      </widget>
     </item>
     <item row="0" column="2">
-     <widget class="QToolButton" name="toolButton_9">
+     <widget class="QToolButton" name="toolFinanciera">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
         <horstretch>0</horstretch>
