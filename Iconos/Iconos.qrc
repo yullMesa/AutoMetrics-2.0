@@ -1,5 +1,13 @@
 <RCC>
   <qresource prefix="Icon">
+    <file>flota.png</file>
+    <file>capital humano y servicio.png</file>
+    <file>inteligencia financiera.png</file>
+    <file>riesgo operacional.png</file>
+    <file>autometrics.png</file>
+    <file>innovacion y tecnologia.png</file>
+    <file>rendimiento de mercado y ventas.png</file>
+    <file>gestion de la cadena de valores.png</file>
     <file>Ingenieria.png</file>
   </qresource>
 </RCC>
