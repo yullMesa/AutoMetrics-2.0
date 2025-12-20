@@ -1,5 +1,6 @@
 import sys
-from PySide6.QtWidgets import QApplication, QDialog, QVBoxLayout,QMainWindow
+# Importamos los componentes necesarios directamente del módulo QtWidgets
+from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QVBoxLayout, QToolBar
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
 import recursos_rc
@@ -38,17 +39,37 @@ class InicioDialog(QDialog):
 class IngenieriaWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        
+        # 1. Cargar el archivo .ui de forma segura
         loader = QUiLoader()
         ui_file = QFile("Ingenieria.ui")
         
-        if ui_file.open(QFile.ReadOnly):
-            self.ui = loader.load(ui_file, self)
-            ui_file.close()
-            self.setCentralWidget(self.ui)
+        if not ui_file.open(QFile.ReadOnly):
+            print("Error: No se encontró Ingenieria.ui")
+            return
+            
+        # IMPORTANTE: Cargamos el contenido pasándole 'self' para que NO se borre de memoria
+        self.ui_content = loader.load(ui_file) # Cargamos el widget raíz del .ui
+        ui_file.close()
+
+        # 2. Configuración de la Ventana Principal
+        if self.ui_content:
+            # Transferimos el widget central (TabWidget, LCDs, etc.)
+            self.setCentralWidget(self.ui_content.centralWidget())
+            
+            # Transferimos el Menú que diseñaste
+            if self.ui_content.menuBar():
+                self.setMenuBar(self.ui_content.menuBar())
+                
+            # Transferimos las Barras de Herramientas
+            for toolbar in self.ui_content.findChildren(QToolBar):
+                self.addToolBar(toolbar)
+                
+            # 3. Ajustes de visualización para evitar el error de resize
             self.setWindowTitle("AutoMetrics 2.0 - Ingeniería")
-            self.resize(self.ui.size())
-        else:
-            print("Error al abrir Ingenieria.ui")
+            
+            # Usamos el tamaño del contenido para definir la ventana
+            self.resize(self.ui_content.size())
 
 
 if __name__ == "__main__":

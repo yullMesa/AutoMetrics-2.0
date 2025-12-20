@@ -125,37 +125,7 @@ QMenuBar::item:selected {
              </property>
              <layout class="QGridLayout" name="gridLayout_2">
               <item row="1" column="1">
-               <widget class="QFrame" name="frame_13">
-                <property name="frameShape">
-                 <enum>QFrame::Shape::StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Shadow::Raised</enum>
-                </property>
-               </widget>
-              </item>
-              <item row="1" column="0">
-               <widget class="QFrame" name="frame_10">
-                <property name="frameShape">
-                 <enum>QFrame::Shape::StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Shadow::Raised</enum>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QFrame" name="frame_12">
-                <property name="frameShape">
-                 <enum>QFrame::Shape::StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                 <enum>QFrame::Shadow::Raised</enum>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="0">
-               <widget class="QFrame" name="frame_11">
+               <widget class="QFrame" name="Faseguramiento">
                 <property name="frameShape">
                  <enum>QFrame::Shape::StyledPanel</enum>
                 </property>
@@ -165,7 +135,37 @@ QMenuBar::item:selected {
                </widget>
               </item>
               <item row="0" column="2">
-               <widget class="QFrame" name="frame_14">
+               <widget class="QFrame" name="Flista">
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QFrame" name="Fdiseno">
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QFrame" name="Fcontrol">
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QFrame" name="Fgestion">
                 <property name="frameShape">
                  <enum>QFrame::Shape::StyledPanel</enum>
                 </property>
@@ -175,7 +175,7 @@ QMenuBar::item:selected {
                </widget>
               </item>
               <item row="1" column="2">
-               <widget class="QFrame" name="frame_15">
+               <widget class="QFrame" name="frame_10">
                 <property name="frameShape">
                  <enum>QFrame::Shape::StyledPanel</enum>
                 </property>
@@ -3441,6 +3441,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <property name="title">
      <string>VOLVER</string>
     </property>
+    <addaction name="actionInicio"/>
    </widget>
    <addaction name="menuDashboard"/>
    <addaction name="menuGesti_n_De_Requisito"/>
@@ -3479,6 +3480,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
   <action name="actionCRUD_4">
    <property name="text">
     <string>CRUD</string>
+   </property>
+  </action>
+  <action name="actionInicio">
+   <property name="text">
+    <string>Inicio</string>
    </property>
   </action>
  </widget>
