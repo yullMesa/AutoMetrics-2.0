@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1370</width>
-    <height>1140</height>
+    <height>922</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -53,7 +53,7 @@ QToolButton:pressed {
      <x>-1</x>
      <y>-1</y>
      <width>1381</width>
-     <height>1208</height>
+     <height>921</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
