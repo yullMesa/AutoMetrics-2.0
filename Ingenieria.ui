@@ -87,7 +87,7 @@ QMenuBar::item:selected {
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="Dashboard">
         <widget class="QWidget" name="horizontalLayoutWidget_2">
@@ -1268,43 +1268,6 @@ QPushButton:pressed {
               </rect>
              </property>
              <layout class="QGridLayout" name="gridLayout_5">
-              <item row="3" column="1">
-               <widget class="QComboBox" name="comboBox_7">
-                <property name="styleSheet">
-                 <string notr="true">QComboBox {
-    background-color: #1a1e26;
-    border: 2px solid #00f2ff;       /* Borde azul neón */
-    border-radius: 5px;
-    padding: 5px 15px;
-    color: white;
-    font-size: 18px;
-    min-width: 150px;
-}
-
-/* El botón de la flecha a la derecha */
-QComboBox::drop-down {
-    border: none;
-    width: 30px;
-}
-
-QComboBox::down-arrow {
-    image: url(down_arrow_cyan.png); /* Si tienes un icono, si no, usa una flecha estándar */
-    width: 12px;
-    height: 12px;
-}
-
-/* La lista que se despliega */
-QComboBox QAbstractItemView {
-    background-color: #12151c;
-    border: 1px solid #00f2ff;
-    selection-background-color: #00f2ff;
-    selection-color: black;
-    color: white;
-    outline: none;
-}</string>
-                </property>
-               </widget>
-              </item>
               <item row="1" column="1">
                <widget class="QLineEdit" name="lineEdit_7">
                 <property name="styleSheet">
@@ -1376,43 +1339,6 @@ QLineEdit::placeholder {
               </item>
               <item row="0" column="1">
                <widget class="QComboBox" name="comboBox_8">
-                <property name="styleSheet">
-                 <string notr="true">QComboBox {
-    background-color: #1a1e26;
-    border: 2px solid #00f2ff;       /* Borde azul neón */
-    border-radius: 5px;
-    padding: 5px 15px;
-    color: white;
-    font-size: 18px;
-    min-width: 150px;
-}
-
-/* El botón de la flecha a la derecha */
-QComboBox::drop-down {
-    border: none;
-    width: 30px;
-}
-
-QComboBox::down-arrow {
-    image: url(down_arrow_cyan.png); /* Si tienes un icono, si no, usa una flecha estándar */
-    width: 12px;
-    height: 12px;
-}
-
-/* La lista que se despliega */
-QComboBox QAbstractItemView {
-    background-color: #12151c;
-    border: 1px solid #00f2ff;
-    selection-background-color: #00f2ff;
-    selection-color: black;
-    color: white;
-    outline: none;
-}</string>
-                </property>
-               </widget>
-              </item>
-              <item row="2" column="1">
-               <widget class="QComboBox" name="comboBox_9">
                 <property name="styleSheet">
                  <string notr="true">QComboBox {
     background-color: #1a1e26;
@@ -1521,40 +1447,78 @@ QComboBox QAbstractItemView {
                 </property>
                </widget>
               </item>
-              <item row="4" column="1">
-               <widget class="QComboBox" name="comboBox_10">
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="lineEdit_15">
                 <property name="styleSheet">
-                 <string notr="true">QComboBox {
-    background-color: #1a1e26;
+                 <string notr="true">QLineEdit {
+    background-color: #1a1e26;      /* Fondo oscuro igual al ComboBox */
     border: 2px solid #00f2ff;       /* Borde azul neón */
-    border-radius: 5px;
-    padding: 5px 15px;
-    color: white;
-    font-size: 18px;
-    min-width: 150px;
+    border-radius: 5px;             /* Bordes redondeados */
+    color: #ffffff;                 /* Letra Blanca */
+    padding: 5px 10px;
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 14px;
 }
 
-/* El botón de la flecha a la derecha */
-QComboBox::drop-down {
-    border: none;
-    width: 30px;
+/* Cuando haces clic para escribir, el borde brilla más */
+QLineEdit:focus {
+    border: 2px solid #7df9ff;       /* Azul más claro al escribir */
+    background-color: #1f2530;
 }
 
-QComboBox::down-arrow {
-    image: url(down_arrow_cyan.png); /* Si tienes un icono, si no, usa una flecha estándar */
-    width: 12px;
-    height: 12px;
+/* Estilo para el texto de ayuda (placeholder) si decides usarlo */
+QLineEdit::placeholder {
+    color: #4a5568;}</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QLineEdit" name="lineEdit_16">
+                <property name="styleSheet">
+                 <string notr="true">QLineEdit {
+    background-color: #1a1e26;      /* Fondo oscuro igual al ComboBox */
+    border: 2px solid #00f2ff;       /* Borde azul neón */
+    border-radius: 5px;             /* Bordes redondeados */
+    color: #ffffff;                 /* Letra Blanca */
+    padding: 5px 10px;
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 14px;
 }
 
-/* La lista que se despliega */
-QComboBox QAbstractItemView {
-    background-color: #12151c;
-    border: 1px solid #00f2ff;
-    selection-background-color: #00f2ff;
-    selection-color: black;
-    color: white;
-    outline: none;
-}</string>
+/* Cuando haces clic para escribir, el borde brilla más */
+QLineEdit:focus {
+    border: 2px solid #7df9ff;       /* Azul más claro al escribir */
+    background-color: #1f2530;
+}
+
+/* Estilo para el texto de ayuda (placeholder) si decides usarlo */
+QLineEdit::placeholder {
+    color: #4a5568;}</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QLineEdit" name="lineEdit_17">
+                <property name="styleSheet">
+                 <string notr="true">QLineEdit {
+    background-color: #1a1e26;      /* Fondo oscuro igual al ComboBox */
+    border: 2px solid #00f2ff;       /* Borde azul neón */
+    border-radius: 5px;             /* Bordes redondeados */
+    color: #ffffff;                 /* Letra Blanca */
+    padding: 5px 10px;
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 14px;
+}
+
+/* Cuando haces clic para escribir, el borde brilla más */
+QLineEdit:focus {
+    border: 2px solid #7df9ff;       /* Azul más claro al escribir */
+    background-color: #1f2530;
+}
+
+/* Estilo para el texto de ayuda (placeholder) si decides usarlo */
+QLineEdit::placeholder {
+    color: #4a5568;}</string>
                 </property>
                </widget>
               </item>

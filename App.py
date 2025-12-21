@@ -8,6 +8,9 @@ from PySide6.QtCore import QFile
 from PySide6.QtGui import QAction
 from PySide6 import QtWidgets
 import sqlite3
+import pandas as pd
+from matplotlib import pyplot as plt 
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import recursos_rc
 
 class InicioDialog(QDialog):
@@ -166,6 +169,16 @@ class IngenieriaWindow(QMainWindow):
 
         self.tabla_requisitos.itemClicked.connect(self.rellenar_campos_desde_tabla)
         self.cargar_datos_tabla()
+        # ... después de cargar la UI ...
+        self.Fgestion = self.ui_content.findChild(QtWidgets.QFrame, "Fgestion")
+        
+        # IMPORTANTE: Fgestion debe tener un layout para contener el gráfico
+        if self.Fgestion.layout() is None:
+            layout = QtWidgets.QVBoxLayout(self.Fgestion)
+            self.Fgestion.setLayout(layout)
+
+        # Cargar el gráfico inicial
+        self.graficar_prioridades()
 
     def guardar_requisito(self):
         id_req = self.txt_id.text()
@@ -292,7 +305,6 @@ class IngenieriaWindow(QMainWindow):
         index = self.cbx_prioridad.findText(self.tabla_requisitos.item(fila, 3).text())
         self.cbx_prioridad.setCurrentIndex(index)
 
-    from PySide6.QtWidgets import QFileDialog, QMessageBox
 
     def abrir_conversor_exportar(self):
         # Abrimos el buscador para seleccionar el archivo CSV
@@ -337,6 +349,49 @@ class IngenieriaWindow(QMainWindow):
         
         # Cerramos ingeniería SOLO después de mostrar inicio
         self.close()
+
+    def graficar_prioridades(self):
+        try:
+            # 1. Obtener los datos para el análisis
+            conn = sqlite3.connect("ingenieria.db")
+            df = pd.read_sql_query("SELECT prioridad FROM requisitos", conn)
+            conn.close()
+
+            if df.empty:
+                print("No hay datos para graficar.")
+                return
+
+            # 2. Procesar los datos (Conteo de cada prioridad)
+            conteo = df['prioridad'].value_counts()
+            etiquetas = conteo.index
+            valores = conteo.values
+
+            # 3. Crear la figura de Matplotlib con estética Dark
+            fig, ax = plt.subplots(figsize=(5, 4), dpi=100)
+            fig.patch.set_facecolor('#1e1e1e') # Fondo oscuro como tu App
+            ax.set_facecolor('#1e1e1e')
+            
+            # Colores cian y variantes para tu diseño
+            colores = ['#00e5ff', '#00b8d4', '#0091ea', '#01579b']
+            
+            # Crear gráfico de pastel (Pie Chart)
+            wedges, texts, autotexts = ax.pie(
+                valores, labels=etiquetas, autopct='%1.1f%%', 
+                startangle=90, colors=colores, textprops={'color':"w"}
+            )
+            ax.set_title("Distribución de Prioridades", color='#00e5ff', fontsize=12, fontweight='bold')
+
+            # 4. Insertar el gráfico en el frame Fgestion
+            # Limpiamos el frame por si ya hay un gráfico anterior
+            for i in reversed(range(self.Fgestion.layout().count())): 
+                self.Fgestion.layout().itemAt(i).widget().setParent(None)
+
+            canvas = FigureCanvas(fig)
+            self.Fgestion.layout().addWidget(canvas)
+            canvas.draw()
+
+        except Exception as e:
+            print(f"Error al generar gráfico: {e}")
     
 
 
