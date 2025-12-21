@@ -1,24 +1,23 @@
 import sqlite3
 
-def crear_base_datos():
-    # Se crea el archivo si no existe
-    conexion = sqlite3.connect("ingenieria.db")
-    cursor = conexion.cursor()
+def crear_base_datos(self):
+    # Conectamos a la base de datos (se creará el archivo si no existe)
+    conn = sqlite3.connect("ingenieria.db")
+    cursor = conn.cursor()
     
-    # Creamos la tabla para el Aseguramiento de Calidad
-    cursor.execute('''
-        CREATE TABLE IF NOT EXISTS inspecciones (
-            id_prueba INTEGER PRIMARY KEY,
-            persona TEXT NOT NULL,
-            criterio TEXT NOT NULL,
-            descripcion TEXT,
-            fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    # Creamos la tabla con las columnas exactas de tu diseño
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS requisitos (
+            id TEXT PRIMARY KEY,
+            nombre TEXT NOT NULL,
+            peticion TEXT,
+            prioridad TEXT
         )
-    ''')
+    """)
     
-    conexion.commit()
-    conexion.close()
-    print("Base de datos 'ingenieria' creada exitosamente.")
+    conn.commit()
+    conn.close()
+    print("Base de datos verificada y lista.")
 
 if __name__ == "__main__":
     crear_base_datos()

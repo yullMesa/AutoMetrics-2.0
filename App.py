@@ -6,6 +6,7 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
 from PySide6.QtGui import QAction
 from PySide6 import QtWidgets
+import sqlite3
 import recursos_rc
 
 class InicioDialog(QDialog):
@@ -135,6 +136,57 @@ class IngenieriaWindow(QMainWindow):
         if btn_volver:
             # Aquí podrías cerrar esta ventana y abrir InicioDialog
             btn_volver.triggered.connect(self.regresar_al_inicio)
+
+        # ... (código de carga de UI anterior)
+        
+        # Referencias a los campos del formulario
+        self.txt_id = self.ui_content.findChild(QtWidgets.QLineEdit, "lineEdit") # El ID
+        self.txt_nombre = self.ui_content.findChild(QtWidgets.QLineEdit, "lineEdit_2") 
+        self.txt_peticion = self.ui_content.findChild(QtWidgets.QLineEdit, "lineEdit_5")
+        self.cbx_prioridad = self.ui_content.findChild(QtWidgets.QComboBox, "comboBox")
+        self.tabla_requisitos = self.ui_content.findChild(QtWidgets.QTableWidget, "tableWidget")
+        
+        # Configurar opciones del ComboBox según tu guía
+        self.cbx_prioridad.clear()
+        self.cbx_prioridad.addItems(["Crítica", "Alta", "Media", "Baja"])
+        
+        # Conectar botón "Nuevo Requisito"
+        self.btn_guardar = self.ui_content.findChild(QtWidgets.QPushButton, "pushButton_4")
+        self.btn_guardar.clicked.connect(self.guardar_requisito)
+
+    def guardar_requisito(self):
+        id_req = self.txt_id.text()
+        nombre = self.txt_nombre.text()
+        peticion = self.txt_peticion.text()
+        prioridad = self.cbx_prioridad.currentText()
+
+        # Validación de campo obligatorio
+        if not id_req or not nombre:
+            print("Error: El ID y el Nombre son obligatorios.")
+            return
+
+        # Guardar en SQLite
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO requisitos (id, nombre, peticion, prioridad) 
+                VALUES (?, ?, ?, ?)""", (id_req, nombre, peticion, prioridad))
+            conn.commit()
+            conn.close()
+            print("Requisito guardado con éxito.")
+            #self.limpiar_campos()
+            # Limpiar los campos después de guardar
+            self.txt_id.clear()
+            self.txt_nombre.clear()
+            self.txt_peticion.clear()
+            # Aquí deberías llamar a una función para refrescar la QTableWidget
+
+        except sqlite3.IntegrityError:
+            print("Error: El ID ya existe.")
+        
+
+
 
 
     def regresar_al_inicio(self):

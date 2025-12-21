@@ -87,7 +87,7 @@ QMenuBar::item:selected {
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="Dashboard">
         <widget class="QWidget" name="horizontalLayoutWidget_2">
@@ -421,10 +421,10 @@ QPushButton:pressed {
 }</string>
                 </property>
                 <property name="text">
-                 <string>Actualizar</string>
+                 <string>Exportar</string>
                 </property>
                 <property name="icon">
-                 <iconset theme="emblem-synchronized"/>
+                 <iconset theme="document-send"/>
                 </property>
                </widget>
               </item>
