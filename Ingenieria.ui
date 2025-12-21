@@ -3417,19 +3417,19 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <property name="title">
      <string>Diseño Y Modelado</string>
     </property>
-    <addaction name="actionCRUD"/>
+    <addaction name="actionCRUD2"/>
    </widget>
    <widget class="QMenu" name="menuLista_De_Materiales">
     <property name="title">
      <string>Lista De Materiales</string>
     </property>
-    <addaction name="actionCRUD_2"/>
+    <addaction name="actionCRUD_5"/>
    </widget>
    <widget class="QMenu" name="menuControl_De_Cambios">
     <property name="title">
      <string>Control De Cambios</string>
     </property>
-    <addaction name="actionCRUD_3"/>
+    <addaction name="actionCRUD_C"/>
    </widget>
    <widget class="QMenu" name="menuAseguramiento_De_Calidad">
     <property name="title">
@@ -3462,17 +3462,17 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <string>CRUD</string>
    </property>
   </action>
-  <action name="actionCRUD">
+  <action name="actionCRUD2">
    <property name="text">
     <string>CRUD</string>
    </property>
   </action>
-  <action name="actionCRUD_2">
+  <action name="actionCRUD_5">
    <property name="text">
     <string>CRUD</string>
    </property>
   </action>
-  <action name="actionCRUD_3">
+  <action name="actionCRUD_C">
    <property name="text">
     <string>CRUD</string>
    </property>
