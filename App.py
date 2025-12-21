@@ -28,30 +28,25 @@ class InicioDialog(QDialog):
         self.resize(self.ui.size())
         # CONEXIÓN: Al presionar el botón OK del ButtonBox, abrimos Ingeniería
         # Suponiendo que usas el standard button box
-        if hasattr(self.ui, 'toolIngenieria'):
-                self.ui.toolIngenieria.clicked.connect(self.accept)
-        else:
-            print("No se encontró el botón 'toolIngenieria' en Inicio.ui")
-        
-        # Conectamos el botón de ingeniería de tu inicio.ui
-        self.btn_ingenieria = self.ui.findChild(QToolButton, "toolIngenieria") # Revisa el nombre en Designer
+        self.btn_ingenieria = self.ui.findChild(QToolButton, "toolIngenieria")
         if self.btn_ingenieria:
             self.btn_ingenieria.clicked.connect(self.abrir_ingenieria)
-            
+        else:
+            print("No se encontró el botón 'toolIngenieria' en Inicio.ui")
+
+       
         
     def abrir_ingenieria(self):
-        # Creamos la ventana de ingeniería
-        from App import IngenieriaWindow 
+        # Creamos la ventana y la guardamos en una variable para que no muera
         self.nueva_ventana = IngenieriaWindow()
         self.nueva_ventana.show()
         
-        # Cerramos el inicio para que no estorben
+        # IMPORTANTE: Usamos close() en lugar de accept() para no disparar el main
         self.close()
         # Cerramos el diálogo y abrimos la ventana principal
         self.accept()
 
         
-
 
 class IngenieriaWindow(QMainWindow):
     def __init__(self):
@@ -145,9 +140,6 @@ class IngenieriaWindow(QMainWindow):
     def regresar_al_inicio(self):
         print("Regresando al menú de selección...")
         
-        # Importamos la clase de tu pantalla inicial
-        from App import InicioDialog 
-        
         # Creamos la ventana de inicio
         self.ventana_inicio = InicioDialog()
         
@@ -164,10 +156,9 @@ class IngenieriaWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     
-    dialogo = InicioDialog()
+    # Solo iniciamos la primera ventana
+    inicio = InicioDialog()
+    inicio.show()
     
-    # Si el ToolButton llama a self.accept(), exec() devolverá True
-    if dialogo.exec():
-        main_window = IngenieriaWindow()
-        main_window.show()
-        sys.exit(app.exec())
+    # El loop de la app (exec()) mantiene todo vivo mientras haya ventanas abiertas
+    sys.exit(app.exec())
