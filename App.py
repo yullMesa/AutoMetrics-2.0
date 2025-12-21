@@ -1,7 +1,8 @@
 import sys
 # Importamos los componentes necesarios directamente del módulo QtWidgets
 from PySide6.QtWidgets import (QApplication, QDialog, QMainWindow, QVBoxLayout, 
-                               QToolBar,QTableWidget,QTabWidget,QStackedWidget,QPushButton,QToolButton)
+                               QToolBar,QTableWidget,QTabWidget,QStackedWidget,QPushButton,
+                               QToolButton,QFileDialog,QMessageBox)
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
 from PySide6.QtGui import QAction
@@ -153,6 +154,18 @@ class IngenieriaWindow(QMainWindow):
         # Conectar botón "Nuevo Requisito"
         self.btn_guardar = self.ui_content.findChild(QtWidgets.QPushButton, "pushButton_4")
         self.btn_guardar.clicked.connect(self.guardar_requisito)
+        # Referencias a botones
+        self.btn_editar = self.ui_content.findChild(QtWidgets.QPushButton, "pushButton_3")
+        self.btn_eliminar = self.ui_content.findChild(QtWidgets.QPushButton, "btn_eliminar")
+        self.btn_exportar = self.ui_content.findChild(QtWidgets.QPushButton, "pushButton")
+
+        # Conexiones
+        if self.btn_editar: self.btn_editar.clicked.connect(self.editar_requisito)
+        if self.btn_eliminar: self.btn_eliminar.clicked.connect(self.eliminar_requisito)
+        if self.btn_exportar: self.btn_exportar.clicked.connect(self.ejecutar_exportacion)
+
+        self.tabla_requisitos.itemClicked.connect(self.rellenar_campos_desde_tabla)
+        self.cargar_datos_tabla()
 
     def guardar_requisito(self):
         id_req = self.txt_id.text()
@@ -184,10 +197,132 @@ class IngenieriaWindow(QMainWindow):
 
         except sqlite3.IntegrityError:
             print("Error: El ID ya existe.")
+
+    def editar_requisito(self):
+        id_val = self.txt_id.text()
+        nom_val = self.txt_nombre.text()
+        pet_val = self.txt_peticion.text()
+        pri_val = self.cbx_prioridad.currentText()
+
+        if not id_val:
+            print("Error: Debes ingresar el ID para editar.")
+            return
+
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            # Actualizamos basándonos en el ID obligatorio
+            cursor.execute("""
+                UPDATE requisitos 
+                SET nombre = ?, peticion = ?, prioridad = ? 
+                WHERE id = ?""", (nom_val, pet_val, pri_val, id_val))
+            
+            if cursor.rowcount > 0:
+                conn.commit()
+                print(f"ID {id_val} actualizado correctamente.")
+                self.cargar_datos_tabla() # Función para refrescar la QTableWidget
+            else:
+                print("Error: El ID no existe en la base de datos.")
+            conn.close()
+        except Exception as e:
+            print(f"Error al editar: {e}")   
+
+    def eliminar_requisito(self):
+        id_val = self.txt_id.text()
+
+        if not id_val:
+            print("Error: Ingresa el ID del requisito a eliminar.")
+            return
+
+        # Mensaje de confirmación
+        confirmar = QtWidgets.QMessageBox.question(self, "Eliminar", 
+                    f"¿Seguro que deseas eliminar el ID {id_val}?",
+                    QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+
+        if confirmar == QtWidgets.QMessageBox.Yes:
+            try:
+                conn = sqlite3.connect("ingenieria.db")
+                cursor = conn.cursor()
+                cursor.execute("DELETE FROM requisitos WHERE id = ?", (id_val,))
+                conn.commit()
+                conn.close()
+                self.cargar_datos_tabla()
+                self.limpiar_campos()
+                print("Registro eliminado.")
+            except Exception as e:
+                print(f"Error al eliminar: {e}")
+    
+
+
+    def cargar_datos_tabla(self):
+        try:
+            # 1. Conexión a la base de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # 2. Seleccionamos los datos según las columnas de tu diseño
+            cursor.execute("SELECT id, nombre, peticion, prioridad FROM requisitos")
+            datos = cursor.fetchall()
+            conn.close()
+
+            # 3. Limpiar la tabla antes de cargar para no duplicar datos
+            self.tabla_requisitos.setRowCount(0)
+            
+            # 4. Llenar la tabla fila por fila
+            for fila_idx, fila_datos in enumerate(datos):
+                self.tabla_requisitos.insertRow(fila_idx)
+                for col_idx, valor in enumerate(fila_datos):
+                    # Creamos el ítem para la celda
+                    item = QtWidgets.QTableWidgetItem(str(valor))
+                    # Insertamos el dato en la posición correspondiente
+                    self.tabla_requisitos.setItem(fila_idx, col_idx, item)
+                    
+            print("Datos cargados en la tabla con éxito.")
+            
+        except Exception as e:
+            print(f"Error al cargar los datos en el QTableWidget: {e}")
+    
+
+    def rellenar_campos_desde_tabla(self):
+        fila = self.tabla_requisitos.currentRow()
+        self.txt_id.setText(self.tabla_requisitos.item(fila, 0).text())
+        self.txt_nombre.setText(self.tabla_requisitos.item(fila, 1).text())
+        self.txt_peticion.setText(self.tabla_requisitos.item(fila, 2).text())
+        # Para el combo, buscamos el índice del texto
+        index = self.cbx_prioridad.findText(self.tabla_requisitos.item(fila, 3).text())
+        self.cbx_prioridad.setCurrentIndex(index)
+
+    from PySide6.QtWidgets import QFileDialog, QMessageBox
+
+    def abrir_conversor_exportar(self):
+        # Abrimos el buscador para seleccionar el archivo CSV
+        archivo_csv, _ = QFileDialog.getOpenFileName(
+            self, 
+            "Seleccionar archivo CSV para convertir", 
+            "", 
+            "Archivos CSV (*.csv)"
+        )
         
+        if archivo_csv:
+            try:
+                # Importamos la lógica de tu otro archivo
+                from Exportar import transformar_a_excel
+                
+                # Ejecutamos la transformación
+                ruta_final = transformar_a_excel(archivo_csv)
+                
+                QMessageBox.information(self, "Éxito", f"Archivo convertido y guardado en:\n{ruta_final}")
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"No se pudo convertir el archivo: {e}")
 
-
-
+        # La función que llama al script externo:
+    def ejecutar_exportacion(self):
+        try:
+            import Exportar
+            # Llama a la función que abre el explorador de archivos
+            Exportar.seleccionar_y_convertir() 
+        except Exception as e:
+            print(f"Error al llamar al modulo de exportación: {e}")
 
     def regresar_al_inicio(self):
         print("Regresando al menú de selección...")
