@@ -1,12 +1,16 @@
 import sys
+import os
 # Importamos los componentes necesarios directamente del módulo QtWidgets
 from PySide6.QtWidgets import (QApplication, QDialog, QMainWindow, QVBoxLayout, 
                                QToolBar,QTableWidget,QTabWidget,QStackedWidget,QPushButton,
                                QToolButton,QFileDialog,QMessageBox)
+
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
 from PySide6.QtGui import QAction
 from PySide6 import QtWidgets
+from PySide6 import QtCore
+from PySide6 import QtGui
 import sqlite3
 import pandas as pd
 from matplotlib import pyplot as plt 
@@ -179,6 +183,10 @@ class IngenieriaWindow(QMainWindow):
 
         # Cargar el gráfico inicial
         self.graficar_prioridades()
+        self.consultar_disenos()
+        # Busca el widget por su nombre de objeto en el Designer
+        self.TablaWire = self.findChild(QtWidgets.QTableWidget, "TablaWire")
+        self.TablaWire.itemClicked.connect(self.seleccionar_diseno)
 
     def guardar_requisito(self):
         id_req = self.txt_id.text()
@@ -392,7 +400,114 @@ class IngenieriaWindow(QMainWindow):
 
         except Exception as e:
             print(f"Error al generar gráfico: {e}")
-    
+
+    def guardar_diseno(self):
+        # 1. Recoger datos de los lineEdit específicos de Diseño
+        # Ajusta los nombres 'lineEdit_X' según tu Object Inspector
+        tabla_val = self.ui.lineEdit_TABLA.text() 
+        id_val = self.ui.lineEdit_ID_DISENO.text()
+        componente_val = self.ui.lineEdit_COMPONENTE.text()
+        estado_val = self.ui.lineEdit_ESTADO.text()
+        version_val = self.ui.lineEdit_VERSION.text()
+
+        # Validación básica de campos obligatorios
+        if not id_val or not componente_val:
+            QtWidgets.QMessageBox.warning(self, "Error", "El ID y Componente son obligatorios.")
+            return
+
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # 2. Insertar en la tabla 'diseno'
+            query = """INSERT INTO diseno (id, tabla, componente, estado, version) 
+                    VALUES (?, ?, ?, ?, ?)"""
+            cursor.execute(query, (id_val, tabla_val, componente_val, estado_val, version_val))
+            
+            conn.commit()
+            conn.close()
+            
+            # 3. Actualizar la vista y limpiar
+            self.consultar_disenos() 
+            self.limpiar_campos_diseno()
+            QtWidgets.QMessageBox.information(self, "Éxito", "Diseño guardado correctamente.")
+            
+        except sqlite3.IntegrityError:
+            QtWidgets.QMessageBox.critical(self, "Error", "El ID ya existe en la base de datos.")
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self, "Error", f"Error crítico: {e}")
+
+    def consultar_disenos(self):
+        try:
+            # Usamos el nombre exacto que aparece en tu Object Inspector
+            # Si usas un cargador de UI (ui_content o self.ui), agrégalo antes:
+            # tabla = self.ui_content.findChild(QtWidgets.QTableWidget, "TablaWire")
+            
+            # PRUEBA ESTA LÍNEA (la más segura para tu error):
+            tabla = self.findChild(QtWidgets.QTableWidget, "TablaWire") 
+            
+            if tabla is None:
+                print("ERROR: El sistema aún no reconoce 'TablaWire'. ¿Recompilaste el .ui?")
+                return
+
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT tabla, id, componente, estado, version FROM diseno")
+            datos = cursor.fetchall()
+            conn.close()
+
+            tabla.setRowCount(0)
+            for row_number, row_data in enumerate(datos):
+                tabla.insertRow(row_number)
+                for column_number, data in enumerate(row_data):
+                    item = QtWidgets.QTableWidgetItem(str(data))
+                    item.setTextAlignment(QtCore.Qt.AlignCenter)
+                    tabla.setItem(row_number, column_number, item)
+            
+            print("ÉXITO: Datos cargados en TablaWire.")
+
+        except Exception as e:
+            print(f"Error fatal: {e}")
+
+
+    def seleccionar_diseno(self):
+        # 1. Localizar la tabla y el frame_4
+        tabla = self.findChild(QtWidgets.QTableWidget, "TablaWire")
+        frame_destino = self.findChild(QtWidgets.QFrame, "frame_4")
+        fila = tabla.currentRow()
+        
+        if fila != -1:
+            # Extraer el nombre del componente (Columna 2)
+            c_val = tabla.item(fila, 2).text()
+            
+            # --- LÓGICA DE IMAGEN EN FRAME ---
+            # 2. Verificar si ya existe un label de imagen dentro del frame
+            # Si no existe, lo creamos dinámicamente
+            self.label_imagen = frame_destino.findChild(QtWidgets.QLabel, "label_dinamico")
+            if not self.label_imagen:
+                self.label_imagen = QtWidgets.QLabel(frame_destino)
+                self.label_imagen.setObjectName("label_dinamico")
+                # Hacemos que el label use todo el espacio del frame
+                self.label_imagen.setGeometry(0, 0, frame_destino.width(), frame_destino.height())
+                self.label_imagen.setAlignment(QtCore.Qt.AlignCenter)
+
+            # 3. Cargar la imagen desde la carpeta WireFrame
+            ruta_foto = os.path.join("WireFrame", f"{c_val}.png")
+            
+            if os.path.exists(ruta_foto):
+                pixmap = QtGui.QPixmap(ruta_foto)
+                # Escalamos la imagen para que quepa en el frame sin deformarse
+                self.label_imagen.setPixmap(pixmap.scaled(
+                    frame_destino.size(), 
+                    QtCore.Qt.KeepAspectRatio, 
+                    QtCore.Qt.SmoothTransformation
+                ))
+                self.label_imagen.show()
+            else:
+                self.label_imagen.setText(f"No se encontró:\n{c_val}.png")
+                print(f"Error: El archivo {ruta_foto} no existe.")
+
+            
 
 
 if __name__ == "__main__":
