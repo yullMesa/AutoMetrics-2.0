@@ -24,6 +24,7 @@ class InicioDialog(QDialog):
         loader = QUiLoader()
         ui_file = QFile("Inicio.ui")
         
+        
         if not ui_file.open(QFile.ReadOnly):
             print(f"Error al abrir Inicio.ui")
             return
@@ -105,6 +106,9 @@ class IngenieriaWindow(QMainWindow):
             self.conectar_botones()
         else:
             print("ERROR: No se encontró 'stackedWidget' en el árbol de objetos.")
+        
+        self.conectar_botonesD()
+        self.actualizar_grafica_estados()
 
     def conectar_botones(self):
         # Conexiones basadas en tu Object Inspector
@@ -358,6 +362,7 @@ class IngenieriaWindow(QMainWindow):
         # Cerramos ingeniería SOLO después de mostrar inicio
         self.close()
 
+
     def graficar_prioridades(self):
         try:
             # 1. Obtener los datos para el análisis
@@ -400,6 +405,7 @@ class IngenieriaWindow(QMainWindow):
 
         except Exception as e:
             print(f"Error al generar gráfico: {e}")
+
 
     def guardar_diseno(self):
         # 1. Recoger datos de los lineEdit específicos de Diseño
@@ -471,42 +477,275 @@ class IngenieriaWindow(QMainWindow):
 
 
     def seleccionar_diseno(self):
-        # 1. Localizar la tabla y el frame_4
+
         tabla = self.findChild(QtWidgets.QTableWidget, "TablaWire")
-        frame_destino = self.findChild(QtWidgets.QFrame, "frame_4")
+        label_foto = self.findChild(QtWidgets.QLabel, "image") # El nuevo nombre
         fila = tabla.currentRow()
         
         if fila != -1:
-            # Extraer el nombre del componente (Columna 2)
+            # 1. Extraer datos (Columnas: 0=Tabla, 1=ID, 2=Componente...)
+            t_val = tabla.item(fila, 0).text()
+            i_val = tabla.item(fila, 1).text()
             c_val = tabla.item(fila, 2).text()
-            
-            # --- LÓGICA DE IMAGEN EN FRAME ---
-            # 2. Verificar si ya existe un label de imagen dentro del frame
-            # Si no existe, lo creamos dinámicamente
-            self.label_imagen = frame_destino.findChild(QtWidgets.QLabel, "label_dinamico")
-            if not self.label_imagen:
-                self.label_imagen = QtWidgets.QLabel(frame_destino)
-                self.label_imagen.setObjectName("label_dinamico")
-                # Hacemos que el label use todo el espacio del frame
-                self.label_imagen.setGeometry(0, 0, frame_destino.width(), frame_destino.height())
-                self.label_imagen.setAlignment(QtCore.Qt.AlignCenter)
+            e_val = tabla.item(fila, 3).text()
+            v_val = tabla.item(fila, 4).text()
 
-            # 3. Cargar la imagen desde la carpeta WireFrame
+            # 2. Rellenar los campos de texto
+            self.findChild(QtWidgets.QLineEdit, "lineEdit_TABLA").setText(t_val)
+            self.findChild(QtWidgets.QLineEdit, "lineEdit_ID_DISENO").setText(i_val)
+            self.findChild(QtWidgets.QLineEdit, "lineEdit_COMPONENTE").setText(c_val)
+            self.findChild(QtWidgets.QLineEdit, "lineEdit_ESTADO").setText(e_val)
+            self.findChild(QtWidgets.QLineEdit, "lineEdit_VERSION").setText(v_val)
+
+            # 3. Lógica de Imagen
             ruta_foto = os.path.join("WireFrame", f"{c_val}.png")
             
-            if os.path.exists(ruta_foto):
-                pixmap = QtGui.QPixmap(ruta_foto)
-                # Escalamos la imagen para que quepa en el frame sin deformarse
-                self.label_imagen.setPixmap(pixmap.scaled(
-                    frame_destino.size(), 
-                    QtCore.Qt.KeepAspectRatio, 
-                    QtCore.Qt.SmoothTransformation
-                ))
-                self.label_imagen.show()
-            else:
-                self.label_imagen.setText(f"No se encontró:\n{c_val}.png")
-                print(f"Error: El archivo {ruta_foto} no existe.")
+            if label_foto:
+                if os.path.exists(ruta_foto):
+                    pixmap = QtGui.QPixmap(ruta_foto)
+                    # Ajustar imagen al tamaño del label
+                    label_foto.setPixmap(pixmap.scaled(
+                        label_foto.size(), 
+                        QtCore.Qt.KeepAspectRatio, 
+                        QtCore.Qt.SmoothTransformation
+                    ))
+                else:
+                    label_foto.clear()
+                    label_foto.setText(f"No existe imagen para: {c_val}")
 
+    def actualizar_registro(self):
+       
+        # 1. Capturar TODOS los campos (excepto ID que solo lo usamos para buscar)
+        # Forzamos a string para evitar el error de tipo de dato que descubriste
+        id_val = str(self.findChild(QtWidgets.QLineEdit, "lineEdit_ID_DISENO").text()).strip()
+        tabla_val = str(self.findChild(QtWidgets.QLineEdit, "lineEdit_TABLA").text()).strip()
+        comp_val = str(self.findChild(QtWidgets.QLineEdit, "lineEdit_COMPONENTE").text()).strip()
+        est_val = str(self.findChild(QtWidgets.QLineEdit, "lineEdit_ESTADO").text()).strip()
+        ver_val = str(self.findChild(QtWidgets.QLineEdit, "lineEdit_VERSION").text()).strip()
+
+        if not id_val:
+            print("Error: Selecciona un registro de la tabla para obtener su ID.")
+            return
+
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # 2. SQL ampliado: Ahora actualizamos 4 columnas
+            # El ID se queda en el WHERE porque es lo que NO cambia.
+            query = """UPDATE diseno 
+                    SET tabla = ?, componente = ?, estado = ?, version = ? 
+                    WHERE id = ?"""
+            
+            # El orden de los datos debe coincidir exactamente con los '?'
+            cursor.execute(query, (tabla_val, comp_val, est_val, ver_val, id_val))
+            
+            if cursor.rowcount > 0:
+                conn.commit()
+                print(f"ÉXITO: Se actualizó el diseño {id_val}. (Componente ahora es: {comp_val})")
+            else:
+                print(f"AVISO: No se encontró el ID '{id_val}' para actualizar.")
+                
+            conn.close()
+            
+            # 3. Refrescar tabla y datos visuales
+            self.consultar_disenos()
+            
+        except Exception as e:
+            print(f"Error al actualizar: {e}")
+
+
+
+    def conectar_botonesD(self):
+        # Localizar botones por su nombre de objeto
+        btn_guardar = self.findChild(QtWidgets.QPushButton, "pushButton_7") # Nuevo Diseño
+        btn_actualizar = self.findChild(QtWidgets.QPushButton, "pushButton_6") # Actualizar/Refrescar
+        btn_eliminar = self.findChild(QtWidgets.QPushButton, "btn_eliminar_2") # Eliminar
+        btn_exportar = self.findChild(QtWidgets.QPushButton, "pushButton_2") # Exportar (ajusta el nombre si varía)
+        tabla = self.findChild(QtWidgets.QTableWidget, "TablaWire")
+        self.consultar_disenos()
+        # Conectar las funciones
+
+        if btn_guardar:
+            btn_guardar.clicked.connect(self.guardar_nuevo_wireframe)
+        if btn_eliminar:
+            btn_eliminar.clicked.connect(self.eliminar_registro)
+        if tabla:
+            tabla.itemClicked.connect(self.seleccionar_diseno)
+        if btn_actualizar:
+            btn_actualizar.clicked.connect(self.actualizar_registro)
+        # CONEXIÓN DEL BOTÓN EXPORTAR
+        if btn_exportar:
+            btn_exportar.clicked.connect(self.ejecutar_exportacion)
+
+
+
+    def eliminar_registro(self):
+        # Obtener el ID del campo de texto
+        id_val = self.findChild(QtWidgets.QLineEdit, "lineEdit_ID_DISENO").text()
+        
+        if not id_val:
+            print("Error: Selecciona un diseño de la tabla para eliminar.")
+            return
+
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            # USAR 'id' EN LUGAR DE 'id_diseno'
+            cursor.execute("DELETE FROM diseno WHERE id = ?", (id_val,))
+            conn.commit()
+            conn.close()
+            
+            self.consultar_disenos() # Refresca la tabla visual
+            print(f"ÉXITO: Registro {id_val} eliminado.")
+            
+            # Limpiar la imagen y los campos
+            self.findChild(QtWidgets.QLabel, "image").clear()
+        except Exception as e:
+            print(f"Error al eliminar: {e}")
+
+    
+    def nuevo_diseno(self):
+        # 1. Localizar y limpiar los LineEdits
+        campos = [
+            "lineEdit_TABLA", 
+            "lineEdit_ID_DISENO", 
+            "lineEdit_COMPONENTE", 
+            "lineEdit_ESTADO", 
+            "lineEdit_VERSION"
+        ]
+        
+        for nombre in campos:
+            widget = self.findChild(QtWidgets.QLineEdit, nombre)
+            if widget:
+                widget.clear() # Borra el texto actual
+
+        # 2. Limpiar la imagen del Label
+        label_foto = self.findChild(QtWidgets.QLabel, "image")
+        if label_foto:
+            label_foto.clear()
+            label_foto.setText("Esperando nuevo diseño...")
+        
+        # 3. Poner el foco en el primer campo para empezar a escribir
+        le_tabla = self.findChild(QtWidgets.QLineEdit, "lineEdit_TABLA")
+        if le_tabla:
+            le_tabla.setFocus()
+        
+        print("Formulario listo para un nuevo registro.")
+
+    
+    def guardar_nuevo_registro(self):
+        # 1. Obtener los valores de los lineEdit
+        t_val = self.findChild(QtWidgets.QLineEdit, "lineEdit_TABLA").text()
+        i_val = self.findChild(QtWidgets.QLineEdit, "lineEdit_ID_DISENO").text()
+        c_val = self.findChild(QtWidgets.QLineEdit, "lineEdit_COMPONENTE").text()
+        e_val = self.findChild(QtWidgets.QLineEdit, "lineEdit_ESTADO").text()
+        v_val = self.findChild(QtWidgets.QLineEdit, "lineEdit_VERSION").text()
+
+        if not i_val: # El ID es obligatorio
+            print("Error: El campo ID es necesario para guardar.")
+            return
+
+        try:
+            # 2. Conectar e Insertar en la DB
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Ajusta los nombres de las columnas según tu tabla 'diseno'
+            query = """INSERT INTO diseno (tabla, id_diseno, componente, estado, version) 
+                    VALUES (?, ?, ?, ?, ?)"""
+            cursor.execute(query, (t_val, i_val, c_val, e_val, v_val))
+            
+            conn.commit()
+            conn.close()
+            
+            # 3. Refrescar la tabla visual para ver el nuevo dato
+            self.consultar_disenos()
+            print(f"ÉXITO: Registro {i_val} guardado correctamente.")
+            
+        except Exception as e:
+            print(f"Error al guardar: {e}")
+
+    
+    def guardar_nuevo_wireframe(self):
+        # 1. Obtener datos de los campos de texto
+        t_val = self.findChild(QtWidgets.QLineEdit, "lineEdit_TABLA").text()
+        i_val = self.findChild(QtWidgets.QLineEdit, "lineEdit_ID_DISENO").text()
+        c_val = self.findChild(QtWidgets.QLineEdit, "lineEdit_COMPONENTE").text()
+        e_val = self.findChild(QtWidgets.QLineEdit, "lineEdit_ESTADO").text()
+        v_val = self.findChild(QtWidgets.QLineEdit, "lineEdit_VERSION").text()
+
+        if not i_val:
+            print("Error: El ID es obligatorio para guardar.")
+            return
+
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            query = "INSERT INTO diseno (tabla, id, componente, estado, version) VALUES (?, ?, ?, ?, ?)"
+            cursor.execute(query, (t_val, i_val, c_val, e_val, v_val))
+            conn.commit()
+            conn.close()
+            
+            self.consultar_disenos()
+            print("ÉXITO: Registro guardado.")
+        except sqlite3.IntegrityError:
+            # Esto captura específicamente el error de ID repetido
+            from PyQt5.QtWidgets import QMessageBox
+            QMessageBox.warning(self, "ID Duplicado", f"El ID '{i_val}' ya existe. Si quieres modificarlo, usa el botón 'Actualizar'.")
+        except Exception as e:
+            print(f"Error: {e}")
+    
+    
+    def actualizar_grafica_estados(self):
+
+        self.Fdiseno = self.findChild(QtWidgets.QFrame, "Fdiseno")
+    
+        if self.Fdiseno is None:
+            print("Error: No se encontró el QFrame llamado 'Fdiseno' en la interfaz.")
+            return
+        try:
+            # 1. Obtener datos de la base de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT estado, COUNT(*) FROM diseno GROUP BY estado")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            estados = [row[0] for row in datos]
+            cantidades = [row[1] for row in datos]
+
+            # 2. Configurar la gráfica de Matplotlib
+            fig, ax = plt.subplots(figsize=(5, 4), dpi=100)
+            fig.patch.set_facecolor('#1e1e1e') # Color de fondo oscuro para combinar
+            
+            colores = ['#005599', '#00aaff', '#00cccc', '#0088cc'] # Paleta azul
+            
+            ax.pie(cantidades, labels=estados, autopct='%1.1f%%', startangle=90, 
+                textprops={'color':"w"}, colors=colores)
+            ax.set_title("Distribución de Estados", color='cyan', fontweight='bold')
+
+            # 3. Insertar la gráfica en el QFrame 'Fdiseno'
+            # Limpiamos el layout anterior si existe
+            if self.Fdiseno.layout() is not None:
+                # Eliminar widgets antiguos para que no se encimen
+                while self.Fdiseno.layout().count():
+                    item = self.Fdiseno.layout().takeAt(0)
+                    widget = item.widget()
+                    if widget: widget.deleteLater()
+            else:
+                layout = QtWidgets.QVBoxLayout(self.Fdiseno)
+                self.Fdiseno.setLayout(layout)
+
+            canvas = FigureCanvas(fig)
+            self.Fdiseno.layout().addWidget(canvas)
+            
+        except Exception as e:
+            print(f"Error al generar gráfica: {e}")
+    
             
 
 
