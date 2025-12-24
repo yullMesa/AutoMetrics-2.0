@@ -110,9 +110,13 @@ class IngenieriaWindow(QMainWindow):
         self.conectar_botonesD()
         self.actualizar_grafica_estados()
         self.conectar_botonesM()
+        self.conectar_botones_cambios()
         # Agrégalo justo debajo de donde cargas la UI
         self.tableWidget_3 = self.findChild(QtWidgets.QTableWidget, "tableWidget_3")
         self.consultar_materiales()
+        self.conectar_aseguramiento_calidad()
+        self.graficar_estadisticas_calidad()
+        self.configurar_resumen_ingenieria()
         # En lugar de la línea 112 que falla
         # 1. Buscamos el botón del menú superior
         self.btn_materiales = self.findChild(QtWidgets.QPushButton, "pushButton_3")
@@ -1090,16 +1094,693 @@ class IngenieriaWindow(QMainWindow):
         except Exception as e:
             print(f"Error al generar gráfico de barras: {e}")
 
+
+    def consultar_cambios(self):
+        try:
+            # 1. Conexión a la base de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Seleccionamos todos los cambios, ordenados por el más reciente
+            cursor.execute("SELECT id, persona, fecha, cargo, descripcion FROM control_cambios ORDER BY id DESC")
+            datos = cursor.fetchall()
+            conn.close()
+
+            # 2. Configurar el tableWidget_4
+            self.tableWidget_4.setRowCount(0) # Limpiamos la tabla antes de cargar
+            
+            for fila_numero, fila_datos in enumerate(datos):
+                self.tableWidget_4.insertRow(fila_numero)
+                for columna_numero, data in enumerate(fila_datos):
+                    # Convertimos todo a string para evitar errores de visualización
+                    item = QtWidgets.QTableWidgetItem(str(data))
+                    
+                    # Opcional: Centrar el texto en las primeras columnas
+                    if columna_numero < 4:
+                        item.setTextAlignment(QtCore.Qt.AlignCenter)
+                    
+                    self.tableWidget_4.setItem(fila_numero, columna_numero, item)
+            
+            # Ajustar el tamaño de las columnas al contenido
+            self.tableWidget_4.resizeColumnsToContents()
+            # Hacer que la columna de descripción ocupe el espacio restante
+            self.tableWidget_4.horizontalHeader().setSectionResizeMode(4, QtWidgets.QHeaderView.Stretch)
+
+        except Exception as e:
+            print(f"Error al cargar el control de cambios: {e}")
+
+    def conectar_botones_cambios(self):
+        # 1. Vincular Entradas (Usa los nombres que pusiste en Qt Designer)
+        # 1. ¡ESTA ES LA LÍNEA QUE FALTA! Vincular la tabla
+        self.tableWidget_4 = self.findChild(QtWidgets.QTableWidget, "tableWidget_4")
+        # Conecta el clic de la tabla con la función que carga los datos
+        self.tableWidget_4.itemClicked.connect(self.seleccionar_cambio_tabla)
+        # Revisa en Qt Designer si se llaman exactamente así:
+        self.txt_persona_cambio = self.findChild(QtWidgets.QLineEdit, "lineEdit_3") # Ejemplo: verifica el nombre real
+        self.txt_cargo_cambio = self.findChild(QtWidgets.QLineEdit, "lineEdit_4")   # Ejemplo: verifica el nombre real
+        self.txt_desc_cambio = self.findChild(QtWidgets.QTextEdit, "textEdit")       # Tu captura muestra 'textEdit'
+
+        # 2. Vincular Botones
+        btn_anadir = self.findChild(QtWidgets.QPushButton, "pushButton_11") # El botón 'Añadir'
+        btn_eliminar = self.findChild(QtWidgets.QPushButton, "btn_eliminar_4") # Eliminar (Verifica el nombre en Qt)
+        btn_actualizar = self.findChild(QtWidgets.QPushButton, "pushButton_8")
+        
+        if btn_anadir:
+            try: btn_anadir.clicked.disconnect()
+            except: pass
+            btn_anadir.clicked.connect(self.guardar_nuevo_cambio)
+            print("DEBUG: Botón Añadir Cambios conectado")
+
+        # Conectar botón Eliminar
+        if btn_eliminar:
+            try: btn_eliminar.clicked.disconnect()
+            except: pass
+            btn_eliminar.clicked.connect(self.eliminar_cambio)
+
+        # Conectar botón Actualizar (Refrescar tabla)
+        if btn_actualizar:
+            try: btn_actualizar.clicked.disconnect()
+            except: pass
+            btn_actualizar.clicked.connect(self.actualizar_cambio)
+
+        # 3. Cargar datos iniciales
+        self.consultar_cambios()
+        self.graficar_control_cambios()
+
+
+
+    def guardar_nuevo_cambio(self):
+        persona = self.txt_persona_cambio.text()
+        cargo = self.txt_cargo_cambio.text()
+        descripcion = self.txt_desc_cambio.toPlainText() # .toPlainText() porque es un QTextEdit
+
+        if not persona or not descripcion:
+            print("Error: Persona y Descripción son campos obligatorios.")
+            return
+
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO control_cambios (persona, cargo, descripcion) VALUES (?, ?, ?)",
+                        (persona, cargo, descripcion))
+            conn.commit()
+            conn.close()
+            
+            print("Cambio registrado exitosamente.")
+            self.consultar_cambios() # Refresca la tabla automáticamente
+            self.limpiar_campos_cambios()
+            
+        except Exception as e:
+            print(f"Error al guardar cambio: {e}")
+
+
+    def eliminar_cambio(self):
+        fila_seleccionada = self.tableWidget_4.currentRow()
+        
+        if fila_seleccionada == -1:
+            print("Error: Por favor selecciona un cambio de la tabla para eliminar.")
+            return
+
+        # Obtener el ID del cambio (asumiendo que está en la columna 0)
+        id_cambio = self.tableWidget_4.item(fila_seleccionada, 0).text()
+
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM control_cambios WHERE id = ?", (id_cambio,))
+            conn.commit()
+            conn.close()
+            
+            print(f"ÉXITO: Cambio ID {id_cambio} eliminado.")
+            self.consultar_cambios() # Refrescar la tabla automáticamente
+        except Exception as e:
+            print(f"Error al eliminar: {e}") 
+
+    def cargar_datos_cambio_a_campos(self):
+        self.tableWidget_4.itemClicked.connect(self.cargar_datos_cambio_a_campos)   
+        fila = self.tableWidget_4.currentRow()
+        if fila != -1:
+            # Extraemos datos de la tabla (IDs de columnas según tu captura)
+            self.txt_persona_cambio.setText(self.tableWidget_4.item(fila, 1).text())
+            self.txt_cargo_cambio.setText(self.tableWidget_4.item(fila, 3).text())
+            self.txt_desc_cambio.setPlainText(self.tableWidget_4.item(fila, 4).text())
+
+
+    def cargar_datos_cambio_a_campos(self):
+        fila = self.tableWidget_4.currentRow()
+        if fila != -1:
+            # Extraemos datos de la tabla (IDs de columnas según tu captura)
+            self.txt_persona_cambio.setText(self.tableWidget_4.item(fila, 1).text())
+            self.txt_cargo_cambio.setText(self.tableWidget_4.item(fila, 3).text())
+            self.txt_desc_cambio.setPlainText(self.tableWidget_4.item(fila, 4).text())
+
+
+    def actualizar_cambio(self):
+        fila_seleccionada = self.tableWidget_4.currentRow()
+        
+        if fila_seleccionada == -1:
+            print("Error: Selecciona un registro de la tabla para actualizar.")
+            return
+
+        # 1. Obtener el ID único del registro
+        id_registro = self.tableWidget_4.item(fila_seleccionada, 0).text()
+        
+        # 2. Capturar los nuevos datos de los campos
+        nueva_persona = self.txt_persona_cambio.text()
+        nuevo_cargo = self.txt_cargo_cambio.text()
+        nueva_desc = self.txt_desc_cambio.toPlainText()
+
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # SQL para actualizar basado en el ID
+            query = """UPDATE control_cambios 
+                    SET persona = ?, cargo = ?, descripcion = ? 
+                    WHERE id = ?"""
+            
+            cursor.execute(query, (nueva_persona, nuevo_cargo, nueva_desc, id_registro))
+            conn.commit()
+            conn.close()
+            
+            print(f"ÉXITO: Registro {id_registro} actualizado correctamente.")
+            self.consultar_cambios() # Refrescar tabla visual
+            
+        except Exception as e:
+            print(f"Error al actualizar el cambio: {e}")
+
     
-    
+    def seleccionar_cambio_tabla(self):
+        # 1. Identificamos qué fila se seleccionó
+        fila = self.tableWidget_4.currentRow()
+        
+        if fila != -1:
+            # 2. Extraemos los datos según el orden de tus columnas
+            # Columna 0: ID (opcional, si quieres guardarlo en una variable oculta)
+            # Columna 1: Persona que lo realiza
+            # Columna 2: Fecha (normalmente no se edita manualmente)
+            # Columna 3: Cargo
+            # Columna 4: Descripción del cambio
+            
+            persona = self.tableWidget_4.item(fila, 1).text()
+            cargo = self.tableWidget_4.item(fila, 3).text()
+            descripcion = self.tableWidget_4.item(fila, 4).text()
+
+            # 3. "Agarramos" los datos y los ponemos en los campos de la interfaz
+            self.txt_persona_cambio.setText(persona)
+            self.txt_cargo_cambio.setText(cargo)
+            self.txt_desc_cambio.setPlainText(descripcion) # Usamos setPlainText por ser QTextEdit
+            
+            print(f"DEBUG: Datos cargados del registro ID {self.tableWidget_4.item(fila, 0).text()}")
+
+    def graficar_control_cambios(self):
+        try:
+            # 1. Conexión y extracción de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            # Agrupamos por cargo para contar la frecuencia de cambios
+            cursor.execute("SELECT cargo, COUNT(id) FROM control_cambios GROUP BY cargo")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            cargos = [row[0] if row[0] else "N/A" for row in datos]
+            frecuencias = [row[1] for row in datos]
+
+            # 2. Configuración Estética (Cyan Dashboard Style)
+            fig, ax = plt.subplots(figsize=(5, 4), tight_layout=True)
+            fig.patch.set_facecolor('#1e1e1e') # Fondo oscuro igual que tu UI
+            ax.set_facecolor('#2d2d2d')        # Fondo interno de la gráfica
+            
+            # Usamos el color Azul Cyan exacto de tu tabla de materiales
+            color_cyan = '#00d2ff'
+            
+            ax.bar(cargos, frecuencias, color=color_cyan, edgecolor='white', linewidth=0.5)
+            
+            # Configuración de textos y ejes
+            ax.set_xlabel('Cargo del Responsable', color='white', fontweight='bold', fontsize=9)
+            ax.set_ylabel('Frecuencia de Cambios', color='white', fontweight='bold', fontsize=9)
+            ax.set_title('DISTRIBUCIÓN POR CARGO', color=color_cyan, pad=15, fontweight='bold')
+            
+            # Ajuste de etiquetas para que no se corten
+            ax.tick_params(axis='x', colors='white', rotation=25, labelsize=8)
+            ax.tick_params(axis='y', colors='white', labelsize=8)
+
+            # 3. Integración en el QFrame 'Fcontrol'
+            frame_grafico = self.findChild(QtWidgets.QFrame, "Fcontrol")
+            
+            if frame_grafico:
+                if frame_grafico.layout() is None:
+                    layout = QtWidgets.QVBoxLayout(frame_grafico)
+                else:
+                    layout = frame_grafico.layout()
+                    # Limpiar gráficos anteriores para evitar superposición
+                    while layout.count():
+                        child = layout.takeAt(0)
+                        if child.widget():
+                            child.widget().deleteLater()
+
+                canvas = FigureCanvas(fig)
+                layout.addWidget(canvas)
+                canvas.draw()
+
+        except Exception as e:
+            print(f"Error al generar gráfico de control: {e}")
+
+    def guardar_inspeccion_calidad(self):
+        # 1. Capturar datos de la interfaz
+        id_prueba = self.txt_id_prueba.text() # Asumiendo este nombre para el QLineEdit
+        persona = self.txt_persona_calidad.text()
+        descripcion = self.txt_desc_calidad.toPlainText()
+        
+        # El criterio se obtiene del botón presionado (OK, RETRY, NO)
+        criterio = self.criterio_seleccionado 
+
+        if not id_prueba or not persona:
+            print("Error: ID de Prueba y Persona son campos obligatorios.")
+            return
+
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            query = """INSERT INTO aseguramiento_calidad (id_prueba, criterio, persona, descripcion) 
+                    VALUES (?, ?, ?, ?)"""
+            
+            cursor.execute(query, (id_prueba, criterio, persona, descripcion))
+            conn.commit()
+            conn.close()
+            
+            print(f"ÉXITO: Inspección {id_prueba} registrada correctamente.")
+            self.consultar_calidad() # Función para refrescar la tabla inferior
+            
+        except Exception as e:
+            print(f"Error al guardar en Aseguramiento de Calidad: {e}")
 
 
+    def consultar_calidad(self):
+        try:
+            # 1. Conexión y extracción de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Seleccionamos los campos: ID Prueba, Persona, Criterio, Descripción
+            cursor.execute("SELECT id_prueba, persona, criterio, descripcion FROM aseguramiento_calidad ORDER BY id DESC")
+            datos = cursor.fetchall()
+            conn.close()
+
+            # 2. Configurar el tableWidget_5
+            # Asegúrate de que el objectName en Qt Designer sea tableWidget_5
+            self.tableWidget_5 = self.findChild(QtWidgets.QTableWidget, "tableWidget_5")
+            
+            if self.tableWidget_5:
+                self.tableWidget_5.setRowCount(0) # Limpiar tabla antes de cargar
+                
+                for fila_idx, fila_datos in enumerate(datos):
+                    self.tableWidget_5.insertRow(fila_idx)
+                    for col_idx, valor in enumerate(fila_datos):
+                        item = QtWidgets.QTableWidgetItem(str(valor))
+                        
+                        # Centrar el texto en las primeras 3 columnas
+                        if col_idx < 3:
+                            item.setTextAlignment(QtCore.Qt.AlignCenter)
+                        
+                        # Aplicar color a la celda del CRITERIO para armonía visual
+                        if col_idx == 2: # Columna de Criterio
+                            if valor == "OK": item.setForeground(QtGui.QColor("#2ecc71")) # Verde
+                            elif valor == "RETRY": item.setForeground(QtGui.QColor("#00d2ff")) # Cyan
+                            elif valor == "NO": item.setForeground(QtGui.QColor("#e74c3c")) # Rojo
+                        
+                        self.tableWidget_5.setItem(fila_idx, col_idx, item)
+                
+                # Ajustes de diseño para que se vea profesional
+                self.tableWidget_5.resizeColumnsToContents()
+                self.tableWidget_5.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch) # Estirar descripción
+                
+        except Exception as e:
+            print(f"Error al cargar la tabla de calidad: {e}")
+
+    # Dentro de tu función principal de carga o en conectar_botones_cambios
+    def conectar_aseguramiento_calidad(self):
+        # Cargar datos iniciales en la tabla
+        self.consultar_calidad()
+        self.actualizar_indicadores_calidad()
+        self.tableWidget_5.itemClicked.connect(self.cargar_datos_calidad_a_campos)
+        self.tableWidget_5.itemClicked.connect(self.cargar_imagen_inspeccion)
+         # 1. Vincular campos de entrada
+        self.txt_id_prueba = self.findChild(QtWidgets.QLineEdit, "lineEdit_14")
+        self.txt_persona_calidad = self.findChild(QtWidgets.QLineEdit, "lineEdit_13")
+        self.txt_desc_calidad = self.findChild(QtWidgets.QTextEdit, "textEdit_2")
+        
+        # 2. El ButtonBox para los criterios (OK, RETRY, NO)
+        # En tu UI estos funcionan como botones independientes, vamos a capturar el clic:
+        self.btn_confirmar = self.findChild(QtWidgets.QPushButton, "pushButton_13") # Botón 'Confirmar'
+
+        if self.btn_confirmar:
+            try: self.btn_confirmar.clicked.disconnect()
+            except: pass
+            self.btn_confirmar.clicked.connect(self.guardar_inspeccion_calidad)
+        
+        # Vincular botones de acción (Confirmar, Actualizar, etc.)
+        btn_confirmar = self.findChild(QtWidgets.QPushButton, "pushButton_confirmar") # Ajusta el nombre real
+        if btn_confirmar:
+            btn_confirmar.clicked.connect(self.guardar_inspeccion_calidad)
+
+        # Vincular los LCD Numbers del árbol de objetos
+        self.lcd_aprobados = self.findChild(QtWidgets.QLCDNumber, "lcdNumber_2")
+        self.lcd_revision = self.findChild(QtWidgets.QLCDNumber, "lcdNumber_3")
+        self.lcd_rechazados = self.findChild(QtWidgets.QLCDNumber, "lcdNumber_4")
+
+        # 1. Buscar el buttonBox en el árbol de objetos
+        self.caja_botones = self.findChild(QtWidgets.QDialogButtonBox, "buttonBox")
+
+        if self.caja_botones:
+            # Buscamos los botones específicos por su rol o texto
+            # Nota: Asegúrate de que en Qt Designer los botones tengan estos nombres/textos
+            btn_ok = self.caja_botones.button(QtWidgets.QDialogButtonBox.Ok)
+            btn_retry = self.caja_botones.button(QtWidgets.QDialogButtonBox.Retry)
+            btn_no = self.caja_botones.button(QtWidgets.QDialogButtonBox.No)
+
+            # Conectar a tus métodos de selección
+            if btn_ok: btn_ok.clicked.connect(self.seleccionar_ok)
+            if btn_retry: btn_retry.clicked.connect(self.seleccionar_retry)
+            if btn_no: btn_no.clicked.connect(self.seleccionar_no)
+
+        # Vincular botones según sus IDs en el árbol
+        self.btn_actualizar_q = self.findChild(QtWidgets.QPushButton, "pushButton_14")
+        self.btn_eliminar_q = self.findChild(QtWidgets.QPushButton, "pushButton_10") # El botón rojo
+        self.btn_exportar_q = self.findChild(QtWidgets.QPushButton, "pushButton_12")
+
+        if self.btn_actualizar_q:
+            self.btn_actualizar_q.clicked.connect(self.actualizar_calidad)
+
+        if self.btn_eliminar_q:
+            self.btn_eliminar_q.clicked.connect(self.eliminar_calidad)
+
+        if self.btn_exportar_q:
+            self.btn_exportar_q.clicked.connect(self.ejecutar_exportacion)
+
+        
+
+    def establecer_criterio(self, valor):
+        self.criterio_actual = valor
+        print(f"Criterio seleccionado: {valor}")
 
 
+    def actualizar_indicadores_calidad(self):
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+
+            # Conteo preciso por cada estado
+            cursor.execute("SELECT (SELECT COUNT(*) FROM aseguramiento_calidad WHERE criterio='OK'), "
+                        "(SELECT COUNT(*) FROM aseguramiento_calidad WHERE criterio='RETRY'), "
+                        "(SELECT COUNT(*) FROM aseguramiento_calidad WHERE criterio='NO')")
+            
+            ok, retry, no = cursor.fetchone()
+            conn.close()
+
+            # Actualizar la visualización digital
+            if self.lcd_aprobados: self.lcd_aprobados.display(ok)
+            if self.lcd_revision: self.lcd_revision.display(retry)
+            if self.lcd_rechazados: self.lcd_rechazados.display(no)
+
+        except Exception as e:
+            print(f"Error en diagnóstico de indicadores: {e}")
+       
+
+    def guardar_inspeccion_calidad(self):
+        # Recoger los datos de los LineEdits y TextEdit
+        id_prueba = self.txt_id_prueba.text()
+        persona = self.txt_persona_calidad.text()
+        descripcion = self.txt_desc_calidad.toPlainText() # .toPlainText() para QTextEdit
+        
+        # Captura del criterio seleccionado (debes definir esta lógica al presionar OK/RETRY/NO)
+        # Por defecto usaremos una variable que guarde el último botón presionado
+        criterio = getattr(self, "criterio_actual", "PENDIENTE")
+
+        if not id_prueba or not persona:
+            print("ALERTA: El ID de Prueba y la Persona son obligatorios.")
+            return
+
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            query = """INSERT INTO aseguramiento_calidad (id_prueba, criterio, persona, descripcion) 
+                    VALUES (?, ?, ?, ?)"""
+            cursor.execute(query, (id_prueba, criterio, persona, descripcion))
+            conn.commit()
+            conn.close()
+            
+            print(f"ÉXITO: Inspección {id_prueba} registrada.")
+            self.consultar_calidad() # Refresca el tableWidget_5
+            self.limpiar_campos_calidad()
+            
+        except Exception as e:
+            print(f"Error al guardar calidad: {e}")
+
+        try:
+            # Tras el commit exitoso:
+            self.consultar_calidad()            # Refresca la tabla inferior
+            self.actualizar_indicadores_calidad() # Refresca los números LCD
+            print("Dashboard de calidad actualizado.")
+        except Exception as e:
+            print(f"Error en actualización de dashboard: {e}")
+
+    # Ejemplo de conexión de botones de estado
+    def seleccionar_ok(self):
+        self.criterio_actual = "OK"
+        print("Criterio: Aprobado")
+
+    def seleccionar_retry(self):
+        self.criterio_actual = "RETRY"
+        print("Criterio: En Revisión")
+
+    def seleccionar_no(self):
+        self.criterio_actual = "NO"
+        print("Criterio: Rechazado")
 
 
+    def actualizar_indicadores_calidad(self):
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+
+            # Consultar conteos por criterio
+            cursor.execute("SELECT COUNT(*) FROM aseguramiento_calidad WHERE criterio = 'OK'")
+            aprobados = cursor.fetchone()[0]
+
+            cursor.execute("SELECT COUNT(*) FROM aseguramiento_calidad WHERE criterio = 'RETRY'")
+            revision = cursor.fetchone()[0]
+
+            cursor.execute("SELECT COUNT(*) FROM aseguramiento_calidad WHERE criterio = 'NO'")
+            rechazados = cursor.fetchone()[0]
+
+            conn.close()
+
+            # Asignar valores a los LCD Numbers
+            self.lcd_aprobados = self.findChild(QtWidgets.QLCDNumber, "lcdNumber_2")
+            self.lcd_revision = self.findChild(QtWidgets.QLCDNumber, "lcdNumber_3")
+            self.lcd_rechazados = self.findChild(QtWidgets.QLCDNumber, "lcdNumber_4")
+
+            if self.lcd_aprobados: self.lcd_aprobados.display(aprobados)
+            if self.lcd_revision: self.lcd_revision.display(revision)
+            if self.lcd_rechazados: self.lcd_rechazados.display(rechazados)
+
+        except Exception as e:
+            print(f"Error al actualizar indicadores LCD: {e}")
+
+    def actualizar_calidad(self):
+        fila = self.tableWidget_5.currentRow()
+        if fila == -1: return
+
+        # El ID real de la DB suele estar en una columna oculta o ser el primero
+        id_prueba_ui = self.txt_id_prueba.text()
+        persona = self.txt_persona_calidad.text()
+        desc = self.txt_desc_calidad.toPlainText()
+        criterio = getattr(self, "criterio_actual", "OK")
+
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            # Actualizamos por el ID de prueba
+            cursor.execute("""UPDATE aseguramiento_calidad 
+                            SET persona=?, criterio=?, descripcion=? 
+                            WHERE id_prueba=?""", (persona, criterio, desc, id_prueba_ui))
+            conn.commit()
+            conn.close()
+            self.consultar_calidad()
+            self.actualizar_indicadores_calidad() # Refresca los LCD
+        except Exception as e:
+            print(f"Error al actualizar: {e}")
+
+    def eliminar_calidad(self):
+        fila = self.tableWidget_5.currentRow()
+        if fila == -1: return
+
+        # Obtenemos el ID de la prueba de la primera columna
+        id_prueba = self.tableWidget_5.item(fila, 0).text()
+
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM aseguramiento_calidad WHERE id_prueba=?", (id_prueba,))
+            conn.commit()
+            conn.close()
+            self.consultar_calidad()
+            self.actualizar_indicadores_calidad() # Los números bajan automáticamente
+        except Exception as e:
+            print(f"Error al eliminar: {e}")
+
+    def cargar_datos_calidad_a_campos(self):
+        fila = self.tableWidget_5.currentRow()
+        
+        if fila != -1:
+            # Extraemos los datos con los índices correctos
+            id_prueba = self.tableWidget_5.item(fila, 0).text()   # Columna 0 -> ID PRUEBA
+            persona = self.tableWidget_5.item(fila, 1).text()     # Columna 1 -> PERSONA
+            criterio = self.tableWidget_5.item(fila, 2).text()    # Columna 2 -> CRITERIO
+            descripcion = self.tableWidget_5.item(fila, 3).text() # Columna 3 -> DESCRIPCIÓN
+
+            # Asignamos a los LineEdits correctos según tu árbol de objetos
+            # lineEdit_13 es ID PRUEBA, lineEdit_14 es PERSONA
+            self.txt_id_prueba.setText(id_prueba)     # Ahora recibirá "PR-008" correctamente
+            self.txt_persona_calidad.setText(persona) # Ahora recibirá "Jorge Hincapié"
+            self.txt_desc_calidad.setPlainText(descripcion)
+            
+            self.criterio_actual = criterio
+            print(f"Sincronización corregida para: {id_prueba}")
+
+    def cargar_imagen_inspeccion(self):
+        fila = self.tableWidget_5.currentRow()
+        if fila == -1: return
+
+        # 1. Obtener el ID de la prueba (Columna 0)
+        id_prueba = self.tableWidget_5.item(fila, 0).text()
+        
+        # 2. Definir la ruta de la imagen (asumiendo formato .png o .jpg)
+        ruta_imagen = f"calidad/{id_prueba}.png" 
+        
+        # 3. Buscar el label_8 en el árbol de objetos
+        self.visor_imagen = self.findChild(QtWidgets.QLabel, "label_8")
+        
+        if self.visor_imagen:
+            if os.path.exists(ruta_imagen):
+                pixmap = QPixmap(ruta_imagen)
+                # Escalar imagen al tamaño del label manteniendo la proporción
+                self.visor_imagen.setPixmap(pixmap.scaled(
+                    self.visor_imagen.width(), 
+                    self.visor_imagen.height(), 
+                    QtCore.Qt.KeepAspectRatio, 
+                    QtCore.Qt.SmoothTransformation
+                ))
+            else:
+                # Si no hay imagen, mostrar un mensaje o limpiar el label
+                self.visor_imagen.setText("SIN IMAGEN DE EVIDENCIA")
+                self.visor_imagen.setStyleSheet("color: gray; font-weight: bold;")
 
 
+    def graficar_estadisticas_calidad(self):
+        try:
+            # 1. Consultar sumatorias por criterio
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            criterios = ['OK', 'RETRY', 'NO']
+            conteos = []
+            
+            for c in criterios:
+                cursor.execute("SELECT COUNT(*) FROM aseguramiento_calidad WHERE criterio = ?", (c,))
+                conteos.append(cursor.fetchone()[0])
+            conn.close()
+
+            # 2. Configuración Estética de la Gráfica
+            fig, ax = plt.subplots(figsize=(4, 3), tight_layout=True)
+            fig.patch.set_facecolor('#1e1e1e') # Fondo oscuro del dashboard
+            ax.set_facecolor('#2d2d2d')
+            
+            # Colores institucionales: Verde (OK), Cyan (RETRY), Rojo (NO)
+            colores = ['#2ecc71', '#00d2ff', '#e74c3c']
+            
+            barras = ax.bar(criterios, conteos, color=colores)
+            
+            # Etiquetas y Estilo
+            ax.set_title('ESTADO DE CALIDAD', color='white', fontweight='bold', fontsize=10)
+            ax.tick_params(axis='both', colors='white', labelsize=8)
+            
+            # Añadir el número exacto sobre cada barra para precisión técnica
+            for barra in barras:
+                height = barra.get_height()
+                ax.annotate(f'{int(height)}',
+                            xy=(barra.get_x() + barra.get_width() / 2, height),
+                            xytext=(0, 3), textcoords="offset points",
+                            ha='center', va='bottom', color='white', fontweight='bold')
+
+            # 3. Insertar en el QFrame 'Faseguramiento'
+            # Nota: Asegúrate de que el frame se llame Faseguramiento en Qt Designer
+            frame_grafico = self.findChild(QtWidgets.QFrame, "Faseguramiento")
+            
+            if frame_grafico:
+                if frame_grafico.layout() is None:
+                    layout = QtWidgets.QVBoxLayout(frame_grafico)
+                else:
+                    layout = frame_grafico.layout()
+                    # Limpiar gráfico anterior para refrescar
+                    while layout.count():
+                        child = layout.takeAt(0)
+                        if child.widget(): child.widget().deleteLater()
+
+                canvas = FigureCanvas(fig)
+                layout.addWidget(canvas)
+                canvas.draw()
+
+        except Exception as e:
+            print(f"Error al generar gráfica de aseguramiento: {e}")
+
+    def configurar_resumen_ingenieria(self):
+        try:
+            # 1. Consultar datos actuales para el KPI
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT COUNT(*) FROM aseguramiento_calidad WHERE criterio = 'OK'")
+            ok = cursor.fetchone()[0]
+            cursor.execute("SELECT COUNT(*) FROM aseguramiento_calidad")
+            total = cursor.fetchone()[0]
+            conn.close()
+
+            # Calcular porcentaje de efectividad
+            yield_rate = (ok / total * 100) if total > 0 else 0
+
+            # 2. Configurar el Frame (Asumiendo que se llama frame_resumen)
+            frame = self.findChild(QtWidgets.QFrame, "frame_10") # Ajusta al nombre real
+            
+            if frame:
+                if frame.layout() is None:
+                    layout = QtWidgets.QVBoxLayout(frame)
+                else:
+                    layout = frame.layout()
+                    while layout.count(): layout.takeAt(0).widget().deleteLater()
+
+                # Crear un Label con estilo de alta ingeniería
+                label_kpi = QtWidgets.QLabel(f"EFECTIVIDAD DE PLANTA\n{yield_rate:.1f}%")
+                label_kpi.setAlignment(QtCore.Qt.AlignCenter)
+                label_kpi.setStyleSheet("""
+                    font-size: 24px; 
+                    font-weight: bold; 
+                    color: #00d2ff; 
+                    border: 2px solid #00d2ff; 
+                    border-radius: 10px;
+                    padding: 10px;
+                    background-color: #1e1e1e;
+                """)
+                layout.addWidget(label_kpi)
+                # 3. Actualización de la Interfaz
+        except Exception as e:
+            print(f"Error en KPI: {e}")
+
+        
 
 
 if __name__ == "__main__":
