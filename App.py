@@ -3,11 +3,11 @@ import os
 # Importamos los componentes necesarios directamente del módulo QtWidgets
 from PySide6.QtWidgets import (QApplication, QDialog, QMainWindow, QVBoxLayout, 
                                QToolBar,QTableWidget,QTabWidget,QStackedWidget,QPushButton,
-                               QToolButton,QFileDialog,QMessageBox)
+                               QToolButton,QFileDialog,QMessageBox,QTreeWidgetItem)
 
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
-from PySide6.QtGui import QAction,QPixmap
+from PySide6.QtGui import QAction,QPixmap,QIcon, QColor
 from PySide6 import QtWidgets
 from PySide6 import QtCore
 from PySide6 import QtGui
@@ -43,7 +43,14 @@ class InicioDialog(QDialog):
             self.btn_ingenieria.clicked.connect(self.abrir_ingenieria)
         else:
             print("No se encontró el botón 'toolIngenieria' en Inicio.ui")
+        
+        
+        self.btn_logistica = self.ui.findChild(QToolButton, "toolGestion") # Asegúrate que el nombre en QtDesigner coincida
+        if self.btn_logistica:
+            self.btn_logistica.clicked.connect(self.abrir_logistica)
 
+        else:
+            print("No se encontró el botón 'toolGestion' en Inicio.ui")
        
         
     def abrir_ingenieria(self):
@@ -54,6 +61,15 @@ class InicioDialog(QDialog):
         # IMPORTANTE: Usamos close() en lugar de accept() para no disparar el main
         self.close()
         # Cerramos el diálogo y abrimos la ventana principal
+        self.accept()
+
+
+
+    # Nuevo método en InicioDialog
+    def abrir_logistica(self):
+        self.nueva_ventana = ModuloCadenaValor()
+        self.nueva_ventana.show()
+        self.close() # Cierra el menú de inicio
         self.accept()
 
         
@@ -1779,6 +1795,163 @@ class IngenieriaWindow(QMainWindow):
                 # 3. Actualización de la Interfaz
         except Exception as e:
             print(f"Error en KPI: {e}")
+
+
+class ModuloCadenaValor(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        
+        loader = QUiLoader()
+        ui_file = QFile("GestionDeLaCadenaDeValor.ui")
+        
+        if ui_file.open(QFile.ReadOnly):
+            # IMPORTANTE: Cargamos el UI y lo guardamos en self.ui
+            self.ui = loader.load(ui_file) 
+            ui_file.close()
+            
+            # Esto es lo que falta: poner el diseño dentro de la ventana
+            self.setCentralWidget(self.ui)
+            
+            # Ajustar el tamaño de la ventana al tamaño del diseño original
+            self.resize(self.ui.size())
+            self.setWindowTitle("Gestión de la Cadena de Valor - Logística")
+        else:
+            print("No se pudo encontrar el archivo .ui")
+
+        self.configurar_navegacion_menu()
+        self.cargar_datos_planificacion()
+        self.actualizar_treewidget_logistica()
+        self.cargar_datos_diferentes()
+
+    def configurar_navegacion_menu(self):
+        # La lógica de índices de izquierda a derecha según tu imagen de la barra:
+        # 0: Dashboard, 1: Planificación, 2: Gestión Proveedores, 
+        # 3: Logística, 4: Análisis Costos, 5: Inventario Crítico
+
+        # 1. Dashboard (Índice 0)
+        self.ui.actionGrafico.triggered.connect(lambda: self.ui.stackedWidget.setCurrentIndex(0))
+
+        # 2. Planificación de Suministros (Índice 1)
+        self.ui.actionCrud.triggered.connect(lambda: self.ui.stackedWidget.setCurrentIndex(1))
+
+        # 3. Gestión de Proveedores (Índice 2)
+        self.ui.actionCrud_2.triggered.connect(lambda: self.ui.stackedWidget.setCurrentIndex(2))
+
+        # 4. Logística y Transporte (Índice 3)
+        self.ui.actionCrud_3.triggered.connect(lambda: self.ui.stackedWidget.setCurrentIndex(3))
+
+        # 5. Análisis de Costos (Índice 4)
+        self.ui.actionCrud_4.triggered.connect(lambda: self.ui.stackedWidget.setCurrentIndex(4))
+
+        # 6. Inventario Crítico (Índice 5)
+        self.ui.actionCrud_5.triggered.connect(lambda: self.ui.stackedWidget.setCurrentIndex(5))
+
+         # BOTÓN VOLVER (actionInicio)
+        self.ui.actionInicio.triggered.connect(self.regresar_al_inicio)
+        
+
+       
+
+    def regresar_al_inicio(self):
+        print("Regresando al menú de selección...")
+        
+        # Creamos la ventana de inicio
+        self.ventana_inicio = InicioDialog()
+        
+        # Le damos un tamaño manual si sale muy pequeña
+        self.ventana_inicio.size()
+        
+        self.ventana_inicio.show()
+        
+        # Cerramos ingeniería SOLO después de mostrar inicio
+        self.close()
+
+    def cargar_datos_planificacion(self):
+        # 1. Configuración visual
+        self.ui.tableWidget.verticalHeader().setVisible(False)
+        
+        # 2. CONEXIÓN CORREGIDA: Apuntamos a la DB de Gestión, no a Ingeniería
+        # Asegúrate de que el nombre del archivo sea exacto al que ves en tu VS Code
+        conn = sqlite3.connect("GestionDelValor.db") 
+        cursor = conn.cursor()
+        
+        try:
+            # Seleccionamos los datos
+            cursor.execute("SELECT id_material, cantidad_requerida, proveedor, fecha_estimada, descripcion FROM planificacion_suministros")
+            datos = cursor.fetchall()
+            
+            # 3. Limpiar y llenar tabla
+            self.ui.tableWidget.setRowCount(0)
+            for row_number, row_data in enumerate(datos):
+                self.ui.tableWidget.insertRow(row_number)
+                for column_number, data in enumerate(row_data):
+                    item = QtWidgets.QTableWidgetItem(str(data))
+                    self.ui.tableWidget.setItem(row_number, column_number, item)
+                    
+        except sqlite3.OperationalError as e:
+            print(f"Error: La tabla no existe en GestionDelValor.db. Detalles: {e}")
+        finally:
+            conn.close()
+
+    def actualizar_treewidget_logistica(self):
+        self.ui.treeWidget.clear()
+        # Encabezados según tu diseño
+        self.ui.treeWidget.setHeaderLabels(["ID ENVÍO", "TRANSPORTISTA", "RUTA", "CARGA", "FECHA", "ESTADO"])
+
+        conn = sqlite3.connect("GestionDelValor.db")
+        cursor = conn.cursor()
+        
+        try:
+            # Traemos los datos de la tabla de logística
+            cursor.execute("SELECT * FROM logistica_transporte")
+            envios = cursor.fetchall()
+            
+            for e in envios:
+                # Creamos el PADRE (El Envío)
+                padre = QTreeWidgetItem(self.ui.treeWidget)
+                padre.setText(0, e[0]) # ID Envío
+                padre.setText(1, e[1]) # Transportista
+                padre.setText(2, e[2]) # Ruta
+                padre.setText(5, e[5]) # Estado
+
+                # Creamos un HIJO de ejemplo (El detalle de la carga)
+                # Esto es lo que hace que NO se vea igual a una tabla plana
+                detalle = QTreeWidgetItem(padre)
+                detalle.setText(0, "Detalle:")
+                detalle.setText(1, f"Peso: {e[3]}")
+                detalle.setText(2, f"Salida: {e[4]}")
+                
+        except sqlite3.OperationalError as e:
+            print(f"Error de base de datos: {e}")
+        finally:
+            conn.close()
+
+    def cargar_datos_diferentes(self):
+        self.ui.treeWidget.clear()
+        # Habilitamos que se vea la estructura de árbol
+        self.ui.treeWidget.setRootIsDecorated(True) 
+        
+        # 1. Creamos un "Envío Padre" (El Camión o Ruta)
+        envio_padre = QTreeWidgetItem(self.ui.treeWidget)
+        envio_padre.setText(0, "RUTA-NACIONAL-001")
+        envio_padre.setText(1, "Transportes Transandina")
+        envio_padre.setText(5, "EN CAMINO")
+        # Ponemos un color de fondo diferente al padre para resaltarlo
+        envio_padre.setBackground(0, QColor("#004d4d")) 
+
+        # 2. Creamos "Hijos" (Los productos dentro de esa ruta)
+        # Al pasar 'envio_padre' como argumento, se vuelve un sub-elemento
+        producto1 = QTreeWidgetItem(envio_padre)
+        producto1.setText(0, "MAT-001")
+        producto1.setText(2, "Sensores Laser")
+        producto1.setText(3, "50 unidades")
+        
+        producto2 = QTreeWidgetItem(envio_padre)
+        producto2.setText(0, "MAT-005")
+        producto2.setText(2, "Fuentes de Poder")
+        producto2.setText(3, "30 unidades")
+
+        self.ui.treeWidget.expandAll()
 
         
 
