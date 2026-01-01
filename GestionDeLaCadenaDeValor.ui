@@ -64,7 +64,7 @@ QMenu::item:selected {
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>4</number>
+        <number>5</number>
        </property>
        <widget class="QWidget" name="page">
         <widget class="QWidget" name="gridLayoutWidget">
@@ -3492,9 +3492,12 @@ QTreeWidget::branch:open:has-children:has-siblings {
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_14">
               <item>
-               <widget class="QLabel" name="label_21">
-                <property name="text">
-                 <string>TextLabel</string>
+               <widget class="QFrame" name="frame_31">
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
                 </property>
                </widget>
               </item>
@@ -3579,6 +3582,9 @@ QScrollBar::handle:vertical {
                 <property name="horizontalScrollBarPolicy">
                  <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
                 </property>
+                <attribute name="horizontalHeaderCascadingSectionResizes">
+                 <bool>false</bool>
+                </attribute>
                 <attribute name="horizontalHeaderDefaultSectionSize">
                  <number>150</number>
                 </attribute>
@@ -3590,32 +3596,32 @@ QScrollBar::handle:vertical {
                 </attribute>
                 <column>
                  <property name="text">
-                  <string>ID Envío</string>
+                  <string>CÓDIGO / SKU</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>Transportista / Vehículo</string>
+                  <string>NOMBRE DEL PRODUCTO</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>Prioridad</string>
+                  <string>STOCK ACTUAL</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>Origen / Destino</string>
+                  <string>PUNTO CRÍTICO </string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>ETA (Hora estimada de llegada)</string>
+                  <string>PROVEEDOR PRINCIPAL</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>Estado de Ruta</string>
+                  <string>ESTADO DE ALERTA</string>
                  </property>
                 </column>
                </widget>
@@ -3795,7 +3801,7 @@ QPushButton:pressed {
                <number>58</number>
               </property>
               <item row="0" column="0">
-               <widget class="QLabel" name="lbl_id_material_5">
+               <widget class="QLabel" name="lbl_sku">
                 <property name="styleSheet">
                  <string notr="true">QLabel {
     color: #00d2ff; /* Usamos el cian para que el usuario identifique rápido el campo */
@@ -3806,7 +3812,7 @@ QPushButton:pressed {
 }</string>
                 </property>
                 <property name="text">
-                 <string>ID Envio</string>
+                 <string>CÓDIGO / SKU</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -3814,7 +3820,7 @@ QPushButton:pressed {
                </widget>
               </item>
               <item row="1" column="0">
-               <widget class="QLabel" name="lbl_descripcion_6">
+               <widget class="QLabel" name="lbl_producto">
                 <property name="styleSheet">
                  <string notr="true">QLabel {
     color: #00d2ff; /* Usamos el cian para que el usuario identifique rápido el campo */
@@ -3825,7 +3831,7 @@ QPushButton:pressed {
 }</string>
                 </property>
                 <property name="text">
-                 <string>Transportista / Vehículo</string>
+                 <string>NOMBRE DEL PRODUCTO</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -3833,7 +3839,7 @@ QPushButton:pressed {
                </widget>
               </item>
               <item row="2" column="0">
-               <widget class="QLabel" name="lbl_cantidad_5">
+               <widget class="QLabel" name="lbl_stock">
                 <property name="styleSheet">
                  <string notr="true">QLabel {
     color: #00d2ff; /* Usamos el cian para que el usuario identifique rápido el campo */
@@ -3844,7 +3850,7 @@ QPushButton:pressed {
 }</string>
                 </property>
                 <property name="text">
-                 <string>Prioridad</string>
+                 <string>STOCK ACTUAL</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -3852,7 +3858,7 @@ QPushButton:pressed {
                </widget>
               </item>
               <item row="3" column="0">
-               <widget class="QLabel" name="label_22">
+               <widget class="QLabel" name="lbl_punto">
                 <property name="styleSheet">
                  <string notr="true">QLabel {
     color: #00d2ff; /* Usamos el cian para que el usuario identifique rápido el campo */
@@ -3863,7 +3869,7 @@ QPushButton:pressed {
 }</string>
                 </property>
                 <property name="text">
-                 <string>Origen / Destino</string>
+                 <string>PUNTO CRÍTICO</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -3871,7 +3877,7 @@ QPushButton:pressed {
                </widget>
               </item>
               <item row="4" column="0">
-               <widget class="QLabel" name="label_23">
+               <widget class="QLabel" name="lbl_principal">
                 <property name="styleSheet">
                  <string notr="true">QLabel {
     color: #00d2ff; /* Usamos el cian para que el usuario identifique rápido el campo */
@@ -3882,7 +3888,7 @@ QPushButton:pressed {
 }</string>
                 </property>
                 <property name="text">
-                 <string>ETA (Hora estimada de llegada)</string>
+                 <string>PROVEEDOR PRINCIPAL</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -3890,7 +3896,7 @@ QPushButton:pressed {
                </widget>
               </item>
               <item row="5" column="0">
-               <widget class="QLabel" name="label_24">
+               <widget class="QLabel" name="lbl_alerta">
                 <property name="styleSheet">
                  <string notr="true">QLabel {
     color: #00d2ff; /* Usamos el cian para que el usuario identifique rápido el campo */
@@ -3901,7 +3907,7 @@ QPushButton:pressed {
 }</string>
                 </property>
                 <property name="text">
-                 <string>Estado de Ruta</string>
+                 <string>ESTADO DE ALERTA</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -3909,7 +3915,7 @@ QPushButton:pressed {
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QLineEdit" name="txt_id_material_5">
+               <widget class="QLineEdit" name="txt_sku">
                 <property name="styleSheet">
                  <string notr="true">/* Estilo base para todos los campos de entrada */
 QLineEdit {
@@ -3947,7 +3953,7 @@ QLineEdit:disabled {
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QLineEdit" name="txt_descripcion_5">
+               <widget class="QLineEdit" name="txt_producto">
                 <property name="styleSheet">
                  <string notr="true">/* Estilo base para todos los campos de entrada */
 QLineEdit {
@@ -3985,7 +3991,7 @@ QLineEdit:disabled {
                </widget>
               </item>
               <item row="2" column="1">
-               <widget class="QLineEdit" name="txt_cantidad_5">
+               <widget class="QLineEdit" name="txt_stock">
                 <property name="styleSheet">
                  <string notr="true">/* Estilo base para todos los campos de entrada */
 QLineEdit {
@@ -4023,7 +4029,7 @@ QLineEdit:disabled {
                </widget>
               </item>
               <item row="3" column="1">
-               <widget class="QLineEdit" name="lineEdit_16">
+               <widget class="QLineEdit" name="txt_punto">
                 <property name="styleSheet">
                  <string notr="true">/* Estilo base para todos los campos de entrada */
 QLineEdit {
@@ -4061,7 +4067,7 @@ QLineEdit:disabled {
                </widget>
               </item>
               <item row="4" column="1">
-               <widget class="QLineEdit" name="lineEdit_17">
+               <widget class="QLineEdit" name="txt_principal">
                 <property name="styleSheet">
                  <string notr="true">
 /* Estilo base para todos los campos de entrada */
@@ -4100,7 +4106,7 @@ QLineEdit:disabled {
                </widget>
               </item>
               <item row="5" column="1">
-               <widget class="QLineEdit" name="lineEdit_18">
+               <widget class="QLineEdit" name="txt_estado">
                 <property name="styleSheet">
                  <string notr="true">/* Estilo base para todos los campos de entrada */
 QLineEdit {

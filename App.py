@@ -1875,6 +1875,21 @@ class ModuloCadenaValor(QMainWindow):
         self.ui.pushButton_15.clicked.connect(self.actualizar_gasto_costos)
         self.ui.pushButton_16.clicked.connect(self.abrir_ventana_exportar)
         self.graficar_dashboard_principal()
+        #inventario critico
+        self.cargar_tabla_inventario()
+        self.cargar_treewidget_inventario()
+        self.graficar_inventario_critico()
+        # Conexión del botón añadir
+        self.ui.pushButton_17.clicked.connect(self.añadir_registro_inventario)
+
+        # Conexión del clic en la tabla para subir valores
+        self.ui.tableWidget_5.itemClicked.connect(self.seleccionar_de_tabla_a_campos)
+        # Conexión del botón ELIMINAR en Inventario Crítico
+        self.ui.pushButton_18.clicked.connect(self.eliminar_registro_inventario)
+        # Conexión del botón ACTUALIZAR en Inventario Crítico
+        self.ui.pushButton_19.clicked.connect(self.actualizar_registro_inventario)
+        self.ui.pushButton_20.clicked.connect(self.abrir_ventana_exportar)
+        self.refrescar_sistema_completo()
 
         
 
@@ -3308,6 +3323,345 @@ class ModuloCadenaValor(QMainWindow):
 
         except Exception as e:
             print(f"Error en Dashboard (frame): {e}")
+
+    #  Tabla de Inventario Crítico
+
+    def cargar_tabla_inventario(self):
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            # Seleccionamos las 6 columnas según tus nuevos labels
+            cursor.execute("SELECT id_sku, nombre_producto, stock_actual, punto_reorden, proveedor_id, estado_alerta FROM inventario_critico")
+            datos = cursor.fetchall()
+            
+            self.ui.tableWidget_5.setRowCount(0)
+            # Configuración estética
+            self.ui.tableWidget_5.verticalHeader().setVisible(False)
+            self.ui.tableWidget_5.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+
+            for row_number, row_data in enumerate(datos):
+                self.ui.tableWidget_5.insertRow(row_number)
+                for column_number, data in enumerate(row_data):
+                    # Validación para evitar errores de formato 'f'
+                    item_text = str(data)
+                    item = QtWidgets.QTableWidgetItem(item_text)
+                    item.setTextAlignment(QtCore.Qt.AlignCenter)
+
+                    # Lógica de alerta visual: Si el Stock (col 2) <= Punto Crítico (col 3)
+                    try:
+                        stock = float(row_data[2])
+                        critico = float(row_data[3])
+                        if stock <= critico:
+                            item.setForeground(QtGui.QBrush(QtGui.QColor("#FF5252"))) # Rojo neón
+                    except:
+                        pass
+
+                    self.ui.tableWidget_5.setItem(row_number, column_number, item)
+            conn.close()
+        except Exception as e:
+            print(f"Error al cargar tableWidget_5: {e}")
+
+    def añadir_registro_inventario(self):
+        # Obtención de datos desde la UI
+        sku = self.ui.txt_sku.text().strip()
+        producto = self.ui.txt_producto.text().strip()
+        stock = self.ui.txt_stock.text().strip()
+        punto_critico = self.ui.txt_punto.text().strip()
+        proveedor = self.ui.txt_principal.text().strip()
+        alerta = self.ui.txt_estado.text().strip()
+
+        if not sku or not producto:
+            QtWidgets.QMessageBox.warning(self, "Campos Vacíos", "SKU y Producto son obligatorios.")
+            return
+
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            
+            # Insertar o reemplazar según el SKU
+            query = """INSERT OR REPLACE INTO inventario_critico 
+                    (id_sku, nombre_producto, stock_actual, punto_reorden, proveedor_id, estado_alerta) 
+                    VALUES (?, ?, ?, ?, ?, ?)"""
+            
+            cursor.execute(query, (sku, producto, stock, punto_critico, proveedor, alerta))
+            conn.commit()
+            conn.close()
+
+            # Refrescar toda la interfaz
+            self.cargar_tabla_inventario()
+            self.cargar_treewidget_inventario()
+            self.graficar_inventario_critico()
+            
+            # Limpiar campos después de añadir
+            self.ui.txt_sku.clear()
+            self.ui.txt_producto.clear()
+            self.ui.txt_stock.clear()
+            self.ui.txt_punto.clear()
+            self.ui.txt_principal.clear()
+            self.ui.txt_estado.clear()
+
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self, "Error SQL", f"No se pudo guardar: {e}")
+
+    def seleccionar_de_tabla_a_campos(self):
+        fila = self.ui.tableWidget_5.currentRow()
+        if fila == -1:
+            return
+
+        # Mapeo de columnas a LineEdits
+        self.ui.txt_sku.setText(self.ui.tableWidget_5.item(fila, 0).text())      # SKU
+        self.ui.txt_producto.setText(self.ui.tableWidget_5.item(fila, 1).text()) # Producto
+        self.ui.txt_stock.setText(self.ui.tableWidget_5.item(fila, 2).text())    # Stock
+        self.ui.txt_punto.setText(self.ui.tableWidget_5.item(fila, 3).text()) # Punto Crítico
+        self.ui.txt_principal.setText(self.ui.tableWidget_5.item(fila, 4).text())    # Proveedor
+        self.ui.txt_estado.setText(self.ui.tableWidget_5.item(fila, 5).text())     # Alerta
+
+    def eliminar_registro_inventario(self):
+        # Obtenemos el SKU del campo de texto correspondiente
+        sku_eliminar = self.ui.txt_sku.text().strip()
+
+        if not sku_eliminar:
+            QtWidgets.QMessageBox.warning(self, "Atención", "Por favor, seleccione un producto de la tabla para eliminar.")
+            return
+
+        # Cuadro de diálogo de confirmación
+        confirmacion = QtWidgets.QMessageBox.question(self, "Confirmar Eliminación", 
+            f"¿Está seguro de que desea eliminar el producto con SKU: {sku_eliminar}?",
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+
+        if confirmacion == QtWidgets.QMessageBox.Yes:
+            try:
+                conn = sqlite3.connect("GestionDelValor.db")
+                cursor = conn.cursor()
+                
+                # Ejecutar eliminación por SKU
+                cursor.execute("DELETE FROM inventario_critico WHERE id_sku = ?", (sku_eliminar,))
+                conn.commit()
+                conn.close()
+
+                QtWidgets.QMessageBox.information(self, "Éxito", "Producto eliminado correctamente.")
+
+                # Limpiar campos y refrescar toda la interfaz
+                self.limpiar_campos_inventario()
+                self.cargar_tabla_inventario()
+                self.cargar_treewidget_inventario()
+                self.graficar_inventario_critico()
+
+            except Exception as e:
+                QtWidgets.QMessageBox.critical(self, "Error", f"No se pudo eliminar el registro: {e}")
+
+    def limpiar_campos_inventario(self):
+        # Limpia los campos usando tus nombres de objeto actualizados
+        self.ui.txt_sku.clear()
+        self.ui.txt_producto.clear()
+        self.ui.txt_stock.clear()
+        self.ui.txt_punto.clear()
+        self.ui.txt_principal.clear()
+        self.ui.txt_estado.clear()
+
+    def actualizar_registro_inventario(self):
+        # 1. Obtención de datos desde los LineEdits
+        sku = self.ui.txt_sku.text().strip()
+        producto = self.ui.txt_producto.text().strip()
+        stock = self.ui.txt_stock.text().strip()
+        punto_critico = self.ui.txt_punto.text().strip()
+        proveedor = self.ui.txt_principal.text().strip()
+        alerta = self.ui.txt_estado.text().strip()
+
+        if not sku:
+            QtWidgets.QMessageBox.warning(self, "Atención", "No hay un SKU seleccionado para actualizar.")
+            return
+
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+
+            # 2. Sentencia SQL UPDATE basada en el id_sku
+            query = """UPDATE inventario_critico SET 
+                    nombre_producto = ?, 
+                    stock_actual = ?, 
+                    punto_reorden = ?, 
+                    proveedor_id = ?, 
+                    estado_alerta = ? 
+                    WHERE id_sku = ?"""
+            
+            cursor.execute(query, (producto, stock, punto_critico, proveedor, alerta, sku))
+            conn.commit()
+            conn.close()
+
+            QtWidgets.QMessageBox.information(self, "Éxito", f"Producto {sku} actualizado correctamente.")
+
+            # 3. Refrescar toda la interfaz
+            self.cargar_tabla_inventario()
+            self.cargar_treewidget_inventario()
+            self.graficar_inventario_critico() # Actualiza los gráficos en frame_31
+            self.limpiar_campos_inventario()
+
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self, "Error", f"No se pudo actualizar: {e}")
+
+    def cargar_treewidget_inventario(self):
+        try:
+            self.ui.treeWidget_5.clear()
+            self.ui.treeWidget_5.setHeaderLabels(["Producto / SKU", "Información de Control"])
+
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT id_sku, nombre_producto, stock_actual, proveedor_id, estado_alerta FROM inventario_critico")
+            datos = cursor.fetchall()
+            conn.close()
+
+            for d in datos:
+                # Nodo Padre: Nombre del Producto y SKU
+                padre = QtWidgets.QTreeWidgetItem(self.ui.treeWidget_5)
+                padre.setText(0, f"{d[1]}")
+                padre.setText(1, f"SKU: {d[0]}")
+
+                # Nodo Hijo 1: Stock y Proveedor
+                hijo_stock = QtWidgets.QTreeWidgetItem(padre)
+                hijo_stock.setText(0, "Stock Actual:")
+                hijo_stock.setText(1, f"{d[2]} unidades")
+
+                hijo_prov = QtWidgets.QTreeWidgetItem(padre)
+                hijo_prov.setText(0, "Proveedor:")
+                hijo_prov.setText(1, f"{d[3]}")
+
+                # Nodo Hijo 2: Estado de Alerta
+                hijo_alerta = QtWidgets.QTreeWidgetItem(padre)
+                hijo_alerta.setText(0, "Estado:")
+                hijo_alerta.setText(1, f"{d[4]}")
+                
+                # Color distintivo para alertas críticas
+                if "CRÍTICO" in str(d[4]).upper():
+                    hijo_alerta.setForeground(1, QtGui.QBrush(QtGui.QColor("#FF5252")))
+
+        except Exception as e:
+            print(f"Error en treeWidget_5: {e}")
+
+    def graficar_inventario_critico(self):
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            
+            # 1. Obtener conteo por estado de alerta
+            cursor.execute("SELECT estado_alerta, COUNT(*) FROM inventario_critico GROUP BY estado_alerta")
+            datos_pie = cursor.fetchall()
+            
+            # 2. Obtener Top 5 productos con menos stock
+            cursor.execute("SELECT nombre_producto, stock_actual FROM inventario_critico ORDER BY stock_actual ASC LIMIT 5")
+            datos_bar = cursor.fetchall()
+            conn.close()
+
+            if not datos_pie: return
+
+            # Configuración de Matplotlib Estilo Oscuro
+            plt.style.use('dark_background')
+            fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
+            fig.patch.set_facecolor('#121212')
+
+            # GRÁFICO 1: Distribución de Alertas (Pie)
+            labels_pie = [f"{fila[0]}" for fila in datos_pie]
+            sizes_pie = [fila[1] for fila in datos_pie]
+            colores = ['#FF5252', '#00E5FF', '#FFD600', '#76FF03'] # Rojo, Cian, Amarillo, Verde
+
+            ax1.pie(sizes_pie, labels=labels_pie, autopct='%1.1f%%', startangle=90, colors=colores)
+            ax1.set_title("Salud del Inventario", color='white', fontsize=10)
+
+            # GRÁFICO 2: Top Críticos (Barras)
+            nombres_bar = [fila[0][:10] for fila in datos_bar] # Nombre corto
+            stocks_bar = [fila[1] for fila in datos_bar]
+            
+            ax2.bar(nombres_bar, stocks_bar, color='#FF5252')
+            ax2.set_title("Productos con Menor Stock", color='white', fontsize=10)
+            ax2.tick_params(axis='x', rotation=30, labelsize=8)
+
+            fig.subplots_adjust(bottom=0.2, wspace=0.3)
+
+            # Renderizar en frame_31 usando la función de limpieza
+            self.actualizar_canvas_grafico(self.ui.frame_31, fig)
+
+        except Exception as e:
+            print(f"Error al graficar inventario: {e}")
+
+    def graficar_gestion_valor_frame4(self):
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            # Consolidado de costos por categoría
+            cursor.execute("SELECT categoria, SUM(monto_total) FROM analisis_costos GROUP BY categoria")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos: return
+
+            cats = [d[0] for d in datos]
+            montos = [float(d[1]) for d in datos]
+
+            plt.style.use('dark_background')
+            fig, ax = plt.subplots(figsize=(5, 4))
+            fig.patch.set_facecolor('#121212')
+            ax.set_facecolor('#121212')
+
+            # Barras de diseño limpio en cian
+            ax.bar(cats, montos, color='#00E5FF', width=0.6)
+            ax.set_title("Distribución de Gastos por Categoría", color='white', pad=15)
+            ax.tick_params(axis='x', rotation=15, labelsize=8)
+
+            # Usar tu función de limpieza para evitar sobreescritura
+            self.actualizar_canvas_grafico(self.ui.frame_4, fig)
+        except Exception as e:
+            print(f"Error en frame_4: {e}")
+
+    def graficar_resumen_general_frame6(self):
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            
+            # 1. Total Dinero en Costos
+            cursor.execute("SELECT SUM(monto_total) FROM analisis_costos")
+            total_costos = cursor.fetchone()[0] or 0
+            
+            # 2. Conteo de Productos Críticos
+            cursor.execute("SELECT COUNT(*) FROM inventario_critico WHERE stock_actual <= punto_reorden")
+            prod_criticos = cursor.fetchone()[0] or 0
+            
+            # 3. Conteo de Productos Estables
+            cursor.execute("SELECT COUNT(*) FROM inventario_critico WHERE stock_actual > punto_reorden")
+            prod_estables = cursor.fetchone()[0] or 0
+            conn.close()
+
+            plt.style.use('dark_background')
+            fig, ax = plt.subplots(figsize=(6, 4))
+            fig.patch.set_facecolor('#121212')
+            ax.set_facecolor('#121212')
+
+            # Datos para comparar peras con manzanas (Normalizados para visualización)
+            etiquetas = ['Total Costos ($)', 'Prod. Críticos', 'Prod. Estables']
+            valores = [total_costos, prod_criticos, prod_estables]
+            colores = ['#00E5FF', '#FF5252', '#76FF03'] # Cian, Rojo, Verde
+
+            ax.bar(etiquetas, valores, color=colores)
+            ax.set_title("RESUMEN EJECUTIVO GENERAL DEL PROYECTO", color='white', fontweight='bold')
+            
+            # Añadir etiquetas de valor sobre las barras para mayor claridad
+            for i, v in enumerate(valores):
+                ax.text(i, v + (v*0.01), f'{v}', color='white', ha='center', fontweight='bold')
+
+            self.actualizar_canvas_grafico(self.ui.frame_6, fig)
+        except Exception as e:
+            print(f"Error en dashboard general: {e}")
+
+    def refrescar_sistema_completo(self):
+        # Costos
+        self.cargar_tabla_costos()
+        self.graficar_gestion_valor_frame4() 
+        
+        # Inventario
+        self.cargar_tabla_inventario()
+        self.graficar_inventario_critico()
+        
+        # Global
+        self.graficar_resumen_general_frame6() # El gran resumen final
 
 
 if __name__ == "__main__":
