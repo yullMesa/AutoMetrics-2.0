@@ -13,6 +13,7 @@ from PySide6 import QtCore
 from PySide6 import QtGui
 import sqlite3
 import pandas as pd
+import numpy as np
 from matplotlib import pyplot as plt 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 import Exportar
@@ -1845,6 +1846,35 @@ class ModuloCadenaValor(QMainWindow):
         # Ejemplo de integración en el botón Actualizar (pushButton_8)
         self.graficar_calificacion_proveedores()
         self.graficar_tiempos_entrega()
+        self.cargar_datos_logistica()
+        self.cargar_treewidget_logistica()
+        self.graficar_estados_logisticaa()
+        self.graficar_rutas_estadoss()
+        self.ui.pushButton_9.clicked.connect(self.añadir_envio_logistica)
+        # Conexión del botón ELIMINAR Logística
+        self.ui.pushButton_10.clicked.connect(self.eliminar_envio_logistica)   
+        # Conectar el clic de la tabla con la función de selección
+        self.ui.tableWidget_3.itemClicked.connect(self.seleccionar_envio_logistica) 
+        # Conexión del botón ACTUALIZAR Logística
+        self.ui.pushButton_11.clicked.connect(self.actualizar_envio_logistica)
+        self.ui.pushButton_12.clicked.connect(self.abrir_ventana_exportar)
+        # Cargar datos iniciales de costos
+        self.cargar_tabla_costos()
+        self.cargar_treewidget_costos()
+        # Y no olvides llamar a tu función de gráfico que hicimos antes
+        self.graficar_analisis_costos()
+        self.graficar_rutas_estadoss()
+        self.graficar_comparativa_costos()
+        # Conexión del botón AÑADIR en Análisis de Costos
+        self.ui.pushButton_13.clicked.connect(self.añadir_gasto_costos)
+        # Al hacer clic en una celda de la tabla de costos
+        self.ui.tableWidget_4.clicked.connect(self.seleccionar_gasto_costos)
+
+        # Al hacer clic en el botón eliminar
+        self.ui.pushButton_14.clicked.connect(self.eliminar_gasto_costos)
+        self.ui.pushButton_15.clicked.connect(self.actualizar_gasto_costos)
+        self.ui.pushButton_16.clicked.connect(self.abrir_ventana_exportar)
+        self.graficar_dashboard_principal()
 
         
 
@@ -2336,6 +2366,7 @@ class ModuloCadenaValor(QMainWindow):
             except Exception as e:
                 QtWidgets.QMessageBox.critical(self, "Error de DB", f"Ocurrió un error: {str(e)}")
 
+
     def actualizar_proveedor(self):
         # 1. Obtener los datos de los campos de texto
         id_prov = self.ui.txt_id_poveedor.text().strip()
@@ -2378,6 +2409,147 @@ class ModuloCadenaValor(QMainWindow):
             QtWidgets.QMessageBox.critical(self, "Error de Actualización", f"Ocurrió un error: {str(e)}")
 
     
+    def añadir_envio_logistica(self):
+        # 1. Capturar datos de los QLineEdit según tu inspector
+        id_envio = self.ui.txt_id_material_3.text().strip()      # ID ENVIO
+        transportista = self.ui.txt_descripcion_3.text().strip() # TRANSPORTISTA / VEHÍCULO
+        prioridad = self.ui.txt_cantidad_3.text().strip()     # PRIORIDAD
+        origen_dest = self.ui.lineEdit_10.text().strip() # ORIGEN / DESTINO
+        eta = self.ui.lineEdit_11.text().strip()     # ETA
+        estado = self.ui.lineEdit_12.text().strip()     # ESTADO DE RUTA
+
+        # Validación básica
+        if not id_envio or not transportista:
+            QtWidgets.QMessageBox.warning(self, "Advertencia", "ID de Envío y Transportista son obligatorios.")
+            return
+
+        try:
+            # 2. Conexión e Inserción en la nueva tabla
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            
+            query = """INSERT INTO control_rutas 
+                    (id_envio, transportista, prioridad, origen_destino, eta_llegada, estado_ruta) 
+                    VALUES (?, ?, ?, ?, ?, ?)"""
+            
+            cursor.execute(query, (id_envio, transportista, prioridad, origen_dest, eta, estado))
+            conn.commit()
+            conn.close()
+
+            # 3. Éxito y Actualización Visual
+            QtWidgets.QMessageBox.information(self, "Éxito", f"Envío {id_envio} registrado correctamente.")
+            
+            # Limpiar campos y refrescar todo el dashboard de logística
+            self.limpiar_campos_logistica()
+            self.cargar_datos_logistica()     # Refrescar Tabla
+            self.cargar_treewidget_logistica() # Refrescar Árbol
+            self.graficar_estados_logistica()  # Actualizar frame_30
+            self.graficar_rutas_estadoss()      # Actualizar frame_5
+
+        except sqlite3.IntegrityError:
+            QtWidgets.QMessageBox.critical(self, "Error", "El ID de envío ya existe.")
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self, "Error de DB", f"No se pudo guardar: {str(e)}")
+
+
+    def limpiar_campos_logistica(self):
+        self.ui.lineEdit_10.clear()
+        self.ui.lineEdit_11.clear()
+        self.ui.lineEdit_12.clear()
+        self.ui.txt_id_material_3.clear()
+        self.ui.txt_descripcion_3.clear()
+        self.ui.txt_cantidad_3.clear()
+
+
+    def eliminar_envio_logistica(self):
+        # 1. Obtener el ID del campo de texto correcto
+        id_a_borrar = self.ui.txt_id_material_3.text().strip() # ID ENVIO
+
+        if not id_a_borrar:
+            QtWidgets.QMessageBox.warning(self, "Atención", "Selecciona un envío de la tabla para eliminar.")
+            return
+
+        # 2. Confirmación de seguridad
+        respuesta = QtWidgets.QMessageBox.question(
+            self, "Confirmar Eliminación", 
+            f"¿Estás seguro de que deseas eliminar el envío {id_a_borrar}?",
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No
+        )
+
+        if respuesta == QtWidgets.QMessageBox.Yes:
+            try:
+                conn = sqlite3.connect("GestionDelValor.db")
+                cursor = conn.cursor()
+                
+                # 3. Ejecutar eliminación en la tabla control_rutas
+                cursor.execute("DELETE FROM control_rutas WHERE id_envio = ?", (id_a_borrar,))
+                conn.commit()
+                
+                if cursor.rowcount > 0:
+                    QtWidgets.QMessageBox.information(self, "Éxito", "Envío eliminado correctamente.")
+                    
+                    # 4. Limpiar campos usando tus nombres corregidos
+                    self.ui.txt_id_material_3.clear()
+                    self.ui.txt_descripcion_3.clear()
+                    self.ui.txt_cantidad_3.clear()
+                    self.ui.lineEdit_10.clear()
+                    self.ui.lineEdit_11.clear()
+                    self.ui.lineEdit_12.clear()
+
+                    # 5. Refrescar todos los componentes visuales
+                    self.cargar_datos_logistica()
+                    self.cargar_treewidget_logistica()
+                    self.graficar_estados_logistica()
+                    self.graficar_rutas_estadoss()
+                else:
+                    QtWidgets.QMessageBox.warning(self, "Error", "No se encontró el envío en la base de datos.")
+                
+                conn.close()
+
+            except Exception as e:
+                QtWidgets.QMessageBox.critical(self, "Error de DB", f"Ocurrió un error: {str(e)}")
+
+    def actualizar_envio_logistica(self):
+        # 1. Capturar datos de los campos
+        id_envio = self.ui.txt_id_material_3.text().strip()      # ID ENVIO (Clave)
+        transportista = self.ui.txt_descripcion_3.text().strip() # TRANSPORTISTA
+        prioridad = self.ui.txt_cantidad_3.text().strip()        # PRIORIDAD
+        origen_dest = self.ui.lineEdit_10.text().strip()         # ORIGEN / DESTINO
+        eta = self.ui.lineEdit_11.text().strip()                 # ETA
+        estado = self.ui.lineEdit_12.text().strip()              # ESTADO DE RUTA
+
+        if not id_envio:
+            QtWidgets.QMessageBox.warning(self, "Atención", "No hay un ID de envío seleccionado para actualizar.")
+            return
+
+        try:
+            # 2. Ejecutar UPDATE en la tabla control_rutas
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            
+            query = """UPDATE control_rutas 
+                    SET transportista = ?, prioridad = ?, origen_destino = ?, 
+                        eta_llegada = ?, estado_ruta = ? 
+                    WHERE id_envio = ?"""
+            
+            cursor.execute(query, (transportista, prioridad, origen_dest, eta, estado, id_envio))
+            conn.commit()
+            
+            if cursor.rowcount > 0:
+                QtWidgets.QMessageBox.information(self, "Éxito", f"Envío {id_envio} actualizado correctamente.")
+                
+                # 3. Refrescar todos los elementos visuales
+                self.cargar_datos_logistica()     # Actualiza la tabla
+                self.cargar_treewidget_logistica() # Actualiza el árbol
+                self.graficar_estados_logistica()  # Actualiza el gráfico circular
+                self.graficar_rutas_estadoss()      # Actualiza el gráfico de barras
+            else:
+                QtWidgets.QMessageBox.warning(self, "Error", "No se encontró el envío para actualizar.")
+                
+            conn.close()
+
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self, "Error de Actualización", f"Ocurrió un error: {str(e)}")
 
 
     def cargar_seleccion_proveedores_a_txt(self):
@@ -2390,6 +2562,27 @@ class ModuloCadenaValor(QMainWindow):
             self.ui.txt_contacto_proveedor.setText(self.ui.tableWidget_2.item(fila, 3).text())
             self.ui.txt_tiempo_entrega.setText(self.ui.tableWidget_2.item(fila, 4).text())
             self.ui.txt_estado_proveedor.setText(self.ui.tableWidget_2.item(fila, 5).text())
+
+    def seleccionar_envio_logistica(self):
+        # 1. Obtener la fila seleccionada
+        fila_seleccionada = self.ui.tableWidget_3.currentRow()
+        
+        if fila_seleccionada != -1:
+            # 2. Extraer datos de las columnas del tableWidget_3
+            id_envio = self.ui.tableWidget_3.item(fila_seleccionada, 0).text()
+            transportista = self.ui.tableWidget_3.item(fila_seleccionada, 1).text()
+            prioridad = self.ui.tableWidget_3.item(fila_seleccionada, 2).text()
+            origen_dest = self.ui.tableWidget_3.item(fila_seleccionada, 3).text()
+            eta = self.ui.tableWidget_3.item(fila_seleccionada, 4).text()
+            estado = self.ui.tableWidget_3.item(fila_seleccionada, 5).text()
+
+            # 3. Subir los datos a los campos de texto
+            self.ui.txt_id_material_3.setText(id_envio)      # ID ENVIO
+            self.ui.txt_descripcion_3.setText(transportista) # TRANSPORTISTA
+            self.ui.txt_cantidad_3.setText(prioridad)        # PRIORIDAD
+            self.ui.lineEdit_10.setText(origen_dest)         # ORIGEN / DESTINO
+            self.ui.lineEdit_11.setText(eta)                 # ETA
+            self.ui.lineEdit_12.setText(estado)              # ESTADO DE RUTA
 
 
     def cargar_treewidget_proveedores(self):
@@ -2526,7 +2719,595 @@ class ModuloCadenaValor(QMainWindow):
         except Exception as e:
             print(f"Error en gráfico de tiempos: {e}")
 
+
+    def cargar_datos_logistica(self):
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            # Apuntamos a la nueva tabla control_rutas
+            query = "SELECT id_envio, transportista, prioridad, origen_destino, eta_llegada, estado_ruta FROM control_rutas"
+            cursor.execute(query)
+            datos = cursor.fetchall()
+            
+            self.ui.tableWidget_3.setRowCount(0)
+            self.ui.tableWidget_3.verticalHeader().setVisible(False) # Estética limpia
+            
+            for row_number, row_data in enumerate(datos):
+                self.ui.tableWidget_3.insertRow(row_number)
+                for column_number, data in enumerate(row_data):
+                    item = QtWidgets.QTableWidgetItem(str(data))
+                    item.setTextAlignment(QtCore.Qt.AlignCenter)
+                    self.ui.tableWidget_3.setItem(row_number, column_number, item)
+            
+            conn.close()
+        except Exception as e:
+            print(f"Error al cargar control de rutas: {e}")
+            
+
+    def cargar_treewidget_logistica(self):
+        self.ui.treeWidget_3.clear()
+        # Definir encabezados acorde a tu interfaz
+        self.ui.treeWidget_3.setHeaderLabels(["Envío / Evento", "Ubicación / Detalle", "Hora"])
         
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            
+            # 1. Obtener los envíos actuales (Padres)
+            cursor.execute("SELECT id_envio, transportista, estado_ruta FROM control_rutas")
+            envios = cursor.fetchall()
+
+            for env in envios:
+                parent = QtWidgets.QTreeWidgetItem(self.ui.treeWidget_3)
+                parent.setText(0, f"Envío: {env[0]}")
+                parent.setText(1, env[1]) # Transportista
+                parent.setText(2, env[2]) # Estado
+                # Estética: Color cian para los padres
+                parent.setForeground(0, QtGui.QColor('#00E5FF')) 
+
+                # 2. Obtener eventos de este envío (Hijos)
+                cursor.execute("SELECT descripcion_evento, ubicacion, hora_reporte FROM eventos_logistica WHERE id_envio = ?", (env[0],))
+                eventos = cursor.fetchall()
+
+                for ev in eventos:
+                    child = QtWidgets.QTreeWidgetItem(parent)
+                    child.setText(0, ev[0]) # Descripción
+                    child.setText(1, ev[1]) # Ubicación
+                    child.setText(2, ev[2]) # Hora
+            
+            conn.close()
+        except Exception as e:
+            print(f"Error cargando TreeWidget de Logística: {e}")
+
+
+
+    def graficar_estados_logisticaa(self):
+        try:
+            # 1. Obtener conteo de estados de la tabla control_rutas
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT estado_ruta, COUNT(*) FROM control_rutas GROUP BY estado_ruta")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            estados = [fila[0] for fila in datos]
+            cantidades = [fila[1] for fila in datos]
+
+            # 2. Configuración estética (Colores Neón sobre fondo oscuro)
+            plt.style.use('dark_background')
+            fig, ax = plt.subplots(figsize=(4, 4))
+            fig.patch.set_facecolor('#121212') 
+            
+            # Paleta de colores acorde a tu marca (Cian, Verde, Naranja, Rojo)
+            colores = ['#00E5FF', '#69F0AE', '#FFD740', '#FF5252']
+
+            wedges, texts, autotexts = ax.pie(
+                cantidades, 
+                labels=estados, 
+                autopct='%1.1f%%', 
+                startangle=140, 
+                colors=colores,
+                textprops={'color':"w", 'fontsize': 8}
+            )
+
+            ax.set_title("Distribución de Estados de Ruta", color='white', fontsize=10)
+
+            # 3. Insertar gráfico en el frame_29
+            if self.ui.frame_29.layout() is None:
+                layout = QtWidgets.QVBoxLayout(self.ui.frame_29)
+            else:
+                layout = self.ui.frame_29.layout()
+                # Limpiar contenido previo
+                while layout.count():
+                    child = layout.takeAt(0)
+                    if child.widget(): child.widget().deleteLater()
+
+            canvas = FigureCanvas(fig)
+            layout.addWidget(canvas)
+            canvas.draw()
+
+        except Exception as e:
+            print(f"Error al graficar logística: {e}")
+
+
+
+    def graficar_rutas_estadoss(self):
+        try:
+            # 1. Obtener datos de la nueva tabla control_rutas
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            query = "SELECT origen_destino, estado_ruta, COUNT(*) FROM control_rutas GROUP BY origen_destino, estado_ruta"
+            cursor.execute(query)
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            rutas = [fila[0] for fila in datos]
+            estados = [fila[1] for fila in datos]
+            conteos = [fila[2] for fila in datos]
+
+            # 2. Configuración del gráfico (Estilo Oscuro)
+            plt.style.use('dark_background')
+            fig, ax = plt.subplots(figsize=(5, 4))
+            fig.patch.set_facecolor('#121212')
+            ax.set_facecolor('#121212')
+
+            # Usamos colores contrastantes para los estados
+            ax.barh(rutas, conteos, color='#00E5FF') 
+            
+            ax.set_title("Envíos por Ruta y Estado", color='white', fontsize=10)
+            ax.set_xlabel("Cantidad de Envíos", color='white')
+            ax.tick_params(axis='both', colors='white', labelsize=8)
+
+            # 3. Insertar en el frame_5
+            if self.ui.frame_5.layout() is None:
+                layout = QtWidgets.QVBoxLayout(self.ui.frame_5)
+            else:
+                layout = self.ui.frame_5.layout()
+                while layout.count():
+                    child = layout.takeAt(0)
+                    if child.widget(): child.widget().deleteLater()
+
+            canvas = FigureCanvas(fig)
+            layout.addWidget(canvas)
+            canvas.draw()
+
+        except Exception as e:
+            print(f"Error en gráfico de rutas frame_5: {e}")
+            
+
+    def cargar_tabla_costos(self):
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            # Seleccionamos las 6 columnas de la nueva tabla
+            cursor.execute("SELECT id_registro, categoria, monto_total, descripcion, fecha_registro, metodo_pago FROM analisis_costos")
+            datos = cursor.fetchall()
+            
+            self.ui.tableWidget_4.setRowCount(0)
+            self.ui.tableWidget_4.verticalHeader().setVisible(False) # Estética limpia
+
+            for row_number, row_data in enumerate(datos):
+                self.ui.tableWidget_4.insertRow(row_number)
+                for column_number, data in enumerate(row_data):
+                    # Validamos si es la columna de MONTO (índice 2) para dar formato
+                    if column_number == 2:
+                        try:
+                            valor_num = float(data) # Convertimos a número para evitar el error 'f'
+                            item_text = f"$ {valor_num:,.2f}"
+                        except (ValueError, TypeError):
+                            item_text = str(data)
+                    else:
+                        item_text = str(data)
+                    
+                    item = QtWidgets.QTableWidgetItem(item_text)
+                    item.setTextAlignment(QtCore.Qt.AlignCenter)
+                    self.ui.tableWidget_4.setItem(row_number, column_number, item)
+            conn.close()
+        except Exception as e:
+            print(f"Error al cargar tableWidget completo: {e}")
+
+
+    def añadir_gasto_costos(self):
+        # 1. Capturar datos según tus nuevos objetos del inspector
+        ref = self.ui.txt_ref.text().strip()           # ID REGISTRO / REF
+        categoria = self.ui.txt_vehiculo.text().strip() # CATEGORÍA (mapeado a txt_vehiculo)
+        monto = self.ui.txt_monto.text().strip()       # MONTO TOTAL
+        concepto = self.ui.txt_concepto.text().strip()  # CONCEPTO / DETALLE
+        fecha = self.ui.txt_fecha.text().strip()       # FECHA DE REGISTRO
+        pago = self.ui.txt_pago.text().strip()         # MÉTODO DE PAGO
+
+        # 2. Validación básica de campos obligatorios
+        if not categoria or not monto:
+            QtWidgets.QMessageBox.warning(self, "Atención", "La Categoría y el Monto son obligatorios.")
+            return
+
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            
+            # 3. Insertar en la tabla de 6 columnas
+            query = """INSERT INTO analisis_costos 
+                    (categoria, monto_total, descripcion, fecha_registro, metodo_pago) 
+                    VALUES (?, ?, ?, ?, ?)"""
+            
+            cursor.execute(query, (categoria, monto, concepto, fecha, pago))
+            conn.commit()
+            
+            QtWidgets.QMessageBox.information(self, "Éxito", "Gasto registrado correctamente.")
+
+            # 4. Limpiar campos
+            self.ui.txt_ref.clear()
+            self.ui.txt_vehiculo.clear()
+            self.ui.txt_monto.clear()
+            self.ui.txt_concepto.clear()
+            self.ui.txt_fecha.clear()
+            self.ui.txt_pago.clear()
+
+            # 5. Refrescar toda la interfaz de costos
+            self.cargar_tabla_costos()
+            self.cargar_treewidget_costos()
+            self.graficar_analisis_costos()
+            self.graficar_comparativa_costos() # Tu nuevo gráfico con barras dobles
+
+            conn.close()
+
+        except sqlite3.IntegrityError:
+            QtWidgets.QMessageBox.critical(self, "Error", "Esa Categoría ya existe. Usa Actualizar si deseas cambiar el monto.")
+        
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self, "Error de DB", f"Ocurrió un error: {str(e)}")
+
+    def eliminar_gasto_costos(self):
+        id_eliminar = self.ui.txt_ref.text().strip()
+
+        if not id_eliminar:
+            QtWidgets.QMessageBox.warning(self, "Atención", "Selecciona un registro de la tabla para eliminar.")
+            return
+
+        # Confirmación de seguridad
+        confirmacion = QtWidgets.QMessageBox.question(self, "Confirmar", 
+            f"¿Estás seguro de eliminar el registro {id_eliminar}?",
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No)
+
+        if confirmacion == QtWidgets.QMessageBox.Yes:
+            try:
+                conn = sqlite3.connect("GestionDelValor.db")
+                cursor = conn.cursor()
+                
+                # 1. Eliminar de la tabla principal
+                # Nota: Si configuraste ON DELETE CASCADE, borrará los detalles del TreeWidget también.
+                cursor.execute("DELETE FROM analisis_costos WHERE id_registro = ?", (id_eliminar,))
+                conn.commit()
+                conn.close()
+
+                QtWidgets.QMessageBox.information(self, "Éxito", "Gasto eliminado correctamente.")
+
+                # 2. Limpiar y refrescar todo
+                self.ui.txt_ref.clear()
+                self.ui.txt_vehiculo.clear()
+                self.ui.txt_monto.clear()
+                self.ui.txt_concepto.clear()
+                self.ui.txt_fecha.clear()
+                self.ui.txt_pago.clear()
+                
+                self.cargar_tabla_costos()
+                self.cargar_treewidget_costos()
+                self.graficar_analisis_costos()
+                self.graficar_comparativa_costos()
+
+            except Exception as e:
+                QtWidgets.QMessageBox.critical(self, "Error", f"No se pudo eliminar: {e}")
+
+    def actualizar_gasto_costos(self):
+        # 1. Obtener los datos de los LineEdits
+        id_registro = self.ui.txt_ref.text().strip()
+        categoria = self.ui.txt_vehiculo.text().strip() # Mapeado a CATEGORÍA
+        monto = self.ui.txt_monto.text().strip()
+        concepto = self.ui.txt_concepto.text().strip()
+        fecha = self.ui.txt_fecha.text().strip()
+        pago = self.ui.txt_pago.text().strip()
+
+        if not id_registro:
+            QtWidgets.QMessageBox.warning(self, "Atención", "Seleccione un registro de la tabla para actualizar.")
+            return
+
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+
+            # 2. Sentencia SQL para actualizar los 5 campos basados en el ID
+            query = """UPDATE analisis_costos SET 
+                    categoria = ?, 
+                    monto_total = ?, 
+                    descripcion = ?, 
+                    fecha_registro = ?, 
+                    metodo_pago = ? 
+                    WHERE id_registro = ?"""
+            
+            cursor.execute(query, (categoria, monto, concepto, fecha, pago, id_registro))
+            conn.commit()
+            conn.close()
+
+            QtWidgets.QMessageBox.information(self, "Éxito", "Registro actualizado correctamente.")
+            # 2. Limpiar y refrescar todo
+            self.ui.txt_ref.clear()
+            self.ui.txt_vehiculo.clear()
+            self.ui.txt_monto.clear()
+            self.ui.txt_concepto.clear()
+            self.ui.txt_fecha.clear()
+            self.ui.txt_pago.clear()
+                
+            self.cargar_tabla_costos()
+            self.cargar_treewidget_costos()
+            self.graficar_analisis_costos()
+            self.graficar_comparativa_costos()
+
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self, "Error", f"No se pudo actualizar: {e}")
+
+    def graficar_comparativa_costos(self):
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            query = """
+                SELECT a.categoria, a.monto_total, SUM(d.monto_especifico) 
+                FROM analisis_costos a
+                LEFT JOIN detalles_costos d ON a.categoria = d.categoria_padre
+                GROUP BY a.categoria
+            """
+            cursor.execute(query)
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos: return
+
+            categorias = [fila[0] for fila in datos]
+            # Aseguramos que los montos sean tratados como números (float)
+            montos_presupuesto = [float(fila[1]) if fila[1] else 0.0 for fila in datos]
+            montos_reales = [float(fila[2]) if fila[2] else 0.0 for fila in datos]
+
+            plt.style.use('dark_background')
+            fig, ax = plt.subplots(figsize=(6, 4))
+            fig.patch.set_facecolor('#121212')
+            
+            x = np.arange(len(categorias)) # Requiere 'import numpy as np'
+            width = 0.35 
+
+            ax.bar(x - width/2, montos_presupuesto, width, label='Presupuesto', color='#00E5FF')
+            ax.bar(x + width/2, montos_reales, width, label='Real', color='#FF5252')
+
+            ax.set_xticks(x)
+            ax.set_xticklabels(categorias, rotation=15, ha='right', fontsize=8)
+            ax.legend()
+            fig.subplots_adjust(bottom=0.25, left=0.15) # Evita que se vea "raro"
+
+            # Renderizar en frame_30
+            self.actualizar_canvas_grafico(self.ui.frame_30, fig)
+
+        except Exception as e:
+            print(f"Error en gráfico combinado: {e}")
+
+            
+
+    def cargar_treewidget_costos(self):
+        self.ui.treeWidget_4.clear()
+        # Definimos las cabeceras según tu diseño
+        self.ui.treeWidget_4.setHeaderLabels(["Categoría / Concepto", "Monto", "Observación"])
+        
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            
+            # 1. Obtener las categorías (Padres)
+            cursor.execute("SELECT categoria, monto_total FROM analisis_costos")
+            categorias = cursor.fetchall()
+
+            for cat in categorias:
+                parent = QtWidgets.QTreeWidgetItem(self.ui.treeWidget_4)
+                parent.setText(0, f"📁 {cat[0]}")
+                parent.setText(1, f"$ {cat[1]:,.2f}")
+                # Color cian para los padres como en tus etiquetas
+                parent.setForeground(0, QtGui.QColor('#00E5FF')) 
+
+                # 2. Obtener los detalles vinculados (Hijos)
+                cursor.execute("""SELECT sub_concepto, monto_especifico, observacion 
+                                FROM detalles_costos WHERE categoria_padre = ?""", (cat[0],))
+                detalles = cursor.fetchall()
+
+                for det in detalles:
+                    child = QtWidgets.QTreeWidgetItem(parent)
+                    child.setText(0, f"   └ {det[0]}")
+                    child.setText(1, f"$ {det[1]:,.2f}")
+                    child.setText(2, str(det[2]))
+            
+            conn.close()
+            self.ui.treeWidget_4.expandAll() # Opcional: expandir todo al iniciar
+        except Exception as e:
+            print(f"Error al cargar treeWidget_3: {e}")
+
+
+    def seleccionar_gasto_costos(self):
+        # Obtener la fila seleccionada
+        fila_seleccionada = self.ui.tableWidget_4.currentRow()
+        
+        if fila_seleccionada != -1:
+            # Extraer datos de las celdas
+            # Columna 0: ID, 1: Categoría, 2: Monto, 3: Concepto, 4: Fecha, 5: Pago
+            id_registro = self.ui.tableWidget_4.item(fila_seleccionada, 0).text()
+            categoria = self.ui.tableWidget_4.item(fila_seleccionada, 1).text()
+            monto = self.ui.tableWidget_4.item(fila_seleccionada, 2).text().replace("$ ", "").replace(",", "")
+            concepto = self.ui.tableWidget_4.item(fila_seleccionada, 3).text()
+            fecha = self.ui.tableWidget_4.item(fila_seleccionada, 4).text()
+            pago = self.ui.tableWidget_4.item(fila_seleccionada, 5).text()
+
+            # Enviar a los QLineEdit según tu inspector
+            self.ui.txt_ref.setText(id_registro)
+            self.ui.txt_vehiculo.setText(categoria)
+            self.ui.txt_monto.setText(monto)
+            self.ui.txt_concepto.setText(concepto)
+            self.ui.txt_fecha.setText(fecha)
+            self.ui.txt_pago.setText(pago)
+
+
+
+    def graficar_analisis_costos(self):
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            # 1. Ajuste de la consulta a la nueva columna 'monto_total'
+            query = "SELECT categoria, SUM(monto_total) FROM analisis_costos GROUP BY categoria"
+            cursor.execute(query)
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos: 
+                print("No hay datos para graficar en Análisis de Costos")
+                return
+
+            categorias = [fila[0] for fila in datos]
+            montos = [fila[1] for fila in datos]
+
+            # 2. Configuración visual oscura y profesional
+            plt.style.use('dark_background')
+            fig, ax = plt.subplots(figsize=(4, 4))
+            fig.patch.set_facecolor('#121212')
+            
+            # Colores neón acorde a tu interfaz
+            colores = ['#00E5FF', '#FF5252', '#69F0AE', '#FFD740']
+
+            ax.pie(montos, labels=categorias, autopct='%1.1f%%', colors=colores, 
+                textprops={'color':"w", 'fontsize': 8}, startangle=90)
+            
+            ax.set_title("Distribución de Gastos Totales", color='white', fontsize=10, pad=20)
+
+            # 3. Ajuste de márgenes para que el gráfico no se vea pegado
+            fig.subplots_adjust(left=0.2, right=0.8, top=0.8, bottom=0.1)
+
+            # 4. Renderizar en el frame_30 (o el que corresponda en tu diseño)
+            if self.ui.frame_30.layout() is None:
+                layout = QtWidgets.QVBoxLayout(self.ui.frame_30)
+            else:
+                layout = self.ui.frame_30.layout()
+                while layout.count():
+                    child = layout.takeAt(0)
+                    if child.widget(): child.widget().deleteLater()
+
+            canvas = FigureCanvas(fig)
+            layout.addWidget(canvas)
+            canvas.draw()
+
+        except Exception as e:
+            print(f"Error al graficar costos: {e}")
+
+
+
+    def graficar_comparativa_costos(self):
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            query = """
+                SELECT a.categoria, a.monto_total, SUM(d.monto_especifico) 
+                FROM analisis_costos a
+                LEFT JOIN detalles_costos d ON a.categoria = d.categoria_padre
+                GROUP BY a.categoria
+            """
+            cursor.execute(query)
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos: return
+
+            categorias = [fila[0] for fila in datos]
+            # Aseguramos que los montos sean tratados como números (float)
+            montos_presupuesto = [float(fila[1]) if fila[1] else 0.0 for fila in datos]
+            montos_reales = [float(fila[2]) if fila[2] else 0.0 for fila in datos]
+
+            plt.style.use('dark_background')
+            fig, ax = plt.subplots(figsize=(6, 4))
+            fig.patch.set_facecolor('#121212')
+            
+            x = np.arange(len(categorias)) # Requiere 'import numpy as np'
+            width = 0.35 
+
+            ax.bar(x - width/2, montos_presupuesto, width, label='Presupuesto', color='#00E5FF')
+            ax.bar(x + width/2, montos_reales, width, label='Real', color='#FF5252')
+
+            ax.set_xticks(x)
+            ax.set_xticklabels(categorias, rotation=15, ha='right', fontsize=8)
+            ax.legend()
+            fig.subplots_adjust(bottom=0.25, left=0.15) # Evita que se vea "raro"
+
+            # Renderizar en frame_30
+            self.actualizar_canvas_grafico(self.ui.frame_30, fig)
+
+        except Exception as e:
+            print(f"Error en gráfico combinado: {e}")
+            
+
+    def actualizar_canvas_grafico(self, frame, figura):
+        # 1. Verificar si el frame tiene un layout. Si no, crearlo.
+        if frame.layout() is None:
+            layout = QtWidgets.QVBoxLayout(frame)
+        else:
+            layout = frame.layout()
+
+        # 2. LIMPIEZA CRÍTICA: Eliminar todos los widgets previos del layout
+        while layout.count():
+            child = layout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater() # Borra el canvas anterior de la memoria
+
+        # 3. Añadir el nuevo gráfico
+        canvas = FigureCanvas(figura)
+        layout.addWidget(canvas)
+        canvas.draw()
+    
+
+    def graficar_dashboard_principal(self):
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            
+            # Consultamos las categorías y la suma de sus montos
+            query = "SELECT categoria, SUM(monto_total) FROM analisis_costos GROUP BY categoria"
+            cursor.execute(query)
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                print("Sin datos para el Dashboard")
+                return
+
+            categorias = [fila[0] for fila in datos]
+            valores = [float(fila[1]) for fila in datos]
+
+            # Configuración de la figura
+            plt.style.use('dark_background')
+            fig, ax = plt.subplots(figsize=(5, 4))
+            fig.patch.set_facecolor('#121212')
+            ax.set_facecolor('#121212')
+
+            # Barras en color cian neón
+            ax.barh(categorias, valores, color='#00E5FF')
+            
+            ax.set_title("Resumen Financiero por Categoría", color='white', fontsize=12, pad=20)
+            ax.set_xlabel("Monto Total ($)", color='white')
+            ax.tick_params(axis='both', colors='white', labelsize=9)
+
+            # Ajuste de márgenes para que no se vea "raro"
+            fig.subplots_adjust(left=0.3, right=0.9, top=0.85, bottom=0.15)
+
+            # Renderizar usando la función de limpieza para evitar sobreescritura
+            self.actualizar_canvas_grafico(self.ui.frame, fig)
+
+        except Exception as e:
+            print(f"Error en Dashboard (frame): {e}")
 
 
 if __name__ == "__main__":

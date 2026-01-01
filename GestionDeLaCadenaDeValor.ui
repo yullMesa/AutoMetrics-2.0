@@ -64,7 +64,7 @@ QMenu::item:selected {
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>0</number>
+        <number>4</number>
        </property>
        <widget class="QWidget" name="page">
         <widget class="QWidget" name="gridLayoutWidget">
@@ -1858,9 +1858,12 @@ QLineEdit:disabled {
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_8">
               <item>
-               <widget class="QLabel" name="label_11">
-                <property name="text">
-                 <string>TextLabel</string>
+               <widget class="QFrame" name="frame_29">
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
                 </property>
                </widget>
               </item>
@@ -2218,7 +2221,7 @@ QPushButton:pressed {
                </widget>
               </item>
               <item row="3" column="0">
-               <widget class="QLabel" name="label_12">
+               <widget class="QLabel" name="lbl_origen">
                 <property name="styleSheet">
                  <string notr="true">QLabel {
     color: #00d2ff; /* Usamos el cian para que el usuario identifique rápido el campo */
@@ -2237,7 +2240,7 @@ QPushButton:pressed {
                </widget>
               </item>
               <item row="4" column="0">
-               <widget class="QLabel" name="label_13">
+               <widget class="QLabel" name="lbl_eta">
                 <property name="styleSheet">
                  <string notr="true">QLabel {
     color: #00d2ff; /* Usamos el cian para que el usuario identifique rápido el campo */
@@ -2256,7 +2259,7 @@ QPushButton:pressed {
                </widget>
               </item>
               <item row="5" column="0">
-               <widget class="QLabel" name="label_14">
+               <widget class="QLabel" name="lbl_estado_2">
                 <property name="styleSheet">
                  <string notr="true">QLabel {
     color: #00d2ff; /* Usamos el cian para que el usuario identifique rápido el campo */
@@ -2579,6 +2582,12 @@ QTreeWidget::branch:open:has-children:has-siblings {
     border-image: none;
 }</string>
                 </property>
+                <attribute name="headerDefaultSectionSize">
+                 <number>200</number>
+                </attribute>
+                <attribute name="headerHighlightSections">
+                 <bool>true</bool>
+                </attribute>
                 <column>
                  <property name="text">
                   <string notr="true">1</string>
@@ -2658,17 +2667,26 @@ QTreeWidget::branch:open:has-children:has-siblings {
             <widget class="QWidget" name="verticalLayoutWidget_11">
              <property name="geometry">
               <rect>
-               <x>9</x>
+               <x>-1</x>
                <y>119</y>
-               <width>901</width>
+               <width>921</width>
                <height>421</height>
               </rect>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout_11">
               <item>
-               <widget class="QLabel" name="label_16">
-                <property name="text">
-                 <string>TextLabel</string>
+               <widget class="QFrame" name="frame_30">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
                 </property>
                </widget>
               </item>
@@ -2764,32 +2782,32 @@ QScrollBar::handle:vertical {
                 </attribute>
                 <column>
                  <property name="text">
-                  <string>ID Envío</string>
+                  <string>ID REGISTRO / REF</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>Transportista / Vehículo</string>
+                  <string>CATEGORÍA</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>Prioridad</string>
+                  <string>MONTO TOTAL</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>Origen / Destino</string>
+                  <string>CONCEPTO / DETALLE</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>ETA (Hora estimada de llegada)</string>
+                  <string>FECHA DE REGISTRO</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>Estado de Ruta</string>
+                  <string>MÉTODO DE PAGO</string>
                  </property>
                 </column>
                </widget>
@@ -2969,7 +2987,7 @@ QPushButton:pressed {
                <number>58</number>
               </property>
               <item row="0" column="0">
-               <widget class="QLabel" name="lbl_id_material_4">
+               <widget class="QLabel" name="lbl_ref">
                 <property name="styleSheet">
                  <string notr="true">QLabel {
     color: #00d2ff; /* Usamos el cian para que el usuario identifique rápido el campo */
@@ -2980,7 +2998,7 @@ QPushButton:pressed {
 }</string>
                 </property>
                 <property name="text">
-                 <string>ID Envio</string>
+                 <string>ID REGISTRO / REF</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -2999,7 +3017,7 @@ QPushButton:pressed {
 }</string>
                 </property>
                 <property name="text">
-                 <string>Transportista / Vehículo</string>
+                 <string>CATEGORÍA</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -3007,7 +3025,7 @@ QPushButton:pressed {
                </widget>
               </item>
               <item row="2" column="0">
-               <widget class="QLabel" name="lbl_cantidad_4">
+               <widget class="QLabel" name="lblmonto">
                 <property name="styleSheet">
                  <string notr="true">QLabel {
     color: #00d2ff; /* Usamos el cian para que el usuario identifique rápido el campo */
@@ -3018,7 +3036,7 @@ QPushButton:pressed {
 }</string>
                 </property>
                 <property name="text">
-                 <string>Prioridad</string>
+                 <string>MONTO TOTAL</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -3026,7 +3044,7 @@ QPushButton:pressed {
                </widget>
               </item>
               <item row="3" column="0">
-               <widget class="QLabel" name="label_17">
+               <widget class="QLabel" name="lbl_detalle">
                 <property name="styleSheet">
                  <string notr="true">QLabel {
     color: #00d2ff; /* Usamos el cian para que el usuario identifique rápido el campo */
@@ -3037,7 +3055,7 @@ QPushButton:pressed {
 }</string>
                 </property>
                 <property name="text">
-                 <string>Origen / Destino</string>
+                 <string>CONCEPTO / DETALLE</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -3045,7 +3063,7 @@ QPushButton:pressed {
                </widget>
               </item>
               <item row="4" column="0">
-               <widget class="QLabel" name="label_18">
+               <widget class="QLabel" name="lbl_fecha_2">
                 <property name="styleSheet">
                  <string notr="true">QLabel {
     color: #00d2ff; /* Usamos el cian para que el usuario identifique rápido el campo */
@@ -3056,7 +3074,7 @@ QPushButton:pressed {
 }</string>
                 </property>
                 <property name="text">
-                 <string>ETA (Hora estimada de llegada)</string>
+                 <string>FECHA DE REGISTRO</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -3075,7 +3093,7 @@ QPushButton:pressed {
 }</string>
                 </property>
                 <property name="text">
-                 <string>Estado de Ruta</string>
+                 <string>MÉTODO DE PAGO</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -3083,7 +3101,7 @@ QPushButton:pressed {
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QLineEdit" name="txt_id_material_4">
+               <widget class="QLineEdit" name="txt_ref">
                 <property name="styleSheet">
                  <string notr="true">/* Estilo base para todos los campos de entrada */
 QLineEdit {
@@ -3121,7 +3139,7 @@ QLineEdit:disabled {
                </widget>
               </item>
               <item row="1" column="1">
-               <widget class="QLineEdit" name="txt_descripcion_4">
+               <widget class="QLineEdit" name="txt_vehiculo">
                 <property name="styleSheet">
                  <string notr="true">/* Estilo base para todos los campos de entrada */
 QLineEdit {
@@ -3159,7 +3177,7 @@ QLineEdit:disabled {
                </widget>
               </item>
               <item row="2" column="1">
-               <widget class="QLineEdit" name="txt_cantidad_4">
+               <widget class="QLineEdit" name="txt_monto">
                 <property name="styleSheet">
                  <string notr="true">/* Estilo base para todos los campos de entrada */
 QLineEdit {
@@ -3197,7 +3215,7 @@ QLineEdit:disabled {
                </widget>
               </item>
               <item row="3" column="1">
-               <widget class="QLineEdit" name="lineEdit_13">
+               <widget class="QLineEdit" name="txt_concepto">
                 <property name="styleSheet">
                  <string notr="true">/* Estilo base para todos los campos de entrada */
 QLineEdit {
@@ -3235,7 +3253,7 @@ QLineEdit:disabled {
                </widget>
               </item>
               <item row="4" column="1">
-               <widget class="QLineEdit" name="lineEdit_14">
+               <widget class="QLineEdit" name="txt_fecha">
                 <property name="styleSheet">
                  <string notr="true">
 /* Estilo base para todos los campos de entrada */
@@ -3274,7 +3292,7 @@ QLineEdit:disabled {
                </widget>
               </item>
               <item row="5" column="1">
-               <widget class="QLineEdit" name="lineEdit_15">
+               <widget class="QLineEdit" name="txt_pago">
                 <property name="styleSheet">
                  <string notr="true">/* Estilo base para todos los campos de entrada */
 QLineEdit {
