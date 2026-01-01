@@ -15,6 +15,8 @@ import sqlite3
 import pandas as pd
 from matplotlib import pyplot as plt 
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+import Exportar
+from collections import Counter
 import recursos_rc
 
 class InicioDialog(QDialog):
@@ -1821,7 +1823,30 @@ class ModuloCadenaValor(QMainWindow):
         self.configurar_navegacion_menu()
         self.cargar_datos_planificacion()
         self.actualizar_treewidget_logistica()
-        self.cargar_datos_diferentes()
+        self.generar_grafico_costos()
+        self.ui.pushButton_4.clicked.connect(self.añadir_suministro) 
+        # Conecta el evento de cambio de selección con la función de carga
+        self.ui.tableWidget.itemSelectionChanged.connect(self.cargar_seleccion_a_txt)
+        self.ui.pushButton_3.clicked.connect(self.eliminar_suministro)
+        self.ui.pushButton_5.clicked.connect(self.actualizar_suministro)
+        self.ui.pushButton.clicked.connect(self.abrir_ventana_exportar)
+        # Dentro de tu clase principal
+        self.graficar_estados_logistica()
+        # Dentro del método __init__
+        self.cargar_datos_proveedores()
+         # Conexión para que al seleccionar una fila se llenen los TXT de proveedores
+        self.ui.tableWidget_2.itemSelectionChanged.connect(self.cargar_seleccion_proveedores_a_txt)
+        self.cargar_treewidget_proveedores()
+        self.ui.pushButton_6.clicked.connect(self.añadir_proveedor)
+        self.ui.pushButton_7.clicked.connect(self.eliminar_proveedor)
+        # Conexión del botón ACTUALIZAR
+        self.ui.pushButton_8.clicked.connect(self.actualizar_proveedor)
+        self.ui.pushButton_2.clicked.connect(self.abrir_ventana_exportar)
+        # Ejemplo de integración en el botón Actualizar (pushButton_8)
+        self.graficar_calificacion_proveedores()
+        self.graficar_tiempos_entrega()
+
+        
 
     def configurar_navegacion_menu(self):
         # La lógica de índices de izquierda a derecha según tu imagen de la barra:
@@ -1866,6 +1891,7 @@ class ModuloCadenaValor(QMainWindow):
         # Cerramos ingeniería SOLO después de mostrar inicio
         self.close()
 
+
     def cargar_datos_planificacion(self):
         # 1. Configuración visual
         self.ui.tableWidget.verticalHeader().setVisible(False)
@@ -1877,7 +1903,7 @@ class ModuloCadenaValor(QMainWindow):
         
         try:
             # Seleccionamos los datos
-            cursor.execute("SELECT id_material, cantidad_requerida, proveedor, fecha_estimada, descripcion FROM planificacion_suministros")
+            cursor.execute("SELECT id_material, cantidad_requerida, proveedor, fecha_estimada, descripcion, costo_unitario  FROM planificacion_suministros")
             datos = cursor.fetchall()
             
             # 3. Limpiar y llenar tabla
@@ -1892,6 +1918,7 @@ class ModuloCadenaValor(QMainWindow):
             print(f"Error: La tabla no existe en GestionDelValor.db. Detalles: {e}")
         finally:
             conn.close()
+
 
     def actualizar_treewidget_logistica(self):
         self.ui.treeWidget.clear()
@@ -1926,32 +1953,578 @@ class ModuloCadenaValor(QMainWindow):
         finally:
             conn.close()
 
-    def cargar_datos_diferentes(self):
-        self.ui.treeWidget.clear()
-        # Habilitamos que se vea la estructura de árbol
-        self.ui.treeWidget.setRootIsDecorated(True) 
-        
-        # 1. Creamos un "Envío Padre" (El Camión o Ruta)
-        envio_padre = QTreeWidgetItem(self.ui.treeWidget)
-        envio_padre.setText(0, "RUTA-NACIONAL-001")
-        envio_padre.setText(1, "Transportes Transandina")
-        envio_padre.setText(5, "EN CAMINO")
-        # Ponemos un color de fondo diferente al padre para resaltarlo
-        envio_padre.setBackground(0, QColor("#004d4d")) 
 
-        # 2. Creamos "Hijos" (Los productos dentro de esa ruta)
-        # Al pasar 'envio_padre' como argumento, se vuelve un sub-elemento
-        producto1 = QTreeWidgetItem(envio_padre)
-        producto1.setText(0, "MAT-001")
-        producto1.setText(2, "Sensores Laser")
-        producto1.setText(3, "50 unidades")
-        
-        producto2 = QTreeWidgetItem(envio_padre)
-        producto2.setText(0, "MAT-005")
-        producto2.setText(2, "Fuentes de Poder")
-        producto2.setText(3, "30 unidades")
+    def añadir_suministro(self):
+        # 1. Recoger valores de los QLineEdit
+        id_mat = self.ui.txt_id_material.text().strip()
+        desc = self.ui.txt_descripcion.text().strip()
+        cant = self.ui.txt_cantidad.text().strip()
+        prov = self.ui.txtproveedor.text().strip()
+        costo = self.ui.txtCosto.text().strip()
+        fecha = self.ui.txtFecha.text().strip()
 
-        self.ui.treeWidget.expandAll()
+        # 2. Validación simple
+        if not id_mat or not cant or not costo:
+            QtWidgets.QMessageBox.warning(self, "Error", "ID, Cantidad y Costo son obligatorios.")
+            return
+
+        # 3. Insertar en la base de datos
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            
+            # El orden debe coincidir con tu tabla SQL
+            query = """INSERT INTO planificacion_suministros 
+                    (id_material, descripcion, cantidad_requerida, proveedor, costo_unitario, fecha_estimada) 
+                    VALUES (?, ?, ?, ?, ?, ?)"""
+            
+            cursor.execute(query, (id_mat, desc, int(cant), prov, float(costo), fecha))
+            
+            conn.commit()
+            conn.close()
+
+            # 4. Feedback y actualización visual
+            QtWidgets.QMessageBox.information(self, "Éxito", "Suministro añadido correctamente.")
+            
+            # Limpiar campos tras añadir
+            for campo in [self.ui.txt_id_material, self.ui.txt_descripcion, 
+                        self.ui.txt_cantidad, self.ui.txtproveedor, 
+                        self.ui.txtCosto, self.ui.txtFecha]:
+                campo.clear()
+
+            # Refrescar la tabla y el gráfico para ver el cambio de inmediato
+            self.cargar_datos_planificacion()
+            self.generar_grafico_costos()
+
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self, "Error de DB", f"No se pudo guardar: {str(e)}")
+
+
+    def eliminar_suministro(self):
+        # Usamos el nombre actualizado: txt_proveedor
+        id_a_borrar = self.ui.txt_id_material.text().strip()
+
+        if not id_a_borrar:
+            QtWidgets.QMessageBox.warning(self, "Atención", "Selecciona un material para eliminar.")
+            return
+
+        try:
+            conn = sqlite3.connect("GestionDelValor.db") # Tu DB actual
+            cursor = conn.cursor()
+            cursor.execute("DELETE FROM planificacion_suministros WHERE id_material = ?", (id_a_borrar,))
+            conn.commit()
+            conn.close()
+
+            # LIMPIEZA DE CAMPOS (Asegúrate de que estos nombres coincidan con Designer)
+            self.ui.txt_id_material.clear()
+            self.ui.txt_descripcion.clear()
+            self.ui.txt_cantidad.clear()
+            self.ui.txtproveedor.clear() # <--- Nombre corregido aquí
+            self.ui.txtCosto.clear()
+            self.ui.txtFecha.clear()
+
+            # Refrescar la tabla para ver que ya no existe
+            self.cargar_datos_planificacion()
+            self.generar_grafico_costos()
+
+        except Exception as e:
+            # Si este error sale, es que todavía hay un nombre mal escrito en el código
+            QtWidgets.QMessageBox.critical(self, "Error de Atributo", f"Verifica los nombres: {str(e)}")
+
+
+    def actualizar_suministro(self):
+        # Recoger datos de los campos
+        id_mat = self.ui.txt_id_material.text().strip()
+        desc = self.ui.txt_descripcion.text().strip()
+        cant = self.ui.txt_cantidad.text().strip()
+        prov = self.ui.txtproveedor.text().strip() 
+        costo = self.ui.txtCosto.text().strip()
+        fecha = self.ui.txtFecha.text().strip()
+
+        if not id_mat:
+            return # Si no hay ID, no hacemos nada
+
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            
+            # Sentencia SQL para modificar el registro existente
+            query = """UPDATE planificacion_suministros 
+                    SET cantidad_requerida = ?, proveedor = ?, fecha_estimada = ?, 
+                        descripcion = ?, costo_unitario = ? 
+                    WHERE id_material = ?"""
+            
+            cursor.execute(query, (int(cant), prov, fecha, desc, float(costo), id_mat))
+            conn.commit()
+            conn.close()
+
+            # Actualizar la interfaz para mostrar los cambios
+            self.cargar_datos_planificacion()
+            self.generar_grafico_costos()
+            
+            QtWidgets.QMessageBox.information(self, "Éxito", "Datos actualizados correctamente.")
+
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self, "Error", f"No se pudo actualizar: {str(e)}")
+            print(f"Error al actualizar: {e}")
+
+    
+
+    def cargar_seleccion_a_txt(self):
+        fila_seleccionada = self.ui.tableWidget.currentRow()
+        
+        if fila_seleccionada != -1:
+            # Extraer datos existentes
+            id_mat = self.ui.tableWidget.item(fila_seleccionada, 0).text()
+            cantidad = self.ui.tableWidget.item(fila_seleccionada, 1).text()
+            proveedor = self.ui.tableWidget.item(fila_seleccionada, 2).text()
+            fecha = self.ui.tableWidget.item(fila_seleccionada, 3).text()
+            descripcion = self.ui.tableWidget.item(fila_seleccionada, 4).text()
+            
+            # NUEVO: Extraer el costo (asegúrate de que la columna exista en el widget)
+            item_costo = self.ui.tableWidget.item(fila_seleccionada, 5)
+            costo = item_costo.text() if item_costo else ""
+
+            # Asignar a los QLineEdit
+            self.ui.txt_id_material.setText(id_mat)
+            self.ui.txt_cantidad.setText(cantidad)
+            self.ui.txtproveedor.setText(proveedor) # Mantengo tu escritura 'txt_proveedor'
+            self.ui.txtFecha.setText(fecha)
+            self.ui.txt_descripcion.setText(descripcion)
+            self.ui.txtCosto.setText(costo) # Ahora sí cargará el costo
+
+
+    # 2. Crea el método que disparará tu script
+    def abrir_ventana_exportar(self):
+
+        try:
+            # Aquí llamamos a la función de tu script que abre el explorador de archivos
+            # y permite seleccionar el CSV para convertirlo a XLSX
+            Exportar.seleccionar_y_convertir() # Reemplaza con el nombre real de la función en Exportar.py
+            
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self, "Error", f"No se pudo abrir el modulo de exportación: {str(e)}")
+
+        # 3. En el __init__, conecta el pushButton_4
+        self.ui.pushButton_4.clicked.connect(self.abrir_ventana_exportar)
+
+    def generar_grafico_costos(self):
+        ids = []
+        valores = []
+        
+        filas = self.ui.tableWidget.rowCount()
+        for i in range(filas):
+            # Tomamos el ID del Material (Columna 0)
+            id_item = self.ui.tableWidget.item(i, 0) 
+            
+            # CAMBIO CLAVE: Usa el índice donde REALMENTE esté el número.
+            # Si quieres graficar la CANTIDAD, usa el índice 1.
+            # Si quieres el COSTO y es la columna 5, usa el 5.
+            valor_item = self.ui.tableWidget.item(i, 1) # Probemos con columna 1 (Cantidad)
+            
+            if id_item and valor_item:
+                texto_num = valor_item.text().strip()
+                try:
+                    # Limpieza total del texto para dejar solo números
+                    num_limpio = "".join(c for c in texto_num if c.isdigit() or c == '.')
+                    valores.append(float(num_limpio))
+                    ids.append(id_item.text())
+                except ValueError:
+                    # Esto es lo que ves en tu terminal ahora
+                    print(f"Fila {i}: Saltando '{texto_num}' porque no es un número.")
+                    continue
+
+        if not valores:
+            print("Error: No se encontraron datos numéricos para graficar.")
+            return
+
+        # --- Configuración del Gráfico ---
+        plt.style.use('dark_background')
+        fig, ax = plt.subplots(figsize=(5, 4))
+        fig.patch.set_facecolor('#121212') 
+        ax.set_facecolor('#121212')
+        
+        ax.bar(ids, valores, color='#00E5FF') # Estilo cian de AutoMetrics
+        ax.set_ylabel("Valor Unitario", color='white')
+        plt.xticks(rotation=45, ha='right')
+        plt.tight_layout()
+
+        # --- Insertar en frame_11 ---
+        # Asegúrate de que frame_11 tenga un QVBoxLayout en Designer
+        if self.ui.frame_11.layout() is None:
+            layout = QtWidgets.QVBoxLayout(self.ui.frame_11)
+        else:
+            layout = self.ui.frame_11.layout()
+            # Limpiar gráfico anterior
+            while layout.count():
+                child = layout.takeAt(0)
+                if child.widget(): child.widget().deleteLater()
+                
+        canvas = FigureCanvas(fig)
+        layout.addWidget(canvas)
+        canvas.draw()
+
+
+    def graficar_estados_logistica(self):
+        # 1. Obtener datos de la base de datos (Logística)
+        estados = []
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            # Seleccionamos la columna estado de tu tabla de logística
+            cursor.execute("SELECT estado FROM logistica_transporte")
+            filas = cursor.fetchall()
+            estados = [fila[0] for fila in filas]
+            conn.close()
+        except Exception as e:
+            print(f"Error al obtener estados: {e}")
+            return
+
+        if not estados:
+            return
+
+        # 2. Contar frecuencias de cada estado
+        conteo = Counter(estados)
+        nombres_estados = list(conteo.keys())
+        cantidades = list(conteo.values())
+
+        # 3. Configurar Matplotlib con tu estilo oscuro
+        plt.style.use('dark_background')
+        fig, ax = plt.subplots(figsize=(4, 3))
+        fig.patch.set_facecolor('#121212') 
+        ax.set_facecolor('#121212')
+
+        # Crear barras horizontales para que las rutas/estados se lean bien
+        colores = ['#00E5FF', '#FF5252', '#FFD740', '#69F0AE'] # Cian, Rojo, Amarillo, Verde
+        ax.barh(nombres_estados, cantidades, color=colores[:len(nombres_estados)])
+        
+        ax.set_title("Resumen de Estados de Envío", color='white', fontsize=10)
+        ax.tick_params(axis='both', colors='white', labelsize=8)
+
+        # 4. Insertar en frame_2 (Página 1)
+        if self.ui.frame_2.layout() is None:
+            layout = QtWidgets.QVBoxLayout(self.ui.frame_2)
+        else:
+            layout = self.ui.frame_2.layout()
+            while layout.count():
+                child = layout.takeAt(0)
+                if child.widget(): child.widget().deleteLater()
+
+        canvas = FigureCanvas(fig)
+        layout.addWidget(canvas)
+        canvas.draw()
+
+
+    def cargar_datos_proveedores(self):
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            
+            # Consulta de los 6 campos de tu interfaz
+            query = "SELECT id_proveedor, nombre_empresa, calificacion, contacto_proveedor, tiempo_entrega, estado FROM gestion_proveedores"
+            cursor.execute(query)
+            datos = cursor.fetchall()
+            
+            self.ui.tableWidget_2.setRowCount(0)
+            
+            # --- AJUSTES ESTÉTICOS PARA QUITAR EL HUECO BLANCO ---
+            # Oculta los números de fila (1, 2, 3...) a la izquierda
+            self.ui.tableWidget_2.verticalHeader().setVisible(False) 
+            
+            # Hace que las columnas ocupen todo el ancho disponible proporcionalmente
+            self.ui.tableWidget_2.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+            
+            for row_number, row_data in enumerate(datos):
+                self.ui.tableWidget_2.insertRow(row_number)
+                for column_number, data in enumerate(row_data):
+                    item = QtWidgets.QTableWidgetItem(str(data))
+                    item.setTextAlignment(QtCore.Qt.AlignCenter) 
+                    self.ui.tableWidget_2.setItem(row_number, column_number, item)
+            
+            conn.close()
+        except Exception as e:
+            print(f"Error estético o de datos: {e}")
+
+    def añadir_proveedor(self):
+        # 1. Capturar datos usando los nombres exactos de tu inspector
+        id_prov = self.ui.txt_id_poveedor.text().strip()
+        empresa = self.ui.txt_nombre_empresa.text().strip() 
+        calif = self.ui.txt_calificacion.text().strip()
+        contacto = self.ui.txt_contacto_proveedor.text().strip() 
+        tiempo = self.ui.txt_tiempo_entrega.text().strip()   
+        estado = self.ui.txt_estado_proveedor.text().strip()   
+        # Validación básica
+        if not id_prov or not empresa:
+            QtWidgets.QMessageBox.warning(self, "Advertencia", "ID y Nombre de Empresa son obligatorios.")
+            return
+
+        try:
+            # 2. Conexión e Inserción
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            
+            query = """INSERT INTO gestion_proveedores 
+                    (id_proveedor, nombre_empresa, calificacion, contacto_proveedor, tiempo_entrega, estado) 
+                    VALUES (?, ?, ?, ?, ?, ?)"""
+            
+            cursor.execute(query, (id_prov, empresa, calif, contacto, tiempo, estado))
+            conn.commit()
+            conn.close()
+
+            # 3. Éxito y Limpieza
+            QtWidgets.QMessageBox.information(self, "Éxito", f"Proveedor {empresa} añadido correctamente.")
+            self.limpiar_campos_proveedores()
+            self.cargar_datos_proveedores() # Refrescar tabla
+            self.cargar_treewidget_proveedores() # Refrescar TreeWidget
+
+        except sqlite3.IntegrityError:
+            QtWidgets.QMessageBox.critical(self, "Error", "El ID de proveedor ya existe.")
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self, "Error de DB", f"No se pudo guardar: {str(e)}")
+
+    def limpiar_campos_proveedores(self):
+        self.ui.txt_id_poveedor.clear()
+        self.ui.txt_nombre_empresa.clear()
+        self.ui.txt_calificacion.clear()
+        self.ui.txt_contacto_proveedor.clear()
+        self.ui.txt_tiempo_entrega.clear()
+        self.ui.txt_estado_proveedor.clear()
+
+    def eliminar_proveedor(self):
+        # 1. Obtener el ID del campo de texto
+        id_a_borrar = self.ui.txt_id_poveedor.text().strip()
+
+        if not id_a_borrar:
+            QtWidgets.QMessageBox.warning(self, "Atención", "Selecciona un proveedor de la tabla para eliminar.")
+            return
+
+        # 2. Confirmación de seguridad
+        respuesta = QtWidgets.QMessageBox.question(
+            self, "Confirmar Eliminación", 
+            f"¿Estás seguro de que deseas eliminar al proveedor {id_a_borrar}? Esto también borrará sus pedidos asociados.",
+            QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No
+        )
+
+        if respuesta == QtWidgets.QMessageBox.Yes:
+            try:
+                conn = sqlite3.connect("GestionDelValor.db")
+                cursor = conn.cursor()
+                
+                # 3. Ejecutar eliminación
+                cursor.execute("DELETE FROM gestion_proveedores WHERE id_proveedor = ?", (id_a_borrar,))
+                conn.commit()
+                
+                if cursor.rowcount > 0:
+                    QtWidgets.QMessageBox.information(self, "Éxito", "Proveedor eliminado correctamente.")
+                    
+                    # 4. Limpiar campos usando tus nombres corregidos
+                    self.ui.txt_id_poveedor.clear()
+                    self.ui.txt_nombre_empresa.clear()
+                    self.ui.txt_calificacion.clear()
+                    self.ui.txt_contacto_proveedor.clear()
+                    self.ui.txt_tiempo_entrega.clear()
+                    self.ui.txt_estado_proveedor.clear()
+
+                    # 5. Refrescar todos los componentes visuales
+                    self.cargar_datos_proveedores()
+                    self.cargar_treewidget_proveedores()
+                else:
+                    QtWidgets.QMessageBox.warning(self, "Error", "No se encontró el proveedor en la base de datos.")
+                
+                conn.close()
+
+            except Exception as e:
+                QtWidgets.QMessageBox.critical(self, "Error de DB", f"Ocurrió un error: {str(e)}")
+
+    def actualizar_proveedor(self):
+        # 1. Obtener los datos de los campos de texto
+        id_prov = self.ui.txt_id_poveedor.text().strip()
+        empresa = self.ui.txt_nombre_empresa.text().strip()
+        calif = self.ui.txt_calificacion.text().strip()
+        contacto = self.ui.txt_contacto_proveedor.text().strip()
+        tiempo = self.ui.txt_tiempo_entrega.text().strip()
+        estado = self.ui.txt_estado_proveedor.text().strip()
+
+        if not id_prov:
+            QtWidgets.QMessageBox.warning(self, "Atención", "No hay un ID de proveedor seleccionado para actualizar.")
+            return
+
+        try:
+            # 2. Conexión a la base de datos
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            
+            # 3. Sentencia SQL UPDATE para la tabla gestion_proveedores
+            query = """UPDATE gestion_proveedores 
+                    SET nombre_empresa = ?, calificacion = ?, contacto_proveedor = ?, 
+                        tiempo_entrega = ?, estado = ? 
+                    WHERE id_proveedor = ?"""
+            
+            # Ejecutar con los datos en el orden de los '?'
+            cursor.execute(query, (empresa, calif, contacto, tiempo, estado, id_prov))
+            conn.commit()
+            
+            if cursor.rowcount > 0:
+                QtWidgets.QMessageBox.information(self, "Éxito", f"Proveedor {id_prov} actualizado correctamente.")
+                # 4. Refrescar la tabla y el TreeWidget para ver los cambios
+                self.cargar_datos_proveedores()
+                self.cargar_treewidget_proveedores()
+            else:
+                QtWidgets.QMessageBox.warning(self, "Error", "No se encontró el proveedor para actualizar.")
+                
+            conn.close()
+
+        except Exception as e:
+            QtWidgets.QMessageBox.critical(self, "Error de Actualización", f"Ocurrió un error: {str(e)}")
+
+    
+
+
+    def cargar_seleccion_proveedores_a_txt(self):
+        fila = self.ui.tableWidget_2.currentRow()
+        if fila != -1:
+            # Extraer de la tabla e insertar en los nuevos TXT
+            self.ui.txt_id_poveedor.setText(self.ui.tableWidget_2.item(fila, 0).text())
+            self.ui.txt_nombre_empresa.setText(self.ui.tableWidget_2.item(fila, 1).text())
+            self.ui.txt_calificacion.setText(self.ui.tableWidget_2.item(fila, 2).text())
+            self.ui.txt_contacto_proveedor.setText(self.ui.tableWidget_2.item(fila, 3).text())
+            self.ui.txt_tiempo_entrega.setText(self.ui.tableWidget_2.item(fila, 4).text())
+            self.ui.txt_estado_proveedor.setText(self.ui.tableWidget_2.item(fila, 5).text())
+
+
+    def cargar_treewidget_proveedores(self):
+        self.ui.treeWidget_2.clear()
+        self.ui.treeWidget_2.setHeaderLabels(["Proveedor / Pedido", "Detalle", "Monto/Calif"])
+        # Quitar índices visuales si los hubiera
+        self.ui.treeWidget_2.setRootIsDecorated(True) 
+
+        try:
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            
+            # 1. Obtener Proveedores (Padres)
+            cursor.execute("SELECT id_proveedor, nombre_empresa, calificacion FROM gestion_proveedores")
+            proveedores = cursor.fetchall()
+
+            for prov in proveedores:
+                parent = QtWidgets.QTreeWidgetItem(self.ui.treeWidget_2)
+                parent.setText(0, f"{prov[1]} ({prov[0]})")
+                parent.setText(2, f"Calif: {prov[2]}")
+                parent.setForeground(0, QtGui.QColor('#00E5FF')) # Color cian de tu marca
+
+                # 2. Obtener Pedidos de este proveedor (Hijos)
+                cursor.execute("SELECT producto_suministrado, fecha_entrega, monto_total FROM pedidos_proveedor WHERE id_proveedor = ?", (prov[0],))
+                pedidos = cursor.fetchall()
+
+                for ped in pedidos:
+                    child = QtWidgets.QTreeWidgetItem(parent)
+                    child.setText(0, ped[0])     # Producto
+                    child.setText(1, ped[1])     # Fecha
+                    child.setText(2, f"${ped[2]}") # Monto
+            
+            conn.close()
+        except Exception as e:
+            print(f"Error en TreeWidget: {e}")
+
+
+    def graficar_calificacion_proveedores(self):
+        try:
+            # 1. Obtener datos de la base de datos
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT nombre_empresa, calificacion FROM gestion_proveedores")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            empresas = [fila[0] for fila in datos]
+            calificaciones = [fila[1] for fila in datos]
+
+            # 2. Configuración estética (Estilo Oscuro)
+            plt.style.use('dark_background')
+            fig, ax = plt.subplots(figsize=(5, 4))
+            fig.patch.set_facecolor('#121212') 
+            ax.set_facecolor('#121212')
+
+            # Crear barras con el color Cian característico
+            ax.bar(empresas, calificaciones, color='#00E5FF')
+            
+            ax.set_title("Calificación por Proveedor", color='white', fontsize=12)
+            ax.set_ylim(0, 5) # La escala siempre es de 1 a 5
+            ax.tick_params(axis='x', rotation=45, labelsize=8, colors='white')
+            ax.tick_params(axis='y', colors='white')
+
+            # 3. Insertar gráfico en el frame_28
+            if self.ui.frame_28.layout() is None:
+                layout = QtWidgets.QVBoxLayout(self.ui.frame_28)
+            else:
+                layout = self.ui.frame_28.layout()
+                # Limpiar gráfico anterior para evitar superposición
+                while layout.count():
+                    child = layout.takeAt(0)
+                    if child.widget(): child.widget().deleteLater()
+
+            canvas = FigureCanvas(fig)
+            layout.addWidget(canvas)
+            canvas.draw()
+
+        except Exception as e:
+            print(f"Error al generar gráfico de proveedores: {e}")
+
+    def graficar_tiempos_entrega(self):
+        try:
+            # 1. Obtener datos de la base de datos
+            conn = sqlite3.connect("GestionDelValor.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT nombre_empresa, tiempo_entrega FROM gestion_proveedores")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            empresas = []
+            tiempos = []
+
+            for fila in datos:
+                empresas.append(fila[0])
+                # Limpiar el texto (ej: "5 días" -> 5) para que sea graficable
+                valor_sucio = fila[1].lower().replace("días", "").replace("dia", "").strip()
+                try:
+                    tiempos.append(int(valor_sucio))
+                except:
+                    tiempos.append(0) # Valor por defecto si no es número
+
+            # 2. Configuración Visual Estilo AutoMetrics
+            plt.style.use('dark_background')
+            fig, ax = plt.subplots(figsize=(5, 4))
+            fig.patch.set_facecolor('#121212')
+            ax.set_facecolor('#121212')
+
+            # Usamos un color distinto (Verde Neón) para diferenciarlo de las calificaciones
+            ax.barh(empresas, tiempos, color='#69F0AE') 
+            
+            ax.set_title("Días de Entrega por Empresa", color='white', fontsize=12)
+            ax.set_xlabel("Días", color='white')
+            ax.tick_params(axis='both', colors='white', labelsize=8)
+
+            # 3. Renderizar en frame_3
+            if self.ui.frame_3.layout() is None:
+                layout = QtWidgets.QVBoxLayout(self.ui.frame_3)
+            else:
+                layout = self.ui.frame_3.layout()
+                while layout.count():
+                    child = layout.takeAt(0)
+                    if child.widget(): child.widget().deleteLater()
+
+            canvas = FigureCanvas(fig)
+            layout.addWidget(canvas)
+            canvas.draw()
+
+        except Exception as e:
+            print(f"Error en gráfico de tiempos: {e}")
 
         
 
