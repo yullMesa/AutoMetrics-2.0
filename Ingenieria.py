@@ -64,6 +64,22 @@ class VentanaIngenieria(QMainWindow):
             # cargar datos de diseño wireframe
 
             self.ir_a_diseno()
+            
+            if hasattr(self.ui, 'pushButton_7'):
+                self.ui.pushButton_7.clicked.connect(self.añadir_diseno)
+            
+            if hasattr(self.ui, 'pushButton_6'):
+                self.ui.pushButton_6.clicked.connect(self.actualizar_diseno)
+            # Dentro del __init__
+            if hasattr(self.ui, 'btn_eliminar_2'):
+                self.ui.btn_eliminar_2.clicked.connect(self.eliminar_diseno)
+
+            if hasattr(self.ui, 'pushButton_2'): 
+                self.ui.pushButton_2.clicked.connect(self.accion_exportar)
+
+            # cargar datos de materiales
+            
+            self.cargar_datos_materiales()
            
 
 
@@ -510,6 +526,7 @@ class VentanaIngenieria(QMainWindow):
 
     def al_seleccionar_diseno(self, item):
         fila = item.row()
+        tabla = self.ui.TablaWire # Tu tabla de la página 2
         # 1. Obtenemos el nombre del componente (Columna 2: COMPONENTE)
         nombre_componente = self.ui.TablaWire.item(fila, 2).text() 
         
@@ -520,6 +537,30 @@ class VentanaIngenieria(QMainWindow):
         
         # 3. Llamamos a la función que ya tienes para mostrarla
         self.actualizar_vista_previa(nombre_archivo_final)
+        try:
+            # 1. Extraer datos de todas las columnas (0 a 4)
+            val_tabla = tabla.item(fila, 0).text()
+            val_id = tabla.item(fila, 1).text()
+            val_componente = tabla.item(fila, 2).text()
+            val_estado = tabla.item(fila, 3).text()
+            val_version = tabla.item(fila, 4).text() # La columna VERSIÓN
+
+            # 2. Subir datos a los LineEdits correspondientes
+            self.ui.lineEdit_TABLA.setText(val_tabla)
+            self.ui.lineEdit_ID_DISENO.setText(val_id)
+            self.ui.lineEdit_COMPONENTE.setText(val_componente)
+            self.ui.lineEdit_ESTADO.setText(val_estado)
+            
+            # Verificamos que el nombre coincida con el de tu Designer para VERSIÓN
+            if hasattr(self.ui, 'lineEdit_VERSION'):
+                self.ui.lineEdit_VERSION.setText(val_version) #
+
+            # 3. Actualizar la imagen Wireframe
+            # Recuerda que usamos el nombre del componente + la extensión
+            self.actualizar_vista_previa(f"{val_componente}.png")
+
+        except Exception as e:
+            print(f"Error al transferir datos de diseño: {e}")
 
 
     def ir_a_diseno(self):
@@ -532,6 +573,176 @@ class VentanaIngenieria(QMainWindow):
         self.ui.TablaWire.itemClicked.connect(self.al_seleccionar_diseno)
         self.cargar_datos_diseno()
 
+    
+    
+    #------Botones wireframe ---------
+    def añadir_diseno(self):
+        # 1. Capturar datos de tus LineEdits específicos
+        val_tabla = self.ui.lineEdit_TABLA.text().strip()
+        val_id = self.ui.lineEdit_ID_DISENO.text().strip()
+        val_comp = self.ui.lineEdit_COMPONENTE.text().strip()
+        val_est = self.ui.lineEdit_ESTADO.text().strip()
+        val_ver = self.ui.lineEdit_VERSION.text().strip()
+
+        # 2. Validación: ID y Componente son esenciales
+        if not val_id or not val_comp:
+            QMessageBox.warning(self, "Campos Vacíos", "El ID y el Componente son obligatorios.")
+            return
+
+        try:
+            # 3. Conexión a la base de datos
+            ruta_db = os.path.join(os.path.dirname(__file__), "ingenieria.db")
+            conn = sqlite3.connect(ruta_db)
+            cursor = conn.cursor()
+            
+            # 4. Sentencia SQL para la tabla 'diseno'
+            query = """
+                INSERT INTO diseno (tabla, id, componente, estado, version) 
+                VALUES (?, ?, ?, ?, ?)
+            """
+            cursor.execute(query, (val_tabla, val_id, val_comp, val_est, val_ver))
+            
+            conn.commit()
+            conn.close()
+
+            # 5. Limpiar los campos para el siguiente ingreso
+            self.ui.lineEdit_TABLA.clear()
+            self.ui.lineEdit_ID_DISENO.clear()
+            self.ui.lineEdit_COMPONENTE.clear()
+            self.ui.lineEdit_ESTADO.clear()
+            self.ui.lineEdit_VERSION.clear()
+
+            # 6. Actualizar la tabla visualmente
+            self.cargar_datos_diseno()
+            
+            # Opcional: Intentar cargar la imagen del nuevo componente
+            self.actualizar_vista_previa(f"{val_comp}.png")
+
+            QMessageBox.information(self, "Éxito", f"Diseño '{val_comp}' añadido correctamente.")
+
+        except sqlite3.IntegrityError:
+            QMessageBox.critical(self, "Error", f"El ID '{val_id}' ya existe en la base de datos.")
+        except sqlite3.Error as e:
+            QMessageBox.critical(self, "Error de DB", f"Ocurrió un error: {e}")
 
     
+    def actualizar_diseno(self):
+        # 1. Obtener valores de los campos de la página de diseño
+        val_tabla = self.ui.lineEdit_TABLA.text().strip()
+        val_id = self.ui.lineEdit_ID_DISENO.text().strip() # Usado como llave en WHERE
+        val_comp = self.ui.lineEdit_COMPONENTE.text().strip()
+        val_est = self.ui.lineEdit_ESTADO.text().strip()
+        val_ver = self.ui.lineEdit_VERSION.text().strip()
 
+        # 2. Validación: Necesitamos el ID para saber qué actualizar
+        if not val_id:
+            QMessageBox.warning(self, "Atención", "Seleccione un diseño de la tabla para actualizar.")
+            return
+
+        try:
+            ruta_db = os.path.join(os.path.dirname(__file__), "ingenieria.db")
+            conn = sqlite3.connect(ruta_db)
+            cursor = conn.cursor()
+
+            # 3. Sentencia SQL UPDATE para la tabla diseno
+            # Actualizamos las otras columnas basándonos en el ID
+            query = """
+                UPDATE diseno 
+                SET tabla = ?, componente = ?, estado = ?, version = ? 
+                WHERE id = ?
+            """
+            cursor.execute(query, (val_tabla, val_comp, val_est, val_ver, val_id))
+            
+            conn.commit()
+            
+            # 4. Verificar si se realizó el cambio
+            if cursor.rowcount > 0:
+                QMessageBox.information(self, "Éxito", f"El componente '{val_comp}' ha sido actualizado.")
+                # Refrescar la tabla y la imagen
+                self.cargar_datos_diseno()
+                self.actualizar_vista_previa(f"{val_comp}.png")
+            else:
+                QMessageBox.warning(self, "Error", "No se encontró el registro para actualizar.")
+
+            conn.close()
+
+        except sqlite3.Error as e:
+            QMessageBox.critical(self, "Error de DB", f"No se pudo actualizar: {e}")
+
+
+    def eliminar_diseno(self):
+        # 1. Tomamos los datos de los LineEdits
+        # SEGÚN TU DB: El ID es el código corto (ENG-01) y TABLA es el nombre (Motor)
+        codigo_id = self.ui.lineEdit_TABLA.text().strip() 
+        nombre_diseno = self.ui.lineEdit_ID_DISENO.text().strip()
+
+        if not codigo_id:
+            QMessageBox.warning(self, "Atención", "No hay un código seleccionado para borrar.")
+            return
+
+        # 2. Confirmación
+        if QMessageBox.question(self, "Confirmar", f"¿Borrar registro {codigo_id}?") == QMessageBox.Yes:
+            try:
+                conn = sqlite3.connect("ingenieria.db")
+                cursor = conn.cursor()
+
+                # 3. EJECUCIÓN: Usamos los nombres exactos de tu imagen image_e1a08c.png
+                # Borramos donde la columna 'id' sea igual al código corto
+                cursor.execute("DELETE FROM diseno WHERE id = ?", (codigo_id,))
+                conn.commit()
+
+                # 4. Verificación de éxito real
+                if cursor.rowcount > 0:
+                    QMessageBox.information(self, "Éxito", f"Registro {codigo_id} eliminado de la base de datos.")
+                    
+                    # 5. Limpiar interfaz
+                    self.ui.lineEdit_TABLA.clear()
+                    self.ui.lineEdit_ID_DISENO.clear()
+                    self.ui.lineEdit_COMPONENTE.clear()
+                    self.ui.lineEdit_ESTADO.clear()
+                    self.ui.lineEdit_VERSION.clear()
+                    self.ui.image.clear()
+                    self.ui.image.setText("S/N Wireframe") #
+
+                    # 6. REFRESCAR TABLA: Vital para ver el cambio
+                    self.cargar_datos_diseno()
+                else:
+                    # Si entra aquí es porque buscó el código y no estaba
+                    QMessageBox.warning(self, "Error", f"No se encontró el código '{codigo_id}' en la base de datos.")
+
+                conn.close()
+            except Exception as e:
+                QMessageBox.critical(self, "Error de Sistema", f"Error: {e}")
+
+
+
+   #----------------------Materiales-----------------------------------------
+    def cargar_datos_materiales(self):
+        try:
+            # 1. Conexión a la base de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # 2. Consultar todos los datos de la tabla materiales
+            cursor.execute("SELECT id_material, descripcion, cantidad, proveedor, unidad, costo_unidad FROM materiales")
+            datos = cursor.fetchall()
+            
+            # 3. Preparar el TableWidget
+            # Importante: Limpiar filas existentes para refrescar correctamente
+            self.ui.tableWidget_3.setRowCount(0)
+            
+            # 4. Insertar los datos fila por fila
+            for fila_numero, fila_datos in enumerate(datos):
+                self.ui.tableWidget_3.insertRow(fila_numero)
+                for columna_numero, dato in enumerate(fila_datos):
+                    # Creamos el ítem y lo insertamos en la celda correspondiente
+                    item = QTableWidgetItem(str(dato))
+                    # Opcional: Centrar el texto para que se vea mejor
+                    item.setTextAlignment(Qt.AlignCenter)
+                    self.ui.tableWidget_3.setItem(fila_numero, columna_numero, item)
+            
+            conn.close()
+            
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"No se pudieron cargar los materiales: {e}")
+   
