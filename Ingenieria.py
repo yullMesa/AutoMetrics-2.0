@@ -4,6 +4,7 @@ import Exportar
 import pandas as pd
 from datetime import datetime # Importación necesaria al inicio del archivo
 from PySide6.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView, QFrame,QMessageBox
+from PySide6 import QtWidgets
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, Qt
 from PySide6.QtGui import QColor ,QPixmap# Importación necesaria para el color de letra
@@ -102,6 +103,15 @@ class VentanaIngenieria(QMainWindow):
             #Cargar datos de aseguramiento de calidad
             self.cargar_aseguramiento_calidad()
             self.ui.tableWidget_5.itemClicked.connect(self.obtener_datos_calidad)
+            self.cargar_LCD_calidad()
+            self.ui.pushButton_13.clicked.connect(self.registrar_calidad)
+            self.criterio_seleccionado = "" # Variable global de la clase
+            self.ui.buttonBox.clicked.connect(self.definir_criterio)
+            self.ui.pushButton_14.clicked.connect(self.actualizar_calidad)
+            self.ui.buttonBox.clicked.connect(self.capturar_criterio)
+            self.ui.pushButton_10.clicked.connect(self.eliminar_registro_calidad)
+            if hasattr(self.ui, 'pushButton_16'): 
+                self.ui.pushButton_16.clicked.connect(self.accion_exportar)
 
 
 
@@ -1154,48 +1164,283 @@ class VentanaIngenieria(QMainWindow):
 
     def cargar_aseguramiento_calidad(self):
         try:
-            # 1. Configuración visual: Ocultar índices y limpiar filas
+            # 1. Configuración visual
             self.ui.tableWidget_5.verticalHeader().setVisible(False)
             self.ui.tableWidget_5.setRowCount(0)
             
-            # 2. Conexión a la base de datos 'ingenieria.db'
             conn = sqlite3.connect("ingenieria.db")
             cursor = conn.cursor()
             
-            # 3. Consulta de las 6 columnas según la estructura
-            cursor.execute("SELECT id, id_prueba, criterio, persona, descripcion, fecha FROM aseguramiento_calidad")
+            # 2. SELECCIÓN SIN EL ID NUMÉRICO
+            # Ordenamos las columnas para que coincidan exactamente con tu tabla visual
+            # Col 0: id_prueba | Col 1: persona | Col 2: criterio | Col 3: descripcion
+            query = "SELECT id_prueba, persona, criterio, descripcion FROM aseguramiento_calidad"
+            cursor.execute(query)
             datos = cursor.fetchall()
             
-            # 4. Llenado de la tabla
+            # 3. Llenado de la tabla
             for fila_idx, fila_datos in enumerate(datos):
                 self.ui.tableWidget_5.insertRow(fila_idx)
                 for col_idx, valor in enumerate(fila_datos):
                     item = QTableWidgetItem(str(valor))
-                    
-                    # Mantenemos el estilo de texto blanco centrado
                     item.setForeground(QColor("white"))
                     item.setTextAlignment(Qt.AlignCenter)
-                    
                     self.ui.tableWidget_5.setItem(fila_idx, col_idx, item)
             
             conn.close()
-            
         except Exception as e:
-            QMessageBox.critical(self, "Error", f"No se pudo cargar la tabla de calidad: {e}")
+            QMessageBox.critical(self, "Error", f"No se pudo cargar la tabla: {e}")
 
     def obtener_datos_calidad(self):
         fila = self.ui.tableWidget_5.currentRow()
-        
         if fila != -1:
-            # Extraer datos de la fila (0 a 5)
-            id_reg      = self.ui.tableWidget_5.item(fila, 0).text()
-            id_prueba   = self.ui.tableWidget_5.item(fila, 1).text()
-            criterio    = self.ui.tableWidget_5.item(fila, 2).text()
-            persona     = self.ui.tableWidget_5.item(fila, 3).text()
-            descripcion = self.ui.tableWidget_5.item(fila, 4).text()
-            fecha       = self.ui.tableWidget_5.item(fila, 5).text()
+            try:
+                # Índices ajustados tras la nueva consulta SQL:
+                # 0: ID PRUEBA (PR-001) | 1: PERSONA | 2: CRITERIO | 3: DESCRIPCIÓN
+                id_prueba   = self.ui.tableWidget_5.item(fila, 0).text()
+                persona     = self.ui.tableWidget_5.item(fila, 1).text()
+                descripcion = self.ui.tableWidget_5.item(fila, 3).text() # La descripción es ahora el índice 3
 
-            # AQUÍ DEBES ASIGNAR A TUS OBJETOS (Ajusta los nombres según tu .ui)
-            # Por ejemplo:
-            # self.ui.lineEdit_ID_PRUEBA.setText(id_prueba)
-            # self.ui.textEdit_CALIDAD.setPlainText(descripcion)
+                # 1. Asignar a los LineEdits y TextEdit
+                self.ui.lineEdit_13.setText(id_prueba)   # ID PRUEBA
+                self.ui.lineEdit_14.setText(persona)     # PERSONA
+                self.ui.textEdit_2.setPlainText(descripcion) # DESCRIPCIÓN (Cargará el texto real)
+
+                # 2. Cargar Imagen correctamente
+                # Asegúrate de que la carpeta se llame 'calidad' y las fotos sean .png
+                self.mostrar_imagen_calidad(id_prueba)
+
+            except Exception as e:
+                print(f"Error en el mapeo de calidad: {e}")
+
+
+    def mostrar_imagen_calidad(self, id_prueba):
+        # Definir la ruta relativa correctamente
+        ruta = os.path.join("calidad", f"{id_prueba}.png")
+        
+        if os.path.exists(ruta):
+            pixmap = QPixmap(ruta)
+            # Ajustar la imagen al tamaño del label_8
+            self.ui.label_8.setPixmap(pixmap.scaled(
+                self.ui.label_8.width(), 
+                self.ui.label_8.height(), 
+                Qt.KeepAspectRatio, 
+                Qt.SmoothTransformation
+            ))
+        else:
+            self.ui.label_8.clear()
+            self.ui.label_8.setText("S/N Imagen")
+            print(f"Archivo no encontrado en: {ruta}")
+
+    #Lcd botones
+    
+    def cargar_LCD_calidad(self):
+        try:
+            # 1. Configuración inicial
+            self.ui.tableWidget_5.setRowCount(0)
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # 2. Variables de conteo para LCDs
+            aprovados = 0   # lcdNumber_2
+            revision = 0    # lcdNumber_3
+            rechazados = 0  # lcdNumber_4
+            
+            # 3. Consulta SQL (0:id_prueba, 1:persona, 2:criterio, 3:descripcion)
+            cursor.execute("SELECT id_prueba, persona, criterio, descripcion FROM aseguramiento_calidad")
+            datos = cursor.fetchall()
+            
+            for fila_idx, fila_datos in enumerate(datos):
+                self.ui.tableWidget_5.insertRow(fila_idx)
+                
+                # Dentro del bucle for en cargar_LCD_calidad
+                crit = str(fila_datos[2]).upper()
+
+                if "OK" in crit:
+                    aprovados += 1
+                elif "RETRY" in crit or "REVISIÓN" in crit:
+                    revision += 1
+                elif "NO" in crit: # Esto capturará tanto "NO" como "&NO"
+                    rechazados += 1
+                    
+                for col_idx, valor in enumerate(fila_datos):
+                    item = QTableWidgetItem(str(valor))
+                    item.setForeground(QColor("white"))
+                    item.setTextAlignment(Qt.AlignCenter)
+                    self.ui.tableWidget_5.setItem(fila_idx, col_idx, item)
+            
+            # 4. Actualizar visualmente los LCDs
+            self.ui.lcdNumber_2.display(aprovados)
+            self.ui.lcdNumber_3.display(revision)
+            self.ui.lcdNumber_4.display(rechazados)
+            
+            conn.close()
+        except Exception as e:
+            print(f"Error al refrescar tabla y LCDs: {e}")
+
+    def obtener_datos_calidad(self):
+        fila = self.ui.tableWidget_5.currentRow()
+        if fila != -1:
+            # Col 0: ID Prueba | Col 1: Persona | Col 3: Descripción
+            id_prueba = self.ui.tableWidget_5.item(fila, 0).text()
+            persona = self.ui.tableWidget_5.item(fila, 1).text()
+            descripcion = self.ui.tableWidget_5.item(fila, 3).text()
+
+            # Cargar en la interfaz
+            self.ui.lineEdit_13.setText(id_prueba)
+            self.ui.lineEdit_14.setText(persona)
+            self.ui.textEdit_2.setPlainText(descripcion) # Aquí ya cargará el texto real
+
+            # Cargar Imagen
+            self.mostrar_imagen_calidad(id_prueba)
+
+    # botones
+
+    def registrar_calidad(self):
+        # 1. Obtener textos de la interfaz
+        id_prueba = self.ui.lineEdit_13.text().strip()
+        persona   = self.ui.lineEdit_14.text().strip()
+        desc      = self.ui.textEdit_2.toPlainText().strip()
+        
+        
+        # 2. Validar que se haya elegido un criterio y que los campos no estén vacíos
+        if not self.criterio_seleccionado:
+            QMessageBox.warning(self, "Aviso", "Por favor seleccione un Criterio (OK, RETRY o NO)")
+            return
+
+        if not id_prueba or not persona:
+            QMessageBox.warning(self, "Error", "Faltan datos obligatorios (ID Prueba o Persona)")
+            return
+
+        # 3. Guardar en SQL
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Insertamos: id_prueba, criterio, persona, descripcion
+            query = "INSERT INTO aseguramiento_calidad (id_prueba, criterio, persona, descripcion) VALUES (?, ?, ?, ?)"
+            cursor.execute(query, (id_prueba, self.criterio_seleccionado, persona, desc))
+            
+            conn.commit()
+            conn.close()
+
+            
+            # 4. Refrescar Tabla, LCDs y Limpiar
+            self.cargar_aseguramiento_calidad()
+            # LLAMADA CRUCIAL PARA REFRESCAR LA INTERFAZ
+            self.cargar_LCD_calidad()
+            self.criterio_seleccionado = "" # Resetear para el siguiente registro
+            QMessageBox.information(self, "Éxito", "Datos guardados correctamente")
+            
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"No se pudo guardar en la base de datos: {e}")
+
+
+    def limpiar_campos_calidad(self):
+        self.ui.lineEdit_13.clear()
+        self.ui.lineEdit_14.clear()
+        self.ui.textEdit_2.clear()
+        self.ui.label_8.clear()
+        self.ui.label_8.setText("S/N Evidencia")
+
+
+    def definir_criterio(self, boton):
+        # Capturamos el texto del botón presionado dentro del buttonBox
+        self.criterio_seleccionado = boton.text()
+        print(f"Criterio seleccionado: {self.criterio_seleccionado}")
+        
+
+    def actualizar_calidad(self):
+        # 1. Obtener los datos actuales de los widgets
+        id_prueba = self.ui.lineEdit_13.text().strip()
+        persona   = self.ui.lineEdit_14.text().strip()
+        desc      = self.ui.textEdit_2.toPlainText().strip()
+        
+        # 2. Validar que tengamos un criterio seleccionado y un ID
+        if not self.criterio_seleccionado:
+            # Si no se presionó el buttonBox en esta sesión, intentamos recuperar el del registro seleccionado
+            fila = self.ui.tableWidget_5.currentRow()
+            if fila != -1:
+                self.criterio_seleccionado = self.ui.tableWidget_5.item(fila, 2).text()
+            else:
+                QMessageBox.warning(self, "Aviso", "Seleccione un registro y un criterio para actualizar")
+                return
+
+        if not id_prueba:
+            QMessageBox.warning(self, "Error", "El ID PRUEBA es necesario para identificar el registro")
+            return
+
+        # 3. Ejecutar la actualización en SQLite
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Actualizamos criterio, persona y descripcion basados en el id_prueba
+            query = """UPDATE aseguramiento_calidad 
+                    SET criterio = ?, persona = ?, descripcion = ? 
+                    WHERE id_prueba = ?"""
+            
+            cursor.execute(query, (self.criterio_seleccionado, persona, desc, id_prueba))
+            # LLAMADA CRUCIAL PARA REFRESCAR LA INTERFAZ
+            
+            
+            if cursor.rowcount > 0:
+                conn.commit()
+                # 4. REFRESCAR TABLA Y LCDs
+                # Al llamar a cargar_aseguramiento_calidad, el bucle de conteo 
+                # actualizará lcdNumber_2, 3 y 4 automáticamente
+                self.cargar_aseguramiento_calidad() 
+                self.cargar_LCD_calidad()
+                
+                QMessageBox.information(self, "Éxito", f"Registro {id_prueba} actualizado y contadores LCD refrescados")
+            else:
+                QMessageBox.warning(self, "Error", "No se encontró el registro para actualizar")
+                
+            conn.close()
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Fallo al actualizar: {e}")
+    
+
+    def capturar_criterio(self, boton):
+        # Esto guarda "OK", "RETRY" o "NO" en una variable para usarla al guardar
+        self.criterio_actual = boton.text().replace("&", "") # Limpia el texto por si tiene shortcuts
+
+    
+    def eliminar_registro_calidad(self):
+        # 1. Obtener el ID del registro a eliminar
+        id_prueba = self.ui.lineEdit_13.text().strip()
+        
+        if not id_prueba:
+            QMessageBox.warning(self, "Aviso", "Por favor seleccione un registro de la tabla para eliminar")
+            return
+
+        # 2. Confirmación de seguridad
+        respuesta = QMessageBox.question(self, "Confirmar", f"¿Está seguro de eliminar el registro {id_prueba}?",
+                                        QMessageBox.Yes | QMessageBox.No)
+        
+        if respuesta == QMessageBox.Yes:
+            try:
+                conn = sqlite3.connect("ingenieria.db")
+                cursor = conn.cursor()
+                
+                # 3. Ejecutar eliminación
+                cursor.execute("DELETE FROM aseguramiento_calidad WHERE id_prueba = ?", (id_prueba,))
+                
+                conn.commit()
+                
+                # 4. REFRESCAR DATOS Y LCDs
+                self.cargar_LCD_calidad() # Esto limpia la tabla, vuelve a contar y actualiza los LCD
+                
+                # 5. Limpiar campos de texto
+                self.ui.lineEdit_13.clear()
+                self.ui.lineEdit_14.clear()
+                self.ui.textEdit_2.clear()
+                self.ui.label_8.clear()
+                
+                QMessageBox.information(self, "Éxito", f"Registro {id_prueba} eliminado y contadores actualizados")
+                
+                conn.close()
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"No se pudo eliminar el registro: {e}")
+
+    
