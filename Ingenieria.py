@@ -80,6 +80,14 @@ class VentanaIngenieria(QMainWindow):
             # cargar datos de materiales
             
             self.cargar_datos_materiales()
+            # Dentro de tu __init__
+            self.ui.tableWidget_3.itemClicked.connect(self.obtener_datos_materiales)
+            self.ui.tableWidget_3.itemClicked.connect(self.obtener_image_materiales)
+            self.ui.pushButton_9.clicked.connect(self.registrar_material) 
+            self.ui.pushButton_15.clicked.connect(self.actualizar_material) 
+            self.ui.btn_eliminar_3.clicked.connect(self.eliminar_material)
+            if hasattr(self.ui, 'pushButton_5'): 
+                self.ui.pushButton_5.clicked.connect(self.accion_exportar)
            
 
 
@@ -564,7 +572,7 @@ class VentanaIngenieria(QMainWindow):
 
 
     def ir_a_diseno(self):
-        self.ui.stackedWidget.setCurrentIndex(2) 
+        self.ui.stackedWidget.setCurrentIndex(0) 
         # Solo conectamos la señal una vez para evitar errores
         try:
             self.ui.TablaWire.itemClicked.disconnect() # Limpiamos conexiones previas
@@ -719,30 +727,240 @@ class VentanaIngenieria(QMainWindow):
    #----------------------Materiales-----------------------------------------
     def cargar_datos_materiales(self):
         try:
-            # 1. Conexión a la base de datos
+            # 1. Configuración de la tabla para mantener la estética
+            self.ui.tableWidget_3.verticalHeader().setVisible(False) # Sin índices de fila
+            self.ui.tableWidget_3.setAlternatingRowColors(False) # Desactivamos filas blancas/grises
+            
+            # 2. Conexión a la tabla 'materiales'
             conn = sqlite3.connect("ingenieria.db")
             cursor = conn.cursor()
             
-            # 2. Consultar todos los datos de la tabla materiales
+            # Seleccionamos las 6 columnas según tu DB
             cursor.execute("SELECT id_material, descripcion, cantidad, proveedor, unidad, costo_unidad FROM materiales")
             datos = cursor.fetchall()
             
-            # 3. Preparar el TableWidget
-            # Importante: Limpiar filas existentes para refrescar correctamente
+            # 3. Limpiar antes de recargar
             self.ui.tableWidget_3.setRowCount(0)
             
-            # 4. Insertar los datos fila por fila
-            for fila_numero, fila_datos in enumerate(datos):
-                self.ui.tableWidget_3.insertRow(fila_numero)
-                for columna_numero, dato in enumerate(fila_datos):
-                    # Creamos el ítem y lo insertamos en la celda correspondiente
-                    item = QTableWidgetItem(str(dato))
-                    # Opcional: Centrar el texto para que se vea mejor
+            # 4. Llenar la tabla aplicando el color de texto
+            for fila_idx, fila_datos in enumerate(datos):
+                self.ui.tableWidget_3.insertRow(fila_idx)
+                for col_idx, valor in enumerate(fila_datos):
+                    item = QTableWidgetItem(str(valor))
+                    
+                    # Forzamos color blanco y alineación centrada para que resalte en el fondo oscuro
+                    item.setForeground(QColor("white")) 
                     item.setTextAlignment(Qt.AlignCenter)
-                    self.ui.tableWidget_3.setItem(fila_numero, columna_numero, item)
+                    
+                    self.ui.tableWidget_3.setItem(fila_idx, col_idx, item)
             
             conn.close()
             
         except Exception as e:
-            QMessageBox.critical(self, "Error", f"No se pudieron cargar los materiales: {e}")
+            QMessageBox.critical(self, "Error", f"Fallo al cargar materiales: {e}")
+
+
+    def obtener_image_materiales(self):
+        fila = self.ui.tableWidget_3.currentRow()
+        
+        if fila != -1:
+            # 1. Extraer datos de la tabla
+            id_mat = self.ui.tableWidget_3.item(fila, 0).text()
+            # ... (tus otras líneas de setText para los lineEdits) ...
+
+            # 2. Lógica para mostrar la imagen en label_7
+            # Ajusta 'Materiales_Folder' al nombre real de tu carpeta de imágenes
+            ruta_imagen = f"Materiales/{id_mat}.png" 
+
+            if os.path.exists(ruta_imagen):
+                pixmap = QPixmap(ruta_imagen)
+                # Escalamos la imagen para que quepa en el label_7 manteniendo la estética
+                self.ui.label_7.setPixmap(pixmap.scaled(
+                    self.ui.label_7.width(), 
+                    self.ui.label_7.height(), 
+                    Qt.KeepAspectRatio, 
+                    Qt.SmoothTransformation
+                ))
+            else:
+                # Si no hay imagen, limpiamos y ponemos un texto de reemplazo
+                self.ui.label_7.clear()
+                self.ui.label_7.setText("Sin Imagen")
+                self.ui.label_7.setAlignment(Qt.AlignCenter)
+                self.ui.label_7.setStyleSheet("color: #00f2ff; font-weight: bold;") # Estilo neón
+
+
+    def obtener_datos_materiales(self):
+        fila = self.ui.tableWidget_3.currentRow()
+        
+        if fila != -1:
+            try:
+                # 1. PRIMERO SUBIMOS LOS DATOS (Para asegurar que siempre se vean)
+                # Extraemos de la tabla
+                id_mat = self.ui.tableWidget_3.item(fila, 0).text()
+                desc   = self.ui.tableWidget_3.item(fila, 1).text()
+                cant   = self.ui.tableWidget_3.item(fila, 2).text()
+                prov   = self.ui.tableWidget_3.item(fila, 3).text()
+                unid   = self.ui.tableWidget_3.item(fila, 4).text()
+                costo  = self.ui.tableWidget_3.item(fila, 5).text()
+
+                # Asignamos a los LineEdits
+                self.ui.lineEdit_6.setText(id_mat)
+                self.ui.lineEdit_8.setText(desc)
+                self.ui.lineEdit_9.setText(cant)
+                self.ui.lineEdit_10.setText(prov)
+                self.ui.lineEdit_11.setText(unid)
+                self.ui.lineEdit_12.setText(costo)
+
+                # 2. LUEGO CARGAMOS LA IMAGEN EN LABEL_7
+                # Cambia "Materiales_Folder" por el nombre de tu carpeta real
+                ruta_imagen = f"Materiales_Folder/{id_mat}.png" 
+
+                if os.path.exists(ruta_imagen):
+                    pixmap = QPixmap(ruta_imagen)
+                    self.ui.label_7.setPixmap(pixmap.scaled(
+                        self.ui.label_7.width(), 
+                        self.ui.label_7.height(), 
+                        Qt.KeepAspectRatio, 
+                        Qt.SmoothTransformation
+                    ))
+                else:
+                    self.ui.label_7.clear()
+                    self.ui.label_7.setText("S/N Imagen")
+                    self.ui.label_7.setAlignment(Qt.AlignCenter)
+                    self.ui.label_7.setStyleSheet("color: #00f2ff; border: 1px solid #00f2ff;")
+
+            except Exception as e:
+                print(f"Error al procesar la fila: {e}")
+   
+   
+    #---------Botones------------------------------------------
+
+    def registrar_material(self):
+        # 1. Obtener datos de los LineEdits
+        id_mat = self.ui.lineEdit_6.text().strip()
+        desc   = self.ui.lineEdit_8.text().strip()
+        cant   = self.ui.lineEdit_9.text().strip()
+        prov   = self.ui.lineEdit_10.text().strip()
+        unid   = self.ui.lineEdit_11.text().strip()
+        costo  = self.ui.lineEdit_12.text().strip()
+
+        # 2. Validación básica
+        if not id_mat or not desc:
+            QMessageBox.warning(self, "Advertencia", "El ID y la Descripción son obligatorios.")
+            return
+
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+
+            # 3. Query de inserción según las columnas de tu DB
+            query = """INSERT INTO materiales (id_material, descripcion, cantidad, proveedor, unidad, costo_unidad) 
+                    VALUES (?, ?, ?, ?, ?, ?)"""
+            
+            cursor.execute(query, (id_mat, desc, cant, prov, unid, costo))
+            conn.commit()
+
+            if cursor.rowcount > 0:
+                QMessageBox.information(self, "Éxito", f"Material {id_mat} registrado correctamente.")
+                
+                # 4. Limpiar campos después de añadir
+                self.ui.lineEdit_6.clear()
+                self.ui.lineEdit_8.clear()
+                self.ui.lineEdit_9.clear()
+                self.ui.lineEdit_10.clear()
+                self.ui.lineEdit_11.clear()
+                self.ui.lineEdit_12.clear()
+
+                # 5. REFRESCAR LA TABLA VISUAL
+                self.cargar_datos_materiales() 
+            
+            conn.close()
+
+        except sqlite3.IntegrityError:
+            QMessageBox.critical(self, "Error", "El ID de material ya existe en la base de datos.")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"No se pudo guardar: {e}")
+
+
+    def actualizar_material(self):
+        # 1. Obtener los datos actuales de los campos
+        id_mat = self.ui.lineEdit_6.text().strip()
+        desc   = self.ui.lineEdit_8.text().strip()
+        cant   = self.ui.lineEdit_9.text().strip()
+        prov   = self.ui.lineEdit_10.text().strip()
+        unid   = self.ui.lineEdit_11.text().strip()
+        costo  = self.ui.lineEdit_12.text().strip()
+
+        if not id_mat:
+            QMessageBox.warning(self, "Atención", "Selecciona un material de la tabla para actualizar.")
+            return
+
+        # 2. Confirmación del usuario
+        if QMessageBox.question(self, "Confirmar", f"¿Deseas guardar los cambios para {id_mat}?") == QMessageBox.Yes:
+            try:
+                conn = sqlite3.connect("ingenieria.db")
+                cursor = conn.cursor()
+
+                # 3. Sentencia SQL UPDATE
+                query = """UPDATE materiales 
+                        SET descripcion = ?, cantidad = ?, proveedor = ?, unidad = ?, costo_unidad = ? 
+                        WHERE id_material = ?"""
+                
+                cursor.execute(query, (desc, cant, prov, unid, costo, id_mat))
+                conn.commit()
+
+                if cursor.rowcount > 0:
+                    QMessageBox.information(self, "Éxito", "Registro actualizado correctamente.")
+                    # 4. Refrescar la tabla para ver los cambios
+                    self.cargar_datos_materiales()
+                else:
+                    QMessageBox.warning(self, "Error", "No se encontró el material para actualizar.")
+                
+                conn.close()
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"No se pudo actualizar: {e}")
+    
+    
+    def eliminar_material(self):
+        # 1. Obtener el ID del material desde el LineEdit
+        id_mat = self.ui.lineEdit_6.text().strip()
+
+        if not id_mat:
+            QMessageBox.warning(self, "Atención", "Selecciona un material de la tabla para eliminar.")
+            return
+
+        # 2. Confirmación de seguridad (Botón Rosa)
+        mensaje = f"¿Estás seguro de eliminar permanentemente el material '{id_mat}'?"
+        if QMessageBox.question(self, "Confirmar Eliminación", mensaje) == QMessageBox.Yes:
+            try:
+                conn = sqlite3.connect("ingenieria.db")
+                cursor = conn.cursor()
+
+                # 3. Ejecutar el borrado en la tabla materiales
+                cursor.execute("DELETE FROM materiales WHERE id_material = ?", (id_mat,))
+                conn.commit()
+
+                if cursor.rowcount > 0:
+                    QMessageBox.information(self, "Éxito", f"Material '{id_mat}' eliminado.")
+                    
+                    # 4. LIMPIEZA TOTAL DE LA INTERFAZ
+                    self.ui.lineEdit_6.clear()
+                    self.ui.lineEdit_8.clear()
+                    self.ui.lineEdit_9.clear()
+                    self.ui.lineEdit_10.clear()
+                    self.ui.lineEdit_11.clear()
+                    self.ui.lineEdit_12.clear()
+                    
+                    # Limpiar la imagen en label_7
+                    self.ui.label_7.clear()
+                    self.ui.label_7.setText("S/N Imagen")
+                    
+                    # 5. Refrescar la tabla para que el dato desaparezca
+                    self.cargar_datos_materiales()
+                else:
+                    QMessageBox.warning(self, "Error", "El registro no existe en la base de datos.")
+                
+                conn.close()
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"Fallo al eliminar material: {e}")
    
