@@ -1,10 +1,14 @@
 import sqlite3
 import os
+import Exportar
+import pandas as pd
 from PySide6.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView, QFrame,QMessageBox
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, Qt
 from PySide6.QtGui import QColor # Importación necesaria para el color de letra
 import recursos_rc
+
+
 class VentanaIngenieria(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -45,6 +49,17 @@ class VentanaIngenieria(QMainWindow):
             if tabla:
                 # Conectamos el clic en la tabla con la función de transferencia
                 tabla.itemClicked.connect(self.transferir_datos_a_campos)
+
+            # Dentro del __init__
+            if hasattr(self.ui, 'pushButton_3'):
+                self.ui.pushButton_3.clicked.connect(self.actualizar_requisito)
+
+            # Dentro del método __init__
+            if hasattr(self.ui, 'btn_eliminar'):
+                self.ui.btn_eliminar.clicked.connect(self.eliminar_requisito)
+
+            if hasattr(self.ui, 'pushButton'): 
+                self.ui.pushButton.clicked.connect(self.accion_exportar)
            
 
 
@@ -274,6 +289,103 @@ class VentanaIngenieria(QMainWindow):
             print(f"Error al cargar tabla: {e}")
 
     #------------------Actualizar-------------------
-    
+
+    def actualizar_requisito(self):
+        # 1. Obtener los valores de los campos
+        id_val = self.ui.lineEdit.text().strip()      # El ID es la llave para buscar
+        nombre_val = self.ui.lineEdit_2.text().strip()
+        peticion_val = self.ui.lineEdit_5.text().strip()
+        prioridad_val = self.ui.comboBox.currentText()
+
+        # 2. Validación básica
+        if not id_val:
+            QMessageBox.warning(self, "Error", "Debe seleccionar un requisito (ID) para actualizar.")
+            return
+
+        try:
+            ruta_db = os.path.join(os.path.dirname(__file__), "ingenieria.db")
+            conn = sqlite3.connect(ruta_db)
+            cursor = conn.cursor()
+
+            # 3. Sentencia SQL UPDATE
+            # Actualizamos nombre, peticion y prioridad donde el id coincida
+            query = """
+                UPDATE requisitos 
+                SET nombre = ?, peticion = ?, prioridad = ? 
+                WHERE id = ?
+            """
+            cursor.execute(query, (nombre_val, peticion_val, prioridad_val, id_val))
+            
+            conn.commit()
+            
+            # Verificamos si realmente se actualizó algo
+            if cursor.rowcount > 0:
+                QMessageBox.information(self, "Éxito", f"Requisito {id_val} actualizado correctamente.")
+                # 4. Refrescar la tabla para ver los cambios
+                self.cargar_datos_requisitos()
+            else:
+                QMessageBox.warning(self, "Error", "No se encontró ningún requisito con ese ID.")
+
+            conn.close()
+
+        except sqlite3.Error as e:
+            QMessageBox.critical(self, "Error de Base de Datos", f"No se pudo actualizar: {e}")
+
+    #-----------------Eliminar--------------------
+
+    def eliminar_requisito(self):
+        # 1. Obtener el ID del campo de texto (donde se carga al hacer clic en la tabla)
+        id_val = self.ui.lineEdit.text().strip()
+
+        # 2. Validación: Si no hay ID, no sabemos qué borrar
+        if not id_val:
+            QMessageBox.warning(self, "Atención", "Por favor, seleccione un requisito de la tabla para eliminar.")
+            return
+
+        # 3. Confirmación de seguridad
+        respuesta = QMessageBox.question(self, "Confirmar Eliminación", 
+                                        f"¿Está seguro de que desea eliminar el requisito con ID: {id_val}?",
+                                        QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+
+        if respuesta == QMessageBox.StandardButton.Yes:
+            try:
+                ruta_db = os.path.join(os.path.dirname(__file__), "ingenieria.db")
+                conn = sqlite3.connect(ruta_db)
+                cursor = conn.cursor()
+
+                # 4. Sentencia SQL DELETE
+                query = "DELETE FROM requisitos WHERE id = ?"
+                cursor.execute(query, (id_val,))
+                
+                conn.commit()
+
+                if cursor.rowcount > 0:
+                    QMessageBox.information(self, "Éxito", "Requisito eliminado correctamente.")
+                    
+                    # 5. Limpiar los campos después de eliminar
+                    self.ui.lineEdit.clear()
+                    self.ui.lineEdit_2.clear()
+                    self.ui.lineEdit_5.clear()
+                    
+                    # 6. Refrescar la tabla para actualizar la vista neón
+                    self.cargar_datos_requisitos()
+                else:
+                    QMessageBox.warning(self, "Error", "No se encontró el registro en la base de datos.")
+
+                conn.close()
+
+            except sqlite3.Error as e:
+                QMessageBox.critical(self, "Error", f"No se pudo eliminar el registro: {e}")
+
+    #--------------------------------Exportar a Excel--------------------
+
+    def accion_exportar(self):
+        # Llamamos a la función que está dentro de Exportar.py
+        exito = Exportar.seleccionar_y_convertir()
+        
+        if exito:
+            QMessageBox.information(self, "Exportación", "Los datos se han exportado correctamente.")
+        else:
+            QMessageBox.critical(self, "Error", "No se pudo completar la exportación.")
     
 
