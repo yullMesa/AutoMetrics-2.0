@@ -5,7 +5,7 @@ import pandas as pd
 from PySide6.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView, QFrame,QMessageBox
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, Qt
-from PySide6.QtGui import QColor # Importación necesaria para el color de letra
+from PySide6.QtGui import QColor ,QPixmap# Importación necesaria para el color de letra
 import recursos_rc
 
 
@@ -60,6 +60,10 @@ class VentanaIngenieria(QMainWindow):
 
             if hasattr(self.ui, 'pushButton'): 
                 self.ui.pushButton.clicked.connect(self.accion_exportar)
+
+            # cargar datos de diseño wireframe
+
+            self.ir_a_diseno()
            
 
 
@@ -387,5 +391,147 @@ class VentanaIngenieria(QMainWindow):
             QMessageBox.information(self, "Exportación", "Los datos se han exportado correctamente.")
         else:
             QMessageBox.critical(self, "Error", "No se pudo completar la exportación.")
+
+
+
+   #----------Wireframe---------------
+
+    def cargar_datos_diseno(self):
+        # Buscamos el tableWidget específico de esta página
+        tabla = self.ui.findChild(object, "TablaWire")
+        if not tabla:
+            return
+
+        # --- CONFIGURACIÓN ESTÉTICA (Igual que la anterior) ---
+        tabla.verticalHeader().setVisible(False)      # Quita números de fila
+        tabla.setAlternatingRowColors(False)          # Evita filas blancas
+        tabla.viewport().setAutoFillBackground(False)  # Fondo negro del QSS
+        tabla.setFrameShape(QFrame.NoFrame)            # Quita bordes de Windows
+        tabla.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
+        try:
+            ruta_db = os.path.join(os.path.dirname(__file__), "ingenieria.db")
+            conn = sqlite3.connect(ruta_db)
+            cursor = conn.cursor()
+            
+            # Consultamos la tabla 'diseno'
+            cursor.execute("SELECT * FROM diseno")
+            datos = cursor.fetchall()
+            
+            # Obtener nombres de columnas dinámicamente
+            columnas = [desc[0] for desc in cursor.description]
+            
+            tabla.setRowCount(len(datos))
+            tabla.setColumnCount(len(columnas))
+            tabla.setHorizontalHeaderLabels([c.upper() for c in columnas])
+
+            # Llenar celdas con texto blanco
+            for f_idx, fila in enumerate(datos):
+                for c_idx, valor in enumerate(fila):
+                    item = QTableWidgetItem(str(valor))
+                    item.setForeground(QColor("white")) # Letras blancas
+                    item.setTextAlignment(Qt.AlignCenter)
+                    tabla.setItem(f_idx, c_idx, item)
+            
+            conn.close()
+        except sqlite3.Error as e:
+            print(f"Error al cargar tabla diseño: {e}")
+
+    
+    # cargar imagen
+    
+    def actualizar_vista_previa(self, nombre_archivo):
+        # 1. Ruta a la carpeta WireFrame
+        ruta_base = os.path.dirname(__file__)
+        ruta_imagen = os.path.join(ruta_base, "WireFrame", nombre_archivo)
+        
+        label_foto = self.ui.findChild(object, "image") # Tu label de imagen
+        
+        if label_foto:
+            if os.path.exists(ruta_imagen) and nombre_archivo != "":
+                pixmap = QPixmap(ruta_imagen)
+                # Ajustamos la imagen al tamaño del label sin deformarla demasiado
+                label_foto.setPixmap(pixmap.scaled(
+                    label_foto.size(), 
+                    Qt.KeepAspectRatio, 
+                    Qt.SmoothTransformation
+                ))
+                label_foto.setScaledContents(True) 
+            else:
+                # Si no hay imagen o no existe, ponemos un fondo oscuro o texto
+                label_foto.clear()
+                label_foto.setText("S/N Wireframe")
+                label_foto.setStyleSheet("color: #00ffff; border: 1px solid #00ffff;")
+
+
+    def cargar_datos_diseno(self):
+        tabla = self.ui.TablaWire
+        if not tabla: return
+
+        # Estética segura
+        tabla.setFrameShape(QFrame.NoFrame) # Esto es lo que PySide6 espera 
+        tabla.verticalHeader().setVisible(False)
+        # Localizamos la tabla de la página 2
+        tabla = self.ui.findChild(object, "TablaWire")
+        if not tabla: return
+
+        # Estética segura: evita el TypeError
+        tabla.setFrameShape(QFrame.NoFrame) 
+        tabla.verticalHeader().setVisible(False)
+        tabla.setAlternatingRowColors(False)
+        tabla.viewport().setAutoFillBackground(False)
+
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            # Asegúrate de que la tabla en la DB sea 'diseno'
+            cursor.execute("SELECT * FROM diseno") 
+            datos = cursor.fetchall()
+            
+            tabla.setRowCount(len(datos))
+            tabla.setColumnCount(5) # Ajusta según tus columnas (ID, COMPONENTE, etc)
+
+            for f_idx, fila in enumerate(datos):
+                for c_idx, valor in enumerate(fila):
+                    item = QTableWidgetItem(str(valor))
+                    item.setForeground(QColor("white"))
+                    item.setTextAlignment(Qt.AlignCenter)
+                    tabla.setItem(f_idx, c_idx, item)
+            conn.close()
+            
+            # Conectar el clic UNA SOLA VEZ para evitar cierres inesperados
+            try: tabla.itemClicked.disconnect() 
+            except: pass
+            tabla.itemClicked.connect(self.al_seleccionar_diseno)
+
+        except Exception as e:
+            print(f"Error al cargar diseño: {e}")
+
+
+    def al_seleccionar_diseno(self, item):
+        fila = item.row()
+        # 1. Obtenemos el nombre del componente (Columna 2: COMPONENTE)
+        nombre_componente = self.ui.TablaWire.item(fila, 2).text() 
+        
+        # 2. Le sumamos la extensión .png para que coincida con la carpeta
+        nombre_archivo_final = f"{nombre_componente}.png"
+        
+        print(f"Buscando imagen: {nombre_archivo_final}") # Para depurar en terminal
+        
+        # 3. Llamamos a la función que ya tienes para mostrarla
+        self.actualizar_vista_previa(nombre_archivo_final)
+
+
+    def ir_a_diseno(self):
+        self.ui.stackedWidget.setCurrentIndex(2) 
+        # Solo conectamos la señal una vez para evitar errores
+        try:
+            self.ui.TablaWire.itemClicked.disconnect() # Limpiamos conexiones previas
+        except:
+            pass
+        self.ui.TablaWire.itemClicked.connect(self.al_seleccionar_diseno)
+        self.cargar_datos_diseno()
+
+
     
 
