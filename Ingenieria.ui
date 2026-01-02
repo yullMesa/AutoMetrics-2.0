@@ -87,7 +87,7 @@ QMenuBar::item:selected {
         </sizepolicy>
        </property>
        <property name="currentIndex">
-        <number>4</number>
+        <number>5</number>
        </property>
        <widget class="QWidget" name="Dashboard">
         <widget class="QWidget" name="horizontalLayoutWidget_2">

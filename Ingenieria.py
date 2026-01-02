@@ -2,6 +2,7 @@ import sqlite3
 import os
 import Exportar
 import pandas as pd
+from datetime import datetime # Importación necesaria al inicio del archivo
 from PySide6.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView, QFrame,QMessageBox
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, Qt
@@ -88,8 +89,19 @@ class VentanaIngenieria(QMainWindow):
             self.ui.btn_eliminar_3.clicked.connect(self.eliminar_material)
             if hasattr(self.ui, 'pushButton_5'): 
                 self.ui.pushButton_5.clicked.connect(self.accion_exportar)
-           
 
+            # cargar datos de control de cambios
+            self.cargar_control_cambios()
+            self.ui.tableWidget_4.itemClicked.connect(self.obtener_datos_cambios)
+            self.ui.pushButton_11.clicked.connect(self.registrar_cambio)
+            self.ui.btn_eliminar_4.clicked.connect(self.eliminar_cambio)
+            self.ui.pushButton_8.clicked.connect(self.actualizar_cambio)
+            if hasattr(self.ui, 'pushButton_16'): 
+                self.ui.pushButton_16.clicked.connect(self.accion_exportar)
+
+            #Cargar datos de aseguramiento de calidad
+            self.cargar_aseguramiento_calidad()
+            self.ui.tableWidget_5.itemClicked.connect(self.obtener_datos_calidad)
 
 
 
@@ -963,4 +975,227 @@ class VentanaIngenieria(QMainWindow):
                 conn.close()
             except Exception as e:
                 QMessageBox.critical(self, "Error", f"Fallo al eliminar material: {e}")
-   
+
+    
+   #------------------Control de cambios-----------------------------------
+
+    def cargar_control_cambios(self):
+        try:
+            # Configuración visual estética
+            self.ui.tableWidget_4.verticalHeader().setVisible(False)
+            self.ui.tableWidget_4.setRowCount(0)
+            
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Seleccionamos las 5 columnas de la tabla control_cambios
+            cursor.execute("SELECT id, persona, fecha, cargo, descripcion FROM control_cambios")
+            datos = cursor.fetchall()
+            
+            for fila_idx, fila_datos in enumerate(datos):
+                self.ui.tableWidget_4.insertRow(fila_idx)
+                for col_idx, valor in enumerate(fila_datos):
+                    item = QTableWidgetItem(str(valor))
+                    item.setForeground(QColor("white"))
+                    item.setTextAlignment(Qt.AlignCenter)
+                    self.ui.tableWidget_4.setItem(fila_idx, col_idx, item)
+            
+            conn.close()
+        except Exception as e:
+            print(f"Error al cargar control de cambios: {e}")
+
+    def obtener_datos_cambios(self):
+        fila = self.ui.tableWidget_4.currentRow()
+        
+        if fila != -1:
+            # Extraer datos de la fila seleccionada
+            id_cambio   = self.ui.tableWidget_4.item(fila, 0).text()
+            persona     = self.ui.tableWidget_4.item(fila, 1).text()
+            fecha       = self.ui.tableWidget_4.item(fila, 2).text()
+            cargo       = self.ui.tableWidget_4.item(fila, 3).text()
+            descripcion = self.ui.tableWidget_4.item(fila, 4).text()
+
+            # Asignar a los objetos de la interfaz
+            # (Ajusta los números de lineEdit según tu diseño exacto)
+            self.ui.lineEdit_3.setText(persona)     # Ejemplo: Persona
+            self.ui.lineEdit_4.setText(cargo)       # Ejemplo: Cargo
+            
+            # Para el campo de texto largo utilizamos setPlainText
+            self.ui.textEdit.setPlainText(descripcion) #
+
+    # botones
+
+    def registrar_cambio(self):
+        # 1. Obtener datos de la interfaz
+        persona     = self.ui.lineEdit_3.text().strip()
+        cargo       = self.ui.lineEdit_4.text().strip()
+        descripcion = self.ui.textEdit.toPlainText().strip()
+        # Generamos la fecha actual en formato Año-Mes-Día
+        fecha_hoy   = datetime.now().strftime("%Y-%m-%d")
+
+        # 2. Validación mínima
+        if not persona or not descripcion:
+            QMessageBox.warning(self, "Advertencia", "Los campos Persona y Descripción son obligatorios.")
+            return
+
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+
+            # 3. Inserción en la tabla 'control_cambios'
+            # Nota: El 'id' se suele omitir si es autoincremental en la DB
+            query = """INSERT INTO control_cambios (persona, fecha, cargo, descripcion) 
+                    VALUES (?, ?, ?, ?)"""
+            
+            cursor.execute(query, (persona, fecha_hoy, cargo, descripcion))
+            conn.commit()
+
+            if cursor.rowcount > 0:
+                QMessageBox.information(self, "Éxito", "El cambio ha sido registrado correctamente.")
+                
+                # 4. Limpiar los campos para un nuevo ingreso
+                self.ui.lineEdit_3.clear()
+                self.ui.lineEdit_4.clear()
+                self.ui.textEdit.clear()
+
+                # 5. REFRESCAR LA TABLA VISUAL
+                self.cargar_control_cambios() 
+            
+            conn.close()
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"No se pudo registrar el cambio: {e}")
+
+
+    def eliminar_cambio(self):
+     # 1. Obtener la fila seleccionada en el tableWidget_4
+        fila_actual = self.ui.tableWidget_4.currentRow()
+        
+        if fila_actual == -1:
+            QMessageBox.warning(self, "Atención", "Por favor, selecciona un registro de la tabla para eliminar.")
+            return
+
+        # 2. Extraer el ID (Columna 0) para el borrado exacto
+        id_registro = self.ui.tableWidget_4.item(fila_actual, 0).text()
+        persona_nom = self.ui.tableWidget_4.item(fila_actual, 1).text()
+
+        # 3. Confirmación de seguridad
+        if QMessageBox.question(self, "Confirmar", f"¿Eliminar el registro de '{persona_nom}'?") == QMessageBox.Yes:
+            try:
+                conn = sqlite3.connect("ingenieria.db")
+                cursor = conn.cursor()
+
+                # 4. Ejecutar DELETE usando el ID único
+                cursor.execute("DELETE FROM control_cambios WHERE id = ?", (id_registro,))
+                conn.commit()
+
+                if cursor.rowcount > 0:
+                    QMessageBox.information(self, "Éxito", "Registro eliminado correctamente.")
+                    
+                    # 5. Limpiar los campos de texto
+                    self.ui.lineEdit_3.clear()
+                    self.ui.lineEdit_4.clear()
+                    self.ui.textEdit.clear()
+                    
+                    # 6. Refrescar la tabla para mostrar los datos actuales
+                    self.cargar_control_cambios()
+                
+                conn.close()
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"No se pudo eliminar el registro: {e}")
+
+
+    def actualizar_cambio(self):
+        # 1. Identificar qué fila está seleccionada para obtener el ID real
+        fila_actual = self.ui.tableWidget_4.currentRow()
+        
+        if fila_actual == -1:
+            QMessageBox.warning(self, "Atención", "Selecciona un registro de la tabla para actualizar.")
+            return
+
+        # Extraemos el ID de la columna 0 (invisible o visible en tu tabla)
+        id_registro = self.ui.tableWidget_4.item(fila_actual, 0).text()
+
+        # 2. Obtener los nuevos datos de los campos
+        nueva_persona     = self.ui.lineEdit_3.text().strip()
+        nuevo_cargo       = self.ui.lineEdit_4.text().strip()
+        nueva_descripcion = self.ui.textEdit.toPlainText().strip()
+
+        if not nueva_persona or not nueva_descripcion:
+            QMessageBox.warning(self, "Error", "Persona y Descripción no pueden estar vacíos.")
+            return
+
+        # 3. Confirmación y ejecución
+        if QMessageBox.question(self, "Actualizar", f"¿Guardar cambios en el registro {id_registro}?") == QMessageBox.Yes:
+            try:
+                conn = sqlite3.connect("ingenieria.db")
+                cursor = conn.cursor()
+
+                # Sentencia SQL UPDATE para la tabla control_cambios
+                query = """UPDATE control_cambios 
+                        SET persona = ?, cargo = ?, descripcion = ? 
+                        WHERE id = ?"""
+                
+                cursor.execute(query, (nueva_persona, nuevo_cargo, nueva_descripcion, id_registro))
+                conn.commit()
+
+                if cursor.rowcount > 0:
+                    QMessageBox.information(self, "Éxito", "Registro actualizado correctamente.")
+                    # 4. Refrescar la vista
+                    self.cargar_control_cambios()
+                else:
+                    QMessageBox.warning(self, "Error", "No se pudo actualizar el registro.")
+
+                conn.close()
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"Error de base de datos: {e}")
+
+    
+    #------------------Aseguramiento calidad-----------------------------------
+
+    def cargar_aseguramiento_calidad(self):
+        try:
+            # 1. Configuración visual: Ocultar índices y limpiar filas
+            self.ui.tableWidget_5.verticalHeader().setVisible(False)
+            self.ui.tableWidget_5.setRowCount(0)
+            
+            # 2. Conexión a la base de datos 'ingenieria.db'
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # 3. Consulta de las 6 columnas según la estructura
+            cursor.execute("SELECT id, id_prueba, criterio, persona, descripcion, fecha FROM aseguramiento_calidad")
+            datos = cursor.fetchall()
+            
+            # 4. Llenado de la tabla
+            for fila_idx, fila_datos in enumerate(datos):
+                self.ui.tableWidget_5.insertRow(fila_idx)
+                for col_idx, valor in enumerate(fila_datos):
+                    item = QTableWidgetItem(str(valor))
+                    
+                    # Mantenemos el estilo de texto blanco centrado
+                    item.setForeground(QColor("white"))
+                    item.setTextAlignment(Qt.AlignCenter)
+                    
+                    self.ui.tableWidget_5.setItem(fila_idx, col_idx, item)
+            
+            conn.close()
+            
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"No se pudo cargar la tabla de calidad: {e}")
+
+    def obtener_datos_calidad(self):
+        fila = self.ui.tableWidget_5.currentRow()
+        
+        if fila != -1:
+            # Extraer datos de la fila (0 a 5)
+            id_reg      = self.ui.tableWidget_5.item(fila, 0).text()
+            id_prueba   = self.ui.tableWidget_5.item(fila, 1).text()
+            criterio    = self.ui.tableWidget_5.item(fila, 2).text()
+            persona     = self.ui.tableWidget_5.item(fila, 3).text()
+            descripcion = self.ui.tableWidget_5.item(fila, 4).text()
+            fecha       = self.ui.tableWidget_5.item(fila, 5).text()
+
+            # AQUÍ DEBES ASIGNAR A TUS OBJETOS (Ajusta los nombres según tu .ui)
+            # Por ejemplo:
+            # self.ui.lineEdit_ID_PRUEBA.setText(id_prueba)
+            # self.ui.textEdit_CALIDAD.setPlainText(descripcion)
