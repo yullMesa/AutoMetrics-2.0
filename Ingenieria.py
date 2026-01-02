@@ -446,8 +446,8 @@ class VentanaIngenieria(QMainWindow):
         
         if exito:
             QMessageBox.information(self, "Exportación", "Los datos se han exportado correctamente.")
-        else:
-            QMessageBox.critical(self, "Error", "No se pudo completar la exportación.")
+
+        
 
 
 

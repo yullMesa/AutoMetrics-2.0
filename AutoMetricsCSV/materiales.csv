@@ -1,0 +1,14 @@
+id_material,descripcion,cantidad,proveedor,unidad,costo_unidad
+MAT-001,Acero Inoxidable 304,50.5,Siderúrgica Nacional,kg,12500.0
+MAT-002,Tornillería Grado 8,200.0,Ferretería Industrial,unidades,450.0
+MAT-003,Aluminio Serie 6000,15.0,Aluminios S.A.,láminas,85000.0
+MAT-004,Sensor Proximidad Inductivo LJ12A3,15.0,Electronica Medellin,unidades,25000.0
+MAT-005,Perfil Aluminio V-Slot 2020 1m,10.0,Aluminios S.A.,unidades,45000.0
+MAT-006,Rodamiento Skf 6204-2Z,40.0,Rodamientos del Sur,unidades,18500.0
+MAT-007,Manguera Neumatica Poliuretano 6mm,100.0,Suministros Ind,metros,3200.0
+MAT-008,Servomotor MG996R Torque 10kg,12.0,Robotics Shop,unidades,35000.0
+MAT-009,Placa de Acero A36 1/4 pulgada,5.0,Siderúrgica Nacional,láminas,210000.0
+MAT-010,Válvula Solenoide 5/2 24VDC,8.0,Festo Colombia,unidades,125000.0
+MAT-011,Correa Sincronica GT2 6mm,50.0,Mecanizados Ya,metros,8500.0
+MAT-012,Fuente Conmutada 24V 10A,6.0,Electronica Medellin,unidades,85000.0
+MAT-013,Acoplamiento Flexible 5x8mm,20.0,Robotics Shop,unidades,12000.0

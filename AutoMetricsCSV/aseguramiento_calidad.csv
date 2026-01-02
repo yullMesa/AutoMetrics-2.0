@@ -1,0 +1,9 @@
+id,id_prueba,criterio,persona,descripcion,fecha
+1,PR-001,OK,Yull Sebastian Mesa,Prueba de torque en servomotor MG996R completada. Desviación dentro del +/- 2%.,2025-12-24 02:11:54
+2,PR-002,RETRY,Carlos Rodríguez,Sensor inductivo LJ12A3 presenta lecturas intermitentes; requiere ajuste de distancia de detección.,2025-12-24 02:11:54
+3,PR-003,NO,Ana María López,Estructura base de aluminio presenta fisura en el soporte del eje Y. Pieza descartada.,2025-12-24 02:11:54
+4,PR-004,OK,Jorge Hincapié,Calibración de PID en controlador de temperatura exitosa. Estabilidad térmica lograda en 45 segundos.,2025-12-24 02:11:54
+5,PR-005,RETRY,Yull Sebastian Mesa,Banda transportadora con ligera vibración en alta velocidad. Revisar alineación de poleas.,2025-12-24 02:11:54
+6,PR-006,OK,Carlos Rodríguez,Validación de firmware v2.0; todas las señales de paro de emergencia responden según la norma.,2025-12-24 02:11:54
+7,PR-007,NO,Ana María López,Error crítico en la comunicación Modbus. El PLC no reconoce el esclavo 05. Requiere rediseño de cableado.,2025-12-24 02:11:54
+8,PR-008,OK,Jorge Hincapié,Inspección visual de acabados: sin virutas metálicas en las guías lineales. Superficie óptima.,2025-12-24 02:11:54

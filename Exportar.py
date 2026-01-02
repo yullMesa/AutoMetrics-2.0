@@ -42,6 +42,3 @@ def seleccionar_y_convertir():
     
     finally:
         root.destroy()
-
-if __name__ == "__main__":
-    seleccionar_y_convertir()

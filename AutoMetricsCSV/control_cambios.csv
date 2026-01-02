@@ -1,0 +1,16 @@
+id,persona,fecha,cargo,descripcion
+1,Yull Sebastian Mesa,2025-12-24 00:27:15,Jefe de Diseño,Sustitución de servomotor de 12V por modelo de 24V para aumentar el torque de apertura en un 15% según el requisito R-102.
+2,Carlos Rodríguez,2025-12-24 00:27:15,Ingeniero Mecatrónico,Ajuste en el firmware del PLC para optimizar el tiempo de ciclo de la banda transportadora en 2 segundos.
+3,Ana María López,2025-12-24 00:27:15,Líder de Software,Actualización de la librería de visualización de gráficos para mejorar el rendimiento en el dashboard de materiales.
+4,Yull Sebastian Mesa,2025-12-24 00:27:15,Jefe de Diseño,Cambio de material en la estructura base: de Aluminio 6061 a Acero Inoxidable 304 por requerimientos de resistencia a la corrosión.
+5,Jorge Hincapié,2025-12-24 00:27:15,Técnico de Mantenimiento,Reemplazo preventivo de sensores inductivos de proximidad en la estación de empaque por fin de vida útil.
+8,Ana María López,2025-12-24 01:01:58,Líder de Software,Optimización de la consulta SQL en el módulo de materiales para reducir el tiempo de carga en un 30%.
+9,Carlos Rodríguez,2025-12-24 01:01:58,Ingeniero Mecatrónico,Calibración de los sensores de presión en la línea 3; se ajustó el offset para compensar variaciones térmicas.
+10,Yull Sebastian Mesa,2025-12-24 01:01:58,Jefe de Diseño,Rediseño del soporte del panel de control para mejorar la ergonomía del operario según normas ISO.
+11,Jorge Hincapié,2025-12-24 01:01:58,Técnico de Mantenimiento,Sustitución de rodamientos desgastados en el eje principal de la fresadora CNC por repuestos de alta precisión.
+12,Ana María López,2025-12-24 01:01:58,Líder de Software,Implementación de validación de campos vacíos en el formulario de Control de Cambios para evitar errores de NoneType.
+13,Carlos Rodríguez,2025-12-24 01:01:58,Ingeniero Mecatrónico,Actualización de diagramas eléctricos en el manual técnico tras la adición del nuevo módulo de seguridad.
+14,Yull Sebastian Mesa,2025-12-24 01:01:58,Jefe de Diseño,Modificación de la tolerancia en el ensamble del pistón para reducir la fricción interna y el consumo de energía.
+15,Jorge Hincapié,2025-12-24 01:01:58,Técnico de Mantenimiento,Limpieza y lubricación general de las guías lineales; se detectó acumulación de viruta metálica.
+16,Ana María López,2025-12-24 01:01:58,Líder de Software,Integración de la función de exportación a PDF para los reportes mensuales de gestión de materiales.
+17,Carlos Rodríguez,2025-12-24 01:01:58,Ingeniero Mecatrónico,Ajuste de los parámetros PID en el control de temperatura del horno para eliminar el sobrepaso (overshoot).
