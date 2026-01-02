@@ -55,6 +55,8 @@ class VentanaInicio(QDialog):
             else:
                 print("Error: No se encontró el objeto 'toolIngenieria' en Inicio.ui")
 
+                
+
     def abrir_ingenieria(self):
         # Creamos la instancia del QMainWindow
         self.nueva_ventana = VentanaIngenieria()
