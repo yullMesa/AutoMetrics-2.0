@@ -3664,6 +3664,8 @@ class ModuloCadenaValor(QMainWindow):
         self.graficar_resumen_general_frame6() # El gran resumen final
 
 
+
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     
