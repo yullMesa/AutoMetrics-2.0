@@ -3,12 +3,15 @@ import os
 import Exportar
 import pandas as pd
 from datetime import datetime # Importación necesaria al inicio del archivo
-from PySide6.QtWidgets import QMainWindow, QTableWidgetItem, QHeaderView, QFrame,QMessageBox
+from PySide6.QtWidgets import (QMainWindow, QTableWidgetItem, QHeaderView, 
+                               QFrame,QMessageBox,QVBoxLayout)
 from PySide6 import QtWidgets
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, Qt
 from PySide6.QtGui import QColor ,QPixmap# Importación necesaria para el color de letra
 import recursos_rc
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 
 class VentanaIngenieria(QMainWindow):
@@ -113,6 +116,14 @@ class VentanaIngenieria(QMainWindow):
             if hasattr(self.ui, 'pushButton_16'): 
                 self.ui.pushButton_16.clicked.connect(self.accion_exportar)
 
+            #grafica
+            
+            self.graficar_gestion()
+            self.graficar_diseno()
+            self.graficar_lista_materiales()
+            self.graficar_control_cambios()
+            self.graficar_calidad()
+            self.calcular_efectividad_planta()
 
 
     def conectar_menu(self):
@@ -1281,18 +1292,24 @@ class VentanaIngenieria(QMainWindow):
     def obtener_datos_calidad(self):
         fila = self.ui.tableWidget_5.currentRow()
         if fila != -1:
-            # Col 0: ID Prueba | Col 1: Persona | Col 3: Descripción
-            id_prueba = self.ui.tableWidget_5.item(fila, 0).text()
-            persona = self.ui.tableWidget_5.item(fila, 1).text()
-            descripcion = self.ui.tableWidget_5.item(fila, 3).text()
+            try:
+                # 1. Extraer el ID de Prueba (Columna 0: PR-001, etc.)
+                id_prueba = self.ui.tableWidget_5.item(fila, 0).text()
+                
+                # 2. Extraer otros datos para los campos
+                persona = self.ui.tableWidget_5.item(fila, 1).text()
+                descripcion = self.ui.tableWidget_5.item(fila, 3).text()
 
-            # Cargar en la interfaz
-            self.ui.lineEdit_13.setText(id_prueba)
-            self.ui.lineEdit_14.setText(persona)
-            self.ui.textEdit_2.setPlainText(descripcion) # Aquí ya cargará el texto real
+                # 3. Asignar a la interfaz
+                self.ui.lineEdit_13.setText(id_prueba)
+                self.ui.lineEdit_14.setText(persona)
+                self.ui.textEdit_2.setPlainText(descripcion)
 
-            # Cargar Imagen
-            self.mostrar_imagen_calidad(id_prueba)
+                # 4. LLAMAR A LA CARGA DE IMAGEN DESDE LA CARPETA 'criterio'
+                self.cargar_imagen_desde_carpeta(id_prueba)
+
+            except Exception as e:
+                print(f"Error al obtener datos: {e}")
 
     # botones
 
@@ -1443,4 +1460,384 @@ class VentanaIngenieria(QMainWindow):
             except Exception as e:
                 QMessageBox.critical(self, "Error", f"No se pudo eliminar el registro: {e}")
 
+    
+    def cargar_imagen_desde_carpeta(self, nombre_id):
+        # Definimos la ruta de la carpeta 'criterio'
+        ruta_imagen = os.path.join("criterio", f"{nombre_id}.png")
+        
+        # Verificamos si el archivo existe
+        if os.path.exists(ruta_imagen):
+            pixmap = QPixmap(ruta_imagen)
+            # Ajustamos la imagen al tamaño del label_8 sin deformar
+            self.ui.label_8.setPixmap(pixmap.scaled(
+                self.ui.label_8.width(), 
+                self.ui.label_8.height(), 
+                Qt.KeepAspectRatio, 
+                Qt.SmoothTransformation
+            ))
+        else:
+            # Si no existe, limpiamos el label y ponemos un aviso
+            self.ui.label_8.clear()
+            self.ui.label_8.setText("S/N Evidencia")
+            print(f"No se encontró imagen en: {ruta_imagen}")
+
+
+    def graficar_gestion(self):
+        try:
+            # 1. Obtener datos de la tabla gestion
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT prioridad FROM requisitos")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            # 2. Contar frecuencias de cada prioridad
+            # Esto evita que el eje X se vea saturado
+            conteo_prioridades = {}
+            for (prio,) in datos:
+                prio_str = str(prio)
+                conteo_prioridades[prio_str] = conteo_prioridades.get(prio_str, 0) + 1
+
+            categorias = list(conteo_prioridades.keys())
+            valores = list(conteo_prioridades.values())
+
+            # 3. Configurar la figura de Matplotlib
+            fig, ax = plt.subplots(figsize=(5, 4), dpi=80)
+            # Usamos colores que combinen con tu interfaz cian
+            barras = ax.bar(categorias, valores, color='#00CCFF', edgecolor='white', linewidth=0.7)
+            
+            # Estética oscura para el QFrame
+            ax.set_title('Distribución de Prioridades', color='#00CCFF', fontsize=12, fontweight='bold')
+            ax.set_facecolor('#1e1e1e')
+            fig.patch.set_facecolor('#1e1e1e')
+            
+            # Configurar etiquetas y ejes
+            ax.tick_params(colors='white', labelsize=9)
+            ax.spines['bottom'].set_color('white')
+            ax.spines['left'].set_color('white')
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.set_ylabel('Número de Peticiones', color='white', fontsize=10)
+
+            # Añadir etiquetas de valor sobre cada barra
+            for barra in barras:
+                height = barra.get_height()
+                ax.annotate(f'{int(height)}',
+                            xy=(barra.get_x() + barra.get_width() / 2, height),
+                            xytext=(0, 3),  # 3 puntos de desplazamiento vertical
+                            textcoords="offset points",
+                            ha='center', va='bottom', color='white', fontweight='bold')
+
+            plt.tight_layout()
+
+            # 4. Integrar en el QFrame 'Fgestion'
+            if self.ui.Fgestion.layout() is None:
+                layout = QVBoxLayout(self.ui.Fgestion)
+                self.ui.Fgestion.setLayout(layout)
+            
+            # Limpiar gráfica anterior
+            for i in reversed(range(self.ui.Fgestion.layout().count())): 
+                self.ui.Fgestion.layout().itemAt(i).widget().setParent(None)
+
+            canvas = FigureCanvas(fig)
+            self.ui.Fgestion.layout().addWidget(canvas)
+            canvas.draw()
+
+        except Exception as e:
+            print(f"Error en gráfica Fgestion: {e}")
+
+    def graficar_diseno(self):
+        try:
+            # 1. Obtener datos de la tabla diseno
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT estado FROM diseno")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            # 2. Procesar los datos para el conteo
+            conteo_estados = {}
+            for (estado,) in datos:
+                est_str = str(estado)
+                conteo_estados[est_str] = conteo_estados.get(est_str, 0) + 1
+
+            labels = list(conteo_estados.keys())
+            sizes = list(conteo_estados.values())
+
+            # 3. Configurar la figura (Gráfica Circular)
+            fig, ax = plt.subplots(figsize=(5, 4), dpi=80)
+            colores = ['#005599', '#0077CC', '#0099EE', '#00BBFF', '#00DDFF', '#00FFFF']
+            
+            # Crear pie chart con porcentajes
+            wedges, texts, autotexts = ax.pie(
+                sizes, labels=labels, autopct='%1.1f%%', 
+                startangle=140, colors=colores,
+                textprops={'color':"w"}
+            )
+            
+            # Estética oscura acorde al panel
+            ax.set_title('Distribución de Estados', color='#00CCFF', fontsize=12, fontweight='bold')
+            fig.patch.set_facecolor('#1e1e1e')
+            
+            plt.tight_layout()
+
+            # 4. Integrar en el QFrame 'Fdiseno'
+            if self.ui.Fdiseno.layout() is None:
+                layout = QVBoxLayout(self.ui.Fdiseno)
+                self.ui.Fdiseno.setLayout(layout)
+            
+            # Limpiar layout previo
+            for i in reversed(range(self.ui.Fdiseno.layout().count())): 
+                widget = self.ui.Fdiseno.layout().itemAt(i).widget()
+                if widget is not None:
+                    widget.setParent(None)
+
+            canvas = FigureCanvas(fig)
+            self.ui.Fdiseno.layout().addWidget(canvas)
+            canvas.draw()
+
+        except Exception as e:
+            print(f"Error en gráfica Fdiseno: {e}")
+
+    def graficar_lista_materiales(self):
+        try:
+            # 1. Obtener datos de la tabla materiales
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            # Asumiendo columnas: proveedor y cantidad
+            cursor.execute("SELECT proveedor, cantidad FROM materiales")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            # 2. Agrupar cantidades por proveedor
+            stock_proveedor = {}
+            for prov, cant in datos:
+                prov_str = str(prov)
+                stock_proveedor[prov_str] = stock_proveedor.get(prov_str, 0) + int(cant)
+
+            proveedores = list(stock_proveedor.keys())
+            cantidades = list(stock_proveedor.values())
+
+            # 3. Configurar la figura (Gráfica de Barras Verticales)
+            fig, ax = plt.subplots(figsize=(5, 4), dpi=80)
+            ax.bar(proveedores, cantidades, color='#00CCFF') # Color cian temático
+            
+            # Estética oscura para el panel
+            ax.set_title('Stock por Proveedor', color='white', fontsize=12, fontweight='bold')
+            ax.set_facecolor('#1e1e1e')
+            fig.patch.set_facecolor('#1e1e1e')
+            
+            # Configurar ejes y etiquetas
+            ax.tick_params(colors='white', labelsize=8)
+            plt.xticks(rotation=45, ha='right')
+            ax.set_xlabel('Proveedores', color='white', fontweight='bold')
+            ax.set_ylabel('Cantidad Total', color='white', fontweight='bold')
+            
+            plt.tight_layout()
+
+            # 4. Integrar en el QFrame 'Flista'
+            if self.ui.Flista.layout() is None:
+                layout = QVBoxLayout(self.ui.Flista)
+                self.ui.Flista.setLayout(layout)
+            
+            # Limpiar cualquier gráfica previa
+            for i in reversed(range(self.ui.Flista.layout().count())): 
+                widget = self.ui.Flista.layout().itemAt(i).widget()
+                if widget is not None:
+                    widget.setParent(None)
+
+            canvas = FigureCanvas(fig)
+            self.ui.Flista.layout().addWidget(canvas)
+            canvas.draw()
+
+        except Exception as e:
+            print(f"Error en gráfica Flista: {e}")
+
+
+    def graficar_control_cambios(self):
+        try:
+            # 1. Obtener datos de la tabla control_cambios
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            # Seleccionamos la columna 'cargo' de la tabla correspondiente
+            cursor.execute("SELECT cargo FROM control_cambios")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            # 2. Procesar los datos para el conteo de frecuencia
+            conteo_cargos = {}
+            for (cargo,) in datos:
+                cargo_str = str(cargo)
+                conteo_cargos[cargo_str] = conteo_cargos.get(cargo_str, 0) + 1
+
+            cargos = list(conteo_cargos.keys())
+            frecuencias = list(conteo_cargos.values())
+
+            # 3. Configurar la figura de Matplotlib
+            fig, ax = plt.subplots(figsize=(5, 4), dpi=80)
+            ax.bar(cargos, frecuencias, color='#00CCFF', edgecolor='white', linewidth=0.5) # Color cian
+            
+            # Estética oscura para el panel
+            ax.set_title('DISTRIBUCIÓN POR CARGO', color='#00CCFF', fontsize=12, fontweight='bold')
+            ax.set_facecolor('#242424')
+            fig.patch.set_facecolor('#1e1e1e')
+            
+            # Configurar ejes y etiquetas
+            ax.tick_params(colors='white', labelsize=8)
+            plt.xticks(rotation=25, ha='right')
+            ax.set_xlabel('Cargo del Responsable', color='white', fontweight='bold', fontsize=9)
+            ax.set_ylabel('Frecuencia de Cambios', color='white', fontweight='bold', fontsize=9)
+            
+            # Ajustar bordes del gráfico
+            for spine in ax.spines.values():
+                spine.set_color('white')
+                
+            plt.tight_layout()
+
+            # 4. Integrar en el QFrame 'Fcontrol'
+            if self.ui.Fcontrol.layout() is None:
+                layout = QVBoxLayout(self.ui.Fcontrol)
+                self.ui.Fcontrol.setLayout(layout)
+            
+            # Limpiar cualquier gráfica previa para evitar sobreposición
+            for i in reversed(range(self.ui.Fcontrol.layout().count())): 
+                widget = self.ui.Fcontrol.layout().itemAt(i).widget()
+                if widget is not None:
+                    widget.setParent(None)
+
+            canvas = FigureCanvas(fig)
+            self.ui.Fcontrol.layout().addWidget(canvas)
+            canvas.draw()
+
+        except Exception as e:
+            print(f"Error en gráfica Fcontrol: {e}")
+
+    def graficar_calidad(self):
+        try:
+            # 1. Conexión y obtención de datos de aseguramiento_calidad
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT criterio FROM aseguramiento_calidad")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            # 2. Conteo de los 3 criterios principales
+            conteos = {"OK": 0, "RETRY": 0, "NO": 0}
+            for (crit,) in datos:
+                crit_upper = str(crit).upper()
+                if "OK" in crit_upper:
+                    conteos["OK"] += 1
+                elif "RETRY" in crit_upper:
+                    conteos["RETRY"] += 1
+                elif "NO" in crit_upper:
+                    conteos["NO"] += 1
+
+            categorias = list(conteos.keys())
+            valores = list(conteos.values())
+
+            # 3. Configurar la figura con colores semafóricos
+            fig, ax = plt.subplots(figsize=(5, 4), dpi=80)
+            colores = ['#2ECC71', '#00CCFF', '#E74C3C'] # Verde, Cian, Rojo
+            barras = ax.bar(categorias, valores, color=colores)
+            
+            # Estética del Dashboard
+            ax.set_title('ESTADO DE CALIDAD', color='white', fontsize=12, fontweight='bold')
+            ax.set_facecolor('#242424')
+            fig.patch.set_facecolor('#1e1e1e')
+            
+            # Etiquetas de los ejes
+            ax.tick_params(colors='white', labelsize=9)
+            for spine in ax.spines.values():
+                spine.set_color('white')
+
+            # Añadir el número exacto sobre cada barra
+            for barra in barras:
+                height = barra.get_height()
+                ax.annotate(f'{int(height)}',
+                            xy=(barra.get_x() + barra.get_width() / 2, height),
+                            xytext=(0, 3), textcoords="offset points",
+                            ha='center', va='bottom', color='white', fontweight='bold')
+
+            plt.tight_layout()
+
+            # 4. Integrar en el QFrame 'Faseguramiento'
+            if self.ui.Faseguramiento.layout() is None:
+                layout = QVBoxLayout(self.ui.Faseguramiento)
+                self.ui.Faseguramiento.setLayout(layout)
+            
+            # Limpiar contenido previo
+            for i in reversed(range(self.ui.Faseguramiento.layout().count())): 
+                self.ui.Faseguramiento.layout().itemAt(i).widget().setParent(None)
+
+            canvas = FigureCanvas(fig)
+            self.ui.Faseguramiento.layout().addWidget(canvas)
+            canvas.draw()
+
+        except Exception as e:
+            print(f"Error en gráfica Faseguramiento: {e}")
+
+    def calcular_efectividad_planta(self):
+        try:
+            # 1. Conexión a la base de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # 2. Obtener el total y los aprobados
+            cursor.execute("SELECT criterio FROM aseguramiento_calidad")
+            datos = cursor.fetchall()
+            conn.close()
+
+            total = len(datos)
+            if total == 0:
+                efectividad = 0.0
+            else:
+                # Contamos solo los que tienen "OK"
+                aprovados = sum(1 for (crit,) in datos if "OK" in str(crit).upper())
+                efectividad = (aprovados / total) * 100
+
+            # 3. Crear la visualización en el frame_10
+            fig, ax = plt.subplots(figsize=(4, 3))
+            fig.patch.set_facecolor('#1e1e1e') # Fondo oscuro
+            ax.set_facecolor('#1e1e1e')
+            
+            # Ocultamos los ejes para que solo se vea el texto
+            ax.axis('off')
+            
+            # Texto del título y el valor porcentual
+            ax.text(0.5, 0.6, 'EFECTIVIDAD DE PLANTA', 
+                    color='#00CCFF', fontsize=14, fontweight='bold', ha='center')
+            ax.text(0.5, 0.4, f'{efectividad:.1f}%', 
+                    color='white', fontsize=22, fontweight='bold', ha='center')
+
+            # 4. Insertar en frame_10
+            if self.ui.frame_10.layout() is None:
+                layout = QVBoxLayout(self.ui.frame_10)
+                self.ui.frame_10.setLayout(layout)
+                
+            # Limpiar layout anterior
+            for i in reversed(range(self.ui.frame_10.layout().count())): 
+                self.ui.frame_10.layout().itemAt(i).widget().setParent(None)
+
+            canvas = FigureCanvas(fig)
+            self.ui.frame_10.layout().addWidget(canvas)
+            canvas.draw()
+
+        except Exception as e:
+            print(f"Error al calcular efectividad: {e}")
+    
     
