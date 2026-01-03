@@ -6,10 +6,11 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas # Nota el cambio a qtagg
 from datetime import datetime
 import Exportar
-from PySide6.QtWidgets import QMainWindow, QMessageBox, QApplication #
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QApplication,QVBoxLayout
 # O si ya importas el módulo completo:
 from PySide6 import QtWidgets # En este caso usarías QtWidgets.QMessageBox
-
+from PySide6.QtWidgets import QTreeWidgetItem
+from PySide6.QtWidgets import QTreeWidgetItem, QFileIconProvider #
 
 
 class VentanaGestion(QtWidgets.QMainWindow):
@@ -48,7 +49,22 @@ class VentanaGestion(QtWidgets.QMainWindow):
             self.ui.pushButton.clicked.connect(self.accion_exportar)
 
             #Datos gestión proveedores
-
+            self.cargar_tabla_proveedores()
+            self.cargar_arbol_gestion()
+            self.ui.treeWidget_2.itemClicked.connect(self.controlar_navegacion_arbol)
+            self.ui.treeWidget_2.setColumnCount(2)
+            self.ui.treeWidget_2.setHeaderLabels(["Módulos del Sistema", "Información Extra"])
+            if self.ui.frame_28.layout() is None:
+                layout = QVBoxLayout(self.ui.frame_28)
+                self.ui.frame_28.setLayout(layout)
+            self.graficar_tiempos_proveedores()
+            self.ui.tableWidget_2.itemClicked.connect(self.recuperar_datos_gestion_tabla)
+            self.ui.pushButton_6.clicked.connect(self.agregar_proveedor)
+            # Conectar el botón Eliminar (pushButton_7)
+            self.ui.pushButton_7.clicked.connect(self.eliminar_proveedor)
+            # Conectar el botón Actualizar (pushButton_8)
+            self.ui.pushButton_8.clicked.connect(self.actualizar_proveedor)
+            self.ui.pushButton_2.clicked.connect(self.accion_exportar)
         
         
         else:
@@ -443,3 +459,290 @@ class VentanaGestion(QtWidgets.QMainWindow):
             conn.close()
         except Exception as e:
             print(f"Error al cargar tabla proveedores: {e}")
+
+    
+    # treewidget
+
+    def cargar_arbol_gestion(self):
+        try:
+            self.ui.treeWidget_2.clear()
+            
+            # --- AJUSTE DE ESPACIO (Para que no se vea apretado) ---
+            # Hacemos que la primera columna sea mucho más ancha que la segunda
+            header = self.ui.treeWidget_2.header()
+            header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+            header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
+            
+            # Proveedor de iconos del sistema
+            iconos = QFileIconProvider()
+            icono_carpeta = iconos.icon(QFileIconProvider.Folder)
+            icono_archivo = iconos.icon(QFileIconProvider.File)
+
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+
+            # --- CARPETA: SUMINISTROS ---
+            rama_sum = QTreeWidgetItem(self.ui.treeWidget_2, ["Suministros y Compras", ""])
+            rama_sum.setIcon(0, icono_carpeta) # Agrega la carpeta visual
+            
+            tablas_sum = [
+                ("Inventario de Materiales", "materiales"),
+                ("Planificación de Suministros", "planificacion_suministros"),
+                ("Gestión de Proveedores", "gestion_proveedores")
+            ]
+
+            for nombre_v, tabla in tablas_sum:
+                cursor.execute(f"SELECT COUNT(*) FROM {tabla}")
+                cant = cursor.fetchone()[0]
+                item = QTreeWidgetItem(rama_sum, [nombre_v, f"{cant} registros"])
+                item.setIcon(0, icono_archivo) # Icono de archivo para los hijos
+
+            # --- CARPETA: INGENIERÍA ---
+            rama_ing = QTreeWidgetItem(self.ui.treeWidget_2, ["Proyectos de Ingeniería", ""])
+            rama_ing.setIcon(0, icono_carpeta)
+            
+            tablas_ing = [
+                ("Diseño de Planos", "diseno"),
+                ("Control de Cambios", "control_cambios"),
+                ("Aseguramiento de Calidad", "aseguramiento_calidad")
+            ]
+
+            for nombre_v, tabla in tablas_ing:
+                try:
+                    cursor.execute(f"SELECT COUNT(*) FROM {tabla}")
+                    cant = cursor.fetchone()[0]
+                    item = QTreeWidgetItem(rama_ing, [nombre_v, f"{cant} items"])
+                    item.setIcon(0, icono_archivo)
+                except:
+                    item = QTreeWidgetItem(rama_ing, [nombre_v, "Tabla vacía"])
+                    item.setIcon(0, icono_archivo)
+
+            # 4. Expandir todo y cerrar conexión
+            self.ui.treeWidget_2.expandAll()
+            conn.close()
+
+        except Exception as e:
+            print(f"Error al organizar el árbol: {e}")
+
+
+    def controlar_navegacion_arbol(self, item, column):
+        nombre = item.text(0)
+        if nombre == "Gestión de Proveedores":
+            self.cargar_tabla_proveedores() # El método que hicimos antes
+        elif nombre == "Planificación de Suministros":
+            self.cargar_tabla_planificacion() 
+
+    
+    #grafica
+
+    def graficar_tiempos_proveedores(self):
+        try:
+            # 1. Obtener datos de la base de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT nombre_empresa, tiempo_entrega FROM gestion_proveedores")
+            datos = cursor.fetchall()
+            conn.close()
+
+            empresas = []
+            tiempos = []
+
+            for nombre, tiempo_str in datos:
+                # Extraemos solo el número del texto "X días"
+                try:
+                    num_dias = int(tiempo_str.split()[0])
+                    empresas.append(nombre)
+                    tiempos.append(num_dias)
+                except:
+                    continue
+
+            # 2. Limpiar el frame antes de dibujar para evitar el error 'NoneType'
+            for i in reversed(range(self.ui.frame_28.layout().count())):
+                self.ui.frame_28.layout().itemAt(i).widget().setParent(None)
+
+            # 3. Crear la gráfica de barras
+            fig, ax = plt.subplots(figsize=(5, 4), tight_layout=True)
+            fig.patch.set_facecolor('#121212') # Color oscuro como tu interfaz
+            ax.set_facecolor('#121212')
+
+            colores = ['#00e5ff', '#00b8d4', '#0097a7'] # Tonos celestes de tu diseño
+            bars = ax.bar(empresas, tiempos, color=colores)
+
+            # Configuración de ejes
+            ax.set_title("Días de Entrega por Proveedor", color='white', fontsize=12)
+            ax.set_ylabel("Días", color='white')
+            ax.tick_params(axis='both', colors='white')
+            
+            # Corrección del Warning de ticks
+            ax.set_xticks(range(len(empresas)))
+            ax.set_xticklabels(empresas, rotation=45, ha='right', fontsize=8)
+
+            # 4. Mostrar en el frame
+            canvas = FigureCanvas(fig)
+            self.ui.frame_28.layout().addWidget(canvas)
+
+        except Exception as e:
+            print(f"Error en gráfica de proveedores: {e}")
+
+    #botones
+
+    def recuperar_datos_gestion_tabla(self):
+        # 1. Obtener la fila seleccionada en la tabla de proveedores
+        fila_seleccionada = self.ui.tableWidget_2.currentRow()
+
+        if fila_seleccionada != -1:
+            # 2. Extraer el texto respetando el orden de GESTIÓN DE PROVEEDORES
+            id_prov   = self.ui.tableWidget_2.item(fila_seleccionada, 0).text()
+            empresa   = self.ui.tableWidget_2.item(fila_seleccionada, 1).text()
+            calif     = self.ui.tableWidget_2.item(fila_seleccionada, 2).text()
+            contacto  = self.ui.tableWidget_2.item(fila_seleccionada, 3).text()
+            tiempo    = self.ui.tableWidget_2.item(fila_seleccionada, 4).text()
+            estado    = self.ui.tableWidget_2.item(fila_seleccionada, 5).text()
+
+            # 3. Mandar los datos a los QLineEdit correctos
+            self.ui.txt_id_poveedor.setText(id_prov)
+            self.ui.txt_nombre_empresa.setText(empresa)
+            self.ui.txt_calificacion.setText(calif)
+            self.ui.txt_contacto_proveedor.setText(contacto)
+            self.ui.txt_tiempo_entrega.setText(tiempo)
+            self.ui.txt_estado_proveedor.setText(estado)
+
+    def agregar_proveedor(self):
+        # 1. Capturar los datos de los QLineEdit
+        # Usamos los nombres exactos de tus objetos
+        id_p      = self.ui.txt_id_poveedor.text()
+        empresa   = self.ui.txt_nombre_empresa.text()
+        calif     = self.ui.txt_calificacion.text()
+        contacto  = self.ui.txt_contacto_proveedor.text()
+        tiempo    = self.ui.txt_tiempo_entrega.text()
+        estado    = self.ui.txt_estado_proveedor.text()
+
+        # Validación básica: No dejar el ID o la Empresa vacíos
+        if not id_p or not empresa:
+            QMessageBox.warning(self, "Campos Vacíos", "El ID y el Nombre de Empresa son obligatorios.")
+            return
+
+        try:
+            # 2. Conectar e insertar en SQL
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            query = """
+                INSERT INTO gestion_proveedores 
+                (id_proveedor, nombre_empresa, calificacion, proveedor_contacto, tiempo_entrega, estado) 
+                VALUES (?, ?, ?, ?, ?, ?)
+            """
+            
+            # Ejecutamos la inserción
+            cursor.execute(query, (id_p, empresa, calif, contacto, tiempo, estado))
+            
+            conn.commit()
+            conn.close()
+
+            # 3. Éxito y Actualización
+            QMessageBox.information(self, "Éxito", f"Proveedor '{empresa}' añadido correctamente.")
+            
+            # Limpiamos los campos y refrescamos la tabla y el árbol
+            self.limpiar_campos_proveedores()
+            self.cargar_tabla_proveedores()
+            self.cargar_arbol_gestion() # Para que se actualice el conteo de registros
+            self.graficar_tiempos_proveedores()
+
+        except sqlite3.IntegrityError:
+            QMessageBox.critical(self, "Error", "El ID del proveedor ya existe.")
+        except Exception as e:
+            QMessageBox.critical(self, "Error Crítico", f"No se pudo guardar: {e}")
+
+
+    def limpiar_campos_proveedores(self):
+        self.ui.txt_id_poveedor.clear()
+        self.ui.txt_nombre_empresa.clear()
+        self.ui.txt_calificacion.clear()
+        self.ui.txt_contacto_proveedor.clear()
+        self.ui.txt_tiempo_entrega.clear()
+        self.ui.txt_estado_proveedor.clear()
+
+
+    def eliminar_proveedor(self):
+        # 1. Obtener la fila seleccionada y el ID del proveedor
+        fila_seleccionada = self.ui.tableWidget_2.currentRow()
+        
+        if fila_seleccionada == -1:
+            QMessageBox.warning(self, "Selección", "Por favor, selecciona un proveedor de la tabla para eliminar.")
+            return
+
+        id_proveedor = self.ui.tableWidget_2.item(fila_seleccionada, 0).text()
+        nombre_empresa = self.ui.tableWidget_2.item(fila_seleccionada, 1).text()
+
+        # 2. Confirmación de seguridad
+        respuesta = QMessageBox.question(
+            self, 
+            "Confirmar Eliminación", 
+            f"¿Estás seguro de que deseas eliminar a '{nombre_empresa}' permanentemente?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+
+        if respuesta == QMessageBox.Yes:
+            try:
+                # 3. Ejecutar la eliminación en SQL
+                conn = sqlite3.connect("ingenieria.db")
+                cursor = conn.cursor()
+                
+                cursor.execute("DELETE FROM gestion_proveedores WHERE id_proveedor = ?", (id_proveedor,))
+                
+                conn.commit()
+                conn.close()
+
+                # 4. Actualizar la interfaz
+                QMessageBox.information(self, "Éxito", "Proveedor eliminado correctamente.")
+                self.cargar_tabla_proveedores()
+                self.cargar_arbol_gestion() # Para actualizar el conteo en el TreeWidget_2
+                self.limpiar_campos_proveedores() # Limpia los QLineEdit
+                self.graficar_tiempos_proveedores()
+
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"No se pudo eliminar el registro: {e}")
+
+    def actualizar_proveedor(self):
+        try:
+            # 1. Capturar los datos desde los QLineEdit
+            id_p      = self.ui.txt_id_poveedor.text()
+            empresa   = self.ui.txt_nombre_empresa.text()
+            calif     = self.ui.txt_calificacion.text()
+            contacto  = self.ui.txt_contacto_proveedor.text()
+            tiempo    = self.ui.txt_tiempo_entrega.text()
+            estado    = self.ui.txt_estado_proveedor.text()
+
+            # Validación: El ID es necesario para saber qué registro actualizar
+            if not id_p:
+                QMessageBox.warning(self, "Error", "No hay un ID seleccionado para actualizar.")
+                return
+
+            # 2. Ejecutar la actualización en la base de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            query = """
+                UPDATE gestion_proveedores 
+                SET nombre_empresa = ?, calificacion = ?, proveedor_contacto = ?, 
+                    tiempo_entrega = ?, estado = ?
+                WHERE id_proveedor = ?
+            """
+            
+            cursor.execute(query, (empresa, calif, contacto, tiempo, estado, id_p))
+            
+            conn.commit()
+            conn.close()
+
+            # 3. Notificar y refrescar
+            QMessageBox.information(self, "Actualización", f"Datos de '{empresa}' actualizados con éxito.")
+            
+            self.cargar_tabla_proveedores()     # Refresca la tabla visual
+            self.graficar_tiempos_proveedores() # Actualiza la gráfica con los nuevos tiempos
+            self.limpiar_campos_proveedores()   # Limpia los campos de texto
+            self.graficar_tiempos_proveedores()
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Fallo al actualizar el proveedor: {e}")
+
+    
