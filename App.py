@@ -20,6 +20,7 @@ import Exportar
 from collections import Counter
 import recursos_rc
 from Ingenieria import VentanaIngenieria
+from Gestion import VentanaGestion # Importamos la lógica que haremos ahora
 
 
 class VentanaInicio(QDialog):
@@ -49,11 +50,11 @@ class VentanaInicio(QDialog):
             # Ajustar el tamaño de la ventana al tamaño que definiste en Qt Designer
             self.resize(self.ui.size())
             self.setWindowTitle("AutoMetrics 2.0")
-        # Conectamos el botón
-            if hasattr(self.ui, 'toolIngenieria'):
-                self.ui.toolIngenieria.clicked.connect(self.abrir_ingenieria)
-            else:
-                print("Error: No se encontró el objeto 'toolIngenieria' en Inicio.ui")
+            
+            # Conectamos el botón
+            self.ui.toolIngenieria.clicked.connect(self.abrir_ingenieria)
+
+            self.ui.toolGestion.clicked.connect(self.abrir_gestion_valor)
 
                 
 
@@ -65,15 +66,25 @@ class VentanaInicio(QDialog):
         self.close()
 
 
+    
+    def abrir_gestion_valor(self):
+        try:
+            from Gestion import VentanaGestion
+            # Aquí enviamos el objeto VentanaInicio (self)
+            self.ventana_gestion = VentanaGestion(self) 
+            self.ventana_gestion.show()
+            self.hide()
+        except Exception as e:
+            # Esto te dirá si el error cambió a otro tipo
+            print(f"Error detectado: {e}")
+
+
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    app.setStyle("Fusion")
-    
-    ventana_principal = VentanaInicio()
-    ventana_principal.show()
-    
-    sys.exit(app.exec())
+    app = QApplication(sys.argv) # Única instancia de PySide6
+    window = VentanaInicio()
+    window.show()
+    sys.exit(app.exec()) # En PySide6 es .exec(), no .exec_()
 
 
 
