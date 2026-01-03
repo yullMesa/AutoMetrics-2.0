@@ -4,6 +4,11 @@ from PySide6 import QtWidgets, QtCore, QtUiTools,QtGui
 from PySide6.QtUiTools import QUiLoader
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas # Nota el cambio a qtagg
+from datetime import datetime
+import Exportar
+from PySide6.QtWidgets import QMainWindow, QMessageBox, QApplication #
+# O si ya importas el módulo completo:
+from PySide6 import QtWidgets # En este caso usarías QtWidgets.QMessageBox
 
 
 
@@ -36,6 +41,14 @@ class VentanaGestion(QtWidgets.QMainWindow):
             self.mostrar_y_cargar_planificacion()
             self.mostrar_y_cargar_materiales()
             self.actualizar_dashboard()
+            self.ui.tableWidget.itemClicked.connect(self.recuperar_datos_tabla)
+            self.ui.pushButton_4.clicked.connect(self.agregar_suministro)
+            self.ui.pushButton_3.clicked.connect(self.eliminar_suministro)
+            self.ui.pushButton_5.clicked.connect(self.actualizar_suministro)
+            self.ui.pushButton.clicked.connect(self.accion_exportar)
+
+            #Datos gestión proveedores
+
         
         
         else:
@@ -227,4 +240,206 @@ class VentanaGestion(QtWidgets.QMainWindow):
     def actualizar_dashboard(self):
         #self.ui.stackedWidget.setCurrentIndex(0) # Va al dashboard
         self.graficar_costos_proveedores()
+
     
+    #recuperar datos
+    
+    def recuperar_datos_tabla(self):
+        # 1. Obtener la fila seleccionada actualmente
+        fila_seleccionada = self.ui.tableWidget.currentRow()
+        
+        if fila_seleccionada != -1:
+            # 2. Extraer el texto de cada celda de esa fila
+            # El orden debe coincidir con las columnas de tu tabla
+            id_material = self.ui.tableWidget.item(fila_seleccionada, 0).text()
+            cantidad    = self.ui.tableWidget.item(fila_seleccionada, 1).text()
+            proveedor   = self.ui.tableWidget.item(fila_seleccionada, 2).text()
+            fecha       = self.ui.tableWidget.item(fila_seleccionada, 3).text()
+            descripcion = self.ui.tableWidget.item(fila_seleccionada, 4).text()
+            costo       = self.ui.tableWidget.item(fila_seleccionada, 5).text()
+
+            # 3. Mandar los datos a los QLineEdit
+            self.ui.txt_id_material.setText(id_material)
+            self.ui.txt_cantidad.setText(cantidad)
+            self.ui.txtproveedor.setText(proveedor)
+            self.ui.txtFecha.setText(fecha)
+            self.ui.txt_descripcion.setText(descripcion)
+            self.ui.txtCosto.setText(costo)
+
+    
+    #Botones
+
+    def agregar_suministro(self):
+        try:
+            # 1. Capturar datos y convertir tipos
+            id_val = int(self.ui.txt_id_material.text())
+            cant   = int(self.ui.txt_cantidad.text())
+            prov   = self.ui.txtproveedor.text()
+            desc   = self.ui.txt_descripcion.text()
+            costo  = float(self.ui.txtCosto.text())
+
+            # 2. GENERAR FECHA AUTOMÁTICA (Formato: Año-Mes-Día)
+            fecha_auto = datetime.now().strftime("%Y-%m-%d")
+
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # 3. Query con el orden de tu tabla visual
+            # (id, cantidad_requerida, proveedor, fecha_estimada, descripcion, costo_unitario)
+            query = """
+                INSERT INTO planificacion_suministros 
+                (id, cantidad_requerida, proveedor, fecha_estimada, descripcion, costo_unitario) 
+                VALUES (?, ?, ?, ?, ?, ?)
+            """
+            cursor.execute(query, (id_val, cant, prov, fecha_auto, desc, costo))
+            
+            conn.commit()
+            conn.close()
+
+            # 4. Actualizar todo
+            self.cargar_tabla_planificacion() 
+            self.graficar_costos_proveedores()
+            self.limpiar_campos()
+            print(f"Agregado con fecha: {fecha_auto}")
+
+        except ValueError:
+            print("Error: Revisa que ID, Cantidad y Costo sean números.")
+        except Exception as e:
+            print(f"Error: {e}")
+
+    def limpiar_campos(self):
+        self.ui.txt_id_material.clear()
+        self.ui.txt_descripcion.clear()
+        self.ui.txt_cantidad.clear()
+        self.ui.txtproveedor.clear()
+        self.ui.txtCosto.clear()
+        self.ui.txtFecha.clear()
+    
+    def eliminar_suministro(self):
+        # 1. Obtener el ID del LineEdit
+        id_para_eliminar = self.ui.txt_id_material.text()
+
+        if not id_para_eliminar:
+            print("Error: Selecciona una fila de la tabla para eliminar")
+            return
+
+        try:
+            # 2. Conexión y ejecución del borrado
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # SQL para eliminar por ID único
+            query = "DELETE FROM planificacion_suministros WHERE id = ?"
+            cursor.execute(query, (id_para_eliminar,))
+            
+            conn.commit()
+            conn.close()
+
+            # 3. Actualizar la interfaz
+            print(f"Registro con ID {id_para_eliminar} eliminado")
+            
+            # Usamos tu método de actualización que me mostraste
+            self.cargar_tabla_planificacion() 
+            
+            # También actualizamos la gráfica y limpiamos campos
+            self.graficar_costos_proveedores()
+            self.limpiar_campos()
+
+        except Exception as e:
+            print(f"Error al eliminar: {e}")
+
+
+    def actualizar_suministro(self):
+        try:
+            # 1. Capturar los datos actualizados de la interfaz
+            # Convertimos a los tipos correctos para evitar el error de 'datatype mismatch'
+            id_val = int(self.ui.txt_id_material.text())
+            cant   = int(self.ui.txt_cantidad.text())
+            prov   = self.ui.txtproveedor.text()
+            desc   = self.ui.txt_descripcion.text()
+            costo  = float(self.ui.txtCosto.text())
+            # La fecha suele mantenerse o actualizarse automáticamente con datetime
+            from datetime import datetime
+            fecha_act = datetime.now().strftime("%Y-%m-%d")
+
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # 2. Query SQL para actualizar
+            # Usamos SET para los nuevos valores y WHERE para localizar el ID original
+            query = """
+                UPDATE planificacion_suministros 
+                SET cantidad_requerida = ?, proveedor = ?, fecha_estimada = ?, 
+                    descripcion = ?, costo_unitario = ?
+                WHERE id = ?
+            """
+            cursor.execute(query, (cant, prov, fecha_act, desc, costo, id_val))
+            
+            conn.commit()
+            conn.close()
+
+            # 3. Refrescar la interfaz
+            print(f"Registro {id_val} actualizado correctamente.")
+            self.cargar_tabla_planificacion() # Tu método de la imagen
+            self.graficar_costos_proveedores()
+            self.limpiar_campos()
+
+        except ValueError:
+            print("Error: Asegúrate de que los campos numéricos sean correctos antes de actualizar.")
+        except Exception as e:
+            print(f"Error al actualizar: {e}")
+
+    def accion_exportar(self):
+        # Llamamos a la función que está dentro de Exportar.py
+        exito = Exportar.seleccionar_y_convertir()
+        
+        if exito:
+            QMessageBox.information(self, "Exportación", "Los datos se han exportado correctamente.")
+
+    
+    
+    #---------------Datos gestión proveedores---------------------
+
+    def cargar_tabla_proveedores(self):
+        try:
+            # 1. Conexión a la base de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # 2. Seleccionar los datos en el orden de tu interfaz
+            query = """
+                SELECT id_proveedor, nombre_empresa, calificacion, 
+                    proveedor_contacto, tiempo_entrega, estado 
+                FROM gestion_proveedores
+            """
+            cursor.execute(query)
+            datos = cursor.fetchall()
+
+            # 3. Configuración de la tabla
+            self.ui.tableWidget_2.setRowCount(len(datos))
+            self.ui.tableWidget_2.setColumnCount(6)
+            self.ui.tableWidget_2.verticalHeader().setVisible(False)
+
+            # 4. Ajuste de columnas para que llenen el espacio
+            header = self.ui.tableWidget_2.horizontalHeader()
+            for i in range(6):
+                header.setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
+
+            # 5. Llenado de datos con alineación centrada
+            for row_index, row_data in enumerate(datos):
+                for col_index, value in enumerate(row_data):
+                    item = QtWidgets.QTableWidgetItem(str(value))
+                    item.setTextAlignment(QtCore.Qt.AlignCenter)
+                    
+                    # TRUCO PRO: Cambiar color según el estado
+                    if col_index == 5: # Columna de "Estado"
+                        if value == "Activo":
+                            item.setForeground(QtGui.QColor("#00ff00")) # Verde
+                        elif value == "Suspendido":
+                            item.setForeground(QtGui.QColor("#ff0000")) # Rojo
+                    
+                    self.ui.tableWidget_2.setItem(row_index, col_index, item)
+            
+            conn.close()
+        except Exception as e:
+            print(f"Error al cargar tabla proveedores: {e}")

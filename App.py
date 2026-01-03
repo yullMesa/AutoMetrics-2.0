@@ -2,21 +2,11 @@ import sys
 import os
 # Importamos los componentes necesarios directamente del módulo QtWidgets
 from PySide6.QtWidgets import (QApplication, QDialog, QMainWindow, QVBoxLayout, 
-                               QToolBar,QTableWidget,QTabWidget,QStackedWidget,QPushButton,
-                               QToolButton,QFileDialog,QMessageBox,QTreeWidgetItem)
+                               )
 
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
-from PySide6.QtGui import QAction,QPixmap,QIcon, QColor
-from PySide6 import QtWidgets
-from PySide6 import QtCore
-from PySide6 import QtGui
 import sqlite3
-import pandas as pd
-import numpy as np
-from matplotlib import pyplot as plt 
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-import Exportar
 from collections import Counter
 import recursos_rc
 from Ingenieria import VentanaIngenieria
