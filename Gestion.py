@@ -65,6 +65,24 @@ class VentanaGestion(QtWidgets.QMainWindow):
             # Conectar el botón Actualizar (pushButton_8)
             self.ui.pushButton_8.clicked.connect(self.actualizar_proveedor)
             self.ui.pushButton_2.clicked.connect(self.accion_exportar)
+
+
+            #Transporte y logistica
+            self.seleccionar_modulo()
+            self.cargar_arbol_ingenieria()
+            if self.ui.frame_29.layout() is None:
+                layout_logistica = QVBoxLayout(self.ui.frame_29)
+                self.ui.frame_29.setLayout(layout_logistica)
+            self.graficar_prioridades_transporte()
+            # Conexión para tableWidget_3 (Logística)
+            self.ui.tableWidget_3.itemClicked.connect(self.recuperar_datos_logistica_tabla)
+            # Conectar el botón Añadir de Logística (pushButton_9)
+            self.ui.pushButton_9.clicked.connect(self.agregar_envio_logistica)
+            # Conectar el botón Eliminar de Logística (pushButton_10)
+            self.ui.pushButton_10.clicked.connect(self.eliminar_envio_logistica)
+            # Conectar el botón Actualizar de Logística (pushButton_11)
+            self.ui.pushButton_11.clicked.connect(self.actualizar_envio_logistica)
+            self.ui.pushButton_12.clicked.connect(self.accion_exportar)
         
         
         else:
@@ -500,7 +518,14 @@ class VentanaGestion(QtWidgets.QMainWindow):
             # --- CARPETA: INGENIERÍA ---
             rama_ing = QTreeWidgetItem(self.ui.treeWidget_2, ["Proyectos de Ingeniería", ""])
             rama_ing.setIcon(0, icono_carpeta)
-            
+            # Dentro de cargar_arbol_gestion
+            rama_logistica = QTreeWidgetItem(self.ui.treeWidget_2, ["Operaciones de Transporte", ""])
+            rama_logistica.setIcon(0, icono_carpeta) # Usando el icono que definimos antes
+
+            # Sub-elemento para la nueva tabla
+            item_transporte = QTreeWidgetItem(rama_logistica, ["Seguimiento de Rutas", "10 envíos"])
+            item_transporte.setIcon(0, icono_archivo)
+
             tablas_ing = [
                 ("Diseño de Planos", "diseno"),
                 ("Control de Cambios", "control_cambios"),
@@ -703,6 +728,7 @@ class VentanaGestion(QtWidgets.QMainWindow):
             except Exception as e:
                 QMessageBox.critical(self, "Error", f"No se pudo eliminar el registro: {e}")
 
+
     def actualizar_proveedor(self):
         try:
             # 1. Capturar los datos desde los QLineEdit
@@ -745,4 +771,327 @@ class VentanaGestion(QtWidgets.QMainWindow):
         except Exception as e:
             QMessageBox.critical(self, "Error", f"Fallo al actualizar el proveedor: {e}")
 
+    #-----------------------Logistica y transporte------------------------------
+
+    def cargar_tabla_logistica(self):
+        try:
+            # 1. Conexión y consulta
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM transporte")
+            datos = cursor.fetchall()
+
+            # 2. Configurar el tableWidget_3
+            self.ui.tableWidget_3.setRowCount(len(datos))
+            self.ui.tableWidget_3.setColumnCount(6)
+            
+            # Ajustar columnas para que ocupen todo el ancho
+            header = self.ui.tableWidget_3.horizontalHeader()
+            for i in range(6):
+                header.setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
+
+            # 3. Llenar la tabla con los 10 registros
+            for row_index, row_data in enumerate(datos):
+                for col_index, value in enumerate(row_data):
+                    item = QtWidgets.QTableWidgetItem(str(value))
+                    item.setTextAlignment(QtCore.Qt.AlignCenter)
+                    
+                    # Colores para el "Estado de Ruta"
+                    if col_index == 5: 
+                        if value == "En Tránsito":
+                            item.setForeground(QtGui.QColor("#00e5ff")) # Celeste
+                        elif value == "Retrasado":
+                            item.setForeground(QtGui.QColor("#ff0000")) # Rojo
+                        elif value == "Entregado":
+                            item.setForeground(QtGui.QColor("#00ff00")) # Verde
+                    
+                    self.ui.tableWidget_3.setItem(row_index, col_index, item)
+            
+            conn.close()
+        except Exception as e:
+            print(f"Error al cargar logística: {e}")
     
+    
+    def seleccionar_modulo(self):
+        self.cargar_tabla_logistica() # Carga el tableWidget_3
+
+    
+    #treewidget
+        
+    def cargar_arbol_ingenieria(self):
+        try:
+            self.ui.treeWidget_3.clear()
+            
+            # --- 1. CONFIGURACIÓN DE ESPACIOS (HEADERS) ---
+            # Esto elimina los "..." y expande la primera columna
+            header = self.ui.treeWidget_3.header()
+            header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch)
+            header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
+
+            # --- 2. QSS NEON PERSONALIZADO ---
+            # Mantenemos el fondo oscuro y aplicamos el celeste neon
+            self.ui.treeWidget_3.setStyleSheet("""
+                QTreeWidget {
+                    background-color: #121212;
+                    color: white;
+                    border: 1px solid #00e5ff;
+                    font-size: 13px;
+                    outline: none;
+                }
+                QTreeWidget::item {
+                    height: 35px; /* Más espacio vertical para que respire */
+                    border-bottom: 1px solid #222;
+                    padding-left: 5px;
+                }
+                QTreeWidget::item:selected {
+                    background-color: #00e5ff;
+                    color: black;
+                }
+                QHeaderView::section {
+                    background-color: #1a1a1a;
+                    color: #00e5ff; /* Texto celeste neon en cabecera */
+                    padding: 4px;
+                    border: 1px solid #333;
+                    font-weight: bold;
+                }
+            """)
+
+            # --- 3. CARGA DE DATOS CON ICONOS ---
+            # Usamos los iconos del sistema que se ven limpios en modo oscuro
+            iconos = QFileIconProvider()
+            icono_carpeta = iconos.icon(QFileIconProvider.Folder)
+            icono_archivo = iconos.icon(QFileIconProvider.File)
+
+            # Rama: Planos
+            rama_diseno = QTreeWidgetItem(self.ui.treeWidget_3, ["Planos y Especificaciones", ""])
+            rama_diseno.setIcon(0, icono_carpeta)
+            
+            # Sub-elementos con colores de estado neon
+            item1 = QTreeWidgetItem(rama_diseno, ["Modelos 3D (Tabla diseno)", "Finalizado"])
+            item1.setIcon(0, icono_archivo)
+            item1.setForeground(1, QtGui.QColor("#00ff00")) # Verde Neon
+
+            item2 = QTreeWidgetItem(rama_diseno, ["Requisitos Técnicos", "En Revisión"])
+            item2.setIcon(0, icono_archivo)
+            item2.setForeground(1, QtGui.QColor("#00e5ff")) # Celeste Neon
+
+            # Rama: Calidad
+            rama_calidad = QTreeWidgetItem(self.ui.treeWidget_3, ["Gestión de Calidad", ""])
+            rama_calidad.setIcon(0, icono_carpeta)
+            
+            item3 = QTreeWidgetItem(rama_calidad, ["Aseguramiento de Calidad", "8 pruebas"])
+            item3.setIcon(0, icono_archivo)
+
+            self.ui.treeWidget_3.expandAll()
+            
+        except Exception as e:
+            print(f"Error al cargar treeWidget_3: {e}")
+
+    
+    #grafica
+
+    def graficar_prioridades_transporte(self):
+        try:
+            # 1. Obtener datos de la tabla transporte
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT prioridad, COUNT(*) FROM transporte GROUP BY prioridad")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            prioridades = [row[0] for row in datos]
+            cantidades = [row[1] for row in datos]
+
+            # 2. Limpiar el frame_29 antes de dibujar
+            for i in reversed(range(self.ui.frame_29.layout().count())):
+                self.ui.frame_29.layout().itemAt(i).widget().setParent(None)
+
+            # 3. Crear la gráfica de pastel con estética Neon
+            fig, ax = plt.subplots(figsize=(4, 4), tight_layout=True)
+            fig.patch.set_facecolor('#121212') # Fondo oscuro
+            
+            # Colores neon: Celeste, Verde y Naranja para las prioridades
+            colores = ['#00e5ff', '#00ff00', '#ffaa00'] 
+
+            wedges, texts, autotexts = ax.pie(
+                cantidades, 
+                labels=prioridades, 
+                autopct='%1.1f%%', 
+                startangle=140,
+                colors=colores,
+                textprops={'color':"w"} # Texto blanco
+            )
+
+            ax.set_title("Distribución de Prioridades", color='#00e5ff', fontsize=12, fontweight='bold')
+
+            # 4. Integrar en el frame_29
+            canvas = FigureCanvas(fig)
+            self.ui.frame_29.layout().addWidget(canvas)
+
+        except Exception as e:
+            print(f"Error en gráfica de transporte: {e}")
+
+    
+    #recuperar datos
+
+    def recuperar_datos_logistica_tabla(self):
+        # 1. Obtener la fila seleccionada en tableWidget_3
+        fila_seleccionada = self.ui.tableWidget_3.currentRow()
+
+        if fila_seleccionada != -1:
+            # 2. Extraer el texto de cada celda de esa fila
+            # El orden debe coincidir con las columnas: ID, Transporte, Prioridad, Ruta, ETA, Estado
+            id_envio    = self.ui.tableWidget_3.item(fila_seleccionada, 0).text()
+            transporte  = self.ui.tableWidget_3.item(fila_seleccionada, 1).text()
+            prioridad   = self.ui.tableWidget_3.item(fila_seleccionada, 2).text()
+            ruta        = self.ui.tableWidget_3.item(fila_seleccionada, 3).text()
+            eta         = self.ui.tableWidget_3.item(fila_seleccionada, 4).text()
+            estado      = self.ui.tableWidget_3.item(fila_seleccionada, 5).text()
+
+            # 3. Mandar los datos a los QLineEdit correctos
+            self.ui.txt_id_material_3.setText(id_envio)
+            self.ui.txt_descripcion_3.setText(transporte)
+            self.ui.txt_cantidad_3.setText(prioridad)
+            self.ui.txt_origen.setText(ruta)
+            self.ui.txt_eta.setText(eta)
+            self.ui.txt_estado_2.setText(estado)
+
+    
+    #botones
+
+    def agregar_envio_logistica(self):
+        # 1. Capturar datos de los QLineEdit de logística
+        id_envio   = self.ui.txt_id_material_3.text()
+        transporte = self.ui.txt_descripcion_3.text()
+        prioridad  = self.ui.txt_cantidad_3.text()
+        ruta       = self.ui.txt_origen.text()
+        eta        = self.ui.txt_eta.text()
+        estado     = self.ui.txt_estado_2.text()
+
+        # Validación: ID y Transportista son obligatorios
+        if not id_envio or not transporte:
+            QMessageBox.warning(self, "Campos Vacíos", "El ID de Envío y el Vehículo son obligatorios.")
+            return
+
+        try:
+            # 2. Insertar en la tabla 'transporte'
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            query = """
+                INSERT INTO transporte 
+                (id_envio, transportista_vehiculo, prioridad, origen_destino, hora_estimada, estado_ruta) 
+                VALUES (?, ?, ?, ?, ?, ?)
+            """
+            
+            cursor.execute(query, (id_envio, transporte, prioridad, ruta, eta, estado))
+            
+            conn.commit()
+            conn.close()
+
+            # 3. Éxito y Actualización de la Interfaz
+            QMessageBox.information(self, "Éxito", f"Envío {id_envio} registrado correctamente.")
+            
+            self.cargar_tabla_logistica()        # Refresca el tableWidget_3
+            self.graficar_prioridades_transporte() # Actualiza la gráfica del frame_29
+            self.limpiar_campos_logistica()      # Limpia los QLineEdit
+            
+        except sqlite3.IntegrityError:
+            QMessageBox.critical(self, "Error", "El ID de envío ya existe.")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"No se pudo guardar: {e}")
+    
+    def limpiar_campos_logistica(self):
+        self.ui.txt_id_material_3.clear()
+        self.ui.txt_descripcion_3.clear()
+        self.ui.txt_cantidad_3.clear()
+        self.ui.txt_origen.clear()
+        self.ui.txt_eta.clear()
+        self.ui.txt_estado_2.clear()
+
+    
+    def eliminar_envio_logistica(self):
+        # 1. Obtener la fila seleccionada en tableWidget_3
+        fila = self.ui.tableWidget_3.currentRow()
+        
+        if fila == -1:
+            QMessageBox.warning(self, "Selección", "Por favor, selecciona un envío de la tabla para eliminar.")
+            return
+
+        # Extraemos el ID del Envío (columna 0)
+        id_envio = self.ui.tableWidget_3.item(fila, 0).text()
+        vehiculo = self.ui.tableWidget_3.item(fila, 1).text()
+
+        # 2. Confirmación de seguridad
+        confirmar = QMessageBox.question(
+            self, 
+            "Confirmar Eliminación", 
+            f"¿Deseas eliminar el envío {id_envio} ({vehiculo})?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+
+        if confirmar == QMessageBox.Yes:
+            try:
+                # 3. Borrar de la base de datos
+                conn = sqlite3.connect("ingenieria.db")
+                cursor = conn.cursor()
+                cursor.execute("DELETE FROM transporte WHERE id_envio = ?", (id_envio,))
+                conn.commit()
+                conn.close()
+
+                # 4. Actualizar la interfaz
+                QMessageBox.information(self, "Éxito", "Envío eliminado correctamente.")
+                self.cargar_tabla_logistica()        # Refresca la tabla
+                self.graficar_prioridades_transporte() # Actualiza la gráfica del frame_29
+                self.limpiar_campos_logistica()      # Limpia los QLineEdit
+
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"No se pudo eliminar: {e}")
+
+
+    def actualizar_envio_logistica(self):
+        try:
+            # 1. Capturar los datos editados
+            id_envio   = self.ui.txt_id_material_3.text()
+            transporte = self.ui.txt_descripcion_3.text()
+            prioridad  = self.ui.txt_cantidad_3.text()
+            ruta       = self.ui.txt_origen.text()
+            eta        = self.ui.txt_eta.text()
+            estado     = self.ui.txt_estado_2.text()
+
+            # Validación: Necesitamos el ID para saber qué registro cambiar
+            if not id_envio:
+                QMessageBox.warning(self, "Error", "Debe seleccionar un envío para actualizar.")
+                return
+
+            # 2. Actualizar en la base de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            query = """
+                UPDATE transporte 
+                SET transportista_vehiculo = ?, prioridad = ?, origen_destino = ?, 
+                    hora_estimada = ?, estado_ruta = ?
+                WHERE id_envio = ?
+            """
+            
+            cursor.execute(query, (transporte, prioridad, ruta, eta, estado, id_envio))
+            
+            conn.commit()
+            conn.close()
+
+            # 3. Refrescar la interfaz completa
+            QMessageBox.information(self, "Éxito", f"Envío {id_envio} actualizado correctamente.")
+            
+            self.cargar_tabla_logistica()        # Actualiza el tableWidget_3
+            self.graficar_prioridades_transporte() # Actualiza el gráfico de pastel
+            self.limpiar_campos_logistica()      # Limpia los campos de texto
+
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"No se pudo actualizar: {e}")
+
+    
+    # Analisis de costos
