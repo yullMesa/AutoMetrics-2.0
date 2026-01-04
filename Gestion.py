@@ -115,6 +115,42 @@ class VentanaGestion(QtWidgets.QMainWindow):
             self.ui.pushButton_18.clicked.connect(self.eliminar_registro_inventario)
             self.ui.pushButton_19.clicked.connect(self.actualizar_registro_inventario)
             self.ui.pushButton_20.clicked.connect(self.accion_exportar)
+
+            # Graficas
+            if self.ui.frame_2.layout() is None:
+                layout_suministros = QVBoxLayout(self.ui.frame_2)
+                self.ui.frame_2.setLayout(layout_suministros)
+
+            self.graficar_planificacion_suministros()
+
+            if self.ui.frame_3.layout() is None:
+                layout_proveedores = QVBoxLayout(self.ui.frame_3)
+                self.ui.frame_3.setLayout(layout_proveedores)
+            self.graficar_gestion_proveedores()
+
+            if self.ui.frame_5.layout() is None:
+                layout_transporte = QVBoxLayout(self.ui.frame_5)
+                self.ui.frame_5.setLayout(layout_transporte)
+
+            self.graficar_logistica_transporte()
+
+            if self.ui.frame.layout() is None:
+                layout_costos = QVBoxLayout(self.ui.frame)
+                self.ui.frame.setLayout(layout_costos)
+
+            self.graficar_analisis_costos_principal()
+
+            if self.ui.frame_4.layout() is None:
+                layout_inventario_visual = QVBoxLayout(self.ui.frame_4)
+                self.ui.frame_4.setLayout(layout_inventario_visual)
+
+            self.graficar_salud_inventario()
+
+            if self.ui.frame_6.layout() is None:
+                layout_resumen = QVBoxLayout(self.ui.frame_6)
+                self.ui.frame_6.setLayout(layout_resumen)
+
+            self.graficar_analisis_general()
         
         else:
             print("No se pudo cargar el archivo .ui")
@@ -1734,3 +1770,292 @@ class VentanaGestion(QtWidgets.QMainWindow):
             QMessageBox.critical(self, "Error de Datos", "Stock y Punto Crítico deben ser números enteros.")
         except Exception as e:
             QMessageBox.critical(self, "Error", f"No se pudo actualizar: {e}")
+
+
+    def graficar_planificacion_suministros(self):
+        try:
+            # 1. Conexión y consulta usando columnas existentes
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            # Agrupamos por proveedor ya que 'estado' no existe
+            query = "SELECT proveedor, COUNT(*) FROM planificacion_suministros GROUP BY proveedor"
+            cursor.execute(query)
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            proveedores = [row[0] for row in datos]
+            cantidades = [row[1] for row in datos]
+
+            # 2. Limpiar el frame_2
+            if self.ui.frame_2.layout() is not None:
+                for i in reversed(range(self.ui.frame_2.layout().count())):
+                    self.ui.frame_2.layout().itemAt(i).widget().setParent(None)
+
+            # 3. Crear gráfica de barras horizontales con estética Neon
+            fig, ax = plt.subplots(figsize=(5, 4), tight_layout=True)
+            fig.patch.set_facecolor('#0c0c0c') # Fondo oscuro coincidente
+            ax.set_facecolor('#0c0c0c')
+
+            # Usamos el celeste neon característico de tu interfaz
+            ax.barh(proveedores, cantidades, color='#00e5ff', edgecolor='white', linewidth=0.5)
+
+            # Configuración de etiquetas
+            ax.set_title("Suministros por Proveedor", color='#00e5ff', fontsize=12, fontweight='bold')
+            ax.tick_params(axis='both', colors='white', labelsize=9)
+            
+            # Eliminar bordes para look minimalista
+            for spine in ax.spines.values():
+                spine.set_visible(False)
+            ax.grid(axis='x', color='#333333', linestyle='--', alpha=0.3)
+
+            # 4. Mostrar en la interfaz
+            canvas = FigureCanvas(fig)
+            self.ui.frame_2.layout().addWidget(canvas)
+
+        except Exception as e:
+            # Esto capturará cualquier otro error de columna
+            print(f"Error crítico al graficar: {e}")
+
+
+    def graficar_gestion_proveedores(self):
+        try:
+            # 1. Obtener nombres y calificaciones
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            # Seleccionamos las columnas reales: nombre_empresa y calificacion
+            cursor.execute("SELECT nombre_empresa, calificacion FROM gestion_proveedores")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            empresas = [row[0] for row in datos]
+            ratings = [row[1] for row in datos]
+
+            # 2. Limpiar el frame_3 antes de actualizar
+            for i in reversed(range(self.ui.frame_3.layout().count())):
+                self.ui.frame_3.layout().itemAt(i).widget().setParent(None)
+
+            # 3. Crear gráfica con estilo Neon
+            fig, ax = plt.subplots(figsize=(5, 4), tight_layout=True)
+            fig.patch.set_facecolor('#0c0c0c') # Fondo negro profundo
+            ax.set_facecolor('#0c0c0c')
+
+            # Barras en Amarillo Alerta/Neon para resaltar calificaciones
+            ax.bar(empresas, ratings, color='#ffaa00', edgecolor='white', alpha=0.8)
+
+            # Configuración estética
+            ax.set_title("Calificación por Proveedor", color='#00e5ff', fontsize=12, fontweight='bold')
+            ax.set_ylim(0, 5) # Asumiendo calificación de 1 a 5
+            ax.tick_params(axis='x', colors='white', labelsize=8, rotation=45)
+            ax.tick_params(axis='y', colors='white')
+            
+            # Grid y bordes minimalistas
+            for spine in ax.spines.values():
+                spine.set_visible(False)
+            ax.grid(axis='y', color='#333333', linestyle='--', alpha=0.3)
+
+            # 4. Mostrar en la interfaz
+            canvas = FigureCanvas(fig)
+            self.ui.frame_3.layout().addWidget(canvas)
+
+        except Exception as e:
+            print(f"Error al graficar proveedores: {e}")
+
+
+    def graficar_logistica_transporte(self):
+        try:
+            # 1. Obtener datos de prioridad
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT prioridad, COUNT(*) FROM transporte GROUP BY prioridad")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            etiquetas = [row[0] for row in datos]
+            cantidades = [row[1] for row in datos]
+
+            # 2. Limpiar el frame_5
+            for i in reversed(range(self.ui.frame_5.layout().count())):
+                self.ui.frame_5.layout().itemAt(i).widget().setParent(None)
+
+            # 3. Crear gráfica de dona con estilo Neon
+            fig, ax = plt.subplots(figsize=(5, 4), tight_layout=True)
+            fig.patch.set_facecolor('#0c0c0c') # Fondo oscuro
+            
+            # Colores: Rojo Neon (Alta), Amarillo (Media), Celeste (Baja)
+            colores = ['#ff4444', '#ffaa00', '#00e5ff']
+            
+            # Dibujar dona
+            wedges, texts, autotexts = ax.pie(
+                cantidades, labels=etiquetas, autopct='%1.1f%%', 
+                colors=colores, startangle=90, pctdistance=0.85,
+                textprops={'color':"w", 'fontsize': 10}
+            )
+
+            # Dibujar círculo central para el efecto "dona"
+            centro = plt.Circle((0,0), 0.70, fc='#0c0c0c')
+            fig.gca().add_artist(centro)
+
+            ax.set_title("Prioridad de Envíos", color='#00e5ff', fontsize=12, fontweight='bold')
+
+            # 4. Integrar en la interfaz
+            canvas = FigureCanvas(fig)
+            self.ui.frame_5.layout().addWidget(canvas)
+
+        except Exception as e:
+            print(f"Error al graficar transporte: {e}")
+
+    def graficar_analisis_costos_principal(self):
+        try:
+            # 1. Obtener la sumatoria de montos por categoría
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            query = "SELECT categoria, SUM(monto_total) FROM analisis_costos GROUP BY categoria"
+            cursor.execute(query)
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            categorias = [row[0] for row in datos]
+            totales = [row[1] for row in datos]
+
+            # 2. Limpiar el frame antes de redibujar
+            for i in reversed(range(self.ui.frame.layout().count())):
+                self.ui.frame.layout().itemAt(i).widget().setParent(None)
+
+            # 3. Crear gráfica con estética Neon
+            fig, ax = plt.subplots(figsize=(5, 4), tight_layout=True)
+            fig.patch.set_facecolor('#0c0c0c') # Fondo oscuro de tu interfaz
+            ax.set_facecolor('#0c0c0c')
+
+            # Barras en Celeste Neon (#00e5ff)
+            ax.bar(categorias, totales, color='#00e5ff', edgecolor='white')
+
+            # Configuración de etiquetas y estilo
+            ax.set_title("Inversión por Categoría", color='white', fontsize=12, fontweight='bold')
+            ax.tick_params(axis='x', colors='white', rotation=30, labelsize=9)
+            ax.tick_params(axis='y', colors='white')
+            
+            # Eliminar bordes para un look de ingeniería moderno
+            for spine in ax.spines.values():
+                spine.set_visible(False)
+            ax.grid(axis='y', color='#333333', linestyle='--', alpha=0.3)
+
+            # 4. Integrar el canvas en el frame
+            canvas = FigureCanvas(fig)
+            self.ui.frame.layout().addWidget(canvas)
+
+        except Exception as e:
+            print(f"Error al graficar costos: {e}")
+
+
+    def graficar_salud_inventario(self):
+        try:
+            # 1. Obtener datos de stock y puntos críticos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT nombre_producto, stock_actual, punto_critico FROM inventario_critico")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            productos = [row[0][:12] for row in datos] # Acortar nombres
+            # Calcular porcentaje de salud (Stock / Punto Crítico)
+            salud = [(row[1] / row[2] * 100) if row[2] > 0 else 100 for row in datos]
+
+            # 2. Limpiar el frame_4
+            for i in reversed(range(self.ui.frame_4.layout().count())):
+                self.ui.frame_4.layout().itemAt(i).widget().setParent(None)
+
+            # 3. Crear gráfica de salud
+            fig, ax = plt.subplots(figsize=(5, 4), tight_layout=True)
+            fig.patch.set_facecolor('#0c0c0c')
+            ax.set_facecolor('#0c0c0c')
+
+            # Asignar colores según el nivel de riesgo
+            colores = ['#ff4444' if s <= 100 else '#00e5ff' for s in salud]
+            
+            ax.bar(productos, salud, color=colores, alpha=0.8)
+            ax.axhline(100, color='white', linestyle='--', linewidth=1, label='Límite Crítico')
+
+            # Estética Neon y etiquetas
+            ax.set_title("Cantidad de Stock (%)", color='#00e5ff', fontsize=12, fontweight='bold')
+            ax.tick_params(axis='x', colors='white', rotation=45, labelsize=8)
+            ax.tick_params(axis='y', colors='white')
+            
+            for spine in ax.spines.values():
+                spine.set_visible(False)
+            ax.grid(axis='y', color='#333333', linestyle=':', alpha=0.3)
+
+            # 4. Mostrar en frame_4
+            canvas = FigureCanvas(fig)
+            self.ui.frame_4.layout().addWidget(canvas)
+
+        except Exception as e:
+            print(f"Error al graficar salud de inventario: {e}")
+
+    def graficar_analisis_general(self):
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+
+            # 1. Obtener métricas clave de cada tabla
+            # Gastos totales
+            cursor.execute("SELECT SUM(monto_total) FROM analisis_costos")
+            total_gastos = cursor.fetchone()[0] or 0
+            
+            # Productos en alerta crítica
+            cursor.execute("SELECT COUNT(*) FROM inventario_critico WHERE stock_actual <= punto_critico")
+            alertas_inventario = cursor.fetchone()[0] or 0
+            
+            # Envíos de alta prioridad
+            cursor.execute("SELECT COUNT(*) FROM transporte WHERE prioridad = 'Alta'")
+            envios_urgentes = cursor.fetchone()[0] or 0
+            
+            # Suministros pendientes
+            cursor.execute("SELECT COUNT(*) FROM planificacion_suministros")
+            total_suministros = cursor.fetchone()[0] or 0
+            conn.close()
+
+            # 2. Limpiar frame_6
+            for i in reversed(range(self.ui.frame_6.layout().count())):
+                self.ui.frame_6.layout().itemAt(i).widget().setParent(None)
+
+            # 3. Crear gráfica de KPIs
+            fig, ax = plt.subplots(figsize=(5, 4), tight_layout=True)
+            fig.patch.set_facecolor('#0c0c0c')
+            ax.set_facecolor('#0c0c0c')
+
+            metricas = ['Gastos (k$)', 'Alertas Stock', 'Envíos Alta P.', 'Suministros']
+            # Normalizamos valores para que quepan en la misma escala visual
+            valores = [total_gastos/1000, alertas_inventario, envios_urgentes, total_suministros]
+            
+            # Colores temáticos combinados
+            colores = ['#00e5ff', '#ff4444', '#ffaa00', '#00ff00']
+            ax.bar(metricas, valores, color=colores, alpha=0.9, width=0.6)
+
+            # Estética de Dashboard Ejecutivo
+            ax.set_title("RESUMEN OPERATIVO GENERAL", color='white', fontsize=12, fontweight='bold')
+            ax.tick_params(axis='both', colors='white', labelsize=9)
+            
+            for spine in ax.spines.values():
+                spine.set_visible(False)
+            ax.grid(axis='y', color='#333333', linestyle='--', alpha=0.3)
+
+            canvas = FigureCanvas(fig)
+            self.ui.frame_6.layout().addWidget(canvas)
+
+        except Exception as e:
+            print(f"Error en análisis general: {e}")

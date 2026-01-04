@@ -64,7 +64,7 @@ QMenu::item:selected {
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>5</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="page">
         <widget class="QWidget" name="gridLayoutWidget">
