@@ -11,6 +11,7 @@ from PySide6.QtWidgets import QMainWindow, QMessageBox, QApplication,QVBoxLayout
 from PySide6 import QtWidgets # En este caso usarías QtWidgets.QMessageBox
 from PySide6.QtWidgets import QTreeWidgetItem
 from PySide6.QtWidgets import QTreeWidgetItem, QFileIconProvider #
+import numpy as np
 
 
 class VentanaGestion(QtWidgets.QMainWindow):
@@ -83,7 +84,37 @@ class VentanaGestion(QtWidgets.QMainWindow):
             # Conectar el botón Actualizar de Logística (pushButton_11)
             self.ui.pushButton_11.clicked.connect(self.actualizar_envio_logistica)
             self.ui.pushButton_12.clicked.connect(self.accion_exportar)
-        
+
+            # Analisis de costos
+            self.cargar_tabla_costos()
+            self.configurar_tree_costos()
+            if self.ui.frame_30.layout() is None:
+                layout_costos = QVBoxLayout(self.ui.frame_30)
+                self.ui.frame_30.setLayout(layout_costos)
+            self.graficar_analisis_costos()
+            # Conectar el botón Añadir de Costos (pushButton_13)
+            self.ui.pushButton_13.clicked.connect(self.agregar_registro_costo)
+            # Conectar el botón Eliminar de Costos (pushButton_14)
+            self.ui.pushButton_14.clicked.connect(self.eliminar_registro_costo)
+            # Conexión para la tabla de Análisis de Costos
+            self.ui.tableWidget_4.itemClicked.connect(self.recuperar_datos_costos_tabla)
+            # Conectar el botón Actualizar de Costos (pushButton_15)
+            self.ui.pushButton_15.clicked.connect(self.actualizar_registro_costo)
+            self.ui.pushButton_16.clicked.connect(self.accion_exportar)
+            
+            # Inventario Critico
+            self.cargar_tabla_inventario()
+            self.configurar_tree_inventario()
+            if self.ui.frame_31.layout() is None:
+                layout_inventario = QVBoxLayout(self.ui.frame_31)
+                self.ui.frame_31.setLayout(layout_inventario)
+
+            self.graficar_estado_inventario()
+            self.ui.tableWidget_5.itemClicked.connect(self.recuperar_datos_inventario)
+            self.ui.pushButton_17.clicked.connect(self.agregar_registro_inventario)
+            self.ui.pushButton_18.clicked.connect(self.eliminar_registro_inventario)
+            self.ui.pushButton_19.clicked.connect(self.actualizar_registro_inventario)
+            self.ui.pushButton_20.clicked.connect(self.accion_exportar)
         
         else:
             print("No se pudo cargar el archivo .ui")
@@ -1095,3 +1126,611 @@ class VentanaGestion(QtWidgets.QMainWindow):
 
     
     # Analisis de costos
+
+    def cargar_tabla_costos(self):
+        try:
+            # 1. Conexión y obtención de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM analisis_costos")
+            datos = cursor.fetchall()
+
+            # 2. Configuración de tableWidget_4
+            self.ui.tableWidget_4.setRowCount(len(datos))
+            self.ui.tableWidget_4.setColumnCount(6)
+            
+            # --- ELIMINAR ÍNDICES Y MEJORAR ESPACIOS ---
+            self.ui.tableWidget_4.verticalHeader().setVisible(False) # Quita los números 1, 2, 3...
+            
+            header = self.ui.tableWidget_4.horizontalHeader()
+            header.setSectionResizeMode(3, QtWidgets.QHeaderView.Stretch) # Concepto se expande
+            
+            # 3. Llenado con formato de moneda y colores
+            for row_index, row_data in enumerate(datos):
+                for col_index, value in enumerate(row_data):
+                    # Formato especial para la columna de Monto (índice 2)
+                    display_text = f"$ {value:,.2f}" if col_index == 2 else str(value)
+                    
+                    item = QtWidgets.QTableWidgetItem(display_text)
+                    item.setTextAlignment(QtCore.Qt.AlignCenter)
+                    
+                    # Color celeste neon para los montos y blanco para el resto
+                    if col_index == 2:
+                        item.setForeground(QtGui.QColor("#00e5ff"))
+                    else:
+                        item.setForeground(QtGui.QColor("white"))
+                    
+                    self.ui.tableWidget_4.setItem(row_index, col_index, item)
+            
+            conn.close()
+        except Exception as e:
+            print(f"Error visualizando costos: {e}")
+
+    
+    # treewidget
+    def configurar_tree_costos(self):
+        # Limpiar antes de cargar
+        self.ui.treeWidget_4.clear()
+        self.ui.treeWidget_4.setHeaderLabels(["FILTROS DE COSTOS", "ESTADO/TOTAL"])
+        header = self.ui.treeWidget_4.header()
+        # La columna de nombres se expande totalmente
+        header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch) 
+        # La columna de montos/registros se ajusta a su contenido
+        header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
+
+        # 1. Carpeta de Períodos
+        periodos = QtWidgets.QTreeWidgetItem(self.ui.treeWidget_4, ["Resumen por Período"])
+        QtWidgets.QTreeWidgetItem(periodos, ["Año Actual (2025)", "$ 9,831.45"])
+        QtWidgets.QTreeWidgetItem(periodos, ["Mes Noviembre", "10 registros"]) # Basado en tus inserts
+
+        # 2. Carpeta de Métodos de Pago
+        pagos = QtWidgets.QTreeWidgetItem(self.ui.treeWidget_4, ["Métodos de Pago"])
+        QtWidgets.QTreeWidgetItem(pagos, ["Transferencias", "5 registros"])
+        QtWidgets.QTreeWidgetItem(pagos, ["Efectivo", "3 registros"])
+
+        # Ajustes estéticos
+        self.ui.treeWidget_4.expandAll()
+        # Ocultar índices si el widget los tuviera por error
+        self.ui.treeWidget_4.setStyleSheet("""
+        QTreeWidget {
+            background-color: #0c0c0c; /* Fondo negro profundo */
+            border: 1px solid #1a1a1a;
+            color: #ffffff;
+            font-size: 13px;
+            outline: none;
+        }
+        QTreeWidget::item {
+            height: 35px; /* Más espacio vertical para evitar amontonamiento */
+            border-bottom: 1px solid #1a1a1a;
+            padding-left: 10px;
+        }
+        QTreeWidget::item:selected {
+            background-color: #00e5ff;
+            color: #000000;
+        }
+        QHeaderView::section {
+            background-color: #121212;
+            color: #00e5ff; /* Texto celeste neon en cabecera */
+            padding: 5px;
+            border: 1px solid #1a1a1a;
+            font-weight: bold;
+        }
+    """)
+        iconos = QFileIconProvider()
+        ic_folder = iconos.icon(QFileIconProvider.Folder)
+        ic_file = iconos.icon(QFileIconProvider.File)
+
+        self.ui.treeWidget_4.clear()
+        
+        # Carpeta: Resumen
+        resumen = QtWidgets.QTreeWidgetItem(self.ui.treeWidget_4, ["Resumen por Período", ""])
+        resumen.setIcon(0, ic_folder)
+        
+        # Sub-ítems con colores específicos
+        año = QtWidgets.QTreeWidgetItem(resumen, ["Año Actual (2026)", "$ 9,831.45"])
+        año.setIcon(0, ic_file)
+        año.setForeground(1, QtGui.QColor("#00ff00")) # Verde para el total
+
+        mes = QtWidgets.QTreeWidgetItem(resumen, ["Mes de Enero", "10 registros"])
+        mes.setIcon(0, ic_file)
+        mes.setForeground(1, QtGui.QColor("#00e5ff")) # Celeste Neon
+
+        self.ui.treeWidget_4.expandAll()
+
+    
+    #grafica
+
+    def graficar_analisis_costos(self):
+        try:
+            # 1. Obtener sumatoria de montos por categoría
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            query = "SELECT categoria, SUM(monto_total) FROM analisis_costos GROUP BY categoria"
+            cursor.execute(query)
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            categorias = [row[0] for row in datos]
+            totales = [row[1] for row in datos]
+
+            # 2. Limpiar el frame_30
+            for i in reversed(range(self.ui.frame_30.layout().count())):
+                self.ui.frame_30.layout().itemAt(i).widget().setParent(None)
+
+            # 3. Crear la gráfica de barras Neon
+            fig, ax = plt.subplots(figsize=(5, 4), tight_layout=True)
+            fig.patch.set_facecolor('#121212') # Fondo oscuro coincidente con QSS
+            ax.set_facecolor('#121212')
+
+            # Barras en celeste neon
+            ax.bar(categorias, totales, color='#00e5ff', edgecolor='white', linewidth=0.5)
+
+            # Configurar etiquetas y títulos
+            ax.set_title("Gastos Totales por Categoría", color='#00e5ff', fontsize=12, fontweight='bold')
+            ax.tick_params(axis='x', colors='white', labelsize=9)
+            ax.tick_params(axis='y', colors='white')
+            
+            # Eliminar bordes innecesarios (spines)
+            for spine in ax.spines.values():
+                spine.set_visible(False)
+            ax.grid(axis='y', color='#333333', linestyle='--', alpha=0.5)
+
+            # 4. Mostrar en la interfaz
+            canvas = FigureCanvas(fig)
+            self.ui.frame_30.layout().addWidget(canvas)
+
+        except Exception as e:
+            print(f"Error graficando costos: {e}")
+
+    
+    # botones
+
+    def agregar_registro_costo(self):
+        # 1. Capturar datos con .strip() para eliminar espacios accidentales
+        id_ref   = self.ui.txt_ref.text().strip()
+        cat      = self.ui.txt_categoria.text().strip()
+        monto    = self.ui.txt_monto.text().strip()
+        detalle  = self.ui.txt_concepto.text().strip()
+        fecha    = self.ui.txt_fecha.text().strip()
+        pago     = self.ui.txt_pago.text().strip()
+
+        # --- LÍNEAS DE DEPURACIÓN (Revisa tu consola con esto) ---
+        print(f"DEBUG: ID='{id_ref}', Cat='{cat}', Monto='{monto}'")
+
+        # 2. Validación estricta
+        if not id_ref or not cat or not monto:
+            QMessageBox.warning(self, "Campos Requeridos", "ID, Categoría y Monto son obligatorios.")
+            return
+
+        try:
+            # 3. Conversión de seguridad y guardado
+            monto_float = float(monto.replace(',', '.')) # Maneja comas decimales
+            
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            query = """
+                INSERT INTO analisis_costos 
+                (id_registro, categoria, monto_total, concepto_detalle, fecha_registro, metodo_pago) 
+                VALUES (?, ?, ?, ?, ?, ?)
+            """
+            
+            cursor.execute(query, (id_ref, cat, monto_float, detalle, fecha, pago))
+            conn.commit()
+            conn.close()
+
+            QMessageBox.information(self, "Éxito", f"Costo {id_ref} guardado correctamente.")
+            
+            # 4. Actualizar toda la vista
+            self.cargar_tabla_costos()
+            self.graficar_analisis_costos()
+            self.limpiar_campos_costos()
+            
+        except ValueError:
+            QMessageBox.critical(self, "Error de Formato", "El campo 'Monto Total' debe ser un número válido.")
+        except Exception as e:
+            QMessageBox.critical(self, "Error de Sistema", f"No se pudo guardar: {e}")
+            
+
+    def eliminar_registro_costo(self):
+        # 1. Obtener la fila seleccionada en tableWidget_4
+        fila = self.ui.tableWidget_4.currentRow()
+        
+        if fila == -1:
+            QMessageBox.warning(self, "Selección", "Por favor, selecciona un registro de la tabla para eliminar.")
+            return
+
+        # Extraemos el ID de Registro (Columna 0)
+        id_registro = self.ui.tableWidget_4.item(fila, 0).text()
+        categoria   = self.ui.tableWidget_4.item(fila, 1).text()
+
+        # 2. Confirmación al usuario
+        confirmar = QMessageBox.question(
+            self, 
+            "Confirmar Eliminación", 
+            f"¿Estás seguro de eliminar el registro {id_registro} de la categoría {categoria}?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+
+        if confirmar == QMessageBox.Yes:
+            try:
+                # 3. Borrar de la base de datos
+                conn = sqlite3.connect("ingenieria.db")
+                cursor = conn.cursor()
+                cursor.execute("DELETE FROM analisis_costos WHERE id_registro = ?", (id_registro,))
+                conn.commit()
+                conn.close()
+
+                # 4. Actualizar toda la interfaz
+                QMessageBox.information(self, "Éxito", "Registro financiero eliminado.")
+                
+                self.cargar_tabla_costos()        # Refresca la tabla sin índices
+                self.graficar_analisis_costos()   # Redibuja las barras en frame_30
+                self.limpiar_campos_costos()      # Vacía los QLineEdits
+                
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"No se pudo eliminar el registro: {e}")   
+
+    def limpiar_campos_costos(self):
+        self.ui.txt_ref.clear()
+        self.ui.txt_categoria.clear()
+        self.ui.txt_monto.clear()
+        self.ui.txt_concepto.clear()
+        self.ui.txt_fecha.clear()
+        self.ui.txt_pago.clear()
+
+    
+    def recuperar_datos_costos_tabla(self):
+        # 1. Obtener la fila seleccionada en tableWidget_4
+        fila = self.ui.tableWidget_4.currentRow()
+
+        if fila != -1:
+            # 2. Extraer el texto de cada celda
+            id_ref   = self.ui.tableWidget_4.item(fila, 0).text()
+            cat      = self.ui.tableWidget_4.item(fila, 1).text()
+            # Quitamos el '$' y las comas para que sea un número limpio en el LineEdit
+            monto    = self.ui.tableWidget_4.item(fila, 2).text().replace("$ ", "").replace(",", "")
+            detalle  = self.ui.tableWidget_4.item(fila, 3).text()
+            fecha    = self.ui.tableWidget_4.item(fila, 4).text()
+            metodo   = self.ui.tableWidget_4.item(fila, 5).text()
+
+            # 3. Asignar a tus QLineEdit corregidos
+            self.ui.txt_ref.setText(id_ref)
+            self.ui.txt_categoria.setText(cat)
+            self.ui.txt_monto.setText(monto)
+            self.ui.txt_concepto.setText(detalle)
+            self.ui.txt_fecha.setText(fecha)
+            self.ui.txt_pago.setText(metodo)
+
+
+    def actualizar_registro_costo(self):
+        try:
+            # 1. Capturar los datos editados de los LineEdits
+            id_ref   = self.ui.txt_ref.text().strip()
+            cat      = self.ui.txt_categoria.text().strip()
+            monto    = self.ui.txt_monto.text().strip()
+            detalle  = self.ui.txt_concepto.text().strip()
+            fecha    = self.ui.txt_fecha.text().strip()
+            pago     = self.ui.txt_pago.text().strip()
+
+            # Validación: El ID es indispensable para localizar el registro
+            if not id_ref:
+                QMessageBox.warning(self, "Error", "Debe seleccionar un registro de la tabla para actualizar.")
+                return
+
+            # 2. Actualizar en la base de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            query = """
+                UPDATE analisis_costos 
+                SET categoria = ?, monto_total = ?, concepto_detalle = ?, 
+                    fecha_registro = ?, metodo_pago = ?
+                WHERE id_registro = ?
+            """
+            
+            # Convertimos el monto a float para mantener la precisión financiera
+            cursor.execute(query, (cat, float(monto), detalle, fecha, pago, id_ref))
+            
+            conn.commit()
+            conn.close()
+
+            # 3. Refrescar la interfaz
+            QMessageBox.information(self, "Éxito", f"Registro {id_ref} actualizado correctamente.")
+            
+            self.cargar_tabla_costos()        # Actualiza el tableWidget_4 (sin índices)
+            self.graficar_analisis_costos()   # Actualiza las barras en frame_30
+            self.limpiar_campos_costos()      # Limpia los campos tras la edición
+
+        except ValueError:
+            QMessageBox.critical(self, "Error", "Asegúrese de que el monto sea un número válido.")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"No se pudo actualizar: {e}")
+
+    
+    #------------Datos de inventario critico---------------------
+
+    def cargar_tabla_inventario(self):
+        try:
+            # 1. Conexión y obtención de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM inventario_critico")
+            datos = cursor.fetchall()
+
+            # 2. Configuración de tableWidget_5
+            self.ui.tableWidget_5.setRowCount(len(datos))
+            self.ui.tableWidget_5.setColumnCount(6)
+            
+            # Ocultar índices verticales para mantener la estética limpia
+            self.ui.tableWidget_5.verticalHeader().setVisible(False)
+            
+            header = self.ui.tableWidget_5.horizontalHeader()
+            header.setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch) # El nombre del producto se expande
+            header.setSectionResizeMode(4, QtWidgets.QHeaderView.ResizeToContents) # Proveedor
+
+            # 3. Llenado con lógica de alertas
+            for row_index, row_data in enumerate(datos):
+                estado_actual = str(row_data[5]) # Columna 'estado_alerta'
+                
+                for col_index, value in enumerate(row_data):
+                    item = QtWidgets.QTableWidgetItem(str(value))
+                    item.setTextAlignment(QtCore.Qt.AlignCenter)
+                    
+                    # --- Lógica de Colores Neon ---
+                    if estado_actual in ["Crítico", "Sin Stock"]:
+                        item.setForeground(QtGui.QColor("#ff4444")) # Rojo Neon
+                    elif estado_actual == "Reabastecer":
+                        item.setForeground(QtGui.QColor("#ffaa00")) # Naranja
+                    else:
+                        item.setForeground(QtGui.QColor("#00e5ff")) # Celeste Neon (Normal)
+                    
+                    self.ui.tableWidget_5.setItem(row_index, col_index, item)
+            
+            conn.close()
+        except Exception as e:
+            print(f"Error al cargar inventario: {e}")
+
+    #treewidget
+
+    def configurar_tree_inventario(self):
+        # Configuración de columnas para evitar el error de "Resu..."
+        header = self.ui.treeWidget_5.header()
+        header.setSectionResizeMode(0, QtWidgets.QHeaderView.Stretch) 
+        header.setSectionResizeMode(1, QtWidgets.QHeaderView.ResizeToContents)
+        
+        self.ui.treeWidget_5.clear()
+        self.ui.treeWidget_5.setHeaderLabels(["ESTADO DE ALMACÉN", "CONTEO"])
+
+        # 1. Grupo de Alertas Críticas
+        alertas = QtWidgets.QTreeWidgetItem(self.ui.treeWidget_5, ["Alertas de Inventario", ""])
+        
+        critico = QtWidgets.QTreeWidgetItem(alertas, ["Stock Crítico", "2 SKUs"])
+        critico.setForeground(0, QtGui.QColor("#ff4444")) # Rojo Neon para peligro
+        
+        reponer = QtWidgets.QTreeWidgetItem(alertas, ["Por Reabastecer", "3 SKUs"])
+        reponer.setForeground(0, QtGui.QColor("#ffaa00")) # Naranja
+
+        # 2. Grupo de Proveedores
+        prov = QtWidgets.QTreeWidgetItem(self.ui.treeWidget_5, ["Proveedores Activos", ""])
+        QtWidgets.QTreeWidgetItem(prov, ["TechSupply Corp", "4 ítems"])
+        QtWidgets.QTreeWidgetItem(prov, ["Industrial Parts Inc", "2 ítems"])
+
+        self.ui.treeWidget_5.expandAll()
+
+
+    def graficar_estado_inventario(self):
+        try:
+            # 1. Obtener datos de la BD
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            # Solo graficamos los primeros 7 para que no se amontone el texto
+            cursor.execute("SELECT nombre_producto, stock_actual, punto_critico FROM inventario_critico LIMIT 7")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            nombres = [row[0][:15] for row in datos] # Acortamos nombres largos
+            stock = [row[1] for row in datos]
+            critico = [row[2] for row in datos]
+
+            # 2. Limpiar frame_31
+            for i in reversed(range(self.ui.frame_31.layout().count())):
+                self.ui.frame_31.layout().itemAt(i).widget().setParent(None)
+
+            # 3. Crear gráfica de barras comparativas
+            fig, ax = plt.subplots(figsize=(5, 4), tight_layout=True)
+            fig.patch.set_facecolor('#0c0c0c') # Fondo negro profundo
+            ax.set_facecolor('#0c0c0c')
+
+            x = np.arange(len(nombres))
+            width = 0.35
+
+            # Barras: Stock en Celeste Neon y Punto Crítico en Rojo Neon
+            rects1 = ax.bar(x - width/2, stock, width, label='Stock Actual', color='#00e5ff')
+            rects2 = ax.bar(x + width/2, critico, width, label='Punto Crítico', color='#ff4444')
+
+            # Estética de la gráfica
+            ax.set_title("Stock vs Punto Crítico", color='white', fontsize=12, fontweight='bold')
+            ax.set_xticks(x)
+            ax.set_xticklabels(nombres, color='white', rotation=45, ha='right', fontsize=8)
+            ax.tick_params(axis='y', colors='white')
+            ax.legend(facecolor='#1a1a1a', edgecolor='#00e5ff', labelcolor='white')
+
+            # Eliminar bordes para look minimalista
+            for spine in ax.spines.values():
+                spine.set_visible(False)
+            ax.grid(axis='y', color='#333333', linestyle='--', alpha=0.3)
+
+            canvas = FigureCanvas(fig)
+            self.ui.frame_31.layout().addWidget(canvas)
+
+        except Exception as e:
+            print(f"Error graficando inventario: {e}")
+
+    #recuperar
+
+    def recuperar_datos_inventario(self):
+        # 1. Obtener la fila seleccionada actualmente
+        fila = self.ui.tableWidget_5.currentRow()
+
+        if fila != -1:
+            # 2. Extraer los datos de las columnas de la tabla
+            sku       = self.ui.tableWidget_5.item(fila, 0).text()
+            producto  = self.ui.tableWidget_5.item(fila, 1).text()
+            stock     = self.ui.tableWidget_5.item(fila, 2).text()
+            punto     = self.ui.tableWidget_5.item(fila, 3).text()
+            principal = self.ui.tableWidget_5.item(fila, 4).text()
+            estado    = self.ui.tableWidget_5.item(fila, 5).text()
+
+            # 3. Asignar los valores a tus objetos QLineEdit
+            self.ui.txt_sku.setText(sku)
+            self.ui.txt_producto.setText(producto)
+            self.ui.txt_stock.setText(stock)
+            self.ui.txt_punto.setText(punto)
+            self.ui.txt_principal.setText(principal)
+            self.ui.txt_estado.setText(estado)
+
+    
+    #botones
+
+    def agregar_registro_inventario(self):
+        # 1. Capturar datos de los QLineEdit
+        sku       = self.ui.txt_sku.text().strip()
+        producto  = self.ui.txt_producto.text().strip()
+        stock     = self.ui.txt_stock.text().strip()
+        punto     = self.ui.txt_punto.text().strip()
+        principal = self.ui.txt_principal.text().strip()
+        estado    = self.ui.txt_estado.text().strip()
+
+        # Validación: SKU, Producto y Stock son obligatorios
+        if not sku or not producto or not stock:
+            QMessageBox.warning(self, "Campos Requeridos", "SKU, Producto y Stock son obligatorios.")
+            return
+
+        try:
+            # 2. Insertar en la base de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            query = """
+                INSERT INTO inventario_critico 
+                (sku, nombre_producto, stock_actual, punto_critico, proveedor_principal, estado_alerta) 
+                VALUES (?, ?, ?, ?, ?, ?)
+            """
+            
+            # Convertimos stock y punto a entero para la lógica de la gráfica
+            cursor.execute(query, (sku, producto, int(stock), int(punto), principal, estado))
+            
+            conn.commit()
+            conn.close()
+
+            # 3. Éxito y actualización visual
+            QMessageBox.information(self, "Éxito", f"Producto {sku} añadido al inventario.")
+            
+            self.cargar_tabla_inventario()    # Refresca tableWidget_5 (sin índices)
+            self.graficar_estado_inventario() # Actualiza las barras en frame_31
+            self.limpiar_campos_inventario()  # Vacía los campos para el siguiente registro
+            
+        except sqlite3.IntegrityError:
+            QMessageBox.critical(self, "Error", "El Código / SKU ya existe en el inventario.")
+        except ValueError:
+            QMessageBox.critical(self, "Error", "Stock y Punto Crítico deben ser números enteros.")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Fallo al guardar: {e}")
+
+    def limpiar_campos_inventario(self):
+        self.ui.txt_sku.clear()
+        self.ui.txt_producto.clear()
+        self.ui.txt_stock.clear()
+        self.ui.txt_punto.clear()
+        self.ui.txt_principal.clear()
+        self.ui.txt_estado.clear()
+
+    def eliminar_registro_inventario(self):
+        # 1. Obtener la fila seleccionada en tableWidget_5
+        fila = self.ui.tableWidget_5.currentRow()
+        
+        if fila == -1:
+            QMessageBox.warning(self, "Selección", "Por favor, selecciona un producto de la tabla para eliminar.")
+            return
+
+        # Extraemos el SKU (Columna 0) y el nombre para la confirmación
+        sku      = self.ui.tableWidget_5.item(fila, 0).text()
+        producto = self.ui.tableWidget_5.item(fila, 1).text()
+
+        # 2. Confirmación de seguridad
+        confirmar = QMessageBox.question(
+            self, 
+            "Confirmar Eliminación", 
+            f"¿Estás seguro de eliminar el producto '{producto}' (SKU: {sku}) del inventario?",
+            QMessageBox.Yes | QMessageBox.No
+        )
+
+        if confirmar == QMessageBox.Yes:
+            try:
+                # 3. Borrar de la base de datos
+                conn = sqlite3.connect("ingenieria.db")
+                cursor = conn.cursor()
+                cursor.execute("DELETE FROM inventario_critico WHERE sku = ?", (sku,))
+                conn.commit()
+                conn.close()
+
+                # 4. Actualizar toda la interfaz
+                QMessageBox.information(self, "Éxito", "Producto eliminado correctamente del inventario.")
+                
+                self.cargar_tabla_inventario()    # Refresca la tabla sin índices
+                self.graficar_estado_inventario() # Actualiza las barras en frame_31
+                self.limpiar_campos_inventario()  # Vacía los QLineEdits
+                
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"No se pudo eliminar el registro: {e}")
+
+    def actualizar_registro_inventario(self):
+        try:
+            # 1. Capturar los datos de los campos de texto
+            sku       = self.ui.txt_sku.text().strip()
+            producto  = self.ui.txt_producto.text().strip()
+            stock     = self.ui.txt_stock.text().strip()
+            punto     = self.ui.txt_punto.text().strip()
+            principal = self.ui.txt_principal.text().strip()
+            estado    = self.ui.txt_estado.text().strip()
+
+            # El SKU es obligatorio para identificar qué registro cambiar
+            if not sku:
+                QMessageBox.warning(self, "Error", "Debe seleccionar un producto para actualizar.")
+                return
+
+            # 2. Ejecutar la actualización en SQL
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            query = """
+                UPDATE inventario_critico 
+                SET nombre_producto = ?, stock_actual = ?, punto_critico = ?, 
+                    proveedor_principal = ?, estado_alerta = ?
+                WHERE sku = ?
+            """
+            
+            # Aseguramos que stock y punto sean enteros para la lógica de la gráfica
+            cursor.execute(query, (producto, int(stock), int(punto), principal, estado, sku))
+            
+            conn.commit()
+            conn.close()
+
+            # 3. Refrescar la interfaz visual
+            QMessageBox.information(self, "Éxito", f"Producto {sku} actualizado correctamente.")
+            
+            self.cargar_tabla_inventario()    # Refresca tableWidget_5 sin índices
+            self.graficar_estado_inventario() # Actualiza las barras en frame_31
+            self.limpiar_campos_inventario()  # Limpia los campos tras editar
+
+        except ValueError:
+            QMessageBox.critical(self, "Error de Datos", "Stock y Punto Crítico deben ser números enteros.")
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"No se pudo actualizar: {e}")
