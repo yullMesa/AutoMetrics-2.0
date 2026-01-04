@@ -169,13 +169,6 @@ QStackedWidget &gt; QWidget {
     background-color: #121212;
 }
 
-/* Estilo para los Labels (Manteniendo lo anterior pero reforzado) */
-QLabel {
-    color: #00E5FF;                /* Cian neón */
-    font-size: 14px;               /* Letra grande */
-    font-weight: bold;
-    background-color: transparent; /* Evita parches de color diferentes */
-}
 
 /* Estilo para los LineEdits (Reforzado para fondo oscuro) */
 QLineEdit {
@@ -389,7 +382,7 @@ QTreeView::branch:open:has-children:has-siblings {
              </sizepolicy>
             </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string/>
             </property>
            </widget>
           </item>
@@ -451,7 +444,7 @@ QLineEdit:disabled {
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit">
+           <widget class="QLineEdit" name="lbl_id">
             <property name="styleSheet">
              <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
 QLabel {
@@ -532,7 +525,7 @@ QLineEdit:disabled {
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_2">
+           <widget class="QLineEdit" name="lbl_confi">
             <property name="styleSheet">
              <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
 QLabel {
@@ -613,7 +606,7 @@ QLineEdit:disabled {
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QLineEdit" name="lineEdit_3">
+           <widget class="QLineEdit" name="lbl_ruta">
             <property name="styleSheet">
              <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
 QLabel {
@@ -694,7 +687,7 @@ QLineEdit:disabled {
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QLineEdit" name="lineEdit_4">
+           <widget class="QLineEdit" name="lbl_version">
             <property name="styleSheet">
              <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
 QLabel {
@@ -775,7 +768,7 @@ QLineEdit:disabled {
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="QLineEdit" name="lineEdit_5">
+           <widget class="QLineEdit" name="lbl_fecha">
             <property name="styleSheet">
              <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
 QLabel {
@@ -856,7 +849,7 @@ QLineEdit:disabled {
            </widget>
           </item>
           <item row="5" column="1">
-           <widget class="QLineEdit" name="lineEdit_6">
+           <widget class="QLineEdit" name="lbl_estado">
             <property name="styleSheet">
              <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
 QLabel {
@@ -927,7 +920,7 @@ QPushButton:hover {
     color: #121212;                 /* El texto cambia a oscuro para contraste */
     border: 2px solid #ffffff;      /* Borde blanco brillante */
     /* Efecto de resplandor (Shadow) */
-    box-shadow: 0 0 15px #00E5FF;   
+   
 }
 
 /* Efecto Pressed (Al hacer clic) */
@@ -947,7 +940,7 @@ QPushButton#pushButton_18 {
 QPushButton#pushButton_18:hover {
     background-color: #FF5252;
     color: #ffffff;
-    box-shadow: 0 0 15px #FF5252;
+    
 }</string>
             </property>
             <property name="text">
@@ -976,7 +969,7 @@ QPushButton#pushButton_18:hover {
     color: #ffffff;                 /* Texto blanco para máximo contraste */
     border: 2px solid #ffffff;      /* Borde blanco brillante */
     /* Resplandor exterior rojo */
-    box-shadow: 0 0 20px rgba(255, 82, 82, 0.7); 
+   
 }
 
 /* Efecto Pressed (Al hacer clic) */
@@ -1013,7 +1006,7 @@ QPushButton:hover {
     color: #121212;                 /* El texto cambia a oscuro para contraste */
     border: 2px solid #ffffff;      /* Borde blanco brillante */
     /* Efecto de resplandor (Shadow) */
-    box-shadow: 0 0 15px #00E5FF;   
+    
 }
 
 /* Efecto Pressed (Al hacer clic) */
@@ -1033,7 +1026,7 @@ QPushButton#pushButton_18 {
 QPushButton#pushButton_18:hover {
     background-color: #FF5252;
     color: #ffffff;
-    box-shadow: 0 0 15px #FF5252;
+    ;
 }</string>
             </property>
             <property name="text">
@@ -1062,7 +1055,7 @@ QPushButton:hover {
     color: #121212;                 /* El texto cambia a oscuro para contraste */
     border: 2px solid #ffffff;      /* Borde blanco brillante */
     /* Efecto de resplandor (Shadow) */
-    box-shadow: 0 0 15px #00E5FF;   
+     
 }
 
 /* Efecto Pressed (Al hacer clic) */
@@ -1082,7 +1075,7 @@ QPushButton#pushButton_18 {
 QPushButton#pushButton_18:hover {
     background-color: #FF5252;
     color: #ffffff;
-    box-shadow: 0 0 15px #FF5252;
+    
 }</string>
             </property>
             <property name="text">
@@ -1134,6 +1127,1046 @@ QScrollBar::handle:vertical {
 
 QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
     height: 0px;
+}
+QTextBrowser {
+    /* Fondo oscuro profundo para resaltar el texto neon */
+    background-color: #0b0b0b; 
+    
+    /* Color de texto cian/neon para máxima legibilidad */
+    color: #00e5ff; 
+    
+    /* Borde cian que combina con tus otros widgets */
+    border: 2px solid #00e5ff; 
+    border-radius: 10px;
+    
+    /* Espaciado interno para que el texto no toque los bordes */
+    padding: 15px;
+    
+    /* Fuente técnica y profesional */
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    font-size: 13px;
+}
+
+/* Estilo para la barra de desplazamiento (Scrollbar) para que no rompa la estética */
+QScrollBar:vertical {
+    border: none;
+    background: #1a1a1a;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #00e5ff;
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}</string>
+            </property>
+            <property name="html">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI','Arial','sans-serif'; font-size:13px; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Monospace'; font-weight:700;&quot;&gt;SISTEMA DE GESTIÓN DE CONFIGURACIONES - MANUAL DE OPERACIÓN&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Monospace';&quot;&gt;Bienvenido al módulo de &lt;/span&gt;&lt;span style=&quot; font-family:'Consolas','Monospace'; font-weight:700;&quot;&gt;Gestión de Archivos y Configuración&lt;/span&gt;&lt;span style=&quot; font-family:'Consolas','Monospace';&quot;&gt;. Esta interfaz ha sido diseñada para la administración centralizada de los parámetros operativos de los servidores de la red.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Monospace'; font-weight:700;&quot;&gt;Instrucciones de Registro:&lt;/span&gt;&lt;span style=&quot; font-family:'Consolas','Monospace';&quot;&gt; Para asegurar la integridad de la base de datos &lt;/span&gt;&lt;span style=&quot; font-family:'Courier New';&quot;&gt;ingenieria.db&lt;/span&gt;&lt;span style=&quot; font-family:'Consolas','Monospace';&quot;&gt;, el analista debe proporcionar la siguiente información obligatoria:&lt;/span&gt;&lt;/p&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; font-family:'Consolas','Monospace';&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;ID Usuario / Rol:&lt;/span&gt; Identificador único del responsable o perfil del sistema asignado.&lt;/li&gt;
+&lt;li style=&quot; font-family:'Consolas','Monospace';&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Nombre de Configuración:&lt;/span&gt; Alias descriptivo del servicio (Ej: &lt;span style=&quot; font-style:italic;&quot;&gt;Database_Mirror_NY&lt;/span&gt;).&lt;/li&gt;
+&lt;li style=&quot; font-family:'Consolas','Monospace';&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Ruta de Directorio:&lt;/span&gt; Ubicación física o lógica absoluta de los archivos de configuración en el servidor.&lt;/li&gt;
+&lt;li style=&quot; font-family:'Consolas','Monospace';&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Versión del Sistema:&lt;/span&gt; Tag de versión siguiendo el estándar &lt;span style=&quot; font-style:italic;&quot;&gt;Semantic Versioning&lt;/span&gt; (Ej: &lt;span style=&quot; font-style:italic;&quot;&gt;v5.6.1&lt;/span&gt;).&lt;/li&gt;
+&lt;li style=&quot; font-family:'Consolas','Monospace';&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Fecha de Última Acción:&lt;/span&gt; Registro cronológico de la modificación más reciente.&lt;/li&gt;
+&lt;li style=&quot; font-family:'Consolas','Monospace';&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Estado del Servidor:&lt;/span&gt; Condición operativa actual (Activo, En Pausa, Mantenimiento, Error Crítico).&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_3">
+        <property name="styleSheet">
+         <string notr="true">/* Fondo principal del StackedWidget */
+QStackedWidget {
+    background-color: #121212; /* Fondo oscuro profundo */
+    border: none;
+}
+
+/* Asegura que las páginas internas (QWidgets) también sean oscuras */
+QStackedWidget &gt; QWidget {
+    background-color: #121212;
+}
+
+/* Estilo para los Labels (Manteniendo lo anterior pero reforzado) */
+QLabel {
+    color: #00E5FF;                /* Cian neón */
+    font-size: 14px;               /* Letra grande */
+    font-weight: bold;
+    background-color: transparent; /* Evita parches de color diferentes */
+}
+
+/* Estilo para los LineEdits (Reforzado para fondo oscuro) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Gris muy oscuro para el campo */
+    color: #ffffff;                /* Texto blanco */
+    border: 1px solid #00E5FF;     /* Borde cian fino */
+    border-radius: 4px;
+    padding: 6px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* Resalte magenta al escribir */
+}</string>
+        </property>
+        <widget class="QWidget" name="verticalLayoutWidget_5">
+         <property name="geometry">
+          <rect>
+           <x>690</x>
+           <y>20</y>
+           <width>591</width>
+           <height>1021</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <item>
+           <widget class="QTreeWidget" name="treeWidget_2">
+            <property name="styleSheet">
+             <string notr="true">/* Contenedor principal del árbol */
+QTreeWidget {
+    background-color: #121212;      /* Fondo oscuro consistente */
+    color: #ffffff;                 /* Texto de las ramas en blanco */
+    border: 1px solid #00E5FF;      /* Borde cian neón */
+    font-family: 'Segoe UI';
+    font-size: 13px;
+    outline: none;                  /* Elimina el borde punteado al hacer clic */
+}
+
+/* Estilo de los encabezados del árbol */
+QHeaderView::section {
+    background-color: #1a1a1a;
+    color: #00E5FF;                 /* Títulos en cian */
+    padding: 4px;
+    border: 1px solid #00E5FF;
+    font-weight: bold;
+}
+
+/* Estilo de los ítems (Ramas) */
+QTreeWidget::item {
+    padding: 5px;
+    border-bottom: 1px solid rgba(0, 229, 255, 0.1); /* Línea divisoria sutil */
+}
+
+/* Efecto al pasar el mouse por una rama */
+QTreeWidget::item:hover {
+    background-color: rgba(0, 229, 255, 0.1);
+    color: #00E5FF;
+}
+
+/* Efecto al seleccionar una rama */
+QTreeWidget::item:selected {
+    background-color: #FF00FF;      /* Resaltado magenta neón */
+    color: #000000;                 /* Texto negro para legibilidad */
+}
+
+/* Estilo de las flechas de expansión (Indicates if branch is open/closed) */
+QTreeView::branch:has-children:!has-siblings:closed,
+QTreeView::branch:closed:has-children:has-siblings {
+    image: url(expand_icon.png);    /* Aquí podrías poner un icono cian */
+}
+
+QTreeView::branch:open:has-children:!has-siblings,
+QTreeView::branch:open:has-children:has-siblings {
+    image: url(collapse_icon.png);
+}</string>
+            </property>
+            <column>
+             <property name="text">
+              <string notr="true">1</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Operaciones</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="verticalLayoutWidget_6">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>20</y>
+           <width>691</width>
+           <height>1021</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <widget class="QFrame" name="frame_8">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="tableWidget_2">
+            <property name="styleSheet">
+             <string notr="true">/* Contenedor principal de la tabla */
+QTableWidget {
+    background-color: #121212;     /* Fondo oscuro */
+    gridline-color: #00E5FF;       /* Líneas de la rejilla en cian neón */
+    color: #ffffff;                /* Texto de las celdas en blanco */
+    font-family: 'Segoe UI';
+    font-size: 13px;
+    border: 1px solid #00E5FF;     /* Borde exterior cian */
+    selection-background-color: rgba(255, 0, 255, 0.3); /* Fondo de selección magenta traslúcido */
+    selection-color: #ffffff;
+}
+
+/* Estilo de los encabezados (Títulos de las columnas) */
+QHeaderView::section {
+    background-color: #1a1a1a;     /* Gris muy oscuro */
+    color: #00E5FF;                /* Texto cian neón */
+    padding: 6px;
+    border: 1px solid #00E5FF;
+    font-weight: bold;
+    font-size: 14px;               /* Letra de encabezado un poco más grande */
+}
+
+/* Estilo de las barras de desplazamiento (Scrollbars) */
+QScrollBar:vertical {
+    border: none;
+    background: #121212;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #00E5FF;           /* Barra de arrastre cian */
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+/* Estilo al seleccionar una celda */
+QTableWidget::item:selected {
+    border: 1px solid #FF00FF;     /* Borde magenta al seleccionar */
+}</string>
+            </property>
+            <attribute name="horizontalHeaderCascadingSectionResizes">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="horizontalHeaderDefaultSectionSize">
+             <number>112</number>
+            </attribute>
+            <attribute name="horizontalHeaderHighlightSections">
+             <bool>true</bool>
+            </attribute>
+            <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>true</bool>
+            </attribute>
+            <attribute name="verticalHeaderCascadingSectionResizes">
+             <bool>true</bool>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>ID</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Nombre </string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Ruta Directorio</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Versión  </string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Fecha Acción</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Estado Servidor</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="verticalLayoutWidget_7">
+         <property name="geometry">
+          <rect>
+           <x>1280</x>
+           <y>20</y>
+           <width>611</width>
+           <height>351</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_7">
+          <item>
+           <widget class="QTextBrowser" name="textBrowser_2">
+            <property name="styleSheet">
+             <string notr="true">/* Contenedor principal del visualizador de texto */
+QTextBrowser {
+    background-color: #121212;      /* Fondo oscuro consistente */
+    color: #ffffff;                 /* Texto base en blanco */
+    border: 2px solid #00E5FF;      /* Borde cian neón */
+    border-radius: 5px;
+    padding: 10px;
+    font-family: 'Consolas', 'Monospace'; /* Fuente tipo código para estilo técnico */
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Resaltado magenta */
+    selection-color: #000000;
+}
+
+/* Estilo de la barra de desplazamiento (Scrollbar) */
+QScrollBar:vertical {
+    border: none;
+    background: #1a1a1a;
+    width: 8px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #00E5FF;           /* Barra cian */
+    min-height: 20px;
+    border-radius: 4px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_2">
+         <property name="geometry">
+          <rect>
+           <x>1280</x>
+           <y>981</y>
+           <width>611</width>
+           <height>61</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QPushButton" name="pushButton_5">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo base del botón */
+QPushButton {
+    background-color: #121212;      /* Fondo oscuro para que el borde resalte */
+    color: #00E5FF;                 /* Texto cian neón */
+    border: 2px solid #00E5FF;      /* Borde cian neón sólido */
+    border-radius: 8px;             /* Bordes redondeados modernos */
+    padding: 10px 20px;
+    font-size: 14px;                /* Letra grande como pediste */
+    font-weight: bold;
+    text-transform: uppercase;      /* Texto en mayúsculas para estilo ejecutivo */
+}
+
+/* Efecto Hover (Al pasar el mouse) */
+QPushButton:hover {
+    background-color: #00E5FF;      /* El fondo se llena de azul cian */
+    color: #121212;                 /* El texto cambia a oscuro para contraste */
+    border: 2px solid #ffffff;      /* Borde blanco brillante */
+    /* Efecto de resplandor (Shadow) */
+   
+}
+
+/* Efecto Pressed (Al hacer clic) */
+QPushButton:pressed {
+    background-color: #008ba3;      /* Un azul más oscuro para indicar presión */
+    border: 2px solid #008ba3;
+    padding-left: 12px;             /* Pequeño desplazamiento visual */
+    padding-top: 12px;
+}
+
+/* Estilo para botones de peligro (opcional para Eliminar) */
+QPushButton#pushButton_18 {
+    border: 2px solid #FF5252;      /* Rojo neón para el botón de eliminar */
+    color: #FF5252;
+}
+
+QPushButton#pushButton_18:hover {
+    background-color: #FF5252;
+    color: #ffffff;
+    
+}</string>
+            </property>
+            <property name="text">
+             <string>Añadir</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_6">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo específico para el botón de eliminar por su nombre de objeto */
+QPushButton {
+    background-color: #121212;      /* Fondo oscuro consistente */
+    color: #FF5252;                 /* Rojo Coral neón para el texto */
+    border: 2px solid #FF5252;      /* Borde rojo neón */
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;                /* Letra grande */
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Efecto Hover (Al pasar el mouse) */
+QPushButton#pushButton_18:hover {
+    background-color: #FF5252;      /* Se llena de rojo */
+    color: #ffffff;                 /* Texto blanco para máximo contraste */
+    border: 2px solid #ffffff;      /* Borde blanco brillante */
+    /* Resplandor exterior rojo */
+   
+}
+
+/* Efecto Pressed (Al hacer clic) */
+QPushButton#pushButton_18:pressed {
+    background-color: #B71C1C;      /* Rojo sangre oscuro al presionar */
+    border: 2px solid #B71C1C;
+    padding-left: 12px;
+    padding-top: 12px;
+}</string>
+            </property>
+            <property name="text">
+             <string>Eliminar</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_7">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo base del botón */
+QPushButton {
+    background-color: #121212;      /* Fondo oscuro para que el borde resalte */
+    color: #00E5FF;                 /* Texto cian neón */
+    border: 2px solid #00E5FF;      /* Borde cian neón sólido */
+    border-radius: 8px;             /* Bordes redondeados modernos */
+    padding: 10px 20px;
+    font-size: 14px;                /* Letra grande como pediste */
+    font-weight: bold;
+    text-transform: uppercase;      /* Texto en mayúsculas para estilo ejecutivo */
+}
+
+/* Efecto Hover (Al pasar el mouse) */
+QPushButton:hover {
+    background-color: #00E5FF;      /* El fondo se llena de azul cian */
+    color: #121212;                 /* El texto cambia a oscuro para contraste */
+    border: 2px solid #ffffff;      /* Borde blanco brillante */
+    /* Efecto de resplandor (Shadow) */
+    
+}
+
+/* Efecto Pressed (Al hacer clic) */
+QPushButton:pressed {
+    background-color: #008ba3;      /* Un azul más oscuro para indicar presión */
+    border: 2px solid #008ba3;
+    padding-left: 12px;             /* Pequeño desplazamiento visual */
+    padding-top: 12px;
+}
+
+/* Estilo para botones de peligro (opcional para Eliminar) */
+QPushButton#pushButton_18 {
+    border: 2px solid #FF5252;      /* Rojo neón para el botón de eliminar */
+    color: #FF5252;
+}
+
+QPushButton#pushButton_18:hover {
+    background-color: #FF5252;
+    color: #ffffff;
+    ;
+}</string>
+            </property>
+            <property name="text">
+             <string>Actualizar</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_8">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo base del botón */
+QPushButton {
+    background-color: #121212;      /* Fondo oscuro para que el borde resalte */
+    color: #00E5FF;                 /* Texto cian neón */
+    border: 2px solid #00E5FF;      /* Borde cian neón sólido */
+    border-radius: 8px;             /* Bordes redondeados modernos */
+    padding: 10px 20px;
+    font-size: 14px;                /* Letra grande como pediste */
+    font-weight: bold;
+    text-transform: uppercase;      /* Texto en mayúsculas para estilo ejecutivo */
+}
+
+/* Efecto Hover (Al pasar el mouse) */
+QPushButton:hover {
+    background-color: #00E5FF;      /* El fondo se llena de azul cian */
+    color: #121212;                 /* El texto cambia a oscuro para contraste */
+    border: 2px solid #ffffff;      /* Borde blanco brillante */
+    /* Efecto de resplandor (Shadow) */
+     
+}
+
+/* Efecto Pressed (Al hacer clic) */
+QPushButton:pressed {
+    background-color: #008ba3;      /* Un azul más oscuro para indicar presión */
+    border: 2px solid #008ba3;
+    padding-left: 12px;             /* Pequeño desplazamiento visual */
+    padding-top: 12px;
+}
+
+/* Estilo para botones de peligro (opcional para Eliminar) */
+QPushButton#pushButton_18 {
+    border: 2px solid #FF5252;      /* Rojo neón para el botón de eliminar */
+    color: #FF5252;
+}
+
+QPushButton#pushButton_18:hover {
+    background-color: #FF5252;
+    color: #ffffff;
+    
+}</string>
+            </property>
+            <property name="text">
+             <string>Exportar</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="formLayoutWidget_2">
+         <property name="geometry">
+          <rect>
+           <x>1280</x>
+           <y>390</y>
+           <width>611</width>
+           <height>650</height>
+          </rect>
+         </property>
+         <layout class="QFormLayout" name="formLayout_2">
+          <property name="verticalSpacing">
+           <number>67</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+            <property name="text">
+             <string>ID USUARIO / ROL</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineEdit_7">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_10">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+            <property name="text">
+             <string>NOMBRE DE CONFIGURACIÓN</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineEdit_8">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_11">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+            <property name="text">
+             <string>RUTA DE DIRECTORIO</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="lineEdit_9">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_12">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+            <property name="text">
+             <string>VERSIÓN DEL SISTEMA</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="lineEdit_10">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_13">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+            <property name="text">
+             <string>FECHA DE ÚLTIMA ACCIÓN</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="lineEdit_11">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_14">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+            <property name="text">
+             <string>ESTADO DEL SERVIDOR</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="lineEdit_12">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
 }</string>
             </property>
            </widget>
@@ -1141,7 +2174,1976 @@ QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
          </layout>
         </widget>
        </widget>
-       <widget class="QWidget" name="page_3"/>
+       <widget class="QWidget" name="page_4">
+        <property name="styleSheet">
+         <string notr="true">/* Fondo principal del StackedWidget */
+QStackedWidget {
+    background-color: #121212; /* Fondo oscuro profundo */
+    border: none;
+}
+
+/* Asegura que las páginas internas (QWidgets) también sean oscuras */
+QStackedWidget &gt; QWidget {
+    background-color: #121212;
+}
+
+/* Estilo para los Labels (Manteniendo lo anterior pero reforzado) */
+QLabel {
+    color: #00E5FF;                /* Cian neón */
+    font-size: 14px;               /* Letra grande */
+    font-weight: bold;
+    background-color: transparent; /* Evita parches de color diferentes */
+}
+
+/* Estilo para los LineEdits (Reforzado para fondo oscuro) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Gris muy oscuro para el campo */
+    color: #ffffff;                /* Texto blanco */
+    border: 1px solid #00E5FF;     /* Borde cian fino */
+    border-radius: 4px;
+    padding: 6px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* Resalte magenta al escribir */
+}</string>
+        </property>
+        <widget class="QWidget" name="horizontalLayoutWidget_3">
+         <property name="geometry">
+          <rect>
+           <x>1280</x>
+           <y>981</y>
+           <width>611</width>
+           <height>61</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QPushButton" name="pushButton_9">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo base del botón */
+QPushButton {
+    background-color: #121212;      /* Fondo oscuro para que el borde resalte */
+    color: #00E5FF;                 /* Texto cian neón */
+    border: 2px solid #00E5FF;      /* Borde cian neón sólido */
+    border-radius: 8px;             /* Bordes redondeados modernos */
+    padding: 10px 20px;
+    font-size: 14px;                /* Letra grande como pediste */
+    font-weight: bold;
+    text-transform: uppercase;      /* Texto en mayúsculas para estilo ejecutivo */
+}
+
+/* Efecto Hover (Al pasar el mouse) */
+QPushButton:hover {
+    background-color: #00E5FF;      /* El fondo se llena de azul cian */
+    color: #121212;                 /* El texto cambia a oscuro para contraste */
+    border: 2px solid #ffffff;      /* Borde blanco brillante */
+    /* Efecto de resplandor (Shadow) */
+   
+}
+
+/* Efecto Pressed (Al hacer clic) */
+QPushButton:pressed {
+    background-color: #008ba3;      /* Un azul más oscuro para indicar presión */
+    border: 2px solid #008ba3;
+    padding-left: 12px;             /* Pequeño desplazamiento visual */
+    padding-top: 12px;
+}
+
+/* Estilo para botones de peligro (opcional para Eliminar) */
+QPushButton#pushButton_18 {
+    border: 2px solid #FF5252;      /* Rojo neón para el botón de eliminar */
+    color: #FF5252;
+}
+
+QPushButton#pushButton_18:hover {
+    background-color: #FF5252;
+    color: #ffffff;
+    
+}</string>
+            </property>
+            <property name="text">
+             <string>Añadir</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_10">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo específico para el botón de eliminar por su nombre de objeto */
+QPushButton {
+    background-color: #121212;      /* Fondo oscuro consistente */
+    color: #FF5252;                 /* Rojo Coral neón para el texto */
+    border: 2px solid #FF5252;      /* Borde rojo neón */
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;                /* Letra grande */
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Efecto Hover (Al pasar el mouse) */
+QPushButton#pushButton_18:hover {
+    background-color: #FF5252;      /* Se llena de rojo */
+    color: #ffffff;                 /* Texto blanco para máximo contraste */
+    border: 2px solid #ffffff;      /* Borde blanco brillante */
+    /* Resplandor exterior rojo */
+   
+}
+
+/* Efecto Pressed (Al hacer clic) */
+QPushButton#pushButton_18:pressed {
+    background-color: #B71C1C;      /* Rojo sangre oscuro al presionar */
+    border: 2px solid #B71C1C;
+    padding-left: 12px;
+    padding-top: 12px;
+}</string>
+            </property>
+            <property name="text">
+             <string>Eliminar</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_11">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo base del botón */
+QPushButton {
+    background-color: #121212;      /* Fondo oscuro para que el borde resalte */
+    color: #00E5FF;                 /* Texto cian neón */
+    border: 2px solid #00E5FF;      /* Borde cian neón sólido */
+    border-radius: 8px;             /* Bordes redondeados modernos */
+    padding: 10px 20px;
+    font-size: 14px;                /* Letra grande como pediste */
+    font-weight: bold;
+    text-transform: uppercase;      /* Texto en mayúsculas para estilo ejecutivo */
+}
+
+/* Efecto Hover (Al pasar el mouse) */
+QPushButton:hover {
+    background-color: #00E5FF;      /* El fondo se llena de azul cian */
+    color: #121212;                 /* El texto cambia a oscuro para contraste */
+    border: 2px solid #ffffff;      /* Borde blanco brillante */
+    /* Efecto de resplandor (Shadow) */
+    
+}
+
+/* Efecto Pressed (Al hacer clic) */
+QPushButton:pressed {
+    background-color: #008ba3;      /* Un azul más oscuro para indicar presión */
+    border: 2px solid #008ba3;
+    padding-left: 12px;             /* Pequeño desplazamiento visual */
+    padding-top: 12px;
+}
+
+/* Estilo para botones de peligro (opcional para Eliminar) */
+QPushButton#pushButton_18 {
+    border: 2px solid #FF5252;      /* Rojo neón para el botón de eliminar */
+    color: #FF5252;
+}
+
+QPushButton#pushButton_18:hover {
+    background-color: #FF5252;
+    color: #ffffff;
+    ;
+}</string>
+            </property>
+            <property name="text">
+             <string>Actualizar</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_12">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo base del botón */
+QPushButton {
+    background-color: #121212;      /* Fondo oscuro para que el borde resalte */
+    color: #00E5FF;                 /* Texto cian neón */
+    border: 2px solid #00E5FF;      /* Borde cian neón sólido */
+    border-radius: 8px;             /* Bordes redondeados modernos */
+    padding: 10px 20px;
+    font-size: 14px;                /* Letra grande como pediste */
+    font-weight: bold;
+    text-transform: uppercase;      /* Texto en mayúsculas para estilo ejecutivo */
+}
+
+/* Efecto Hover (Al pasar el mouse) */
+QPushButton:hover {
+    background-color: #00E5FF;      /* El fondo se llena de azul cian */
+    color: #121212;                 /* El texto cambia a oscuro para contraste */
+    border: 2px solid #ffffff;      /* Borde blanco brillante */
+    /* Efecto de resplandor (Shadow) */
+     
+}
+
+/* Efecto Pressed (Al hacer clic) */
+QPushButton:pressed {
+    background-color: #008ba3;      /* Un azul más oscuro para indicar presión */
+    border: 2px solid #008ba3;
+    padding-left: 12px;             /* Pequeño desplazamiento visual */
+    padding-top: 12px;
+}
+
+/* Estilo para botones de peligro (opcional para Eliminar) */
+QPushButton#pushButton_18 {
+    border: 2px solid #FF5252;      /* Rojo neón para el botón de eliminar */
+    color: #FF5252;
+}
+
+QPushButton#pushButton_18:hover {
+    background-color: #FF5252;
+    color: #ffffff;
+    
+}</string>
+            </property>
+            <property name="text">
+             <string>Exportar</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="verticalLayoutWidget_8">
+         <property name="geometry">
+          <rect>
+           <x>690</x>
+           <y>20</y>
+           <width>591</width>
+           <height>1021</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_8">
+          <item>
+           <widget class="QTreeWidget" name="treeWidget_3">
+            <property name="styleSheet">
+             <string notr="true">/* Contenedor principal del árbol */
+QTreeWidget {
+    background-color: #121212;      /* Fondo oscuro consistente */
+    color: #ffffff;                 /* Texto de las ramas en blanco */
+    border: 1px solid #00E5FF;      /* Borde cian neón */
+    font-family: 'Segoe UI';
+    font-size: 13px;
+    outline: none;                  /* Elimina el borde punteado al hacer clic */
+}
+
+/* Estilo de los encabezados del árbol */
+QHeaderView::section {
+    background-color: #1a1a1a;
+    color: #00E5FF;                 /* Títulos en cian */
+    padding: 4px;
+    border: 1px solid #00E5FF;
+    font-weight: bold;
+}
+
+/* Estilo de los ítems (Ramas) */
+QTreeWidget::item {
+    padding: 5px;
+    border-bottom: 1px solid rgba(0, 229, 255, 0.1); /* Línea divisoria sutil */
+}
+
+/* Efecto al pasar el mouse por una rama */
+QTreeWidget::item:hover {
+    background-color: rgba(0, 229, 255, 0.1);
+    color: #00E5FF;
+}
+
+/* Efecto al seleccionar una rama */
+QTreeWidget::item:selected {
+    background-color: #FF00FF;      /* Resaltado magenta neón */
+    color: #000000;                 /* Texto negro para legibilidad */
+}
+
+/* Estilo de las flechas de expansión (Indicates if branch is open/closed) */
+QTreeView::branch:has-children:!has-siblings:closed,
+QTreeView::branch:closed:has-children:has-siblings {
+    image: url(expand_icon.png);    /* Aquí podrías poner un icono cian */
+}
+
+QTreeView::branch:open:has-children:!has-siblings,
+QTreeView::branch:open:has-children:has-siblings {
+    image: url(collapse_icon.png);
+}</string>
+            </property>
+            <column>
+             <property name="text">
+              <string notr="true">1</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_15">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Analisis</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="verticalLayoutWidget_9">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>20</y>
+           <width>691</width>
+           <height>1021</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <item>
+           <widget class="QFrame" name="frame_9">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="tableWidget_3">
+            <property name="styleSheet">
+             <string notr="true">/* Contenedor principal de la tabla */
+QTableWidget {
+    background-color: #121212;     /* Fondo oscuro */
+    gridline-color: #00E5FF;       /* Líneas de la rejilla en cian neón */
+    color: #ffffff;                /* Texto de las celdas en blanco */
+    font-family: 'Segoe UI';
+    font-size: 13px;
+    border: 1px solid #00E5FF;     /* Borde exterior cian */
+    selection-background-color: rgba(255, 0, 255, 0.3); /* Fondo de selección magenta traslúcido */
+    selection-color: #ffffff;
+}
+
+/* Estilo de los encabezados (Títulos de las columnas) */
+QHeaderView::section {
+    background-color: #1a1a1a;     /* Gris muy oscuro */
+    color: #00E5FF;                /* Texto cian neón */
+    padding: 6px;
+    border: 1px solid #00E5FF;
+    font-weight: bold;
+    font-size: 14px;               /* Letra de encabezado un poco más grande */
+}
+
+/* Estilo de las barras de desplazamiento (Scrollbars) */
+QScrollBar:vertical {
+    border: none;
+    background: #121212;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #00E5FF;           /* Barra de arrastre cian */
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+/* Estilo al seleccionar una celda */
+QTableWidget::item:selected {
+    border: 1px solid #FF00FF;     /* Borde magenta al seleccionar */
+}</string>
+            </property>
+            <attribute name="horizontalHeaderCascadingSectionResizes">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="horizontalHeaderDefaultSectionSize">
+             <number>112</number>
+            </attribute>
+            <attribute name="horizontalHeaderHighlightSections">
+             <bool>true</bool>
+            </attribute>
+            <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>true</bool>
+            </attribute>
+            <attribute name="verticalHeaderCascadingSectionResizes">
+             <bool>true</bool>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>ID</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Nombre </string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Ruta Directorio</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Versión  </string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Fecha Acción</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Estado Servidor</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="formLayoutWidget_3">
+         <property name="geometry">
+          <rect>
+           <x>1280</x>
+           <y>390</y>
+           <width>611</width>
+           <height>650</height>
+          </rect>
+         </property>
+         <layout class="QFormLayout" name="formLayout_3">
+          <property name="verticalSpacing">
+           <number>67</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_16">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+            <property name="text">
+             <string>ID USUARIO / ROL</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineEdit_13">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_17">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+            <property name="text">
+             <string>NOMBRE DE CONFIGURACIÓN</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineEdit_14">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_18">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+            <property name="text">
+             <string>RUTA DE DIRECTORIO</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="lineEdit_15">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_19">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+            <property name="text">
+             <string>VERSIÓN DEL SISTEMA</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="lineEdit_16">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_20">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+            <property name="text">
+             <string>FECHA DE ÚLTIMA ACCIÓN</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="lineEdit_17">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_21">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+            <property name="text">
+             <string>ESTADO DEL SERVIDOR</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="lineEdit_18">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="verticalLayoutWidget_10">
+         <property name="geometry">
+          <rect>
+           <x>1280</x>
+           <y>20</y>
+           <width>611</width>
+           <height>351</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_10">
+          <item>
+           <widget class="QTextBrowser" name="textBrowser_3">
+            <property name="styleSheet">
+             <string notr="true">/* Contenedor principal del visualizador de texto */
+QTextBrowser {
+    background-color: #121212;      /* Fondo oscuro consistente */
+    color: #ffffff;                 /* Texto base en blanco */
+    border: 2px solid #00E5FF;      /* Borde cian neón */
+    border-radius: 5px;
+    padding: 10px;
+    font-family: 'Consolas', 'Monospace'; /* Fuente tipo código para estilo técnico */
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Resaltado magenta */
+    selection-color: #000000;
+}
+
+/* Estilo de la barra de desplazamiento (Scrollbar) */
+QScrollBar:vertical {
+    border: none;
+    background: #1a1a1a;
+    width: 8px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #00E5FF;           /* Barra cian */
+    min-height: 20px;
+    border-radius: 4px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_5">
+        <property name="styleSheet">
+         <string notr="true">/* Fondo principal del StackedWidget */
+QStackedWidget {
+    background-color: #121212; /* Fondo oscuro profundo */
+    border: none;
+}
+
+/* Asegura que las páginas internas (QWidgets) también sean oscuras */
+QStackedWidget &gt; QWidget {
+    background-color: #121212;
+}
+
+/* Estilo para los Labels (Manteniendo lo anterior pero reforzado) */
+QLabel {
+    color: #00E5FF;                /* Cian neón */
+    font-size: 14px;               /* Letra grande */
+    font-weight: bold;
+    background-color: transparent; /* Evita parches de color diferentes */
+}
+
+/* Estilo para los LineEdits (Reforzado para fondo oscuro) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Gris muy oscuro para el campo */
+    color: #ffffff;                /* Texto blanco */
+    border: 1px solid #00E5FF;     /* Borde cian fino */
+    border-radius: 4px;
+    padding: 6px;
+}
+
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* Resalte magenta al escribir */
+}</string>
+        </property>
+        <widget class="QWidget" name="formLayoutWidget_4">
+         <property name="geometry">
+          <rect>
+           <x>1280</x>
+           <y>389</y>
+           <width>611</width>
+           <height>650</height>
+          </rect>
+         </property>
+         <layout class="QFormLayout" name="formLayout_4">
+          <property name="verticalSpacing">
+           <number>67</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_22">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+            <property name="text">
+             <string>ID USUARIO / ROL</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="lineEdit_19">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_23">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+            <property name="text">
+             <string>NOMBRE DE CONFIGURACIÓN</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="lineEdit_20">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_24">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+            <property name="text">
+             <string>RUTA DE DIRECTORIO</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="lineEdit_21">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_25">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+            <property name="text">
+             <string>VERSIÓN DEL SISTEMA</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="lineEdit_22">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_26">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+            <property name="text">
+             <string>FECHA DE ÚLTIMA ACCIÓN</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="lineEdit_23">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_27">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+            <property name="text">
+             <string>ESTADO DEL SERVIDOR</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="lineEdit_24">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
+QLabel {
+    color: #00E5FF;                /* Cian neón para los títulos */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px;               /* Tamaño de letra grande y legible */
+    font-weight: bold;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo para los campos de entrada (LineEdits) */
+QLineEdit {
+    background-color: #1a1a1a;     /* Fondo gris oscuro para contraste */
+    color: #ffffff;                /* Texto blanco para lectura clara */
+    border: 2px solid #00E5FF;     /* Borde inicial cian neón */
+    border-radius: 5px;            /* Bordes ligeramente redondeados */
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Color de selección magenta */
+}
+
+/* Efecto cuando el usuario hace clic o escribe en el campo (Focus) */
+QLineEdit:focus {
+    border: 2px solid #FF00FF;     /* El borde cambia a magenta neón al escribir */
+    background-color: #252525;     /* Se aclara levemente el fondo */
+}
+
+/* Estilo para LineEdits cuando están deshabilitados */
+QLineEdit:disabled {
+    color: #555555;
+    border: 2px solid #333333;
+    background-color: #0d0d0d;
+}</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="verticalLayoutWidget_11">
+         <property name="geometry">
+          <rect>
+           <x>690</x>
+           <y>19</y>
+           <width>591</width>
+           <height>1021</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_11">
+          <item>
+           <widget class="QTreeWidget" name="treeWidget_4">
+            <property name="styleSheet">
+             <string notr="true">/* Contenedor principal del árbol */
+QTreeWidget {
+    background-color: #121212;      /* Fondo oscuro consistente */
+    color: #ffffff;                 /* Texto de las ramas en blanco */
+    border: 1px solid #00E5FF;      /* Borde cian neón */
+    font-family: 'Segoe UI';
+    font-size: 13px;
+    outline: none;                  /* Elimina el borde punteado al hacer clic */
+}
+
+/* Estilo de los encabezados del árbol */
+QHeaderView::section {
+    background-color: #1a1a1a;
+    color: #00E5FF;                 /* Títulos en cian */
+    padding: 4px;
+    border: 1px solid #00E5FF;
+    font-weight: bold;
+}
+
+/* Estilo de los ítems (Ramas) */
+QTreeWidget::item {
+    padding: 5px;
+    border-bottom: 1px solid rgba(0, 229, 255, 0.1); /* Línea divisoria sutil */
+}
+
+/* Efecto al pasar el mouse por una rama */
+QTreeWidget::item:hover {
+    background-color: rgba(0, 229, 255, 0.1);
+    color: #00E5FF;
+}
+
+/* Efecto al seleccionar una rama */
+QTreeWidget::item:selected {
+    background-color: #FF00FF;      /* Resaltado magenta neón */
+    color: #000000;                 /* Texto negro para legibilidad */
+}
+
+/* Estilo de las flechas de expansión (Indicates if branch is open/closed) */
+QTreeView::branch:has-children:!has-siblings:closed,
+QTreeView::branch:closed:has-children:has-siblings {
+    image: url(expand_icon.png);    /* Aquí podrías poner un icono cian */
+}
+
+QTreeView::branch:open:has-children:!has-siblings,
+QTreeView::branch:open:has-children:has-siblings {
+    image: url(collapse_icon.png);
+}</string>
+            </property>
+            <column>
+             <property name="text">
+              <string notr="true">1</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_28">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Reportes</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="verticalLayoutWidget_12">
+         <property name="geometry">
+          <rect>
+           <x>1280</x>
+           <y>19</y>
+           <width>611</width>
+           <height>351</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_12">
+          <item>
+           <widget class="QTextBrowser" name="textBrowser_4">
+            <property name="styleSheet">
+             <string notr="true">/* Contenedor principal del visualizador de texto */
+QTextBrowser {
+    background-color: #121212;      /* Fondo oscuro consistente */
+    color: #ffffff;                 /* Texto base en blanco */
+    border: 2px solid #00E5FF;      /* Borde cian neón */
+    border-radius: 5px;
+    padding: 10px;
+    font-family: 'Consolas', 'Monospace'; /* Fuente tipo código para estilo técnico */
+    font-size: 13px;
+    selection-background-color: #FF00FF; /* Resaltado magenta */
+    selection-color: #000000;
+}
+
+/* Estilo de la barra de desplazamiento (Scrollbar) */
+QScrollBar:vertical {
+    border: none;
+    background: #1a1a1a;
+    width: 8px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #00E5FF;           /* Barra cian */
+    min-height: 20px;
+    border-radius: 4px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    height: 0px;
+}</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_4">
+         <property name="geometry">
+          <rect>
+           <x>1280</x>
+           <y>980</y>
+           <width>611</width>
+           <height>61</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_4">
+          <item>
+           <widget class="QPushButton" name="pushButton_13">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo base del botón */
+QPushButton {
+    background-color: #121212;      /* Fondo oscuro para que el borde resalte */
+    color: #00E5FF;                 /* Texto cian neón */
+    border: 2px solid #00E5FF;      /* Borde cian neón sólido */
+    border-radius: 8px;             /* Bordes redondeados modernos */
+    padding: 10px 20px;
+    font-size: 14px;                /* Letra grande como pediste */
+    font-weight: bold;
+    text-transform: uppercase;      /* Texto en mayúsculas para estilo ejecutivo */
+}
+
+/* Efecto Hover (Al pasar el mouse) */
+QPushButton:hover {
+    background-color: #00E5FF;      /* El fondo se llena de azul cian */
+    color: #121212;                 /* El texto cambia a oscuro para contraste */
+    border: 2px solid #ffffff;      /* Borde blanco brillante */
+    /* Efecto de resplandor (Shadow) */
+   
+}
+
+/* Efecto Pressed (Al hacer clic) */
+QPushButton:pressed {
+    background-color: #008ba3;      /* Un azul más oscuro para indicar presión */
+    border: 2px solid #008ba3;
+    padding-left: 12px;             /* Pequeño desplazamiento visual */
+    padding-top: 12px;
+}
+
+/* Estilo para botones de peligro (opcional para Eliminar) */
+QPushButton#pushButton_18 {
+    border: 2px solid #FF5252;      /* Rojo neón para el botón de eliminar */
+    color: #FF5252;
+}
+
+QPushButton#pushButton_18:hover {
+    background-color: #FF5252;
+    color: #ffffff;
+    
+}</string>
+            </property>
+            <property name="text">
+             <string>Añadir</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_14">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo específico para el botón de eliminar por su nombre de objeto */
+QPushButton {
+    background-color: #121212;      /* Fondo oscuro consistente */
+    color: #FF5252;                 /* Rojo Coral neón para el texto */
+    border: 2px solid #FF5252;      /* Borde rojo neón */
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;                /* Letra grande */
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Efecto Hover (Al pasar el mouse) */
+QPushButton#pushButton_18:hover {
+    background-color: #FF5252;      /* Se llena de rojo */
+    color: #ffffff;                 /* Texto blanco para máximo contraste */
+    border: 2px solid #ffffff;      /* Borde blanco brillante */
+    /* Resplandor exterior rojo */
+   
+}
+
+/* Efecto Pressed (Al hacer clic) */
+QPushButton#pushButton_18:pressed {
+    background-color: #B71C1C;      /* Rojo sangre oscuro al presionar */
+    border: 2px solid #B71C1C;
+    padding-left: 12px;
+    padding-top: 12px;
+}</string>
+            </property>
+            <property name="text">
+             <string>Eliminar</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_15">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo base del botón */
+QPushButton {
+    background-color: #121212;      /* Fondo oscuro para que el borde resalte */
+    color: #00E5FF;                 /* Texto cian neón */
+    border: 2px solid #00E5FF;      /* Borde cian neón sólido */
+    border-radius: 8px;             /* Bordes redondeados modernos */
+    padding: 10px 20px;
+    font-size: 14px;                /* Letra grande como pediste */
+    font-weight: bold;
+    text-transform: uppercase;      /* Texto en mayúsculas para estilo ejecutivo */
+}
+
+/* Efecto Hover (Al pasar el mouse) */
+QPushButton:hover {
+    background-color: #00E5FF;      /* El fondo se llena de azul cian */
+    color: #121212;                 /* El texto cambia a oscuro para contraste */
+    border: 2px solid #ffffff;      /* Borde blanco brillante */
+    /* Efecto de resplandor (Shadow) */
+    
+}
+
+/* Efecto Pressed (Al hacer clic) */
+QPushButton:pressed {
+    background-color: #008ba3;      /* Un azul más oscuro para indicar presión */
+    border: 2px solid #008ba3;
+    padding-left: 12px;             /* Pequeño desplazamiento visual */
+    padding-top: 12px;
+}
+
+/* Estilo para botones de peligro (opcional para Eliminar) */
+QPushButton#pushButton_18 {
+    border: 2px solid #FF5252;      /* Rojo neón para el botón de eliminar */
+    color: #FF5252;
+}
+
+QPushButton#pushButton_18:hover {
+    background-color: #FF5252;
+    color: #ffffff;
+    ;
+}</string>
+            </property>
+            <property name="text">
+             <string>Actualizar</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_16">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo base del botón */
+QPushButton {
+    background-color: #121212;      /* Fondo oscuro para que el borde resalte */
+    color: #00E5FF;                 /* Texto cian neón */
+    border: 2px solid #00E5FF;      /* Borde cian neón sólido */
+    border-radius: 8px;             /* Bordes redondeados modernos */
+    padding: 10px 20px;
+    font-size: 14px;                /* Letra grande como pediste */
+    font-weight: bold;
+    text-transform: uppercase;      /* Texto en mayúsculas para estilo ejecutivo */
+}
+
+/* Efecto Hover (Al pasar el mouse) */
+QPushButton:hover {
+    background-color: #00E5FF;      /* El fondo se llena de azul cian */
+    color: #121212;                 /* El texto cambia a oscuro para contraste */
+    border: 2px solid #ffffff;      /* Borde blanco brillante */
+    /* Efecto de resplandor (Shadow) */
+     
+}
+
+/* Efecto Pressed (Al hacer clic) */
+QPushButton:pressed {
+    background-color: #008ba3;      /* Un azul más oscuro para indicar presión */
+    border: 2px solid #008ba3;
+    padding-left: 12px;             /* Pequeño desplazamiento visual */
+    padding-top: 12px;
+}
+
+/* Estilo para botones de peligro (opcional para Eliminar) */
+QPushButton#pushButton_18 {
+    border: 2px solid #FF5252;      /* Rojo neón para el botón de eliminar */
+    color: #FF5252;
+}
+
+QPushButton#pushButton_18:hover {
+    background-color: #FF5252;
+    color: #ffffff;
+    
+}</string>
+            </property>
+            <property name="text">
+             <string>Exportar</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="verticalLayoutWidget_13">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>19</y>
+           <width>691</width>
+           <height>1021</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_13">
+          <item>
+           <widget class="QFrame" name="frame_10">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="tableWidget_4">
+            <property name="styleSheet">
+             <string notr="true">/* Contenedor principal de la tabla */
+QTableWidget {
+    background-color: #121212;     /* Fondo oscuro */
+    gridline-color: #00E5FF;       /* Líneas de la rejilla en cian neón */
+    color: #ffffff;                /* Texto de las celdas en blanco */
+    font-family: 'Segoe UI';
+    font-size: 13px;
+    border: 1px solid #00E5FF;     /* Borde exterior cian */
+    selection-background-color: rgba(255, 0, 255, 0.3); /* Fondo de selección magenta traslúcido */
+    selection-color: #ffffff;
+}
+
+/* Estilo de los encabezados (Títulos de las columnas) */
+QHeaderView::section {
+    background-color: #1a1a1a;     /* Gris muy oscuro */
+    color: #00E5FF;                /* Texto cian neón */
+    padding: 6px;
+    border: 1px solid #00E5FF;
+    font-weight: bold;
+    font-size: 14px;               /* Letra de encabezado un poco más grande */
+}
+
+/* Estilo de las barras de desplazamiento (Scrollbars) */
+QScrollBar:vertical {
+    border: none;
+    background: #121212;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #00E5FF;           /* Barra de arrastre cian */
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+/* Estilo al seleccionar una celda */
+QTableWidget::item:selected {
+    border: 1px solid #FF00FF;     /* Borde magenta al seleccionar */
+}</string>
+            </property>
+            <attribute name="horizontalHeaderCascadingSectionResizes">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="horizontalHeaderDefaultSectionSize">
+             <number>112</number>
+            </attribute>
+            <attribute name="horizontalHeaderHighlightSections">
+             <bool>true</bool>
+            </attribute>
+            <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>true</bool>
+            </attribute>
+            <attribute name="verticalHeaderCascadingSectionResizes">
+             <bool>true</bool>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>ID</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Nombre </string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Ruta Directorio</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Versión  </string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Fecha Acción</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Estado Servidor</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
       </widget>
      </item>
     </layout>

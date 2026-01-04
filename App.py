@@ -11,6 +11,7 @@ from collections import Counter
 import recursos_rc
 from Ingenieria import VentanaIngenieria
 from Gestion import VentanaGestion # Importamos la lógica que haremos ahora
+from Rendimiento import RendimientoMercado
 
 
 class VentanaInicio(QDialog):
@@ -46,6 +47,8 @@ class VentanaInicio(QDialog):
 
             self.ui.toolGestion.clicked.connect(self.abrir_gestion_valor)
 
+            self.ui.toolRendimiento.clicked.connect(self.Abrir_rendimiento)
+
                 
 
     def abrir_ingenieria(self):
@@ -59,7 +62,6 @@ class VentanaInicio(QDialog):
     
     def abrir_gestion_valor(self):
         try:
-            from Gestion import VentanaGestion
             # Aquí enviamos el objeto VentanaInicio (self)
             self.ventana_gestion = VentanaGestion(self) 
             self.ventana_gestion.show()
@@ -67,6 +69,19 @@ class VentanaInicio(QDialog):
         except Exception as e:
             # Esto te dirá si el error cambió a otro tipo
             print(f"Error detectado: {e}")
+
+
+    def Abrir_rendimiento(self):
+        try:
+   
+            self.ventana_gestion = RendimientoMercado(self) 
+            self.ventana_gestion.show()
+            self.hide()
+        except Exception as e:
+            # Esto te dirá si el error cambió a otro tipo
+            print(f"Error detectado: {e}")
+
+    
 
 
 
