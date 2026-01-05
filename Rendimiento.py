@@ -82,6 +82,21 @@ class RendimientoMercado(QMainWindow):
             # Conectar el botón de Actualizar (pushButton_11)
             self.ui_content.pushButton_11.clicked.connect(self.actualizar_datos_analisis)
             self.ui_content.pushButton_12.clicked.connect(self.importa)
+
+            #Reportes
+            # Al final de tu def __init__(self):
+            self.actualizar_tabla_reportes()
+            self.agregar_nuevo_reporte()
+            # Conexión para que al tocar la tabla se llenen los campos
+            self.ui_content.tableWidget_4.itemClicked.connect(self.seleccionar_reporte_tabla)
+            # Conexión del botón Añadir en la pestaña de reportes
+            self.ui_content.pushButton_13.clicked.connect(self.agregar_datos_reporte)
+            # Conexión del botón Eliminar
+            self.ui_content.pushButton_14.clicked.connect(self.eliminar_datos_reporte)
+            # Conexión del botón Actualizar
+            self.ui_content.pushButton_15.clicked.connect(self.actualizar_datos_reporte)
+            self.ui_content.pushButton_16.clicked.connect(self.importa)
+            
             
             
             
@@ -1249,6 +1264,316 @@ class RendimientoMercado(QMainWindow):
         except sqlite3.Error as e:
             QMessageBox.critical(self, "Error de DB", f"No se pudo actualizar: {e}")
 
+
+    def actualizar_tabla_reportes(self):
+        try:
+            # 1. Conexión a la base de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Seleccionamos las columnas según tus nuevos labels
+            # El id_reporte DEBE ser el primer elemento (índice 0)
+            cursor.execute("""
+                SELECT id_reporte, responsable, titulo_informe, destino_exportacion, 
+                    tipo_documento, periodo_finalizado, prioridad_clasificacion 
+                FROM reportes_sistema
+            """)
+            datos = cursor.fetchall()
+            conn.close()
+
+            # 2. Configurar dimensiones de tableWidget_4
+            self.ui_content.tableWidget_4.setRowCount(len(datos))
+            self.ui_content.tableWidget_4.setColumnCount(6)
+            # ... después de setColumnCount(6)
+            self.ui_content.tableWidget_4.verticalHeader().setVisible(False) # Esto elimina los números 1, 2, 3...
+            
+            # Opcional: Establecer cabeceras
+            self.ui_content.tableWidget_4.setHorizontalHeaderLabels([
+                "RESPONSABLE", "TÍTULO", "DESTINO", "TIPO", "PERIODO", "PRIORIDAD"
+            ])
+
+            # 3. Poblar la tabla con estilo
+            for fila_idx, fila_datos in enumerate(datos):
+                for col_idx, valor in enumerate(fila_datos):
+                    item = QTableWidgetItem(str(valor))
+                    
+                    # Aplicar color basado en la PRIORIDAD (Columna 5)
+                    prioridad = str(fila_datos[5])
+                    if prioridad == "Crítico":
+                        item.setForeground(QColor("#ff4444")) # Rojo para reportes críticos
+                    elif prioridad == "Degradado":
+                        item.setForeground(QColor("#ffaa00")) # Naranja
+                    else:
+                        item.setForeground(QColor("#00e5ff")) # Cian para reportes óptimos
+
+                    self.ui_content.tableWidget_4.setItem(fila_idx, col_idx, item)
+
+            print("📂 Tabla de Reportes actualizada correctamente.")
+
+        except Exception as e:
+            print(f"❌ Error al cargar reportes en tableWidget_4: {e}")
+
+
+    def agregar_nuevo_reporte(self):
+        # ... código de INSERT en reportes_sistema ...
+        self.actualizar_tabla_reportes() # <--- Crucial para ver el cambio
+        self.cargar_tree_reportes()
+        self.graficar_estadisticas_reportes()
+
+
+    def cargar_tree_reportes(self):
+        try:
+            # 1. Conexión y obtención de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT tipo_documento, titulo_informe, responsable, prioridad_clasificacion FROM reportes_sistema")
+            datos = cursor.fetchall()
+            conn.close()
+
+            # 2. Limpiar el árbol y configurar columnas
+            self.ui_content.treeWidget_4.clear()
+            self.ui_content.treeWidget_4.setHeaderLabels(["Estructura de Reportes", "Responsable", "Prioridad"])
+            self.ui_content.treeWidget_4.setColumnWidth(0, 250)
+
+            # 3. Agrupar por tipo (Diccionario de "Carpetas")
+            carpetas = {}
+
+            for tipo, titulo, responsable, prioridad in datos:
+                # Si la carpeta (PDF, XLSX...) no existe, la creamos
+                if tipo not in carpetas:
+                    carpeta = QTreeWidgetItem(self.ui_content.treeWidget_4)
+                    carpeta.setText(0, f"📁 Archivos {tipo}")
+                    carpeta.setForeground(0, QColor("#ffffff"))
+                    carpetas[tipo] = carpeta
+
+                # 4. Crear el elemento hijo (el reporte)
+                item_reporte = QTreeWidgetItem(carpetas[tipo])
+                item_reporte.setText(0, titulo)
+                item_reporte.setText(1, responsable)
+                item_reporte.setText(2, prioridad)
+
+                # Aplicar colores neón según prioridad
+                if prioridad == "Crítico":
+                    item_reporte.setForeground(0, QColor("#ff4444"))
+                elif prioridad == "Degradado":
+                    item_reporte.setForeground(0, QColor("#ffaa00"))
+                else:
+                    item_reporte.setForeground(0, QColor("#00e5ff"))
+
+            # Expandir todas las carpetas por defecto
+            self.ui_content.treeWidget_4.expandAll()
+            print("🌳 Jerarquía de Reportes cargada en treeWidget_4.")
+
+        except Exception as e:
+            print(f"❌ Error al cargar árbol de reportes: {e}")
+
+    def graficar_estadisticas_reportes(self):
+        try:
+            # 1. Preparar el Layout del frame_10
+            if self.ui_content.frame_10.layout() is None:
+                from PySide6.QtWidgets import QVBoxLayout
+                self.ui_content.frame_10.setLayout(QVBoxLayout())
+
+            # Limpiar gráfico anterior
+            while self.ui_content.frame_10.layout().count():
+                child = self.ui_content.frame_10.layout().takeAt(0)
+                if child.widget():
+                    child.widget().deleteLater()
+
+            # 2. Consultar datos de la nueva tabla
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            # Contamos cuántos reportes hay de cada tipo
+            cursor.execute("SELECT tipo_documento, COUNT(*) FROM reportes_sistema GROUP BY tipo_documento")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos: return
+
+            tipos = [str(d[0]) for d in datos]
+            cantidades = [int(d[1]) for d in datos]
+
+            # 3. Crear el Canvas (puedes reutilizar tu clase CanvasAnalisis o crear una nueva)
+            canvas = CanvasAnalisis() 
+            ax = canvas.ax
+            ax.clear()
+            
+            # Estilo visual coherente (Fondo negro, barras cian)
+            canvas.fig.patch.set_facecolor('#0b0d0e')
+            ax.set_facecolor('#0b0d0e')
+            
+            # Dibujar barras verticales
+            ax.bar(tipos, cantidades, color='#00e5ff', edgecolor='white', width=0.5)
+            
+            # Configurar etiquetas
+            ax.set_title("DISTRIBUCIÓN DE FORMATOS", color='white', fontsize=10, pad=15)
+            ax.tick_params(axis='both', colors='white', labelsize=9)
+            
+            # 4. Insertar en la interfaz
+            self.ui_content.frame_10.layout().addWidget(canvas)
+            canvas.draw()
+            print("📊 Gráfico de Reportes (frame_10) actualizado.")
+
+        except Exception as e:
+            print(f"❌ Error en gráfico de reportes: {e}")
+
+    def seleccionar_reporte_tabla(self, item):
+        # Obtenemos la fila en la que se hizo clic
+        fila = item.row()
+        
+        # Extraemos los datos de las columnas
+        responsable = self.ui_content.tableWidget_4.item(fila, 0).text()
+        titulo      = self.ui_content.tableWidget_4.item(fila, 1).text()
+        destino     = self.ui_content.tableWidget_4.item(fila, 2).text()
+        tipo        = self.ui_content.tableWidget_4.item(fila, 3).text()
+        periodo     = self.ui_content.tableWidget_4.item(fila, 4).text()
+        prioridad   = self.ui_content.tableWidget_4.item(fila, 5).text()
+
+        # Seteamos los valores en los QLineEdit correspondientes
+        self.ui_content.txt_reporte.setText(responsable)   # Responsable del reporte
+        self.ui_content.txt_informe.setText(titulo)        # Título del informe
+        self.ui_content.txt_destino.setText(destino)       # Destino de exportación
+        self.ui_content.txt_tipo.setText(tipo)             # Tipo de documento
+        self.ui_content.txt_periodo.setText(periodo)       # Periodo finalizado
+        self.ui_content.txt_prioridad.setText(prioridad)   # Prioridad / Clasificación
+
+    
+    #botones
+
+    def agregar_datos_reporte(self):
+        # 1. Recoger datos respetando el orden de tus Labels
+        responsable = self.ui_content.txt_reporte.text()   # RESPONSABLE DEL REPORTE
+        titulo      = self.ui_content.txt_informe.text()   # TÍTULO DEL INFORME
+        destino     = self.ui_content.txt_destino.text()   # DESTINO DE EXPORTACIÓN
+        tipo        = self.ui_content.txt_tipo.text()      # TIPO DE DOCUMENTO
+        periodo     = self.ui_content.txt_periodo.text()   # PERIODO FINALIZADO
+        prioridad   = self.ui_content.txt_prioridad.text() # PRIORIDAD / CLASIFICACIÓN
+
+        # 2. Validación básica
+        if not responsable or not titulo:
+            QMessageBox.warning(self, "Campos Obligatorios", "Complete Responsable y Título.")
+            return
+
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # 3. Query con el orden exacto de las columnas en tu DB
+            query = """
+            INSERT INTO reportes_sistema (
+                responsable, titulo_informe, destino_exportacion, 
+                tipo_documento, periodo_finalizado, prioridad_clasificacion
+            ) VALUES (?, ?, ?, ?, ?, ?)
+            """
+            
+            # El orden en la tupla debe ser IDÉNTICO al de la query arriba
+            cursor.execute(query, (responsable, titulo, destino, tipo, periodo, prioridad))
+            
+            conn.commit()
+            conn.close()
+
+            QMessageBox.information(self, "Éxito", f"Reporte '{titulo}' guardado.")
+            
+            # 4. IMPORTANTE: Usar el refresco correcto
+            self.refrescar_todo_reportes() 
+            self.limpiar_campos_registro()
+
+        except sqlite3.Error as e:
+            QMessageBox.critical(self, "Error", f"Error de DB: {e}")
+
+
+    def eliminar_datos_reporte(self):
+        fila = self.ui_content.tableWidget_4.currentRow()
+
+        if fila == -1:
+            QMessageBox.warning(self, "Atención", "Seleccione una fila en la tabla.")
+            return
+
+        # 1. Recuperar el ID (Asegúrate que sea la columna 0)
+        item_id = self.ui_content.tableWidget_4.item(fila, 0)
+        if not item_id:
+            QMessageBox.critical(self, "Error", "No se pudo recuperar el ID de la celda.")
+            return
+            
+        id_a_borrar = item_id.text()
+        print(f"DEBUG: Intentando borrar id_reporte = {id_a_borrar}") # Mira esto en tu terminal
+
+        respuesta = QMessageBox.question(self, "Confirmar", f"¿Eliminar reporte con ID {id_a_borrar}?",
+                                        QMessageBox.Yes | QMessageBox.No)
+
+        if respuesta == QMessageBox.Yes:
+            try:
+                conn = sqlite3.connect("ingenieria.db")
+                cursor = conn.cursor()
+                
+                # 2. Ejecutar el borrado usando el nombre exacto de la columna
+                cursor.execute("DELETE FROM reportes_sistema WHERE id_reporte = ?", (id_a_borrar,))
+                
+                # 3. Verificar si realmente hubo cambios
+                if cursor.rowcount > 0:
+                    conn.commit()
+                    QMessageBox.information(self, "Éxito", "Dato borrado físicamente.")
+                else:
+                    # Si llega aquí, es porque el ID en la tabla no coincide con la DB
+                    QMessageBox.warning(self, "Fallo", f"El ID '{id_a_borrar}' no se encontró en la base de datos.")
+                
+                conn.close()
+                
+                # 4. Refrescar la interfaz para que desaparezca la fila
+                self.limpiar_campos_registro() # Debes crear esta función para vaciar los QLineEdit
+            
+                # 5. REFRESCO TOTAL DE LA PESTAÑA
+                self.agregar_nuevo_reporte()  
+
+            except sqlite3.Error as e:
+                QMessageBox.critical(self, "Error SQL", f"No se pudo eliminar: {e}")
+
+
+    def actualizar_datos_reporte(self):
+        # 1. Obtener la fila seleccionada para saber qué ID actualizar
+        fila = self.ui_content.tableWidget_4.currentRow()
+        
+        if fila == -1:
+            QMessageBox.warning(self, "Atención", "Seleccione un reporte de la tabla para editar.")
+            return
+
+        # 2. Obtener el ID de la columna 0 (oculta o visible)
+        id_reporte = self.ui_content.tableWidget_4.item(fila, 0).text()
+
+        # 3. Recoger los nuevos datos de los QLineEdit
+        responsable = self.ui_content.txt_reporte.text()
+        titulo      = self.ui_content.txt_informe.text()
+        destino     = self.ui_content.txt_destino.text()
+        tipo        = self.ui_content.txt_tipo.text()
+        periodo     = self.ui_content.txt_periodo.text()
+        prioridad   = self.ui_content.txt_prioridad.text()
+
+        try:
+            # 4. Ejecutar la actualización en SQL
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            query = """
+            UPDATE reportes_sistema 
+            SET responsable = ?, titulo_informe = ?, destino_exportacion = ?, 
+                tipo_documento = ?, periodo_finalizado = ?, prioridad_clasificacion = ?
+            WHERE id_reporte = ?
+            """
+            
+            cursor.execute(query, (responsable, titulo, destino, tipo, periodo, prioridad, id_reporte))
+            conn.commit()
+            
+            if cursor.rowcount > 0:
+                QMessageBox.information(self, "Éxito", f"Reporte '{titulo}' actualizado correctamente.")
+            conn.close()
+
+            self.limpiar_campos_registro() # Debes crear esta función para vaciar los QLineEdit
+            
+            # 5. REFRESCO TOTAL DE LA PESTAÑA
+            self.agregar_nuevo_reporte()  
+
+        except sqlite3.Error as e:
+            QMessageBox.critical(self, "Error", f"No se pudo actualizar: {e}")
     
                 
 class CanvasAnalisis(FigureCanvas):
