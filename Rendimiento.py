@@ -97,7 +97,12 @@ class RendimientoMercado(QMainWindow):
             self.ui_content.pushButton_15.clicked.connect(self.actualizar_datos_reporte)
             self.ui_content.pushButton_16.clicked.connect(self.importa)
             self.seleccionar_reporte_tabla()
-            
+            self.graficar_gestion_mercado()
+            self.graficar_operaciones_mercado()
+            self.graficar_analisis_mercado()
+            self.graficar_operaciones_sistema()
+            self.comparar_rendimiento_mercado()
+            self.graficar_estado_salud_sistema()
             
             
             
@@ -1321,6 +1326,9 @@ class RendimientoMercado(QMainWindow):
         self.actualizar_tabla_reportes() # <--- Crucial para ver el cambio
         self.cargar_tree_reportes()
         self.graficar_estadisticas_reportes()
+        self.graficar_gestion_mercado()
+        self.graficar_operaciones_mercado()
+        self.graficar_analisis_mercado()
 
 
     def cargar_tree_reportes(self):
@@ -1610,6 +1618,369 @@ class RendimientoMercado(QMainWindow):
             
             # CAMBIO: Actualizar el icono en label_28
             self.actualizar_imagen_tipo(tipo)
+
+    #grafica
+
+    def graficar_gestion_mercado(self):
+        try:
+            # 1. Conexión y obtención de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT estado_servidor, COUNT(*) FROM gestion_mercado GROUP BY estado_servidor")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                return
+
+            estados = [str(row[0]) for row in datos]
+            cantidades = [row[1] for row in datos]
+
+            # 2. Configuración de la figura con FONDO NEGRO
+            # Usamos un color hexadecimal oscuro para el facecolor
+            fig, ax = plt.subplots(figsize=(5, 3), dpi=100)
+            
+            # Color de fondo del recuadro exterior e interior
+            fig.patch.set_facecolor('#121212') 
+            ax.set_facecolor('#121212')
+
+            # 3. Dibujar barras con colores neón
+            colores_neon = ['#00e5ff', '#ffaa00', '#ff4444', '#ccff00']
+            barras = ax.bar(estados, cantidades, color=colores_neon[:len(estados)])
+
+            # 4. Personalización de Textos y Ejes para legibilidad
+            ax.set_title("ESTADO DE SERVIDORES (MERCADO)", color='#00e5ff', fontsize=10, fontweight='bold')
+            
+            # Cambiar color de los numeritos de los ejes (Ticks)
+            ax.tick_params(axis='x', colors='#00e5ff', labelsize=8)
+            ax.tick_params(axis='y', colors='#00e5ff', labelsize=8)
+
+            # Cambiar color de las líneas de los bordes (Spines)
+            for spine in ax.spines.values():
+                spine.set_edgecolor('#00e5ff')
+                spine.set_linewidth(0.5)
+
+            # 5. Integración en el frame_2
+            if self.ui_content.frame_2.layout() is None:
+                from PySide6.QtWidgets import QVBoxLayout
+                self.ui_content.frame_2.setLayout(QVBoxLayout())
+
+            # Limpiar el layout antes de añadir el nuevo canvas
+            for i in reversed(range(self.ui_content.frame_2.layout().count())): 
+                widget = self.ui_content.frame_2.layout().itemAt(i).widget()
+                if widget:
+                    widget.setParent(None)
+
+            canvas = FigureCanvas(fig)
+            self.ui_content.frame_2.layout().addWidget(canvas)
+
+        except Exception as e:
+            print(f"Error al graficar mercado: {e}")
+
+    def graficar_operaciones_mercado(self):
+        try:
+            # 1. Conexión y consulta usando los nombres que TÚ proporcionaste
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Agrupamos por 'operacion' (ej: Venta, Compra, etc.)
+            # Si prefieres ver por método de pago, cambia 'operacion' por 'metodo'
+            cursor.execute("SELECT capacidad_utilizada, COUNT(*) FROM operaciones_mercado GROUP BY capacidad_utilizada")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                print("⚠️ No hay datos en operaciones_mercado.")
+                return
+
+            nombres = [str(row[0]) for row in datos]
+            cantidades = [row[1] for row in datos]
+
+            # 2. Configuración Dark Mode (Legibilidad Máxima)
+            fig, ax = plt.subplots(figsize=(5, 3), dpi=100)
+            fig.patch.set_facecolor('#121212') 
+            ax.set_facecolor('#121212')
+
+            # 3. Barras Magenta Neón para frame_3
+            ax.bar(nombres, cantidades, color='#ff00ff', edgecolor='#00e5ff', linewidth=1)
+
+            # 4. Estilo de ejes y títulos
+            ax.set_title("ANÁLISIS POR TIPO DE OPERACIÓN", color='#00e5ff', fontsize=10, fontweight='bold')
+            ax.tick_params(axis='x', colors='#00e5ff', labelsize=8)
+            ax.tick_params(axis='y', colors='#00e5ff', labelsize=8)
+            
+            for spine in ax.spines.values():
+                spine.set_edgecolor('#00e5ff')
+
+            # 5. Integración en el frame_3
+            if self.ui_content.frame_3.layout() is None:
+                from PySide6.QtWidgets import QVBoxLayout
+                self.ui_content.frame_3.setLayout(QVBoxLayout())
+
+            # Limpiar el layout para que no se encimen los gráficos
+            for i in reversed(range(self.ui_content.frame_3.layout().count())): 
+                widget = self.ui_content.frame_3.layout().itemAt(i).widget()
+                if widget:
+                    widget.setParent(None)
+
+            canvas = FigureCanvas(fig)
+            self.ui_content.frame_3.layout().addWidget(canvas)
+
+        except sqlite3.Error as e:
+            print(f"❌ Error de SQL (Verifica los nombres): {e}")
+        except Exception as e:
+            print(f"❌ Error general: {e}")
+
+
+    def graficar_analisis_mercado(self):
+        try:
+            # 1. Conexión y consulta de datos relevantes
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Seleccionamos Producto y Precio (o Volumen) para analizar tendencias
+            cursor.execute("SELECT salud_global, metrica_pico_ms FROM analisis_mercado LIMIT 10")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                print("⚠️ No hay datos en analisis_mercado.")
+                return
+
+            productos = [str(row[0]) for row in datos]
+            precios = [float(row[1]) for row in datos]
+
+            # 2. Configuración Estética (Fondo Negro / Estilo Neón)
+            fig, ax = plt.subplots(figsize=(5, 3), dpi=100)
+            fig.patch.set_facecolor('#121212') 
+            ax.set_facecolor('#121212')
+
+            # 3. Gráfico de Línea Neón (Tendencia de Precios)
+            # Usamos un color verde neón (#ccff00) para diferenciarlo de los otros frames
+            ax.plot(productos, precios, color='#ccff00', marker='o', 
+                    markersize=6, linewidth=2, markerfacecolor='#ffffff')
+            
+            # Rellenar el área bajo la línea para un efecto más moderno
+            ax.fill_between(productos, precios, color='#ccff00', alpha=0.1)
+
+            # 4. Personalización de Ejes y Títulos
+            ax.set_title("Metricas de pico ms", color='#00e5ff', fontsize=10, fontweight='bold')
+            ax.tick_params(axis='x', colors='#00e5ff', labelsize=7, rotation=20)
+            ax.tick_params(axis='y', colors='#00e5ff', labelsize=8)
+            
+            for spine in ax.spines.values():
+                spine.set_edgecolor('#00e5ff')
+
+            # 5. Integración en el frame_4
+            if self.ui_content.frame_4.layout() is None:
+                from PySide6.QtWidgets import QVBoxLayout
+                self.ui_content.frame_4.setLayout(QVBoxLayout())
+
+            for i in reversed(range(self.ui_content.frame_4.layout().count())): 
+                widget = self.ui_content.frame_4.layout().itemAt(i).widget()
+                if widget:
+                    widget.setParent(None)
+
+            canvas = FigureCanvas(fig)
+            self.ui_content.frame_4.layout().addWidget(canvas)
+            
+            print("✅ Buena información: Gráfico de análisis de mercado generado con éxito.")
+
+        except Exception as e:
+            print(f"❌ Error en frame_4: {e}")
+
+    def graficar_operaciones_sistema(self):
+        try:
+            # 1. Conexión usando el nombre de TABLA y COLUMNAS exactos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Agrupamos por 'tipo_operacion' y sumamos el 'monto'
+            query = """
+                SELECT tipo_documento, COUNT(tipo_documento) 
+                FROM reportes_sistema 
+                GROUP BY tipo_documento
+            """
+            cursor.execute(query)
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                print("⚠️ No hay datos en operaciones_sistema.")
+                return
+
+            operaciones = [str(row[0]) for row in datos]
+            montos = [float(row[1]) for row in datos]
+
+            # 2. Configuración Dark Mode (Fondo Negro #121212)
+            fig, ax = plt.subplots(figsize=(5, 3), dpi=100)
+            fig.patch.set_facecolor('#121212') 
+            ax.set_facecolor('#121212')
+
+            # 3. Gráfico de Barras Neón (Color Naranja Neón para esta sección)
+            ax.bar(operaciones, montos, color='#ffaa00', edgecolor='#00e5ff', linewidth=1)
+
+            # 4. Personalización de Ejes y Títulos (Legibilidad)
+            ax.set_title("VOLUMEN ECONÓMICO POR OPERACIÓN", color='#00e5ff', fontsize=10, fontweight='bold')
+            ax.tick_params(axis='x', colors='#00e5ff', labelsize=8)
+            ax.tick_params(axis='y', colors='#00e5ff', labelsize=8)
+            
+            # Bordes en color Cian Neón
+            for spine in ax.spines.values():
+                spine.set_edgecolor('#00e5ff')
+
+            # 5. Insertar en el objeto 'frame'
+            if self.ui_content.frame.layout() is None:
+                from PySide6.QtWidgets import QVBoxLayout
+                self.ui_content.frame.setLayout(QVBoxLayout())
+
+            # Limpieza absoluta de gráficos anteriores
+            for i in reversed(range(self.ui_content.frame.layout().count())): 
+                widget = self.ui_content.frame.layout().itemAt(i).widget()
+                if widget:
+                    widget.setParent(None)
+
+            canvas = FigureCanvas(fig)
+            self.ui_content.frame.layout().addWidget(canvas)
+            
+            print("✅ Gráfico de operaciones_sistema generado con éxito.")
+
+        except Exception as e:
+            print(f"❌ Error en el gráfico: {e}")
+
+    def comparar_rendimiento_mercado(self):
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # 1. Obtener Capacidad Utilizada de operaciones_mercado
+            # Columna: nodo_destino y capacidad_utilizada
+            cursor.execute("SELECT nodo_destino, AVG(capacidad_utilizada) FROM operaciones_mercado GROUP BY nodo_destino")
+            datos_capacidad = dict(cursor.fetchall())
+            
+            # 2. Obtener Métrica Pico de analisis_mercado
+            # Columna: id_nodo_cluster y metrica_pico_ms
+            cursor.execute("SELECT id_nodo_cluster, AVG(metrica_pico_ms) FROM analisis_mercado GROUP BY id_nodo_cluster")
+            datos_pico = dict(cursor.fetchall())
+            conn.close()
+
+            # Sincronizar nodos comunes para la comparativa
+            nodos = sorted(list(set(datos_capacidad.keys()) & set(datos_pico.keys())))
+            if not nodos:
+                print("⚠️ No hay nodos coincidentes para comparar.")
+                return
+
+            usos = [datos_capacidad[n] for n in nodos]
+            picos = [datos_pico[n] for n in nodos]
+
+            # 3. Configuración Visual Estilo Neón Dark (#121212)
+            fig, ax1 = plt.subplots(figsize=(5, 3), dpi=100)
+            fig.patch.set_facecolor('#121212')
+            ax1.set_facecolor('#121212')
+
+            # Eje Izquierdo: Capacidad (Barras Naranja Neón)
+            ax1.bar(nodos, usos, color='#ffaa00', alpha=0.7, label='Carga (%)')
+            ax1.set_ylabel('Uso de Capacidad %', color='#ffaa00', fontsize=8)
+            ax1.tick_params(axis='y', labelcolor='#ffaa00', labelsize=8)
+
+            # Eje Derecho: Latencia/Pico (Línea Cian Neón)
+            ax2 = ax1.twinx() 
+            ax2.plot(nodos, picos, color='#00e5ff', marker='s', linewidth=2, label='Latencia (ms)')
+            ax2.set_ylabel('Pico de Respuesta (ms)', color='#00e5ff', fontsize=8)
+            ax2.tick_params(axis='y', labelcolor='#00e5ff', labelsize=8)
+
+            # 4. Estética de Ejes y Título
+            ax1.set_title("COMPARATIVA: CARGA VS LATENCIA POR NODO", color='#00e5ff', fontsize=9, fontweight='bold')
+            ax1.tick_params(axis='x', colors='#00e5ff', labelsize=7, rotation=30)
+            
+            for spine in ax1.spines.values():
+                spine.set_edgecolor('#444444')
+
+            # 5. Integración en el frame_5
+            if self.ui_content.frame_5.layout() is None:
+                from PySide6.QtWidgets import QVBoxLayout
+                self.ui_content.frame_5.setLayout(QVBoxLayout())
+
+            for i in reversed(range(self.ui_content.frame_5.layout().count())): 
+                widget = self.ui_content.frame_5.layout().itemAt(i).widget()
+                if widget: widget.setParent(None)
+
+            canvas = FigureCanvas(fig)
+            self.ui_content.frame_5.layout().addWidget(canvas)
+            
+            print("✅ Buena información: Rendimiento comparado entre operaciones y análisis.")
+
+        except Exception as e:
+            print(f"❌ Error en comparativa de frame_5: {e}")
+
+    def graficar_estado_salud_sistema(self):
+        try:
+            # 1. Conexión y consulta exacta
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Agrupamos por prioridad para ver la salud general
+            cursor.execute("SELECT prioridad_clasificacion, COUNT(*) FROM reportes_sistema GROUP BY prioridad_clasificacion")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                print("⚠️ No hay datos de salud en reportes_sistema.")
+                return
+
+            etiquetas = [str(row[0]) for row in datos]
+            cantidades = [row[1] for row in datos]
+
+            # 2. Configuración Estética (Fondo Negro / Estilo Neón)
+            fig, ax = plt.subplots(figsize=(5, 3), dpi=100)
+            fig.patch.set_facecolor('#121212')
+            ax.set_facecolor('#121212')
+
+            # Definir colores neón según la prioridad
+            # Mapeamos: Crítico -> Rojo, Óptimo -> Cian, Degradado -> Naranja
+            colores_map = {
+                'Crítico': '#ff4444',
+                'Óptimo': '#00e5ff',
+                'Degradado': '#ffaa00'
+            }
+            colores = [colores_map.get(e, '#ffffff') for e in etiquetas]
+
+            # 3. Crear Gráfico de Pastel
+            wedges, texts, autotexts = ax.pie(
+                cantidades, 
+                labels=etiquetas, 
+                autopct='%1.1f%%',
+                startangle=140,
+                colors=colores,
+                textprops={'color': "#00e5ff", 'fontsize': 8},
+                pctdistance=0.85,
+                explode=[0.05] * len(etiquetas) # Separar un poco los gajos
+            )
+
+            # Hacer el centro hueco para que parezca un "Donut Chart" moderno
+            centre_circle = plt.Circle((0,0), 0.70, fc='#121212')
+            fig.gca().add_artist(centre_circle)
+
+            # 4. Título
+            ax.set_title("SALUD GENERAL DEL SISTEMA", color='#00e5ff', fontsize=10, fontweight='bold')
+
+            # 5. Integración en el frame_6
+            if self.ui_content.frame_6.layout() is None:
+                from PySide6.QtWidgets import QVBoxLayout
+                self.ui_content.frame_6.setLayout(QVBoxLayout())
+
+            for i in reversed(range(self.ui_content.frame_6.layout().count())): 
+                widget = self.ui_content.frame_6.layout().itemAt(i).widget()
+                if widget: widget.setParent(None)
+
+            canvas = FigureCanvas(fig)
+            self.ui_content.frame_6.layout().addWidget(canvas)
+            
+            print("✅ Dashboard completo: Salud del sistema graficada en frame_6.")
+
+        except Exception as e:
+            print(f"❌ Error en salud frame_6: {e}")
+                
     
                 
 class CanvasAnalisis(FigureCanvas):
