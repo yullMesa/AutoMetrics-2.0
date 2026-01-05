@@ -80,7 +80,7 @@ QMenu::separator {
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>4</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="page">
         <widget class="QWidget" name="gridLayoutWidget">
@@ -3860,7 +3860,7 @@ QTreeView::branch:open:has-children:has-siblings {
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Reportes</string>
+             <string/>
             </property>
            </widget>
           </item>

@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1890</width>
+    <height>1083</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1890</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuDASHBOARD">
+    <property name="title">
+     <string>DASHBOARD</string>
+    </property>
+    <addaction name="actiongRAFICA"/>
+   </widget>
+   <widget class="QMenu" name="menuConsola_de_Comandos">
+    <property name="title">
+     <string>Consola de Comandos</string>
+    </property>
+    <addaction name="actionCRUD"/>
+   </widget>
+   <widget class="QMenu" name="menuReporte_de_Errores_Cr_ticos">
+    <property name="title">
+     <string>Reporte de Errores Críticos</string>
+    </property>
+    <addaction name="actionCRUD_2"/>
+   </widget>
+   <widget class="QMenu" name="menuHistorial_de_Versiones">
+    <property name="title">
+     <string>Historial de Versiones</string>
+    </property>
+    <addaction name="actionCRUD_3"/>
+   </widget>
+   <widget class="QMenu" name="menuMapa_Global_de_Conectividad">
+    <property name="title">
+     <string>Mapa Global de Conectividad</string>
+    </property>
+    <addaction name="actionCRUD_4"/>
+   </widget>
+   <widget class="QMenu" name="menuM_tricas_de_Rendimiento">
+    <property name="title">
+     <string>Métricas de Rendimiento</string>
+    </property>
+    <addaction name="actionCRUD_5"/>
+   </widget>
+   <widget class="QMenu" name="menuLogs_de_Actividad">
+    <property name="title">
+     <string>Logs de Actividad</string>
+    </property>
+    <addaction name="actionCRUD_6"/>
+   </widget>
+   <widget class="QMenu" name="menuVOLVER">
+    <property name="title">
+     <string>VOLVER</string>
+    </property>
+    <addaction name="actionINICIO"/>
+   </widget>
+   <addaction name="menuDASHBOARD"/>
+   <addaction name="menuConsola_de_Comandos"/>
+   <addaction name="menuReporte_de_Errores_Cr_ticos"/>
+   <addaction name="menuHistorial_de_Versiones"/>
+   <addaction name="menuMapa_Global_de_Conectividad"/>
+   <addaction name="menuM_tricas_de_Rendimiento"/>
+   <addaction name="menuLogs_de_Actividad"/>
+   <addaction name="menuVOLVER"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actiongRAFICA">
+   <property name="text">
+    <string>GRAFICA</string>
+   </property>
+  </action>
+  <action name="actionCRUD">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+  <action name="actionCRUD_2">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+  <action name="actionCRUD_3">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+  <action name="actionCRUD_4">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+  <action name="actionCRUD_5">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+  <action name="actionCRUD_6">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+  <action name="actionINICIO">
+   <property name="text">
+    <string>INICIO</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

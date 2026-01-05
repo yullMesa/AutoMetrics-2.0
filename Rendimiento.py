@@ -96,6 +96,7 @@ class RendimientoMercado(QMainWindow):
             # Conexión del botón Actualizar
             self.ui_content.pushButton_15.clicked.connect(self.actualizar_datos_reporte)
             self.ui_content.pushButton_16.clicked.connect(self.importa)
+            self.seleccionar_reporte_tabla()
             
             
             
@@ -1264,15 +1265,14 @@ class RendimientoMercado(QMainWindow):
         except sqlite3.Error as e:
             QMessageBox.critical(self, "Error de DB", f"No se pudo actualizar: {e}")
 
+    # reportes
+
 
     def actualizar_tabla_reportes(self):
         try:
-            # 1. Conexión a la base de datos
             conn = sqlite3.connect("ingenieria.db")
             cursor = conn.cursor()
-            
-            # Seleccionamos las columnas según tus nuevos labels
-            # El id_reporte DEBE ser el primer elemento (índice 0)
+            # Seleccionamos las 7 columnas reales
             cursor.execute("""
                 SELECT id_reporte, responsable, titulo_informe, destino_exportacion, 
                     tipo_documento, periodo_finalizado, prioridad_clasificacion 
@@ -1281,34 +1281,36 @@ class RendimientoMercado(QMainWindow):
             datos = cursor.fetchall()
             conn.close()
 
-            # 2. Configurar dimensiones de tableWidget_4
+            # CONFIGURACIÓN CORRECTA:
             self.ui_content.tableWidget_4.setRowCount(len(datos))
-            self.ui_content.tableWidget_4.setColumnCount(6)
-            # ... después de setColumnCount(6)
-            self.ui_content.tableWidget_4.verticalHeader().setVisible(False) # Esto elimina los números 1, 2, 3...
-            
-            # Opcional: Establecer cabeceras
-            self.ui_content.tableWidget_4.setHorizontalHeaderLabels([
-                "RESPONSABLE", "TÍTULO", "DESTINO", "TIPO", "PERIODO", "PRIORIDAD"
-            ])
+            self.ui_content.tableWidget_4.setColumnCount(6) # Solo mostramos 6 al usuario
+            self.ui_content.tableWidget_4.verticalHeader().setVisible(False)
 
-            # 3. Poblar la tabla con estilo
             for fila_idx, fila_datos in enumerate(datos):
-                for col_idx, valor in enumerate(fila_datos):
-                    item = QTableWidgetItem(str(valor))
+                # Empezamos desde col_idx 1 para saltar el ID en la visualización
+                # Pero guardamos el ID en una columna oculta o en el UserData
+                for col_idx in range(1, 7): 
+                    valor = str(fila_datos[col_idx])
+                    item = QTableWidgetItem(valor)
                     
-                    # Aplicar color basado en la PRIORIDAD (Columna 5)
-                    prioridad = str(fila_datos[5])
+                    # El ID real (fila_datos[0]) lo guardamos oculto en la columna 0 si es necesario
+                    # Para esta visualización, mapeamos: Responsable(1)->Col0, Título(2)->Col1...
+                    
+                    # Aplicar color basado en PRIORIDAD (Índice 6 de la fila de datos)
+                    prioridad = str(fila_datos[6])
                     if prioridad == "Crítico":
-                        item.setForeground(QColor("#ff4444")) # Rojo para reportes críticos
+                        item.setForeground(QColor("#ff4444"))
                     elif prioridad == "Degradado":
-                        item.setForeground(QColor("#ffaa00")) # Naranja
+                        item.setForeground(QColor("#ffaa00"))
                     else:
-                        item.setForeground(QColor("#00e5ff")) # Cian para reportes óptimos
+                        item.setForeground(QColor("#00e5ff"))
 
-                    self.ui_content.tableWidget_4.setItem(fila_idx, col_idx, item)
+                    self.ui_content.tableWidget_4.setItem(fila_idx, col_idx - 1, item)
 
-            print("📂 Tabla de Reportes actualizada correctamente.")
+            # Guardar el ID de forma invisible para poder eliminar/actualizar luego
+            # (O simplemente usa una columna oculta)
+        except Exception as e:
+            print(f"Error: {e}")
 
         except Exception as e:
             print(f"❌ Error al cargar reportes en tableWidget_4: {e}")
@@ -1574,6 +1576,40 @@ class RendimientoMercado(QMainWindow):
 
         except sqlite3.Error as e:
             QMessageBox.critical(self, "Error", f"No se pudo actualizar: {e}")
+
+    def actualizar_imagen_tipo(self, tipo_documento):
+        # 1. Normalizar el nombre (ej: "pdf" -> "PDF")
+        formato = str(tipo_documento).upper().strip()
+        
+        # 2. Ruta a la carpeta Mercado/Reporte
+        ruta_imagen = f"Mercado/Reporte/{formato}.png"
+        
+        if os.path.exists(ruta_imagen):
+            pixmap = QPixmap(ruta_imagen)
+            
+            # CORRECCIÓN: Quitamos 'aspectRatioMode=' y pasamos los argumentos directamente
+            ancho = self.ui_content.label_28.width()
+            alto = self.ui_content.label_28.height()
+            
+            pixmap_escalado = pixmap.scaled(ancho, alto, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            
+            self.ui_content.label_28.setPixmap(pixmap_escalado)
+            self.ui_content.label_28.setScaledContents(True)
+        else:
+            print(f"⚠️ No se encontró la imagen en: {ruta_imagen}")
+            self.ui_content.label_28.clear()
+
+    def seleccionar_reporte_tabla(self):
+        fila = self.ui_content.tableWidget_4.currentRow()
+        if fila != -1:
+            # Extraer el tipo de documento (Columna 3 en la visualización)
+            tipo = self.ui_content.tableWidget_4.item(fila, 3).text()
+            
+            # Actualizar los QLineEdit
+            self.ui_content.txt_tipo.setText(tipo)
+            
+            # CAMBIO: Actualizar el icono en label_28
+            self.actualizar_imagen_tipo(tipo)
     
                 
 class CanvasAnalisis(FigureCanvas):
