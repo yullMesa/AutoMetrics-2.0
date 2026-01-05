@@ -80,7 +80,7 @@ QMenu::separator {
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>1</number>
+        <number>4</number>
        </property>
        <widget class="QWidget" name="page">
         <widget class="QWidget" name="gridLayoutWidget">
@@ -1300,7 +1300,10 @@ QTreeView::branch:open:has-children:has-siblings {
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Operaciones</string>
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
             </property>
            </widget>
           </item>
@@ -1401,27 +1404,27 @@ QTableWidget::item:selected {
             </column>
             <column>
              <property name="text">
-              <string>Nombre </string>
+              <string>Nodo</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Ruta Directorio</string>
+              <string>Latencia</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Versión  </string>
+              <string>Capacidad</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Fecha Acción</string>
+              <string>Reporte Salud</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Estado Servidor</string>
+              <string>SLA</string>
              </property>
             </column>
            </widget>
@@ -1470,7 +1473,62 @@ QScrollBar::handle:vertical {
 
 QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
     height: 0px;
+}
+/* Estilo para el contenedor del manual */
+QTextBrowser {
+    background-color: #0b0b0b;          /* Fondo negro igual a la UI */
+    border: 2px solid #00e5ff;          /* Borde neón cian */
+    border-radius: 10px;                /* Bordes redondeados */
+    padding: 15px;                      /* Espaciado interno para que el texto no toque el borde */
+    color: #ffffff;                     /* Texto general en blanco */
+    font-size: 13px;
+    selection-background-color: #00e5ff; /* Color al resaltar texto */
+    selection-color: #000000;
+}
+
+/* Personalización de la barra de desplazamiento (Scrollbar) para que sea oscura */
+QTextBrowser QScrollBar:vertical {
+    border: none;
+    background: #1a1a1a;
+    width: 10px;
+    margin: 0px;
+}
+
+QTextBrowser QScrollBar::handle:vertical {
+    background: #00e5ff;               /* Barra color cian */
+    min-height: 20px;
+    border-radius: 5px;
 }</string>
+            </property>
+            <property name="html">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Consolas','Monospace'; font-size:13px; font-weight:400; font-style:normal;&quot;&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;1. Panel de Registro y Entrada&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;En el lado izquierdo tienes los campos para alimentar la base de datos:&lt;/p&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Identificación&lt;/span&gt;: Ingresa el &lt;span style=&quot; font-weight:700;&quot;&gt;ID Servidor&lt;/span&gt; y el &lt;span style=&quot; font-weight:700;&quot;&gt;Nodo Destino&lt;/span&gt; (ej. &amp;quot;London-Node&amp;quot;) para identificar qué unidad estás evaluando.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Métricas Técnicas&lt;/span&gt;: Escribe la &lt;span style=&quot; font-weight:700;&quot;&gt;Latencia Promedio&lt;/span&gt; en milisegundos y el &lt;span style=&quot; font-weight:700;&quot;&gt;% de Capacidad&lt;/span&gt; actual.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;SLA&lt;/span&gt;: Define el &lt;span style=&quot; font-weight:700;&quot;&gt;Nivel de Servicio&lt;/span&gt; (Óptimo, Degradado o Crítico). Este valor es el que activará los colores neón en toda la interfaz.&lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;2. Tabla de Monitoreo en Tiempo Real (&lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:large; font-weight:700;&quot;&gt;tableWidget_2&lt;/span&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;)&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;La tabla central es tu espejo de la base de datos &lt;span style=&quot; font-family:'Courier New';&quot;&gt;operaciones_mercado&lt;/span&gt;:&lt;/p&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Lectura Rápida&lt;/span&gt;: Las filas se iluminan automáticamente. El &lt;span style=&quot; font-weight:700;&quot;&gt;Cian&lt;/span&gt; indica salud perfecta, el &lt;span style=&quot; font-weight:700;&quot;&gt;Naranja&lt;/span&gt; advertencia y el &lt;span style=&quot; font-weight:700;&quot;&gt;Rojo&lt;/span&gt; un fallo crítico que requiere atención inmediata.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Sin Índices&lt;/span&gt;: Hemos quitado los números de fila para que la visualización sea más limpia y profesional.&lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;3. Diagnóstico Profundo (&lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:large; font-weight:700;&quot;&gt;treeWidget_2&lt;/span&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;)&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Cuando necesites más detalles que los que ofrece la tabla, usa el árbol de la derecha:&lt;/p&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Agrupación por Riesgo&lt;/span&gt;: Los servidores se agrupan por su estado de SLA para que priorices los problemas.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Desglose Dinámico&lt;/span&gt;: Haz clic en la flecha de un nodo para desplegar los &lt;span style=&quot; font-weight:700;&quot;&gt;Detalles Técnicos&lt;/span&gt;. Verás la carga exacta y la hora del último reporte sin saturar la vista principal.&lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;4. Análisis Gráfico (&lt;/span&gt;&lt;span style=&quot; font-family:'Courier New'; font-size:large; font-weight:700;&quot;&gt;frame_8&lt;/span&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;)&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;La gráfica de barras te da el resumen ejecutivo:&lt;/p&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Distribución&lt;/span&gt;: Te permite saber cuántos servidores tienes en total por cada categoría de rendimiento.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Actualización Silenciosa&lt;/span&gt;: Al presionar &lt;span style=&quot; font-weight:700;&quot;&gt;ACTUALIZAR&lt;/span&gt;, la gráfica se redibuja internamente sin abrir ventanas externas de Python, manteniendo el flujo de trabajo limpio.&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -1678,7 +1736,7 @@ QPushButton#pushButton_18:hover {
            <x>1280</x>
            <y>390</y>
            <width>611</width>
-           <height>650</height>
+           <height>591</height>
           </rect>
          </property>
          <layout class="QFormLayout" name="formLayout_2">
@@ -1723,12 +1781,12 @@ QLineEdit:disabled {
 }</string>
             </property>
             <property name="text">
-             <string>ID USUARIO / ROL</string>
+             <string>ID  Servidor</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit_7">
+           <widget class="QLineEdit" name="lbl_servidor">
             <property name="styleSheet">
              <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
 QLabel {
@@ -1804,12 +1862,12 @@ QLineEdit:disabled {
 }</string>
             </property>
             <property name="text">
-             <string>NOMBRE DE CONFIGURACIÓN</string>
+             <string>Servidor / Nodo Destino</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_8">
+           <widget class="QLineEdit" name="lbl_nodo">
             <property name="styleSheet">
              <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
 QLabel {
@@ -1885,12 +1943,12 @@ QLineEdit:disabled {
 }</string>
             </property>
             <property name="text">
-             <string>RUTA DE DIRECTORIO</string>
+             <string>Latencia Promedio (ms)</string>
             </property>
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QLineEdit" name="lineEdit_9">
+           <widget class="QLineEdit" name="lbl_ms">
             <property name="styleSheet">
              <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
 QLabel {
@@ -1966,12 +2024,12 @@ QLineEdit:disabled {
 }</string>
             </property>
             <property name="text">
-             <string>VERSIÓN DEL SISTEMA</string>
+             <string>Capacidad Utilizada (%)</string>
             </property>
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QLineEdit" name="lineEdit_10">
+           <widget class="QLineEdit" name="lbl_capacidad">
             <property name="styleSheet">
              <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
 QLabel {
@@ -2047,12 +2105,12 @@ QLineEdit:disabled {
 }</string>
             </property>
             <property name="text">
-             <string>FECHA DE ÚLTIMA ACCIÓN</string>
+             <string>Último Reporte de Salud</string>
             </property>
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="QLineEdit" name="lineEdit_11">
+           <widget class="QLineEdit" name="lbl_salud">
             <property name="styleSheet">
              <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
 QLabel {
@@ -2128,12 +2186,12 @@ QLineEdit:disabled {
 }</string>
             </property>
             <property name="text">
-             <string>ESTADO DEL SERVIDOR</string>
+             <string>Nivel de Servicio (SLA)</string>
             </property>
            </widget>
           </item>
           <item row="5" column="1">
-           <widget class="QLineEdit" name="lineEdit_12">
+           <widget class="QLineEdit" name="lbl_nivel">
             <property name="styleSheet">
              <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
 QLabel {
@@ -2481,7 +2539,7 @@ QTreeView::branch:open:has-children:has-siblings {
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Analisis</string>
+             <string/>
             </property>
            </widget>
           </item>
@@ -2582,27 +2640,27 @@ QTableWidget::item:selected {
             </column>
             <column>
              <property name="text">
-              <string>Nombre </string>
+              <string>MÉTRICA</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Ruta Directorio</string>
+              <string>UMBRAL</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Versión  </string>
+              <string>UPTIME</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Fecha Acción</string>
+              <string>INCIDENTE</string>
              </property>
             </column>
             <column>
              <property name="text">
-              <string>Estado Servidor</string>
+              <string>ESTADO</string>
              </property>
             </column>
            </widget>
@@ -2615,7 +2673,7 @@ QTableWidget::item:selected {
            <x>1280</x>
            <y>390</y>
            <width>611</width>
-           <height>650</height>
+           <height>581</height>
           </rect>
          </property>
          <layout class="QFormLayout" name="formLayout_3">
@@ -2660,12 +2718,12 @@ QLineEdit:disabled {
 }</string>
             </property>
             <property name="text">
-             <string>ID USUARIO / ROL</string>
+             <string>ID DEL NODO / CLÚSTER</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QLineEdit" name="lineEdit_13">
+           <widget class="QLineEdit" name="txt_cluster">
             <property name="styleSheet">
              <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
 QLabel {
@@ -2741,12 +2799,12 @@ QLineEdit:disabled {
 }</string>
             </property>
             <property name="text">
-             <string>NOMBRE DE CONFIGURACIÓN</string>
+             <string>MÉTRICA DE PICO (LATENCIA)</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QLineEdit" name="lineEdit_14">
+           <widget class="QLineEdit" name="txt_pico">
             <property name="styleSheet">
              <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
 QLabel {
@@ -2822,12 +2880,12 @@ QLineEdit:disabled {
 }</string>
             </property>
             <property name="text">
-             <string>RUTA DE DIRECTORIO</string>
+             <string>UMBRAL DE CARGA (%)</string>
             </property>
            </widget>
           </item>
           <item row="2" column="1">
-           <widget class="QLineEdit" name="lineEdit_15">
+           <widget class="QLineEdit" name="txt_umbral">
             <property name="styleSheet">
              <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
 QLabel {
@@ -2903,12 +2961,12 @@ QLineEdit:disabled {
 }</string>
             </property>
             <property name="text">
-             <string>VERSIÓN DEL SISTEMA</string>
+             <string>TIEMPO DE ACTIVIDAD (UPTIME)</string>
             </property>
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QLineEdit" name="lineEdit_16">
+           <widget class="QLineEdit" name="txt_uptime">
             <property name="styleSheet">
              <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
 QLabel {
@@ -2984,12 +3042,12 @@ QLineEdit:disabled {
 }</string>
             </property>
             <property name="text">
-             <string>FECHA DE ÚLTIMA ACCIÓN</string>
+             <string>HORA DEL ÚLTIMO INCIDENTE</string>
             </property>
            </widget>
           </item>
           <item row="4" column="1">
-           <widget class="QLineEdit" name="lineEdit_17">
+           <widget class="QLineEdit" name="txt_hora">
             <property name="styleSheet">
              <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
 QLabel {
@@ -3065,12 +3123,12 @@ QLineEdit:disabled {
 }</string>
             </property>
             <property name="text">
-             <string>ESTADO DEL SERVIDOR</string>
+             <string>ESTADO DE SALUD GLOBAL</string>
             </property>
            </widget>
           </item>
           <item row="5" column="1">
-           <widget class="QLineEdit" name="lineEdit_18">
+           <widget class="QLineEdit" name="txt_global">
             <property name="styleSheet">
              <string notr="true">/* Estilo para las etiquetas de texto (Labels) */
 QLabel {
@@ -3153,6 +3211,37 @@ QScrollBar::handle:vertical {
 QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
     height: 0px;
 }</string>
+            </property>
+            <property name="html">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Consolas','Monospace'; font-size:13px; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;SISTEMA DE ANÁLISIS DE RENDIMIENTO - GUÍA DE USUARIO&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;1. MONITOREO DE CLÚSTERES&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   - ID DEL NODO: Identificador único del clúster o servidor bajo análisis.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   - MÉTRICA DE PICO: Muestra la latencia máxima registrada en milisegundos (ms).&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   - UMBRAL DE CARGA: Porcentaje máximo de capacidad operativa permitida antes de alerta.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   - UPTIME: Porcentaje de disponibilidad histórica del servicio.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;2. GESTIÓN DE DATOS (BOTONES)&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   - AÑADIR: Registra un nuevo nodo tras llenar los campos de texto superiores.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   - ELIMINAR: Borra el registro seleccionado. Se activará una alerta de seguridad antes de proceder.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   - ACTUALIZAR: Guarda los cambios realizados en los parámetros del nodo seleccionado.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   - EXPORTAR: Genera un reporte externo con los datos actuales de la red.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;3. JERARQUÍA Y ESTADOS&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   - ÓPTIMO: Sistemas con latencia baja y alta disponibilidad.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   - DEGRADADO: Sistemas con picos de latencia moderados.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   - CRÍTICO: Sistemas con fallos recientes o latencia fuera de umbral.&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;4. INSTRUCCIONES DE NAVEGACIÓN&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   - Seleccione una fila en la tabla de análisis para visualizar los detalles en los campos de edición.&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;   - El gráfico de barras se actualizará automáticamente para mostrar la comparativa de picos de latencia.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
