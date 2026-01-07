@@ -6,21 +6,1398 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1890</width>
+    <width>1922</width>
     <height>1083</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <property name="styleSheet">
+   <string notr="true">/* Estilo general de la barra de menú */
+QMenuBar {
+    background-color: #000000;
+    color: #ffffff;
+    font-size: 20px; /* Letras grandes */
+    font-weight: bold;
+    padding: 5px;
+    border-bottom: 2px solid #00e5ff; /* Línea cian neón para separar del contenido */
+}
+
+/* Estilo de los items de la barra al pasar el mouse */
+QMenuBar::item:selected {
+    background-color: #333333;
+    color: #00e5ff; /* Cambio a cian al seleccionar */
+    border-radius: 4px;
+}
+
+/* Estilo de los menús desplegables (Archivos, Edición, etc.) */
+QMenu {
+    background-color: #000000;
+    color: #ffffff;
+    font-size: 16px;
+    border: 1px solid #00e5ff;
+}
+
+/* Estilo de las opciones dentro del menú desplegable */
+QMenu::item {
+    padding: 8px 25px;
+    background-color: transparent;
+}
+
+QMenu::item:selected {
+    background-color: #00e5ff;
+    color: #000000; /* Texto negro sobre fondo cian al resaltar */
+}
+
+/* Estilo de los separadores dentro del menú */
+QMenu::separator {
+    height: 1px;
+    background: #444444;
+    margin: 5px;
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>-1</x>
+      <y>-1</y>
+      <width>1961</width>
+      <height>1021</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QStackedWidget" name="stackedWidget">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(39, 39, 39);</string>
+       </property>
+       <property name="currentIndex">
+        <number>1</number>
+       </property>
+       <widget class="QWidget" name="page">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(31, 31, 31);</string>
+        </property>
+        <widget class="QWidget" name="gridLayoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>-1</x>
+           <y>9</y>
+           <width>1931</width>
+           <height>1011</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="2">
+           <widget class="QFrame" name="frame_4">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QFrame" name="frame">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QFrame" name="frame_3">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QFrame" name="frame_5">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QFrame" name="frame_2">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QFrame" name="frame_6">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_2">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(29, 29, 29);</string>
+        </property>
+        <widget class="QWidget" name="horizontalLayoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>520</x>
+           <y>10</y>
+           <width>921</width>
+           <height>101</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QLabel" name="titulo_etapa">
+            <property name="styleSheet">
+             <string notr="true">QLabel#titulo_etapa {
+    color: #00e5ff; /* Cian Neón */
+    font-size: 32px;
+    font-weight: bold;
+    font-family: 'Segoe UI Semibold', sans-serif;
+    letter-spacing: 2px;
+    padding: 5px;
+    background-color: transparent;
+    /* Línea inferior de neón que da estructura */
+    border-bottom: 2px solid #00e5ff;
+    margin-bottom: 10px;
+}</string>
+            </property>
+            <property name="text">
+             <string>Consola De comandos</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="verticalLayoutWidget_2">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>149</y>
+           <width>211</width>
+           <height>851</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_2">
+          <item>
+           <widget class="QPushButton" name="push_ayuda">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    /* Fondo gris carbón traslúcido para dar profundidad sin saturar */
+    background-color: rgba(42, 43, 46, 0.6); 
+    color: #ffffff;
+    
+    /* Borde neón sutil que define la forma */
+    border: 1px solid #3d3e42;
+    border-radius: 8px;
+    
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 20px;
+}
+
+/* Efecto al pasar el mouse (Hover) */
+QPushButton:hover {
+    /* El fondo se aclara un poco y el borde se enciende */
+    background-color: rgba(60, 61, 65, 0.8);
+    border: 1px solid #00e5ff; 
+    color: #00e5ff;
+}
+
+/* Efecto al presionar (Pressed) */
+QPushButton:pressed {
+    background-color: #0a0b1c; /* Se hunde visualmente volviéndose oscuro */
+    border: 1px solid #ffaa00; /* Naranja para indicar ejecución */
+    color: #ffaa00;
+}
+
+/* Estilo para el botón principal de la etapa (Prominente) */
+QPushButton#btn_ejecutar {
+    background-color: rgba(0, 229, 255, 0.1); /* Tinte cian muy suave */
+    border: 1px solid #00e5ff;
+}</string>
+            </property>
+            <property name="text">
+             <string>Ayuda</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="push_ingestion">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    /* Fondo gris carbón traslúcido para dar profundidad sin saturar */
+    background-color: rgba(42, 43, 46, 0.6); 
+    color: #ffffff;
+    
+    /* Borde neón sutil que define la forma */
+    border: 1px solid #3d3e42;
+    border-radius: 8px;
+    
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 20px;
+}
+
+/* Efecto al pasar el mouse (Hover) */
+QPushButton:hover {
+    /* El fondo se aclara un poco y el borde se enciende */
+    background-color: rgba(60, 61, 65, 0.8);
+    border: 1px solid #00e5ff; 
+    color: #00e5ff;
+}
+
+/* Efecto al presionar (Pressed) */
+QPushButton:pressed {
+    background-color: #0a0b1c; /* Se hunde visualmente volviéndose oscuro */
+    border: 1px solid #ffaa00; /* Naranja para indicar ejecución */
+    color: #ffaa00;
+}
+
+/* Estilo para el botón principal de la etapa (Prominente) */
+QPushButton#btn_ejecutar {
+    background-color: rgba(0, 229, 255, 0.1); /* Tinte cian muy suave */
+    border: 1px solid #00e5ff;
+}</string>
+            </property>
+            <property name="text">
+             <string>Ingestion</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="push_limpieza">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    /* Fondo gris carbón traslúcido para dar profundidad sin saturar */
+    background-color: rgba(42, 43, 46, 0.6); 
+    color: #ffffff;
+    
+    /* Borde neón sutil que define la forma */
+    border: 1px solid #3d3e42;
+    border-radius: 8px;
+    
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 20px;
+}
+
+/* Efecto al pasar el mouse (Hover) */
+QPushButton:hover {
+    /* El fondo se aclara un poco y el borde se enciende */
+    background-color: rgba(60, 61, 65, 0.8);
+    border: 1px solid #00e5ff; 
+    color: #00e5ff;
+}
+
+/* Efecto al presionar (Pressed) */
+QPushButton:pressed {
+    background-color: #0a0b1c; /* Se hunde visualmente volviéndose oscuro */
+    border: 1px solid #ffaa00; /* Naranja para indicar ejecución */
+    color: #ffaa00;
+}
+
+/* Estilo para el botón principal de la etapa (Prominente) */
+QPushButton#btn_ejecutar {
+    background-color: rgba(0, 229, 255, 0.1); /* Tinte cian muy suave */
+    border: 1px solid #00e5ff;
+}</string>
+            </property>
+            <property name="text">
+             <string>Limpieza</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="push_analisis">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    /* Fondo gris carbón traslúcido para dar profundidad sin saturar */
+    background-color: rgba(42, 43, 46, 0.6); 
+    color: #ffffff;
+    
+    /* Borde neón sutil que define la forma */
+    border: 1px solid #3d3e42;
+    border-radius: 8px;
+    
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 20px;
+}
+
+/* Efecto al pasar el mouse (Hover) */
+QPushButton:hover {
+    /* El fondo se aclara un poco y el borde se enciende */
+    background-color: rgba(60, 61, 65, 0.8);
+    border: 1px solid #00e5ff; 
+    color: #00e5ff;
+}
+
+/* Efecto al presionar (Pressed) */
+QPushButton:pressed {
+    background-color: #0a0b1c; /* Se hunde visualmente volviéndose oscuro */
+    border: 1px solid #ffaa00; /* Naranja para indicar ejecución */
+    color: #ffaa00;
+}
+
+/* Estilo para el botón principal de la etapa (Prominente) */
+QPushButton#btn_ejecutar {
+    background-color: rgba(0, 229, 255, 0.1); /* Tinte cian muy suave */
+    border: 1px solid #00e5ff;
+}</string>
+            </property>
+            <property name="text">
+             <string>Analísis</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="push_salida">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    /* Fondo gris carbón traslúcido para dar profundidad sin saturar */
+    background-color: rgba(42, 43, 46, 0.6); 
+    color: #ffffff;
+    
+    /* Borde neón sutil que define la forma */
+    border: 1px solid #3d3e42;
+    border-radius: 8px;
+    
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 20px;
+}
+
+/* Efecto al pasar el mouse (Hover) */
+QPushButton:hover {
+    /* El fondo se aclara un poco y el borde se enciende */
+    background-color: rgba(60, 61, 65, 0.8);
+    border: 1px solid #00e5ff; 
+    color: #00e5ff;
+}
+
+/* Efecto al presionar (Pressed) */
+QPushButton:pressed {
+    background-color: #0a0b1c; /* Se hunde visualmente volviéndose oscuro */
+    border: 1px solid #ffaa00; /* Naranja para indicar ejecución */
+    color: #ffaa00;
+}
+
+/* Estilo para el botón principal de la etapa (Prominente) */
+QPushButton#btn_ejecutar {
+    background-color: rgba(0, 229, 255, 0.1); /* Tinte cian muy suave */
+    border: 1px solid #00e5ff;
+}</string>
+            </property>
+            <property name="text">
+             <string>Salida</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_2">
+         <property name="geometry">
+          <rect>
+           <x>229</x>
+           <y>159</y>
+           <width>1211</width>
+           <height>641</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QStackedWidget" name="Visual">
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <widget class="QWidget" name="page_4">
+             <widget class="QWidget" name="verticalLayoutWidget_4">
+              <property name="geometry">
+               <rect>
+                <x>19</x>
+                <y>19</y>
+                <width>1181</width>
+                <height>611</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_4">
+               <item>
+                <widget class="QTextBrowser" name="textBrowser">
+                 <property name="styleSheet">
+                  <string notr="true">QTextBrowser {
+    /* Fondo oscuro sólido para simular una terminal */
+    background-color: #050610; 
+    color: #00ff41; /* Verde matriz/terminal para los logs de éxito */
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13px;
+    border: 1px solid #1c1e33;
+    border-radius: 5px;
+    padding: 10px;
+    line-height: 1.5;
+}
+
+/* Estilo para la barra de desplazamiento de la consola */
+QScrollBar:vertical {
+    border: none;
+    background: #050610;
+    width: 8px;
+}
+
+QScrollBar::handle:vertical {
+    background: #1c1e33;
+    border-radius: 4px;
+}</string>
+                 </property>
+                 <property name="html">
+                  <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Consolas','Courier New','monospace'; font-size:13px; font-weight:400; font-style:normal;&quot;&gt;
+&lt;h4 style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:medium; font-weight:700;&quot;&gt;Ventana 1: INGESTION (Ingesta)&lt;/span&gt;&lt;/h4&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Propósito&lt;/span&gt;: Conectar con la fuente de verdad.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Contenido&lt;/span&gt;:
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Botón &amp;quot;Explorar Archivos&amp;quot; para cargar una tabla.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Campos de texto si conectas a una DB SQL.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Log de Consola&lt;/span&gt;: &lt;span style=&quot; font-family:'Courier New';&quot;&gt;&amp;gt; Conectando a la base de datos... Conexión exitosa. Se detectaron &lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;
+&lt;h4 style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:medium; font-weight:700;&quot;&gt;Ventana 2: LIMPIEZA (Cleaning)&lt;/span&gt;&lt;/h4&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Propósito&lt;/span&gt;: Sanear los datos antes del análisis.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Contenido&lt;/span&gt;:
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Botón &amp;quot;añadir&amp;quot;: Llena espacios vacíos con el promedio o ceros.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Botón &amp;quot;Drop Eliminar&amp;quot;: Elimina filas repetidas.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Log de Consola&lt;/span&gt;: &lt;span style=&quot; font-family:'Courier New';&quot;&gt;&amp;gt; Ejecutando limpieza... 142 filas duplicadas eliminadas. 12 valores nulos imputados.&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;
+&lt;h4 style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:medium; font-weight:700;&quot;&gt;Ventana 3: ANALISIS (Transformation)&lt;/span&gt;&lt;/h4&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Propósito&lt;/span&gt;: Crear valor agregado a través de cálculos.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Contenido&lt;/span&gt;:
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Botón &amp;quot;Agrupar Data&amp;quot;: Por fecha, categoría o región.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Log de Consola&lt;/span&gt;: &lt;span style=&quot; font-family:'Courier New';&quot;&gt;&amp;gt; Generando matriz de correlación... Procesando agrupamiento por 'Región'.&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;
+&lt;h4 style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:medium; font-weight:700;&quot;&gt;Ventana 4: SALIDA (Visualization/Export)&lt;/span&gt;&lt;/h4&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Propósito&lt;/span&gt;: Entregar el resultado final.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Contenido&lt;/span&gt;:
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 2;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Botón &amp;quot;Generar Reporte PDF&amp;quot;: Exporta un resumen ejecutivo.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Botón &amp;quot;Ver Gráficas&amp;quot;: Muestra los gráficos dinámicos finales.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Log de Consola&lt;/span&gt;: &lt;span style=&quot; font-family:'Courier New';&quot;&gt;&amp;gt; Reporte 'Analisis_Mensual.pdf' generado en la carpeta raíz.&lt;/span&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="page_5">
+             <widget class="QWidget" name="horizontalLayoutWidget_4">
+              <property name="geometry">
+               <rect>
+                <x>9</x>
+                <y>19</y>
+                <width>1191</width>
+                <height>601</height>
+               </rect>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_4">
+               <item>
+                <widget class="QTreeWidget" name="treeWidget">
+                 <property name="styleSheet">
+                  <string notr="true">/* Estilo general del Árbol */
+QTreeWidget {
+    background-color: #050610; /* Fondo negro profundo para que se funda con la app */
+    color: #ffffff; /* Texto blanco para legibilidad */
+    border: 1px solid #1c1e33; /* Borde oscuro sutil */
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none; /* Elimina el recuadro punteado al hacer clic */
+    padding: 5px;
+}
+
+/* Estilo de los Items (las tablas de tu DB) */
+QTreeWidget::item {
+    padding: 10px;
+    border-bottom: 1px solid #111222; /* Separación muy fina entre filas */
+    color: #b0b0b0; /* Gris claro en reposo */
+}
+
+/* Al pasar el mouse por encima de una tabla */
+QTreeWidget::item:hover {
+    background-color: rgba(0, 229, 255, 0.05); /* Resplandor cian muy suave */
+    color: #00e5ff; /* El texto se enciende en cian neón */
+}
+
+/* Cuando seleccionas una tabla para mostrarla en el TableWidget */
+QTreeWidget::item:selected {
+    background-color: rgba(0, 229, 255, 0.1); 
+    color: #00e5ff; /* Texto cian brillante */
+    border-left: 3px solid #00e5ff; /* Una barra lateral neón que indica &quot;activo&quot; */
+}
+
+/* Estilo de la cabecera (Si usas encabezado como &quot;TABLAS&quot;) */
+QHeaderView::section {
+    background-color: #0a0b1c;
+    color: #00e5ff;
+    padding: 8px;
+    border: none;
+    border-bottom: 2px solid #1c1e33;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Estilo de las flechas de expansión (en caso de que tengas nodos hijos) */
+QTreeView::branch:has-children:!has-siblings:closed,
+QTreeView::branch:closed:has-children:has-siblings {
+    image: url(flecha_derecha.png); /* Aquí podrías usar un icono cian */
+}
+
+QTreeView::branch:open:has-children:!has-siblings,
+QTreeView::</string>
+                 </property>
+                 <column>
+                  <property name="text">
+                   <string notr="true">1</string>
+                  </property>
+                 </column>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="page_10">
+             <widget class="QWidget" name="horizontalLayoutWidget_6">
+              <property name="geometry">
+               <rect>
+                <x>9</x>
+                <y>19</y>
+                <width>1191</width>
+                <height>611</height>
+               </rect>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_6">
+               <item>
+                <widget class="QTableWidget" name="tableWidget_2">
+                 <property name="styleSheet">
+                  <string notr="true">/* Cuerpo de la Tabla */
+QTableWidget {
+    background-color: #050610; /* Fondo negro profundo */
+    color: #ffffff; /* Texto blanco para los datos */
+    gridline-color: #1c1e33; /* Color de la rejilla muy sutil */
+    border: 1px solid #1c1e33;
+    border-radius: 8px;
+    font-size: 13px;
+    selection-background-color: rgba(0, 229, 255, 0.2); /* Fondo cian traslúcido al seleccionar */
+    selection-color: #00e5ff; /* Texto cian al seleccionar */
+}
+
+/* Encabezados Horizontales (Nombres de Columnas) */
+QHeaderView::section:horizontal {
+    background-color: #0a0b1c; /* Un azul casi negro para diferenciar del cuerpo */
+    color: #00e5ff; /* Títulos en Cian Neón */
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid #00e5ff; /* Línea de luz cian bajo los títulos */
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Encabezados Verticales (Números de Fila) */
+QHeaderView::section:vertical {
+    background-color: #050610;
+    color: #5c5f7d; /* Gris apagado para que no distraiga de los datos */
+    padding-left: 5px;
+    padding-right: 5px;
+    border: none;
+    border-right: 1px solid #1c1e33;
+}
+
+/* Estilo de las celdas individuales */
+QTableWidget::item {
+    padding: 5px;
+    border-bottom: 1px solid #0a0b1c;
+}
+
+/* Efecto al pasar el mouse sobre una fila */
+QTableWidget::item:hover {
+    background-color: rgba(0, 229, 255, 0.05);
+}
+
+/* Esquina superior izquierda donde se juntan los headers */
+QTableCornerButton::section {
+    background-color: #0a0b1c;
+    border: none;
+}</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="page_8">
+             <widget class="QWidget" name="horizontalLayoutWidget_5">
+              <property name="geometry">
+               <rect>
+                <x>9</x>
+                <y>19</y>
+                <width>1191</width>
+                <height>611</height>
+               </rect>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_5">
+               <item>
+                <widget class="QFrame" name="frame_7">
+                 <property name="frameShape">
+                  <enum>QFrame::Shape::StyledPanel</enum>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="verticalLayoutWidget_3">
+         <property name="geometry">
+          <rect>
+           <x>1449</x>
+           <y>159</y>
+           <width>471</width>
+           <height>641</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <widget class="QStackedWidget" name="Comando">
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <widget class="QWidget" name="page_6"/>
+            <widget class="QWidget" name="page_7">
+             <widget class="QWidget" name="verticalLayoutWidget_5">
+              <property name="geometry">
+               <rect>
+                <x>9</x>
+                <y>19</y>
+                <width>451</width>
+                <height>601</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_5">
+               <item>
+                <widget class="QTableWidget" name="tableWidget">
+                 <property name="styleSheet">
+                  <string notr="true">/* Cuerpo de la Tabla */
+QTableWidget {
+    background-color: #050610; /* Fondo negro profundo */
+    color: #ffffff; /* Texto blanco para los datos */
+    gridline-color: #1c1e33; /* Color de la rejilla muy sutil */
+    border: 1px solid #1c1e33;
+    border-radius: 8px;
+    font-size: 13px;
+    selection-background-color: rgba(0, 229, 255, 0.2); /* Fondo cian traslúcido al seleccionar */
+    selection-color: #00e5ff; /* Texto cian al seleccionar */
+}
+
+/* Encabezados Horizontales (Nombres de Columnas) */
+QHeaderView::section:horizontal {
+    background-color: #0a0b1c; /* Un azul casi negro para diferenciar del cuerpo */
+    color: #00e5ff; /* Títulos en Cian Neón */
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid #00e5ff; /* Línea de luz cian bajo los títulos */
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Encabezados Verticales (Números de Fila) */
+QHeaderView::section:vertical {
+    background-color: #050610;
+    color: #5c5f7d; /* Gris apagado para que no distraiga de los datos */
+    padding-left: 5px;
+    padding-right: 5px;
+    border: none;
+    border-right: 1px solid #1c1e33;
+}
+
+/* Estilo de las celdas individuales */
+QTableWidget::item {
+    padding: 5px;
+    border-bottom: 1px solid #0a0b1c;
+}
+
+/* Efecto al pasar el mouse sobre una fila */
+QTableWidget::item:hover {
+    background-color: rgba(0, 229, 255, 0.05);
+}
+
+/* Esquina superior izquierda donde se juntan los headers */
+QTableCornerButton::section {
+    background-color: #0a0b1c;
+    border: none;
+}</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="page_11">
+             <widget class="QWidget" name="verticalLayoutWidget_6">
+              <property name="geometry">
+               <rect>
+                <x>9</x>
+                <y>19</y>
+                <width>451</width>
+                <height>601</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_6">
+               <item>
+                <widget class="QPushButton" name="pushButton_5">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    /* Fondo gris carbón traslúcido para dar profundidad sin saturar */
+    background-color: rgba(42, 43, 46, 0.6); 
+    color: #ffffff;
+    
+    /* Borde neón sutil que define la forma */
+    border: 1px solid #3d3e42;
+    border-radius: 8px;
+    
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 20px;
+}
+
+/* Efecto al pasar el mouse (Hover) */
+QPushButton:hover {
+    /* El fondo se aclara un poco y el borde se enciende */
+    background-color: rgba(60, 61, 65, 0.8);
+    border: 1px solid #00e5ff; 
+    color: #00e5ff;
+}
+
+/* Efecto al presionar (Pressed) */
+QPushButton:pressed {
+    background-color: #0a0b1c; /* Se hunde visualmente volviéndose oscuro */
+    border: 1px solid #ffaa00; /* Naranja para indicar ejecución */
+    color: #ffaa00;
+}
+
+/* Estilo para el botón principal de la etapa (Prominente) */
+QPushButton#btn_ejecutar {
+    background-color: rgba(0, 229, 255, 0.1); /* Tinte cian muy suave */
+    border: 1px solid #00e5ff;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Añadir</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButton_6">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    /* Fondo gris carbón traslúcido para dar profundidad sin saturar */
+    background-color: rgba(42, 43, 46, 0.6); 
+    color: #ffffff;
+    
+    /* Borde neón sutil que define la forma */
+    border: 1px solid #3d3e42;
+    border-radius: 8px;
+    
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 20px;
+}
+
+/* Efecto al pasar el mouse (Hover) */
+QPushButton:hover {
+    /* El fondo se aclara un poco y el borde se enciende */
+    background-color: rgba(60, 61, 65, 0.8);
+    border: 1px solid #00e5ff; 
+    color: #00e5ff;
+}
+
+/* Efecto al presionar (Pressed) */
+QPushButton:pressed {
+    background-color: #0a0b1c; /* Se hunde visualmente volviéndose oscuro */
+    border: 1px solid #ffaa00; /* Naranja para indicar ejecución */
+    color: #ffaa00;
+}
+
+/* Estilo para el botón principal de la etapa (Prominente) */
+QPushButton#btn_ejecutar {
+    background-color: rgba(0, 229, 255, 0.1); /* Tinte cian muy suave */
+    border: 1px solid #00e5ff;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Eliminar</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="page_9">
+             <widget class="QWidget" name="verticalLayoutWidget_7">
+              <property name="geometry">
+               <rect>
+                <x>9</x>
+                <y>19</y>
+                <width>451</width>
+                <height>611</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_7">
+               <item>
+                <widget class="QComboBox" name="comboBox_2">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">/* Estilo del ComboBox Principal */
+QComboBox {
+    /* Fondo traslúcido como los PushButtons */
+    background-color: rgba(42, 43, 46, 0.4); 
+    color: #ffffff;
+    border: 1px solid #3d3e42;
+    border-radius: 8px;
+    padding: 8px 15px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/* Efecto al pasar el mouse */
+QComboBox:hover {
+    border: 1px solid #00e5ff; /* Borde cian neón */
+    background-color: rgba(60, 61, 65, 0.6);
+}
+
+/* El botón de la flecha hacia abajo */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 1px solid #1c1e33;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    background-color: transparent;
+}
+
+/* La flecha (puedes usar una imagen o un triángulo estándar) */
+QComboBox::down-arrow {
+    image: none; /* Si no tienes imagen, usa border para crear un triángulo */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid #00e5ff;
+    margin-top: 2px;
+}
+
+/* LA LISTA DESPLEGABLE (Lo que aparece al hacer clic) */
+QComboBox QAbstractItemView {
+    background-color: #050610; /* Fondo negro sólido para legibilidad */
+    color: #b0b0b0;
+    border: 1px solid #00e5ff;
+    selection-background-color: rgba(0, 229, 255, 0.2);
+    selection-color: #00e5ff;
+    outline: none;
+    padding: 5px;
+}</string>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Seleccione</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="comboBox">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">/* Estilo del ComboBox Principal */
+QComboBox {
+    /* Fondo traslúcido como los PushButtons */
+    background-color: rgba(42, 43, 46, 0.4); 
+    color: #ffffff;
+    border: 1px solid #3d3e42;
+    border-radius: 8px;
+    padding: 8px 15px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/* Efecto al pasar el mouse */
+QComboBox:hover {
+    border: 1px solid #00e5ff; /* Borde cian neón */
+    background-color: rgba(60, 61, 65, 0.6);
+}
+
+/* El botón de la flecha hacia abajo */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 1px solid #1c1e33;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    background-color: transparent;
+}
+
+/* La flecha (puedes usar una imagen o un triángulo estándar) */
+QComboBox::down-arrow {
+    image: none; /* Si no tienes imagen, usa border para crear un triángulo */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid #00e5ff;
+    margin-top: 2px;
+}
+
+/* LA LISTA DESPLEGABLE (Lo que aparece al hacer clic) */
+QComboBox QAbstractItemView {
+    background-color: #050610; /* Fondo negro sólido para legibilidad */
+    color: #b0b0b0;
+    border: 1px solid #00e5ff;
+    selection-background-color: rgba(0, 229, 255, 0.2);
+    selection-color: #00e5ff;
+    outline: none;
+    padding: 5px;
+}</string>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Seleccione</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="pushButton_7">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    /* Fondo gris carbón traslúcido para dar profundidad sin saturar */
+    background-color: rgba(42, 43, 46, 0.6); 
+    color: #ffffff;
+    
+    /* Borde neón sutil que define la forma */
+    border: 1px solid #3d3e42;
+    border-radius: 8px;
+    
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 20px;
+}
+
+/* Efecto al pasar el mouse (Hover) */
+QPushButton:hover {
+    /* El fondo se aclara un poco y el borde se enciende */
+    background-color: rgba(60, 61, 65, 0.8);
+    border: 1px solid #00e5ff; 
+    color: #00e5ff;
+}
+
+/* Efecto al presionar (Pressed) */
+QPushButton:pressed {
+    background-color: #0a0b1c; /* Se hunde visualmente volviéndose oscuro */
+    border: 1px solid #ffaa00; /* Naranja para indicar ejecución */
+    color: #ffaa00;
+}
+
+/* Estilo para el botón principal de la etapa (Prominente) */
+QPushButton#btn_ejecutar {
+    background-color: rgba(0, 229, 255, 0.1); /* Tinte cian muy suave */
+    border: 1px solid #00e5ff;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Aceptar</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="page_12">
+             <widget class="QWidget" name="verticalLayoutWidget_8">
+              <property name="geometry">
+               <rect>
+                <x>9</x>
+                <y>19</y>
+                <width>451</width>
+                <height>611</height>
+               </rect>
+              </property>
+              <layout class="QVBoxLayout" name="verticalLayout_8">
+               <item>
+                <widget class="QPushButton" name="pushButton_8">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    /* Fondo gris carbón traslúcido para dar profundidad sin saturar */
+    background-color: rgba(42, 43, 46, 0.6); 
+    color: #ffffff;
+    
+    /* Borde neón sutil que define la forma */
+    border: 1px solid #3d3e42;
+    border-radius: 8px;
+    
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 20px;
+}
+
+/* Efecto al pasar el mouse (Hover) */
+QPushButton:hover {
+    /* El fondo se aclara un poco y el borde se enciende */
+    background-color: rgba(60, 61, 65, 0.8);
+    border: 1px solid #00e5ff; 
+    color: #00e5ff;
+}
+
+/* Efecto al presionar (Pressed) */
+QPushButton:pressed {
+    background-color: #0a0b1c; /* Se hunde visualmente volviéndose oscuro */
+    border: 1px solid #ffaa00; /* Naranja para indicar ejecución */
+    color: #ffaa00;
+}
+
+/* Estilo para el botón principal de la etapa (Prominente) */
+QPushButton#btn_ejecutar {
+    background-color: rgba(0, 229, 255, 0.1); /* Tinte cian muy suave */
+    border: 1px solid #00e5ff;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Exportar</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_3">
+         <property name="geometry">
+          <rect>
+           <x>229</x>
+           <y>809</y>
+           <width>1691</width>
+           <height>201</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QPlainTextEdit" name="plainTextEdit">
+            <property name="styleSheet">
+             <string notr="true">QPlainTextEdit {
+    background-color: #050505; /* Negro casi absoluto */
+    color: #00ff41; /* Verde terminal clásico (puedes usar el cian #00e5ff si prefieres) */
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 12px;
+    border: 1px solid #1c1e33;
+    border-top: 2px solid #3d3e42; /* Una &quot;ceja&quot; gris para separarla de la tabla */
+    padding: 10px;
+}
+
+/* Estilo para la barra de desplazamiento (Scrollbar) */
+QScrollBar:vertical {
+    background: #050505;
+    width: 10px;
+}
+QScrollBar::handle:vertical {
+    background: #1c1e33;
+    border-radius: 5px;
+}</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_3">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(34, 34, 34);</string>
+        </property>
+        <widget class="QLabel" name="titulo_etapa_2">
+         <property name="geometry">
+          <rect>
+           <x>510</x>
+           <y>20</y>
+           <width>919</width>
+           <height>99</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    color: #00e5ff; /* Cian Neón */
+    font-size: 32px;
+    font-weight: bold;
+    font-family: 'Segoe UI Semibold', sans-serif;
+    letter-spacing: 2px;
+    padding: 5px;
+    background-color: transparent;
+    /* Línea inferior de neón que da estructura */
+    border-bottom: 2px solid #00e5ff;
+    margin-bottom: 10px;
+}</string>
+         </property>
+         <property name="text">
+          <string>Reporte De Errores Criticos</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_13">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(47, 47, 47);</string>
+        </property>
+        <widget class="QLabel" name="titulo_etapa_3">
+         <property name="geometry">
+          <rect>
+           <x>520</x>
+           <y>10</y>
+           <width>919</width>
+           <height>99</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    color: #00e5ff; /* Cian Neón */
+    font-size: 32px;
+    font-weight: bold;
+    font-family: 'Segoe UI Semibold', sans-serif;
+    letter-spacing: 2px;
+    padding: 5px;
+    background-color: transparent;
+    /* Línea inferior de neón que da estructura */
+    border-bottom: 2px solid #00e5ff;
+    margin-bottom: 10px;
+}</string>
+         </property>
+         <property name="text">
+          <string>Historial De Versiones</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_14">
+        <widget class="QLabel" name="titulo_etapa_4">
+         <property name="geometry">
+          <rect>
+           <x>480</x>
+           <y>20</y>
+           <width>1001</width>
+           <height>99</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    color: #00e5ff; /* Cian Neón */
+    font-size: 32px;
+    font-weight: bold;
+    font-family: 'Segoe UI Semibold', sans-serif;
+    letter-spacing: 2px;
+    padding: 5px;
+    background-color: transparent;
+    /* Línea inferior de neón que da estructura */
+    border-bottom: 2px solid #00e5ff;
+    margin-bottom: 10px;
+}</string>
+         </property>
+         <property name="text">
+          <string>Mapa Global De Conectividad</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_15">
+        <widget class="QLabel" name="titulo_etapa_5">
+         <property name="geometry">
+          <rect>
+           <x>550</x>
+           <y>10</y>
+           <width>919</width>
+           <height>99</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    color: #00e5ff; /* Cian Neón */
+    font-size: 32px;
+    font-weight: bold;
+    font-family: 'Segoe UI Semibold', sans-serif;
+    letter-spacing: 2px;
+    padding: 5px;
+    background-color: transparent;
+    /* Línea inferior de neón que da estructura */
+    border-bottom: 2px solid #00e5ff;
+    margin-bottom: 10px;
+}</string>
+         </property>
+         <property name="text">
+          <string>Metricas De Rendimiento</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_16">
+        <widget class="QLabel" name="titulo_etapa_6">
+         <property name="geometry">
+          <rect>
+           <x>530</x>
+           <y>10</y>
+           <width>919</width>
+           <height>99</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    color: #00e5ff; /* Cian Neón */
+    font-size: 32px;
+    font-weight: bold;
+    font-family: 'Segoe UI Semibold', sans-serif;
+    letter-spacing: 2px;
+    padding: 5px;
+    background-color: transparent;
+    /* Línea inferior de neón que da estructura */
+    border-bottom: 2px solid #00e5ff;
+    margin-bottom: 10px;
+}</string>
+         </property>
+         <property name="text">
+          <string>Logs De Actividad</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1890</width>
-     <height>33</height>
+     <width>1922</width>
+     <height>43</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDASHBOARD">

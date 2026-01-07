@@ -12,6 +12,7 @@ import recursos_rc
 from Ingenieria import VentanaIngenieria
 from Gestion import VentanaGestion # Importamos la lógica que haremos ahora
 from Rendimiento import RendimientoMercado
+from Innovacionytecnologia import InnovacionWidget
 
 
 class VentanaInicio(QDialog):
@@ -49,6 +50,8 @@ class VentanaInicio(QDialog):
 
             self.ui.toolRendimiento.clicked.connect(self.Abrir_rendimiento)
 
+            self.ui.toolInnovacion.clicked.connect(self.abrir_innovacion)
+
                 
 
     def abrir_ingenieria(self):
@@ -80,6 +83,21 @@ class VentanaInicio(QDialog):
         except Exception as e:
             # Esto te dirá si el error cambió a otro tipo
             print(f"Error detectado: {e}")
+
+    # En App.py, dentro de tu función del botón toolInnovacion
+    def abrir_innovacion(self):
+        try:
+            
+            # Instanciar y guardar como atributo de clase para que no desaparezca de memoria
+            self.ventana_gestion = InnovacionWidget() 
+            self.ventana_gestion.show()
+            self.hide()
+            
+            # No ocultes la principal todavía hasta confirmar que la otra abrió
+            # self.hide() 
+            
+        except Exception as e:
+            print(f"Error al intentar abrir Innovación: {e}")
 
     
 
