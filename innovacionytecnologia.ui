@@ -80,7 +80,7 @@ QMenu::separator {
         <string notr="true">background-color: rgb(39, 39, 39);</string>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>3</number>
        </property>
        <widget class="QWidget" name="page">
         <property name="styleSheet">
@@ -1260,7 +1260,7 @@ QScrollBar::handle:vertical {
           <rect>
            <x>10</x>
            <y>180</y>
-           <width>501</width>
+           <width>681</width>
            <height>591</height>
           </rect>
          </property>
@@ -1280,7 +1280,7 @@ QScrollBar::handle:vertical {
         <widget class="QWidget" name="horizontalLayoutWidget_7">
          <property name="geometry">
           <rect>
-           <x>520</x>
+           <x>700</x>
            <y>330</y>
            <width>1181</width>
            <height>441</height>
@@ -1344,7 +1344,7 @@ QScrollBar::handle:vertical:hover {
         <widget class="QWidget" name="gridLayoutWidget_2">
          <property name="geometry">
           <rect>
-           <x>529</x>
+           <x>700</x>
            <y>180</y>
            <width>1171</width>
            <height>141</height>
@@ -1512,9 +1512,9 @@ QLabel#titulo_reporte {
         <widget class="QWidget" name="formLayoutWidget">
          <property name="geometry">
           <rect>
-           <x>9</x>
-           <y>789</y>
-           <width>1911</width>
+           <x>10</x>
+           <y>780</y>
+           <width>1181</width>
            <height>211</height>
           </rect>
          </property>
@@ -1523,7 +1523,7 @@ QLabel#titulo_reporte {
            <widget class="QPushButton" name="push_actualizar">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-              <horstretch>0</horstretch>
+              <horstretch>10</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
@@ -1601,22 +1601,29 @@ QPlainTextEdit QScrollBar::handle:vertical {
 
 QPlainTextEdit QScrollBar::handle:vertical:hover {
     background: #00e5ff;
+}
+
+QPlainTextEdit#plainTextEdit_2 {
+    color: #39ff14; /* Verde neón */
+    background-color: #050610;
+    font-family: 'Consolas';
+    border-left: 4px solid #39ff14; /* Una barra lateral verde */
 }</string>
             </property>
            </widget>
           </item>
          </layout>
         </widget>
-        <widget class="QWidget" name="verticalLayoutWidget_10">
+        <widget class="QWidget" name="horizontalLayoutWidget_8">
          <property name="geometry">
           <rect>
-           <x>1709</x>
-           <y>259</y>
-           <width>231</width>
-           <height>511</height>
+           <x>1200</x>
+           <y>780</y>
+           <width>741</width>
+           <height>211</height>
           </rect>
          </property>
-         <layout class="QVBoxLayout" name="verticalLayout_10">
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
           <item>
            <widget class="QTextBrowser" name="textBrowser_2">
             <property name="styleSheet">
@@ -1643,6 +1650,31 @@ QScrollBar::handle:vertical {
     background: #1c1e33;
     border-radius: 4px;
 }</string>
+            </property>
+            <property name="html">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+hr { height: 1px; border-width: 0; }
+li.unchecked::marker { content: &quot;\2610&quot;; }
+li.checked::marker { content: &quot;\2612&quot;; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Segoe UI','Arial'; font-size:11px; font-weight:400; font-style:normal;&quot;&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;1. Lógica del Nivel de Riesgo (LCD Púrpura)&lt;/span&gt;&lt;/h3&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;El &lt;span style=&quot; font-weight:700;&quot;&gt;Nivel de Riesgo&lt;/span&gt; no es un conteo simple, sino una métrica porcentual de la &amp;quot;salud&amp;quot; de tu base de datos. Se calcula comparando el total de celdas corruptas (nulas/vacías) frente al volumen total de datos de la tabla.&lt;/p&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Riesgo Bajo (0% - 5%):&lt;/span&gt; Indica una tabla saludable. El LCD se mantendrá en tonos cian/púrpura.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Riesgo Medio (6% - 15%):&lt;/span&gt; Se detecta una degradación moderada. Se recomienda iniciar procesos de limpieza manual.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Riesgo Crítico (&amp;gt; 15%):&lt;/span&gt; La integridad de la información está comprometida. A mayor porcentaje, mayor es la probabilidad de errores en gráficas y reportes finales.&lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;2. Interpretación de Indicadores Neón&lt;/span&gt;&lt;/h3&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Total de Errores (Rojo):&lt;/span&gt; Muestra la suma absoluta de celdas vacías detectadas mediante el escaneo de integridad.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Tabla más Inestable (Naranja):&lt;/span&gt; Identifica automáticamente cuál de las 13 tablas requiere atención inmediata por su alto volumen de fallos.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Inventario de Tablas:&lt;/span&gt; Permite navegar por la estructura de la base de datos &lt;span style=&quot; font-family:'Courier New';&quot;&gt;ingenieria.db&lt;/span&gt; en tiempo real.&lt;/li&gt;&lt;/ul&gt;
+&lt;h3 style=&quot; margin-top:14px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:large; font-weight:700;&quot;&gt;3. Flujo de Trabajo (Workflow)&lt;/span&gt;&lt;/h3&gt;
+&lt;ol style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Selección:&lt;/span&gt; Al dar doble clic en una tabla del inventario, se dispara el protocolo de auditoría.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Diagnóstico:&lt;/span&gt; El terminal inferior (&lt;span style=&quot; font-family:'Courier New';&quot;&gt;plainTextEdit_2&lt;/span&gt;) genera un reporte panorámico centrado con el detalle de los campos afectados.&lt;/li&gt;
+&lt;li style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Visualización:&lt;/span&gt; El &lt;span style=&quot; font-family:'Courier New';&quot;&gt;frame_8&lt;/span&gt; renderiza una gráfica de pastel que muestra la proporción exacta de datos limpios frente a nulos.&lt;/li&gt;&lt;/ol&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -1682,6 +1714,257 @@ QScrollBar::handle:vertical {
          <property name="alignment">
           <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_9">
+         <property name="geometry">
+          <rect>
+           <x>19</x>
+           <y>139</y>
+           <width>661</width>
+           <height>721</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <item>
+           <widget class="QTreeWidget" name="treeWidget_2">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo general del Árbol */
+QTreeWidget {
+    background-color: #050610; /* Fondo negro profundo para que se funda con la app */
+    color: #ffffff; /* Texto blanco para legibilidad */
+    border: 1px solid #1c1e33; /* Borde oscuro sutil */
+    border-radius: 8px;
+    font-size: 13px;
+    outline: none; /* Elimina el recuadro punteado al hacer clic */
+    padding: 5px;
+}
+
+/* Estilo de los Items (las tablas de tu DB) */
+QTreeWidget::item {
+    padding: 10px;
+    border-bottom: 1px solid #111222; /* Separación muy fina entre filas */
+    color: #b0b0b0; /* Gris claro en reposo */
+}
+
+/* Al pasar el mouse por encima de una tabla */
+QTreeWidget::item:hover {
+    background-color: rgba(0, 229, 255, 0.05); /* Resplandor cian muy suave */
+    color: #00e5ff; /* El texto se enciende en cian neón */
+}
+
+/* Cuando seleccionas una tabla para mostrarla en el TableWidget */
+QTreeWidget::item:selected {
+    background-color: rgba(0, 229, 255, 0.1); 
+    color: #00e5ff; /* Texto cian brillante */
+    border-left: 3px solid #00e5ff; /* Una barra lateral neón que indica &quot;activo&quot; */
+}
+
+/* Estilo de la cabecera (Si usas encabezado como &quot;TABLAS&quot;) */
+QHeaderView::section {
+    background-color: #0a0b1c;
+    color: #00e5ff;
+    padding: 8px;
+    border: none;
+    border-bottom: 2px solid #1c1e33;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Estilo de las flechas de expansión (en caso de que tengas nodos hijos) */
+QTreeView::branch:has-children:!has-siblings:closed,
+QTreeView::branch:closed:has-children:has-siblings {
+    image: url(flecha_derecha.png); /* Aquí podrías usar un icono cian */
+}
+
+QTreeView::branch:open:has-children:!has-siblings,
+QTreeView::</string>
+            </property>
+            <column>
+             <property name="text">
+              <string notr="true">1</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_10">
+         <property name="geometry">
+          <rect>
+           <x>689</x>
+           <y>139</y>
+           <width>1241</width>
+           <height>831</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_10">
+          <item>
+           <widget class="QTableWidget" name="tableWidget_Versiones">
+            <property name="styleSheet">
+             <string notr="true">QTableWidget {
+    background-color: #050610;
+    gridline-color: #1c1e33;
+    border: 1px solid #1c1e33;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 12px;
+}
+
+/* Cabeceras (Headers) */
+QHeaderView::section {
+    background-color: #0a0b1a;
+    color: #bc13fe; /* Morado para los títulos de columna */
+    padding: 8px;
+    border: none;
+    border-bottom: 2px solid #bc13fe;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Filas alternas para mejor lectura */
+QTableWidget::item {
+    padding: 5px;
+}
+
+QTableWidget::item:selected {
+    background-color: #1c1e33;
+    color: #00e5ff;
+}
+
+/* Barra de desplazamiento (Scrollbar) Estilo Neón */
+QScrollBar:vertical {
+    border: none;
+    background: #050610;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #1c1e33;
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #bc13fe;
+}
+QTableWidget {
+    background-color: #050610; /* Fondo profundo igual a la UI */
+    gridline-color: #141529; /* Líneas de rejilla muy sutiles */
+    border: 1px solid #1c1e33;
+    border-radius: 5px;
+    color: #e0e0e0; /* Texto gris claro para no cansar la vista */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 11px;
+    selection-background-color: rgba(0, 229, 255, 0.2); /* Resalte cian tenue */
+    selection-color: #00e5ff;
+}
+
+/* Encabezados de Columna (Títulos) */
+QHeaderView::section {
+    background-color: #0a0b1a;
+    color: #bc13fe; /* Morado neón para los títulos */
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid #1c1e33;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Encabezados de Fila (Números laterales) */
+QHeaderView::section:vertical {
+    background-color: #050610;
+    color: #444; /* Números discretos */
+    padding-left: 5px;
+    padding-right: 5px;
+    border: none;
+    border-right: 1px solid #1c1e33;
+}
+
+/* Efecto Hover al pasar el mouse por las celdas */
+QTableWidget::item:hover {
+    background-color: #0d0f26;
+}
+
+/* Estilizar las Barras de Desplazamiento (Scrollbars) */
+QScrollBar:vertical {
+    border: none;
+    background: #050610;
+    width: 8px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #1c1e33;
+    min-height: 20px;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #bc13fe; /* Se ilumina al tocarlo */
+}</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_11">
+         <property name="geometry">
+          <rect>
+           <x>19</x>
+           <y>879</y>
+           <width>661</width>
+           <height>101</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_11">
+          <item>
+           <widget class="QPushButton" name="push_Exportar">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: rgba(188, 19, 254, 0.1);
+    color: #bc13fe;
+    border: 2px solid #bc13fe;
+    border-radius: 10px;
+    font-weight: bold;
+    font-family: 'Segoe UI';
+    font-size: 14px;
+    padding: 10px 20px;
+    text-transform: uppercase;
+}
+
+QPushButton:hover {
+    background-color: #bc13fe;
+    color: #ffffff;
+    /* Efecto de resplandor */
+    border: 2px solid #e0aaff;
+}
+
+QPushButton:pressed {
+    background-color: #7b09a8;
+    border: 2px solid #7b09a8;
+    padding-left: 22px;
+    padding-top: 12px;
+}
+
+QPushButton:disabled {
+    border: 2px solid #444;
+    color: #444;
+    background-color: transparent;
+}</string>
+            </property>
+            <property name="text">
+             <string>Exportar</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </widget>
        <widget class="QWidget" name="page_14">

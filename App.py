@@ -13,6 +13,9 @@ from Ingenieria import VentanaIngenieria
 from Gestion import VentanaGestion # Importamos la lógica que haremos ahora
 from Rendimiento import RendimientoMercado
 from Innovacionytecnologia import InnovacionWidget
+import sqlite3
+import datetime
+
 
 
 class VentanaInicio(QDialog):
@@ -51,6 +54,10 @@ class VentanaInicio(QDialog):
             self.ui.toolRendimiento.clicked.connect(self.Abrir_rendimiento)
 
             self.ui.toolInnovacion.clicked.connect(self.abrir_innovacion)
+
+            #self.respaldo_automatico_inicio()
+            #self.reset_sistema_versiones() activar cuando se necesita reiniciar la base de datos
+
 
                 
 
@@ -98,6 +105,81 @@ class VentanaInicio(QDialog):
             
         except Exception as e:
             print(f"Error al intentar abrir Innovación: {e}")
+
+
+    def respaldo_automatico_inicio(self):
+        try:
+            # --- CONTROL DE SESIONES ROBUSTO ---
+            archivo_contador = os.path.join(os.path.dirname(__file__), "sesiones.txt")
+            
+            # 1. Leer o Inicializar el contador
+            if not os.path.exists(archivo_contador):
+                aperturas = 0
+            else:
+                with open(archivo_contador, "r") as f:
+                    contenido = f.read().strip()
+                    # Si el archivo está vacío, usamos 0, sino convertimos el texto
+                    aperturas = int(contenido) if contenido else 0
+            
+            aperturas += 1
+            
+            # 2. Guardar el nuevo número inmediatamente
+            with open(archivo_contador, "w") as f:
+                f.write(str(aperturas))
+                
+            print(f">>> SESIÓN DETECTADA: {aperturas}")
+
+            # 3. Lógica de Respaldo: Solo en sesiones 2, 4, 6... o múltiplos de 5
+            if aperturas % 2 != 0 and aperturas % 5 != 0:
+                print(f"Sesión {aperturas}: No se requiere respaldo aún.")
+                return
+
+            # --- INICIO DEL CÓDIGO DE RESPALDO ORIGINAL ---
+            path_actual = os.path.join(os.path.dirname(__file__), "ingenieria.db")
+            
+            if aperturas % 5 == 0:
+                path_destino = os.path.join(os.path.dirname(__file__), "archivo_maestro.db")
+                tag = "CADA_5_SESIONES"
+            else:
+                path_destino = os.path.join(os.path.dirname(__file__), "historial_versiones.db")
+                tag = "CADA_2_SESIONES"
+
+            # Conectar y realizar el respaldo
+            conn = sqlite3.connect(path_actual)
+            cursor = conn.cursor()
+            cursor.execute(f"ATTACH DATABASE '{path_destino}' AS dest")
+
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M")
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+            tablas = [f[0] for f in cursor.fetchall() if f[0] != 'sqlite_sequence']
+
+            for tabla in tablas:
+                nom_v = f"{tabla}_v_{timestamp}"
+                cursor.execute(f"CREATE TABLE IF NOT EXISTS dest.{nom_v} AS SELECT * FROM {tabla}")
+                
+                # Registrar el commit
+                cursor.execute(f"CREATE TABLE IF NOT EXISTS dest.registro_commits (id INTEGER PRIMARY KEY AUTOINCREMENT, tabla_original TEXT, nombre_version_db TEXT, fecha TEXT, comentario TEXT)")
+                cursor.execute("INSERT INTO dest.registro_commits (tabla_original, nombre_version_db, fecha, comentario) VALUES (?, ?, ?, ?)", 
+                            (tabla, nom_v, timestamp, f"Respaldo {tag}"))
+
+            conn.commit()
+            conn.close()
+            print(f"✅ Respaldo {tag} completado con éxito.")
+
+        except Exception as e:
+            print(f"Error crítico en rotación de versiones: {e}")
+
+    # Busca esta función en tu código y agrégale el (self)
+    def reset_sistema_versiones(self): # <--- Asegúrate de que tenga 'self'
+        import os
+        archivos_a_eliminar = ["sesiones.txt", "historial_versiones.db", "archivo_maestro.db"]
+        for archivo in archivos_a_eliminar:
+            if os.path.exists(archivo):
+                try:
+                    os.remove(archivo)
+                    print(f"Eliminado con éxito: {archivo}")
+                except Exception as e:
+                    print(f"No se pudo eliminar {archivo}: {e}")
 
     
 
