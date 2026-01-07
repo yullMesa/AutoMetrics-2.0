@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1922</width>
+    <width>1954</width>
     <height>1083</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
@@ -74,7 +80,7 @@ QMenu::separator {
         <string notr="true">background-color: rgb(39, 39, 39);</string>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="page">
         <property name="styleSheet">
@@ -753,57 +759,52 @@ QTableCornerButton::section {
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_5">
                <item>
-                <widget class="QTableWidget" name="tableWidget">
+                <widget class="QPushButton" name="push_elegir">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
                  <property name="styleSheet">
-                  <string notr="true">/* Cuerpo de la Tabla */
-QTableWidget {
-    background-color: #050610; /* Fondo negro profundo */
-    color: #ffffff; /* Texto blanco para los datos */
-    gridline-color: #1c1e33; /* Color de la rejilla muy sutil */
-    border: 1px solid #1c1e33;
+                  <string notr="true">QPushButton {
+    /* Fondo gris carbón traslúcido para dar profundidad sin saturar */
+    background-color: rgba(42, 43, 46, 0.6); 
+    color: #ffffff;
+    
+    /* Borde neón sutil que define la forma */
+    border: 1px solid #3d3e42;
     border-radius: 8px;
+    
     font-size: 13px;
-    selection-background-color: rgba(0, 229, 255, 0.2); /* Fondo cian traslúcido al seleccionar */
-    selection-color: #00e5ff; /* Texto cian al seleccionar */
-}
-
-/* Encabezados Horizontales (Nombres de Columnas) */
-QHeaderView::section:horizontal {
-    background-color: #0a0b1c; /* Un azul casi negro para diferenciar del cuerpo */
-    color: #00e5ff; /* Títulos en Cian Neón */
-    padding: 10px;
-    border: none;
-    border-bottom: 2px solid #00e5ff; /* Línea de luz cian bajo los títulos */
     font-weight: bold;
     text-transform: uppercase;
+    padding: 10px 20px;
 }
 
-/* Encabezados Verticales (Números de Fila) */
-QHeaderView::section:vertical {
-    background-color: #050610;
-    color: #5c5f7d; /* Gris apagado para que no distraiga de los datos */
-    padding-left: 5px;
-    padding-right: 5px;
-    border: none;
-    border-right: 1px solid #1c1e33;
+/* Efecto al pasar el mouse (Hover) */
+QPushButton:hover {
+    /* El fondo se aclara un poco y el borde se enciende */
+    background-color: rgba(60, 61, 65, 0.8);
+    border: 1px solid #00e5ff; 
+    color: #00e5ff;
 }
 
-/* Estilo de las celdas individuales */
-QTableWidget::item {
-    padding: 5px;
-    border-bottom: 1px solid #0a0b1c;
+/* Efecto al presionar (Pressed) */
+QPushButton:pressed {
+    background-color: #0a0b1c; /* Se hunde visualmente volviéndose oscuro */
+    border: 1px solid #ffaa00; /* Naranja para indicar ejecución */
+    color: #ffaa00;
 }
 
-/* Efecto al pasar el mouse sobre una fila */
-QTableWidget::item:hover {
-    background-color: rgba(0, 229, 255, 0.05);
-}
-
-/* Esquina superior izquierda donde se juntan los headers */
-QTableCornerButton::section {
-    background-color: #0a0b1c;
-    border: none;
+/* Estilo para el botón principal de la etapa (Prominente) */
+QPushButton#btn_ejecutar {
+    background-color: rgba(0, 229, 255, 0.1); /* Tinte cian muy suave */
+    border: 1px solid #00e5ff;
 }</string>
+                 </property>
+                 <property name="text">
+                  <string>Elegir</string>
                  </property>
                 </widget>
                </item>
@@ -1254,6 +1255,399 @@ QScrollBar::handle:vertical {
           <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
         </widget>
+        <widget class="QWidget" name="verticalLayoutWidget_9">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>180</y>
+           <width>501</width>
+           <height>591</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_9">
+          <item>
+           <widget class="QFrame" name="frame_8">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_7">
+         <property name="geometry">
+          <rect>
+           <x>520</x>
+           <y>330</y>
+           <width>1181</width>
+           <height>441</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="QTableWidget" name="tabla_tablas">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo general de la Tabla */
+QTableWidget {
+    background-color: #050610;        /* Fondo ultra oscuro */
+    alternate-background-color: #0a0b1a; /* Filas alternas un poco más claras */
+    gridline-color: #1c1e33;          /* Color de las líneas de la rejilla */
+    color: #ffffff;                    /* Color de la letra */
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 10px;
+    border: 1px solid #1c1e33;
+    selection-background-color: rgba(0, 229, 255, 0.2); /* Fondo de celda seleccionada */
+    selection-color: #00e5ff;          /* Texto de celda seleccionada */
+}
+
+/* Estilo de los Encabezados (Header) */
+QHeaderView::section {
+    background-color: #0f1124;
+    color: #00e5ff;                    /* Texto Cian Neón */
+    padding: 5px;
+    border: 1px solid #1c1e33;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Esquina superior izquierda donde se juntan los encabezados */
+QTableCornerButton::section {
+    background-color: #0f1124;
+    border: 1px solid #1c1e33;
+}
+
+/* Estilo de la Barra de Desplazamiento (Scrollbar) */
+QScrollBar:vertical {
+    border: none;
+    background: #050610;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #1c1e33;
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #00e5ff;              /* El scroll brilla al pasar el mouse */
+}</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="gridLayoutWidget_2">
+         <property name="geometry">
+          <rect>
+           <x>529</x>
+           <y>180</y>
+           <width>1171</width>
+           <height>141</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="2">
+           <widget class="QLCDNumber" name="lcdNumber_3">
+            <property name="styleSheet">
+             <string notr="true">QLCDNumber {
+    background-color: rgba(15, 0, 20, 0.5);
+    border: 2px solid #bc13fe; /* Violeta eléctrico */
+    color: #bc13fe;
+    border-radius: 5px;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLCDNumber" name="lcdNumber">
+            <property name="styleSheet">
+             <string notr="true">QLCDNumber {
+    background-color: rgba(10, 10, 20, 0.5); /* Fondo semitransparente oscuro */
+    border: 2px solid #00e5ff; /* Borde cian neón */
+    border-radius: 5px;
+    color: #00e5ff; /* Color de los números */
+    padding: 5px;
+}
+
+/* Efecto cuando el valor es crítico (opcional, si usas una clase específica) */
+QLCDNumber#lcd_error_critico {
+    border: 2px solid #ff0055; /* Borde rojo neón para alertas */
+    color: #ff0055;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLCDNumber" name="lcdNumber_2">
+            <property name="styleSheet">
+             <string notr="true">/* 1. LCD TOTAL DE ERRORES - Rojo Alerta */
+QLCDNumber {
+    background-color: rgba(20, 0, 0, 0.5);
+    border: 2px solid #ff0055; /* Rojo neón */
+    color: #ff0055;
+    border-radius: 5px;
+}
+
+/* 2. LCD TABLA MÁS INESTABLE - Naranja Precaución */
+QLCDNumber {
+    background-color: rgba(20, 10, 0, 0.5);
+    border: 2px solid #ffaa00; /* Naranja neón */
+    color: #ffaa00;
+    border-radius: 5px;
+}
+
+/* 3. LCD NIVEL DE RIESGO - Amarillo/Cian informativo */
+QLCDNumber#lcd_riesgo {
+    background-color: rgba(0, 20, 20, 0.5);
+    border: 2px solid #00e5ff; /* Cian original */
+    color: #00e5ff;
+    border-radius: 5px;
+}
+
+/* Estilo para las Labels debajo de los LCDs */
+QLabel {
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-top: 5px;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label">
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+    color: #00e5ff;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: transparent;
+}
+
+/* Estilo para el título principal &quot;Reporte De Errores Criticos&quot; */
+QLabel#titulo_reporte {
+    font-size: 24px;
+    color: #ffffff;
+    border-bottom: 2px solid #00e5ff;
+    padding-bottom: 10px;
+}</string>
+            </property>
+            <property name="text">
+             <string>Total de Errores</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLabel" name="label_2">
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+    color: #00e5ff;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: transparent;
+}
+
+/* Estilo para el título principal &quot;Reporte De Errores Criticos&quot; */
+QLabel#titulo_reporte {
+    font-size: 24px;
+    color: #ffffff;
+    border-bottom: 2px solid #00e5ff;
+    padding-bottom: 10px;
+}</string>
+            </property>
+            <property name="text">
+             <string>Tabla más Inestable</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_3">
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+    color: #00e5ff;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: transparent;
+}
+
+/* Estilo para el título principal &quot;Reporte De Errores Criticos&quot; */
+QLabel#titulo_reporte {
+    font-size: 24px;
+    color: #ffffff;
+    border-bottom: 2px solid #00e5ff;
+    padding-bottom: 10px;
+}</string>
+            </property>
+            <property name="text">
+             <string>Nivel de Riesgo</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="formLayoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>789</y>
+           <width>1911</width>
+           <height>211</height>
+          </rect>
+         </property>
+         <layout class="QFormLayout" name="formLayout">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="push_actualizar">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/* Estilo base para todos los botones de la pestaña */
+QPushButton {
+    background-color: rgba(0, 229, 255, 0.05); /* Fondo casi transparente */
+    color: #00e5ff;                            /* Texto Cian */
+    border: 1px solid #00e5ff;                 /* Borde neón delgado */
+    border-radius: 4px;
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 8px 15px;
+    text-transform: uppercase;
+}
+
+/* Efecto al pasar el mouse (Hover) */
+QPushButton:hover {
+    background-color: #00e5ff;                 /* Se llena de color */
+    color: #050610;                            /* Texto se vuelve oscuro */
+    border: 1px solid #ffffff;
+}
+
+/* Efecto al presionar (Pressed) */
+QPushButton:pressed {
+    background-color: #008ba3;
+    padding-left: 10px;                        /* Efecto de hundimiento */
+}
+
+/* --- ESTILO ESPECIAL PARA EL BOTÓN DE PURGA / ELIMINAR --- */
+/* (Debes ponerle este objectName en Designer: btn_eliminar_critico) */
+QPushButton#btn_eliminar_critico {
+    color: #ff0055;                            /* Texto Rojo/Magenta */
+    border: 1px solid #ff0055;
+    background-color: rgba(255, 0, 85, 0.05);
+}
+
+QPushButton#btn_eliminar_critico:hover {
+    background-color: #ff0055;
+    color: #ffffff;
+}</string>
+            </property>
+            <property name="text">
+             <string>Actualizar</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QPlainTextEdit" name="plainTextEdit_2">
+            <property name="styleSheet">
+             <string notr="true">QPlainTextEdit {
+    background-color: #050610;        /* Fondo ultra oscuro */
+    color: #00e5ff;                   /* Texto Cian Neón */
+    font-family: 'Consolas', 'Monospace', 'Courier New'; /* Fuentes de programador */
+    font-size: 11px;
+    border: 1px solid #1c1e33;        /* Borde discreto */
+    border-radius: 5px;
+    padding: 10px;
+    selection-background-color: #00e5ff;
+    selection-color: #050610;
+}
+
+/* Estilo de la barra de desplazamiento (Scrollbar) para que no sea gris */
+QPlainTextEdit QScrollBar:vertical {
+    border: none;
+    background: #050610;
+    width: 8px;
+}
+
+QPlainTextEdit QScrollBar::handle:vertical {
+    background: #1c1e33;
+    border-radius: 4px;
+}
+
+QPlainTextEdit QScrollBar::handle:vertical:hover {
+    background: #00e5ff;
+}</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="verticalLayoutWidget_10">
+         <property name="geometry">
+          <rect>
+           <x>1709</x>
+           <y>259</y>
+           <width>231</width>
+           <height>511</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_10">
+          <item>
+           <widget class="QTextBrowser" name="textBrowser_2">
+            <property name="styleSheet">
+             <string notr="true">QTextBrowser {
+    background-color: #050610;        /* Fondo oscuro coherente */
+    color: #e0e0e0;                   /* Texto gris claro para mejor lectura de párrafos */
+    font-family: &quot;Segoe UI&quot;, &quot;Arial&quot;;
+    font-size: 11px;
+    border: 1px solid #1c1e33;
+    border-top: 3px solid #00e5ff;    /* Detalle superior cian para diferenciarlo */
+    border-radius: 4px;
+    padding: 15px;
+    line-height: 150%;                /* Espaciado entre líneas */
+}
+
+/* Estilo para los Scrollbars (para que no desentonen) */
+QTextBrowser QScrollBar:vertical {
+    border: none;
+    background: #050610;
+    width: 8px;
+}
+
+QScrollBar::handle:vertical {
+    background: #1c1e33;
+    border-radius: 4px;
+}</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </widget>
        <widget class="QWidget" name="page_13">
         <property name="styleSheet">
@@ -1396,7 +1790,7 @@ QScrollBar::handle:vertical {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1922</width>
+     <width>1954</width>
      <height>43</height>
     </rect>
    </property>
