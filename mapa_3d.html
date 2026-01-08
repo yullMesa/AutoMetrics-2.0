@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts-gl/2.0.8/echarts-gl.min.js"></script>
+    <style>
+        body, html, #main { width: 100%; height: 100%; margin: 0; background-color: #000; overflow: hidden; }
+    </style>
+</head>
+<body>
+    <div id="main"></div>
+    <script>
+        var chart = echarts.init(document.getElementById('main'));
+        chart.setOption({
+            backgroundColor: '#000',
+            globe: {
+                baseTexture: 'tierra_textura.jpg',
+                shading: 'lambert',
+                light: {
+                    main: { intensity: 1.2, shadow: true },
+                    ambient: { intensity: 0.3 }
+                },
+                viewControl: {
+                    autoRotate: true, // El globo gira para la demostración
+                    autoRotateSpeed: 3,
+                    targetCoord: [-74, 4] // Enfocado inicialmente cerca de Colombia
+                }
+            }
+        });
+
+        // Dejamos la función vacía por si Python intenta llamarla, 
+        // así evitamos errores en la consola.
+        window.renderizarPuntos = function(datos) {
+            console.log("Modo visualización activa: Puntos omitidos para limpieza visual.");
+        };
+    </script>
+</body>
+</html>

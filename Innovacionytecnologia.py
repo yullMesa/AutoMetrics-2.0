@@ -6,15 +6,24 @@ from PySide6.QtCore import QFile
 from PySide6.QtWidgets import (QTreeWidgetItem,QTableWidgetItem, 
                                QAbstractItemView,QHeaderView,QVBoxLayout,QMessageBox,QFileDialog)
 from PySide6.QtGui import QColor,QFont
+
 import sqlite3
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 from PySide6.QtGui import QPixmap
-from PySide6.QtCore import QFile, Qt
+from PySide6.QtCore import QFile, Qt,QUrl
 import Exportar
 import pandas as pd
 from datetime import datetime
+from PySide6.QtWebEngineWidgets import QWebEngineView
+from PySide6.QtCore import QUrl
+import json
+from PySide6 import QtGui, QtCore
+from PySide6.QtWidgets import QSizePolicy
+from PySide6 import QtWidgets
+import numpy as np
+
 
 
 
@@ -78,9 +87,66 @@ class InnovacionWidget(QMainWindow):
             # Dentro de tu __init__
             self.ui.treeWidget_2.itemClicked.connect(self.visualizar_datos_seleccionados)
             self.ui.push_Exportar.clicked.connect(self.exportar_a_excel)
+
+            #Cargar Datos Globo Terraquio
+            self.inicializar_globo()
+            html_path = os.path.abspath("mapa_3d.html")
+            self.browser.load(QUrl.fromLocalFile(html_path))
             
+            #Metricas De Rendimiento
+            self.ui.comboBox_3.currentTextChanged.connect(self.filtrar_sedes_por_pais)
+            self.cargar_datos_combos()
+            # 1. Obtener la ruta absoluta del archivo HTML
+            ruta_html = os.path.abspath("graficas_metricas.html")
             
+            # 2. Cargar el archivo en el componente correcto
+            self.ui.webEngineView_2.setUrl(QUrl.fromLocalFile(ruta_html))
             
+            # 3. Conectar el botón (asegúrate de que el nombre coincida)
+            self.ui.push_grafica.clicked.connect(self.graficar_seleccion)
+            self.ui.webEngineView.setMinimumSize(QtCore.QSize(0, 0)) # Quita mínimos que estorben
+            self.ui.webEngineView.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+
+            # 3. Refrescar la geometría
+            self.ui.webEngineView.updateGeometry()
+
+            #logs
+            self.cargar_logs_a_tabla()
+            # En tu __init__, justo antes o después de cargar los logs
+            self.ui.tableWidget_logs.setStyleSheet("""
+                QTableWidget {
+                    background-color: #121212;
+                    color: white; /* Fuerza texto blanco a nivel CSS */
+                    gridline-color: #333333;
+                    font-size: 12px;
+                }
+                QTableWidget::item {
+                    color: white; 
+                    padding: 5px;
+                }
+            """)
+
+        if self.ui.frame_2.layout() is None:
+            layout_grafico = QVBoxLayout(self.ui.frame_2)
+            self.ui.frame_2.setLayout(layout_grafico)
+
+       
+
+        if self.ui.frame_3.layout() is None:
+            self.ui.frame_3.setLayout(QVBoxLayout())
+
+        self.actualizar_todo_el_dashboard()
+
+        # En el __init__ o al cargar la pestaña de métricas
+    def actualizar_todo_el_dashboard(self):
+        self.graficar_resumen_tablas()    # frame_2: Volumen
+        self.graficar_proporcion_logs()   # frame_3: Salud (Pie)
+        self.graficar_actividad_temporal() # frame_4: Tiempo (Línea)
+        self.graficar_kpis_ingenieria()
+        self.graficar_carga_modulos()
+        self.graficar_dispersion_carga()
+
+       
 
     #pasar paginas
     def conectar_menu(self):
@@ -1012,4 +1078,538 @@ class InnovacionWidget(QMainWindow):
         except Exception as e:
             self.ui.plainTextEdit_2.appendPlainText(f"❌ ERROR CRÍTICO: {str(e)}")
 
+
+    #--------------------------------Globo Terraquio----------------------------------------------
+
+
+    def inicializar_globo(self):
+        try:
+            self.browser = self.ui.webEngineView 
+
+            settings = self.browser.settings()
+            settings.setAttribute(settings.WebAttribute.LocalContentCanAccessFileUrls, True)
+            settings.setAttribute(settings.WebAttribute.JavascriptEnabled, True)
+
+            # 1. Obtener la ruta de la carpeta actual
+            ruta_base = os.path.dirname(os.path.abspath(__file__))
+            html_path = os.path.join(ruta_base, "mapa_3d.html")
+            
+            # 2. CARGA ESPECIAL: Le enviamos la carpeta como 'baseUrl'
+            # Esto permite que el HTML encuentre 'tierra_textura.jpg'
+            url_local = QUrl.fromLocalFile(html_path)
+            with open(html_path, 'r', encoding='utf-8') as f:
+                html_contenido = f.read()
+                self.browser.setHtml(html_contenido, baseUrl=QUrl.fromLocalFile(ruta_base + "/"))
+
+        except Exception as e:
+            print(f"Error: {e}")
+
+    def actualizar_puntos_globo(self):
+        """Consulta la DB y envía los puntos al globo"""
+        import sqlite3
+        conn = sqlite3.connect("Regiones.db")
+        cursor = conn.cursor()
+        # Obtenemos nombre, lat, lng y un valor de costo de Ingenieria.db
+        cursor.execute("SELECT nombre, lat, lng, costo FROM vista_global_mapa")
+        datos = cursor.fetchall()
+        
+        # Convertimos a formato que entienda JavaScript
+        js_data = str(datos)
+        self.browser.page().runJavaScript(f"renderizarPuntos({js_data})")
+
+    
+    #Datos Metricas
+
+
+    def obtener_datos_para_graficar(self):
+        pais = self.ui.comboBox_3.currentText()
+        empresa = self.ui.comboBox_4.currentText()
+        
+        conn = sqlite3.connect("ingenieria.db")
+        cursor = conn.cursor()
+        
+        # 1. Gráfica General: Promedio de eficiencia de todos (para comparar)
+        cursor.execute("SELECT pais, eficiencia_porcentaje FROM sedes_autometrics LIMIT 10")
+        datos_todos = cursor.fetchall()
+        
+        # 2. Gráfica Específica: El registro exacto seleccionado
+        cursor.execute("SELECT eficiencia_porcentaje, meses_como_estrella FROM sedes_autometrics WHERE pais = ? AND empresa = ?", (pais, empresa))
+        datos_uno = cursor.fetchone()
+        conn.close()
+
+        if datos_uno:
+            # Enviamos ambos paquetes de datos al WebView
+            # datos_todos (Lista) y datos_uno (Tupla)
+            self.enviar_a_webview(datos_todos, datos_uno, pais)
+
+
+    def enviar_a_webview(self, globales, usuario, nombre_pais):
+        # Convertimos los datos a formato JSON para que JavaScript los entienda
+        js_globales = json.dumps(globales)
+        js_usuario = json.dumps(usuario)
+        
+        # Ejecutamos la función dentro del HTML
+        script = f"actualizarGraficas({js_globales}, {js_usuario}, '{nombre_pais}');"
+        self.ui.webEngineView.page().runJavaScript(script)
+
+        
+    def configurar_filtros(self):
+        conn = sqlite3.connect("ingenieria.db")
+        cursor = conn.cursor()
+
+        # Obtener Países Únicos (para comboBox_3)
+        cursor.execute("SELECT DISTINCT pais FROM sedes_autometrics ORDER BY pais ASC")
+        paises = [fila[0] for fila in cursor.fetchall()]
+        self.ui.comboBox_3.clear()
+        self.ui.comboBox_3.addItems(paises)
+
+        # Obtener Empresas Únicas (para comboBox_4)
+        cursor.execute("SELECT DISTINCT empresa FROM sedes_autometrics ORDER BY empresa ASC")
+        empresas = [fila[0] for fila in cursor.fetchall()]
+        self.ui.comboBox_4.clear()
+        self.ui.comboBox_4.addItems(empresas)
+
+        conn.close()
+
+
+    def cargar_datos_combos(self):
+        try:
+            # Conexión a la base de datos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+
+            # 1. Obtener Países Únicos para comboBox_3
+            cursor.execute("SELECT DISTINCT pais FROM sedes_autometrics ORDER BY pais ASC")
+            paises = [fila[0] for fila in cursor.fetchall()]
+            
+            self.ui.comboBox_3.clear() # Limpia datos viejos
+            self.ui.comboBox_3.addItems(paises) # Agrega la lista completa
+
+            # 2. Obtener Empresas Únicas para comboBox_4
+            cursor.execute("SELECT DISTINCT empresa FROM sedes_autometrics ORDER BY empresa ASC")
+            empresas = [fila[0] for fila in cursor.fetchall()]
+            
+            self.ui.comboBox_4.clear()
+            self.ui.comboBox_4.addItems(empresas)
+
+            conn.close()
+            print("ComboBox cargados exitosamente")
+            
+        except sqlite3.Error as e:
+            print(f"Error al conectar con la base de datos: {e}")
+
+    
+    def filtrar_sedes_por_pais(self):
+        pais_seleccionado = self.ui.comboBox_3.currentText()
+        
+        conn = sqlite3.connect("ingenieria.db")
+        cursor = conn.cursor()
+        
+        # Buscamos solo las empresas que pertenecen al país seleccionado
+        cursor.execute("SELECT empresa FROM sedes_autometrics WHERE pais = ?", (pais_seleccionado,))
+        empresas = [fila[0] for fila in cursor.fetchall()]
+        conn.close()
+        
+        # Actualizamos el comboBox_4 con las sedes restringidas
+        self.ui.comboBox_4.clear()
+        self.ui.comboBox_4.addItems(empresas)
+
+
+    def graficar_seleccion(self):
+        # 1. Inicializar variables para evitar el UnboundLocalError
+        datos_especificos = None 
+        datos_globales = []
+        
+        pais = self.ui.comboBox_3.currentText()
+        empresa = self.ui.comboBox_4.currentText()
+        
+        if not pais or not empresa:
+            return
+
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Obtener Globales
+            cursor.execute("SELECT pais, eficiencia_porcentaje FROM sedes_autometrics ORDER BY eficiencia_porcentaje DESC LIMIT 10")
+            datos_globales = cursor.fetchall()
+            
+            # Obtener Específicos
+            cursor.execute("""
+            SELECT eficiencia_porcentaje, meses_como_estrella, tiempo_respuesta_ms 
+            FROM sedes_autometrics 
+            WHERE pais = ? AND empresa = ?
+            """, (pais, empresa))
+            datos_especificos = cursor.fetchone()
+            conn.close()
+        except Exception as e:
+            print(f"Error de base de datos: {e}")
+
+        # Ahora sí, el check es seguro
+        if datos_especificos:
+            js_globales = json.dumps(datos_globales)
+            js_especificos = json.dumps(list(datos_especificos))
+            tiempo_ms = datos_especificos[2] 
+    
+            # Actualizamos el label en la interfaz de Qt
+            # Usamos f-string para que se vea limpio: "95 ms"
+            self.ui.label_10.setText(f"{tiempo_ms} ms")
+            
+            # Asegúrate de usar comillas simples para el string de empresa
+            script = f"actualizarGraficas({js_globales}, {js_especificos}, '{empresa}');"
+            self.ui.webEngineView_2.page().runJavaScript(script)
+        else:
+            print("No se encontraron datos para la combinación seleccionada.")
       
+
+    #logs
+    #def registrar_log(self, evento, modulo="SYSTEM"):
+        #try:
+            #ahora = datetime.now()
+            #fecha = ahora.strftime("%Y-%m-%d")
+            #hora = ahora.strftime("%H:%M:%S")
+            
+            #conn = sqlite3.connect("ingenieria.db")
+            #cursor = conn.cursor()
+            #cursor.execute("""
+                #INSERT INTO logs_actividad (fecha, hora, evento, modulo) 
+                #VALUES (?, ?, ?, ?)
+            #""", (fecha, hora, evento, modulo))
+            #conn.commit()
+            #conn.close()
+            
+            # Opcional: Refrescar la tabla de la interfaz cada vez que se registra uno
+            #self.cargar_logs_a_tabla() 
+        #except Exception as e:
+            #print(f"Error al guardar log: {e}") 
+            #activar cuando la app sea funcional en su totalidad
+
+
+    def cargar_logs_a_tabla(self):
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("SELECT fecha, hora, evento, modulo FROM logs_actividad ORDER BY id DESC LIMIT 50")
+            logs = cursor.fetchall()
+            conn.close()
+
+            # Reset total
+            self.ui.tableWidget_logs.setRowCount(0)
+            self.ui.tableWidget_logs.setColumnCount(4) # Aseguramos que tenga 4 columnas
+            self.ui.tableWidget_logs.verticalHeader().setVisible(False)
+            
+            # Forzamos los encabezados para que la tabla "despierte"
+            self.ui.tableWidget_logs.setHorizontalHeaderLabels(["FECHA", "HORA", "EVENTO", "MÓDULO"])
+
+            for row_number, row_data in enumerate(logs):
+                self.ui.tableWidget_logs.insertRow(row_number)
+                for column_number, data in enumerate(row_data):
+                    texto = str(data) if data else ""
+                    item = QTableWidgetItem(texto)
+                    
+                    # Forzar visibilidad total
+                    item.setForeground(QtGui.QBrush(QtGui.QColor(255, 255, 255))) # Uso de Brush para más fuerza
+                    
+                    if column_number == 3:
+                        if texto == "SUCCESS":
+                            item.setForeground(QtGui.QBrush(QtGui.QColor("#00ffcc")))
+                        elif texto == "ERROR":
+                            item.setForeground(QtGui.QBrush(QtGui.QColor("#ff4d4d")))
+                    
+                    self.ui.tableWidget_logs.setItem(row_number, column_number, item)
+            
+            # Ajuste de tamaño garantizado
+            header = self.ui.tableWidget_logs.horizontalHeader()
+            header.setSectionResizeMode(QHeaderView.Stretch)
+            
+            self.ui.tableWidget_logs.viewport().update()
+            print(f"DEBUG: {self.ui.tableWidget_logs.rowCount()} filas insertadas físicamente.")
+
+        except Exception as e:
+            print(f"Error crítico: {e}")
+
+
+    def graficar_resumen_tablas(self):
+        try:
+            # 1. Obtener datos de las tablas
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            tablas_a_medir = ['inventario_critico', 'transporte', 'materiales', 'logs_actividad']
+            conteos = []
+            
+            for tabla in tablas_a_medir:
+                cursor.execute(f"SELECT COUNT(*) FROM {tabla}")
+                conteos.append(cursor.fetchone()[0])
+            conn.close()
+
+            # 2. Configurar el gráfico de Matplotlib
+            fig, ax = plt.subplots(figsize=(5, 3), dpi=100)
+            fig.patch.set_facecolor('#121212') # Fondo oscuro como tu interfaz
+            ax.set_facecolor('#1e1e1e')
+            
+            # Crear barras
+            colores = ['#00ffcc', '#ff4d4d', '#3399ff', '#ffcc00']
+            bars = ax.bar(tablas_a_medir, conteos, color=colores)
+            
+            # Estética de etiquetas
+            ax.tick_params(axis='x', colors='white', labelsize=8)
+            ax.tick_params(axis='y', colors='white')
+            ax.set_title("Registros por Categoría Crítica", color='white', fontsize=10)
+            
+            # 3. Insertar el gráfico en el frame_2
+            # Limpiamos el frame por si ya tiene algo
+            for i in reversed(range(self.ui.frame_2.layout().count())): 
+                self.ui.frame_2.layout().itemAt(i).widget().setParent(None)
+                
+            canvas = FigureCanvas(fig)
+            self.ui.frame_2.layout().addWidget(canvas)
+            canvas.draw()
+            
+        except Exception as e:
+            print(f"Error al graficar: {e}")
+
+    def graficar_proporcion_logs(self):
+        try:
+            # 1. Obtener conteo de SUCCESS y ERROR
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            cursor.execute("SELECT modulo, COUNT(*) FROM logs_actividad GROUP BY modulo")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                print("No hay datos en logs para graficar el frame_3")
+                return
+
+            etiquetas = [row[0] for row in datos]
+            valores = [row[1] for row in datos]
+
+            # 2. Configurar el gráfico de Matplotlib
+            fig, ax = plt.subplots(figsize=(4, 4), dpi=100)
+            fig.patch.set_facecolor('#121212') # Fondo oscuro uniforme
+            
+            # Colores temáticos: Cian para Success, Rojo para Error
+            colores_map = {'SUCCESS': '#00ffcc', 'ERROR': '#ff4d4d'}
+            colores = [colores_map.get(etiqueta, '#3399ff') for etiqueta in etiquetas]
+            
+            ax.pie(valores, labels=etiquetas, autopct='%1.1f%%', 
+                colors=colores, textprops={'color':"w"}, startangle=90)
+            ax.set_title("Estado de Operaciones", color='white', fontsize=10)
+
+            # 3. Insertar en frame_3 con limpieza previa
+            if self.ui.frame_3.layout() is None:
+                self.ui.frame_3.setLayout(QVBoxLayout())
+                
+            # Limpiar el frame antes de redibujar
+            for i in reversed(range(self.ui.frame_3.layout().count())): 
+                self.ui.frame_3.layout().itemAt(i).widget().setParent(None)
+                
+            canvas = FigureCanvas(fig)
+            self.ui.frame_3.layout().addWidget(canvas)
+            canvas.draw()
+            
+        except Exception as e:
+            print(f"Error al graficar frame_3: {e}")
+
+    def graficar_actividad_temporal(self):
+        try:
+            # 1. Obtener conteo de logs agrupados por hora
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Esta consulta agrupa por la columna 'hora' (tomando solo los primeros 2 dígitos: la hora)
+            cursor.execute("SELECT substr(hora, 1, 2) as h, COUNT(*) FROM logs_actividad GROUP BY h ORDER BY h")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                # Si no hay datos, mostramos un gráfico vacío con estilo
+                horas = ["00", "06", "12", "18"]
+                conteos = [0, 0, 0, 0]
+            else:
+                horas = [row[0] + ":00" for row in datos]
+                conteos = [row[1] for row in datos]
+
+            # 2. Configurar el gráfico de Línea
+            fig, ax = plt.subplots(figsize=(5, 3), dpi=100)
+            fig.patch.set_facecolor('#121212') 
+            ax.set_facecolor('#1e1e1e')
+            
+            # Dibujar línea neón
+            ax.plot(horas, conteos, color='#3399ff', marker='o', linewidth=2, markersize=6, markerfacecolor='#00ffcc')
+            ax.fill_between(horas, conteos, color='#3399ff', alpha=0.2) # Sombreado bajo la línea
+            
+            # Estética
+            ax.tick_params(axis='x', colors='white', labelsize=7)
+            ax.tick_params(axis='y', colors='white')
+            ax.set_title("Flujo de Operaciones por Hora", color='white', fontsize=10)
+            ax.grid(True, color='#333333', linestyle='--', alpha=0.5)
+
+            # 3. Insertar en frame_4
+            if self.ui.frame_4.layout() is None:
+                self.ui.frame_4.setLayout(QVBoxLayout())
+                
+            for i in reversed(range(self.ui.frame_4.layout().count())): 
+                self.ui.frame_4.layout().itemAt(i).widget().setParent(None)
+                
+            canvas = FigureCanvas(fig)
+            self.ui.frame_4.layout().addWidget(canvas)
+            canvas.draw()
+            
+        except Exception as e:
+            print(f"Error al graficar frame_4: {e}")
+
+
+    def graficar_kpis_ingenieria(self):
+        try:
+            # 1. Datos de ejemplo basados en tus tablas
+            categorias = ['Calidad', 'Inventario', 'Logística', 'Materiales', 'Seguridad']
+            # Aquí podrías contar registros de cada tabla específica
+            valores = [85, 90, 70, 95, 80] # Estos valores pueden venir de un SELECT COUNT
+            
+            # El gráfico de radar necesita cerrar el círculo (repetir el primer valor)
+            valores += valores[:1]
+            angulos = np.linspace(0, 2 * np.pi, len(categorias), endpoint=False).tolist()
+            angulos += angulos[:1]
+
+            # 2. Configurar el gráfico
+            fig, ax = plt.subplots(figsize=(5, 5), subplot_kw=dict(polar=True), dpi=100)
+            fig.patch.set_facecolor('#121212') 
+            ax.set_facecolor('#1e1e1e')
+            
+            # Dibujar el área del radar
+            ax.fill(angulos, valores, color='#00ffcc', alpha=0.25)
+            ax.plot(angulos, valores, color='#00ffcc', linewidth=2) # Color cian neón
+
+            # Ajustar etiquetas y rejilla
+            ax.set_xticks(angulos[:-1])
+            ax.set_xticklabels(categorias, color='white', size=9)
+            ax.set_yticklabels([]) # Ocultar números internos para limpieza
+            ax.spines['polar'].set_color('#333333')
+            ax.grid(color='#333333')
+
+            # 3. Insertar en el widget llamado 'frame'
+            if self.ui.frame.layout() is None:
+                self.ui.frame.setLayout(QVBoxLayout())
+                
+            for i in reversed(range(self.ui.frame.layout().count())): 
+                self.ui.frame.layout().itemAt(i).widget().setParent(None)
+                
+            canvas = FigureCanvas(fig)
+            self.ui.frame.layout().addWidget(canvas)
+            canvas.draw()
+            
+        except Exception as e:
+            print(f"Error al graficar el frame principal: {e}")
+
+    def graficar_carga_modulos(self):
+        try:
+            # 1. Consultar los 5 módulos con más actividad
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Agrupamos por la columna 'modulo' de tu tabla de logs
+            cursor.execute("SELECT modulo, COUNT(*) as total FROM logs_actividad GROUP BY modulo ORDER BY total DESC LIMIT 5")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                modulos = ["Módulo A", "Módulo B", "Módulo C"]
+                conteos = [0, 0, 0]
+            else:
+                modulos = [row[0] for row in datos]
+                conteos = [row[1] for row in datos]
+
+            # 2. Configurar el gráfico Matplotlib
+            fig, ax = plt.subplots(figsize=(5, 3), dpi=100)
+            fig.patch.set_facecolor('#121212') 
+            ax.set_facecolor('#1e1e1e')
+            
+            # Crear barras horizontales con un degradado visual
+            y_pos = np.arange(len(modulos))
+            ax.barh(y_pos, conteos, align='center', color='#3399ff', edgecolor='#00ffcc', alpha=0.8)
+            
+            # Estética de los ejes
+            ax.set_yticks(y_pos)
+            ax.set_yticklabels(modulos, color='white', fontsize=8)
+            ax.invert_yaxis()  # El módulo con más registros arriba
+            ax.tick_params(axis='x', colors='white')
+            ax.set_title("Top Módulos Activos", color='white', fontsize=10)
+            
+            # Eliminar bordes innecesarios para un look moderno
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.spines['left'].set_color('#444444')
+            ax.spines['bottom'].set_color('#444444')
+
+            # 3. Insertar en el frame_5
+            if self.ui.frame_5.layout() is None:
+                self.ui.frame_5.setLayout(QVBoxLayout())
+                
+            for i in reversed(range(self.ui.frame_5.layout().count())): 
+                self.ui.frame_5.layout().itemAt(i).widget().setParent(None)
+                
+            canvas = FigureCanvas(fig)
+            self.ui.frame_5.layout().addWidget(canvas)
+            canvas.draw()
+            
+        except Exception as e:
+            print(f"Error al graficar frame_5: {e}")
+
+    def graficar_dispersion_carga(self):
+        try:
+            # 1. Consultar datos de tiempo y volumen
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Obtenemos la hora y contamos cuántos eventos ocurrieron exactamente en ese minuto
+            cursor.execute("SELECT substr(hora, 1, 5) as minuto, COUNT(*) FROM logs_actividad GROUP BY minuto")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                minutos = [1, 2, 3, 4, 5]
+                frecuencia = [0, 0, 0, 0, 0]
+            else:
+                # Convertimos los minutos a un formato numérico para el eje X
+                minutos = range(len(datos))
+                frecuencia = [row[1] for row in datos]
+
+            # 2. Configurar el gráfico Matplotlib
+            fig, ax = plt.subplots(figsize=(5, 3), dpi=100)
+            fig.patch.set_facecolor('#121212') 
+            ax.set_facecolor('#1e1e1e')
+            
+            # Crear efecto de dispersión con "glow" (brillo)
+            scatter = ax.scatter(minutos, frecuencia, c=frecuencia, cmap='winter', 
+                            s=100, alpha=0.6, edgecolors='white', linewidth=0.5)
+            
+            # Estética de los ejes
+            ax.tick_params(axis='x', colors='white', labelsize=7)
+            ax.tick_params(axis='y', colors='white')
+            ax.set_title("Densidad de Eventos en Tiempo Real", color='white', fontsize=10)
+            ax.set_xlabel("Puntos de Tiempo", color='#888888', fontsize=8)
+            ax.set_ylabel("Volumen", color='#888888', fontsize=8)
+            
+            # Añadir una línea de tendencia suave
+            if len(frecuencia) > 1:
+                z = np.polyfit(minutos, frecuencia, 1)
+                p = np.poly1d(z)
+                ax.plot(minutos, p(minutos), color="#ff4d4d", linestyle="--", alpha=0.4)
+
+            # 3. Insertar en el frame_6
+            if self.ui.frame_6.layout() is None:
+                self.ui.frame_6.setLayout(QVBoxLayout())
+                
+            for i in reversed(range(self.ui.frame_6.layout().count())): 
+                self.ui.frame_6.layout().itemAt(i).widget().setParent(None)
+                
+            canvas = FigureCanvas(fig)
+            self.ui.frame_6.layout().addWidget(canvas)
+            canvas.draw()
+            
+        except Exception as e:
+            print(f"Error al graficar frame_6: {e}")
+            

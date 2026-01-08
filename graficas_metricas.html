@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <style>
+        body { background-color: #1e1e2d; margin: 0; padding: 10px; color: white; font-family: sans-serif; }
+        .container { display: flex; gap: 20px; width: 100%; height: 400px; }
+        .chart { flex: 1; height: 100%; background: #161621; border-radius: 10px; border: 1px solid #33ffff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="main_global" class="chart"></div>
+        <div id="main_sede" class="chart"></div>
+    </div>
+
+    <script>
+    var myChart1 = echarts.init(document.getElementById('main_global'));
+    var myChart2 = echarts.init(document.getElementById('main_sede'));
+
+    // DEBE EMPEZAR CON window. PARA QUE PYTHON LA ENCUENTRE
+    // Dentro de tu <script> en el HTML
+    window.actualizarGraficas = function(globales, usuario, nombre_pais) {
+        console.log("Datos recibidos correctamente");
+        // ... aquí va tu código de ECharts para myChart.setOption ...
+
+        
+        // Opción para la gráfica global (Barras)
+        myChart1.setOption({
+            xAxis: { type: 'category', data: globales.map(d => d[0]) },
+            yAxis: { type: 'value' },
+            series: [{ data: globales.map(d => d[1]), type: 'bar' }]
+        });
+
+        // Opción para la gráfica específica
+        myChart2.setOption({
+            series: [{
+                type: 'gauge',
+                data: [{ value: usuario[0], name: 'Eficiencia' }]
+            }]
+        });
+    };
+</script>
+</body>
+</html>

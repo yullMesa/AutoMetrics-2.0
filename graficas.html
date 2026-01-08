@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    <style>body { background-color: #121212; margin: 0; }</style>
+</head>
+<body>
+    <div id="grafico_container" style="width: 100%; height: 500px;"></div>
+    <script>
+        var myChart = echarts.init(document.getElementById('grafico_container'));
+
+        // ESTA ES LA FUNCIÓN QUE PYTHON BUSCA
+        window.actualizarGraficas = function(globales, usuario, nombre_pais) {
+            console.log("Datos recibidos:", globales, usuario);
+            
+            var option = {
+                backgroundColor: '#121212',
+                title: { text: 'Comparativa: ' + nombre_pais, textStyle: {color: '#00ffff'} },
+                tooltip: {},
+                xAxis: { data: globales.map(d => d[0]), axisLabel: {color: '#fff'} },
+                yAxis: { axisLabel: {color: '#fff'} },
+                series: [{
+                    name: 'Eficiencia Global',
+                    type: 'bar',
+                    data: globales.map(d => d[1]),
+                    itemStyle: { color: '#33ffff' }
+                }]
+            };
+            myChart.setOption(option);
+        };
+    </script>
+</body>
+</html>

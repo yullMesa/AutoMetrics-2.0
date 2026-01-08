@@ -34,6 +34,8 @@ class VentanaInicio(QDialog):
         # Importante: No pasamos 'self' como segundo argumento aquí para manejarlo manualmente
         self.ui = loader.load(ui_file)
         ui_file.close()
+        
+        os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--enable-gpu-rasterization --ignore-gpu-blocklist --disable-web-security"
 
         if self.ui:
             # 3. CREAR UN LAYOUT para que la interfaz no salga en blanco
@@ -180,6 +182,7 @@ class VentanaInicio(QDialog):
                     print(f"Eliminado con éxito: {archivo}")
                 except Exception as e:
                     print(f"No se pudo eliminar {archivo}: {e}")
+
 
     
 

@@ -80,7 +80,7 @@ QMenu::separator {
         <string notr="true">background-color: rgb(39, 39, 39);</string>
        </property>
        <property name="currentIndex">
-        <number>3</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="page">
         <property name="styleSheet">
@@ -1998,6 +1998,33 @@ QPushButton:disabled {
           <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
         </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_12">
+         <property name="geometry">
+          <rect>
+           <x>19</x>
+           <y>139</y>
+           <width>1921</width>
+           <height>861</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_12">
+          <item>
+           <widget class="QWebEngineView" name="webEngineView">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="url">
+             <url>
+              <string>about:blank</string>
+             </url>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </widget>
        <widget class="QWidget" name="page_15">
         <widget class="QLabel" name="titulo_etapa_5">
@@ -2030,6 +2057,387 @@ QPushButton:disabled {
           <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
         </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_13">
+         <property name="geometry">
+          <rect>
+           <x>129</x>
+           <y>120</y>
+           <width>1761</width>
+           <height>80</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_13">
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+    color: #33ffff; /* Cian Neón */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 11pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: transparent;
+}</string>
+            </property>
+            <property name="text">
+             <string>Eficiencia Global</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+    color: #33ffff; /* Cian Neón */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 11pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: transparent;
+}</string>
+            </property>
+            <property name="text">
+             <string>Sede </string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+    color: #33ffff; /* Cian Neón */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 11pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: transparent;
+}</string>
+            </property>
+            <property name="text">
+             <string>Tiempo</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_14">
+         <property name="geometry">
+          <rect>
+           <x>130</x>
+           <y>210</y>
+           <width>1761</width>
+           <height>80</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_14">
+          <item>
+           <widget class="QComboBox" name="comboBox_3">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/* Estilo de la caja principal */
+QComboBox {
+    border: 2px solid #3d3d4d;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #1e1e2d;
+    color: #ffffff;
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 10pt;
+    min-width: 6em;
+}
+
+/* Cuando pasas el mouse o está enfocado */
+QComboBox:hover, QComboBox:focus {
+    border: 2px solid #33ffff; /* Brillo cian */
+}
+
+/* Estilo del botón de la flecha */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 25px;
+    border-left-width: 1px;
+    border-left-color: #3d3d4d;
+    border-left-style: solid;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+/* Personalización de la flecha (puedes usar un carácter o una imagen) */
+QComboBox::down-arrow {
+    image: none; /* Quitamos la imagen por defecto */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid #33ffff; /* Triángulo cian */
+    margin-right: 10px;
+}
+
+/* Estilo del menú desplegable (La lista) */
+QAbstractItemView {
+    background-color: #1e1e2d;
+    color: #ffffff;
+    selection-background-color: #33ffff;
+    selection-color: #000000;
+    border: 1px solid #33ffff;
+    outline: none;
+}</string>
+            </property>
+            <property name="placeholderText">
+             <string>País</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="comboBox_4">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/* Estilo de la caja principal */
+QComboBox {
+    border: 2px solid #3d3d4d;
+    border-radius: 5px;
+    padding: 5px;
+    background-color: #1e1e2d;
+    color: #ffffff;
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 10pt;
+    min-width: 6em;
+}
+
+/* Cuando pasas el mouse o está enfocado */
+QComboBox:hover, QComboBox:focus {
+    border: 2px solid #33ffff; /* Brillo cian */
+}
+
+/* Estilo del botón de la flecha */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 25px;
+    border-left-width: 1px;
+    border-left-color: #3d3d4d;
+    border-left-style: solid;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+/* Personalización de la flecha (puedes usar un carácter o una imagen) */
+QComboBox::down-arrow {
+    image: none; /* Quitamos la imagen por defecto */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid #33ffff; /* Triángulo cian */
+    margin-right: 10px;
+}
+
+/* Estilo del menú desplegable (La lista) */
+QAbstractItemView {
+    background-color: #1e1e2d;
+    color: #ffffff;
+    selection-background-color: #33ffff;
+    selection-color: #000000;
+    border: 1px solid #33ffff;
+    outline: none;
+}</string>
+            </property>
+            <property name="placeholderText">
+             <string>Empresa</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_10">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+    color: #a0a0b2; /* Gris plateado para que parezca un dato secundario */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 10pt;
+    font-style: italic; /* Le da un toque de historial/registro */
+    background-color: rgba(51, 255, 255, 0.05); /* Fondo cian casi invisible */
+    border-left: 3px solid #33ffff; /* Pequeña barra neón lateral para resaltar */
+    padding-left: 8px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_7">
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+    color: #ffffff; /* Blanco puro para contraste */
+    font-family: &quot;Segoe UI Semibold&quot;, sans-serif;
+    font-size: 24pt;
+    font-weight: bold;
+    background: transparent;
+}</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+    color: #ffffff; /* Blanco puro para contraste */
+    font-family: &quot;Segoe UI Semibold&quot;, sans-serif;
+    font-size: 24pt;
+    font-weight: bold;
+    background: transparent;
+}</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_9">
+            <property name="styleSheet">
+             <string notr="true">QLabel {
+    color: #ffffff; /* Blanco puro para contraste */
+    font-family: &quot;Segoe UI Semibold&quot;, sans-serif;
+    font-size: 24pt;
+    font-weight: bold;
+    background: transparent;
+}</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_15">
+         <property name="geometry">
+          <rect>
+           <x>129</x>
+           <y>319</y>
+           <width>1761</width>
+           <height>581</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_15">
+          <item>
+           <widget class="QWebEngineView" name="webEngineView_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="url">
+             <url>
+              <string>about:blank</string>
+             </url>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_16">
+         <property name="geometry">
+          <rect>
+           <x>789</x>
+           <y>910</y>
+           <width>461</width>
+           <height>91</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_16">
+          <item>
+           <widget class="QPushButton" name="push_grafica">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/* Estado Normal */
+QPushButton {
+    background-color: #1e1e2d; /* Fondo oscuro coherente con los frames */
+    color: #33ffff; /* Texto Cian Neón */
+    border: 2px solid #33ffff;
+    border-radius: 8px;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 11pt;
+    font-weight: bold;
+    padding: 10px 20px;
+    text-transform: uppercase;
+}
+
+/* Cuando pasas el mouse (Hover) */
+QPushButton:hover {
+    background-color: #33ffff; /* Se llena de color cian */
+    color: #000000; /* Texto cambia a negro para legibilidad */
+    border: 2px solid #ffffff;
+}
+
+/* Cuando lo presionas (Pressed) */
+QPushButton:pressed {
+    background-color: #29cccc; /* Cian un poco más oscuro */
+    padding-top: 12px; /* Efecto de hundimiento */
+    padding-bottom: 8px;
+}
+
+/* Si el botón está desactivado */
+QPushButton:disabled {
+    background-color: #2d2d3d;
+    color: #555566;
+    border: 2px solid #444455;
+}</string>
+            </property>
+            <property name="text">
+             <string>Graficar</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </widget>
        <widget class="QWidget" name="page_16">
         <widget class="QLabel" name="titulo_etapa_6">
@@ -2061,6 +2469,73 @@ QPushButton:disabled {
          <property name="alignment">
           <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_17">
+         <property name="geometry">
+          <rect>
+           <x>19</x>
+           <y>129</y>
+           <width>1921</width>
+           <height>861</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_17">
+          <item>
+           <widget class="QTableWidget" name="tableWidget_logs">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo general de la tabla */
+QTableWidget {
+    background-color: #121212;      /* Fondo ultra oscuro */
+    color: #ffffff;                 /* Texto blanco */
+    gridline-color: #33ffff;        /* Líneas de la rejilla color cian neón */
+    border: 2px solid #33ffff;      /* Borde exterior cian */
+    border-radius: 8px;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 12px;
+}
+
+/* Estilo de los encabezados (Headers) */
+QHeaderView::section {
+    background-color: #1e1e2d;      /* Fondo un poco más claro para el encabezado */
+    color: #00ffff;                 /* Texto cian */
+    padding: 6px;
+    border: 1px solid #33ffff;      /* Bordes de las celdas del encabezado */
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Estilo de los elementos seleccionados */
+QTableWidget::item:selected {
+    background-color: #33ffff;      /* Fondo cian cuando se selecciona */
+    color: #000000;                 /* Texto negro para contraste */
+}
+
+/* Efecto Hover (al pasar el mouse) */
+QTableWidget::item:hover {
+    background-color: #2a2a3a;      /* Fondo gris azulado suave */
+}
+
+/* Personalización de la Barra de Desplazamiento (Scrollbar) */
+QScrollBar:vertical {
+    border: none;
+    background: #121212;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #33ffff;            /* El &quot;agarre&quot; de la barra es cian */
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    background: none;
+}</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </widget>
       </widget>
@@ -2176,6 +2651,13 @@ QPushButton:disabled {
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QWebEngineView</class>
+   <extends>QWidget</extends>
+   <header location="global">QtWebEngineWidgets/QWebEngineView</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
