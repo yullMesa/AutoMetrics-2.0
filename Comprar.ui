@@ -13,18 +13,812 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <property name="styleSheet">
+   <string notr="true">/* Estilo de la barra principal */
+QMenuBar {
+    background-color: #121212;
+    color: #ffffff;
+    padding: 10px 5px; /* Más espacio vertical para que respire */
+    font-size: 16px;    /* Letras más grandes y legibles */
+    font-weight: bold;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    border-bottom: 2px solid #333333;
+}
+
+/* Estilo de cada pestaña (Tienda, Dashboard, etc.) */
+QMenuBar::item {
+    background-color: transparent;
+    padding: 12px 30px; /* Aumentamos el espacio horizontal (30px) */
+    margin: 0px 5px;    /* Separación entre pestañas */
+    border-radius: 6px;
+    min-width: 120px;   /* Forzamos a que ocupen más ancho de base */
+    text-align: center;
+}
+
+/* Efecto Hover (Pasar el mouse) */
+QMenuBar::item:selected {
+    background-color: #1e1e1e;
+    color: #00ffcc;     /* Tu color cian neón característico */
+    border-bottom: 2px solid #00ffcc; /* Subrayado neón */
+}
+
+/* Menú desplegable (Dropdown) */
+QMenu {
+    background-color: #1e1e1e;
+    color: white;
+    font-size: 15px;    /* Submenús un poco más grandes también */
+    border: 1px solid #00ffcc;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+/* Items dentro del menú desplegable */
+QMenu::item {
+    padding: 10px 40px 10px 30px; /* Mucho espacio horizontal en submenús */
+    border-radius: 4px;
+    margin-bottom: 2px;
+}
+
+/* Selección en submenús */
+QMenu::item:selected {
+    background-color: #00ffcc;
+    color: #121212;
+}
+
+/* Separador más visible */
+QMenu::separator {
+    height: 2px;
+    background: #333333;
+    margin: 8px 10px;
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>-1</x>
+      <y>-1</y>
+      <width>1961</width>
+      <height>1111</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QStackedWidget" name="stackedWidget">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="currentIndex">
+        <number>1</number>
+       </property>
+       <widget class="QWidget" name="page">
+        <widget class="QWidget" name="gridLayoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>19</y>
+           <width>1941</width>
+           <height>1071</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="1" column="0">
+           <widget class="QFrame" name="frame_2">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QFrame" name="frame">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QFrame" name="frame_3">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QFrame" name="frame_4">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QFrame" name="frame_5">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QFrame" name="frame_6">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_2">
+        <widget class="QWidget" name="horizontalLayoutWidget_2">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>10</y>
+           <width>1951</width>
+           <height>1131</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QScrollArea" name="scrollArea_Catalogo">
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOn</enum>
+            </property>
+            <property name="sizeAdjustPolicy">
+             <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContentsOnFirstShow</enum>
+            </property>
+            <property name="widgetResizable">
+             <bool>false</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>1933</width>
+               <height>2000</height>
+              </rect>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="sizeIncrement">
+              <size>
+               <width>0</width>
+               <height>8</height>
+              </size>
+             </property>
+             <widget class="QWidget" name="gridLayoutWidget_2">
+              <property name="geometry">
+               <rect>
+                <x>9</x>
+                <y>9</y>
+                <width>1921</width>
+                <height>1081</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_2">
+               <item row="0" column="3">
+                <widget class="QToolButton" name="toolButton_4">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QToolButton {
+    background-color: #1a1a1a;
+    color: white;
+    border: 2px solid #333333;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px;
+}
+
+QToolButton:hover {
+    border: 2px solid #00ffcc; /* Brillo neón al seleccionarlo */
+    background-color: #252525;
+}
+
+/* Estilo para el icono (la foto del auto) */
+QToolButton::menu-indicator { image: none; } /* Quita la flechita si existe */</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="toolButtonStyle">
+                  <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+                 </property>
+                 <property name="autoRaise">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QToolButton" name="toolButton_3">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QToolButton {
+    background-color: #1a1a1a;
+    color: white;
+    border: 2px solid #333333;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px;
+}
+
+QToolButton:hover {
+    border: 2px solid #00ffcc; /* Brillo neón al seleccionarlo */
+    background-color: #252525;
+}
+
+/* Estilo para el icono (la foto del auto) */
+QToolButton::menu-indicator { image: none; } /* Quita la flechita si existe */</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="toolButtonStyle">
+                  <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+                 </property>
+                 <property name="autoRaise">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QToolButton" name="btn_maestro">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QToolButton {
+    background-color: #1a1a1a;
+    color: white;
+    border: 2px solid #333333;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px;
+}
+
+QToolButton:hover {
+    border: 2px solid #00ffcc; /* Brillo neón al seleccionarlo */
+    background-color: #252525;
+}
+
+/* Estilo para el icono (la foto del auto) */
+QToolButton::menu-indicator { image: none; } /* Quita la flechita si existe */</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="toolButtonStyle">
+                  <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+                 </property>
+                 <property name="autoRaise">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QToolButton" name="toolButton_2">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QToolButton {
+    background-color: #1a1a1a;
+    color: white;
+    border: 2px solid #333333;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px;
+}
+
+QToolButton:hover {
+    border: 2px solid #00ffcc; /* Brillo neón al seleccionarlo */
+    background-color: #252525;
+}
+
+/* Estilo para el icono (la foto del auto) */
+QToolButton::menu-indicator { image: none; } /* Quita la flechita si existe */</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="toolButtonStyle">
+                  <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+                 </property>
+                 <property name="autoRaise">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QToolButton" name="toolButton_5">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QToolButton {
+    background-color: #1a1a1a;
+    color: white;
+    border: 2px solid #333333;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px;
+}
+
+QToolButton:hover {
+    border: 2px solid #00ffcc; /* Brillo neón al seleccionarlo */
+    background-color: #252525;
+}
+
+/* Estilo para el icono (la foto del auto) */
+QToolButton::menu-indicator { image: none; } /* Quita la flechita si existe */</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="toolButtonStyle">
+                  <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+                 </property>
+                 <property name="autoRaise">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QToolButton" name="toolButton_6">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QToolButton {
+    background-color: #1a1a1a;
+    color: white;
+    border: 2px solid #333333;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px;
+}
+
+QToolButton:hover {
+    border: 2px solid #00ffcc; /* Brillo neón al seleccionarlo */
+    background-color: #252525;
+}
+
+/* Estilo para el icono (la foto del auto) */
+QToolButton::menu-indicator { image: none; } /* Quita la flechita si existe */</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="toolButtonStyle">
+                  <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+                 </property>
+                 <property name="autoRaise">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QToolButton" name="toolButton_7">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QToolButton {
+    background-color: #1a1a1a;
+    color: white;
+    border: 2px solid #333333;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px;
+}
+
+QToolButton:hover {
+    border: 2px solid #00ffcc; /* Brillo neón al seleccionarlo */
+    background-color: #252525;
+}
+
+/* Estilo para el icono (la foto del auto) */
+QToolButton::menu-indicator { image: none; } /* Quita la flechita si existe */</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="toolButtonStyle">
+                  <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+                 </property>
+                 <property name="autoRaise">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="3">
+                <widget class="QToolButton" name="toolButton_8">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QToolButton {
+    background-color: #1a1a1a;
+    color: white;
+    border: 2px solid #333333;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 10px;
+}
+
+QToolButton:hover {
+    border: 2px solid #00ffcc; /* Brillo neón al seleccionarlo */
+    background-color: #252525;
+}
+
+/* Estilo para el icono (la foto del auto) */
+QToolButton::menu-indicator { image: none; } /* Quita la flechita si existe */</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="toolButtonStyle">
+                  <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+                 </property>
+                 <property name="autoRaise">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_3">
+        <widget class="QLabel" name="label">
+         <property name="geometry">
+          <rect>
+           <x>770</x>
+           <y>85</y>
+           <width>481</width>
+           <height>91</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    color: #00ffcc;             /* Color cian neón */
+    font-size: 36px;
+    font-weight: bold;
+    font-family: 'Impact', sans-serif; /* O una fuente robusta */
+    text-transform: uppercase;  /* Todo en mayúsculas */
+    background: transparent;
+    /* Sombra que simula el resplandor neón */
+    qproperty-alignment: 'AlignLeft | AlignVCenter';
+}</string>
+         </property>
+         <property name="text">
+          <string>financiamiento</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_4">
+        <widget class="QLabel" name="label_2">
+         <property name="geometry">
+          <rect>
+           <x>780</x>
+           <y>40</y>
+           <width>481</width>
+           <height>91</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    color: #00ffcc;             /* Color cian neón */
+    font-size: 36px;
+    font-weight: bold;
+    font-family: 'Impact', sans-serif; /* O una fuente robusta */
+    text-transform: uppercase;  /* Todo en mayúsculas */
+    background: transparent;
+    /* Sombra que simula el resplandor neón */
+    qproperty-alignment: 'AlignLeft | AlignVCenter';
+}</string>
+         </property>
+         <property name="text">
+          <string>test drive</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_5">
+        <widget class="QLabel" name="label_3">
+         <property name="geometry">
+          <rect>
+           <x>720</x>
+           <y>50</y>
+           <width>481</width>
+           <height>91</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    color: #00ffcc;             /* Color cian neón */
+    font-size: 36px;
+    font-weight: bold;
+    font-family: 'Impact', sans-serif; /* O una fuente robusta */
+    text-transform: uppercase;  /* Todo en mayúsculas */
+    background: transparent;
+    /* Sombra que simula el resplandor neón */
+    qproperty-alignment: 'AlignLeft | AlignVCenter';
+}</string>
+         </property>
+         <property name="text">
+          <string>Certificados</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_6">
+        <widget class="QLabel" name="label_4">
+         <property name="geometry">
+          <rect>
+           <x>670</x>
+           <y>30</y>
+           <width>481</width>
+           <height>91</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    color: #00ffcc;             /* Color cian neón */
+    font-size: 36px;
+    font-weight: bold;
+    font-family: 'Impact', sans-serif; /* O una fuente robusta */
+    text-transform: uppercase;  /* Todo en mayúsculas */
+    background: transparent;
+    /* Sombra que simula el resplandor neón */
+    qproperty-alignment: 'AlignLeft | AlignVCenter';
+}</string>
+         </property>
+         <property name="text">
+          <string>Estado</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_7">
+        <widget class="QLabel" name="label_5">
+         <property name="geometry">
+          <rect>
+           <x>690</x>
+           <y>10</y>
+           <width>481</width>
+           <height>91</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    color: #00ffcc;             /* Color cian neón */
+    font-size: 36px;
+    font-weight: bold;
+    font-family: 'Impact', sans-serif; /* O una fuente robusta */
+    text-transform: uppercase;  /* Todo en mayúsculas */
+    background: transparent;
+    /* Sombra que simula el resplandor neón */
+    qproperty-alignment: 'AlignLeft | AlignVCenter';
+}</string>
+         </property>
+         <property name="text">
+          <string>comparador</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_8">
+        <widget class="QLabel" name="label_6">
+         <property name="geometry">
+          <rect>
+           <x>690</x>
+           <y>20</y>
+           <width>481</width>
+           <height>91</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    color: #00ffcc;             /* Color cian neón */
+    font-size: 36px;
+    font-weight: bold;
+    font-family: 'Impact', sans-serif; /* O una fuente robusta */
+    text-transform: uppercase;  /* Todo en mayúsculas */
+    background: transparent;
+    /* Sombra que simula el resplandor neón */
+    qproperty-alignment: 'AlignLeft | AlignVCenter';
+}</string>
+         </property>
+         <property name="text">
+          <string>venta</string>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>1956</width>
-     <height>33</height>
+     <height>66</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menudASHBOARD">
+    <property name="title">
+     <string>DASHBOARD</string>
+    </property>
+    <addaction name="actionGRAFICA"/>
+   </widget>
+   <widget class="QMenu" name="menuCatalogo">
+    <property name="title">
+     <string>Catálogo</string>
+    </property>
+    <addaction name="actionCarros"/>
+   </widget>
+   <widget class="QMenu" name="menuFinanciamiento">
+    <property name="title">
+     <string>Financiamiento</string>
+    </property>
+    <addaction name="actionBanco"/>
+   </widget>
+   <widget class="QMenu" name="menuTest">
+    <property name="title">
+     <string>Test Drive</string>
+    </property>
+    <addaction name="actionPetici_n"/>
+   </widget>
+   <widget class="QMenu" name="menuCertificados">
+    <property name="title">
+     <string>Certificados AutoMetrics</string>
+    </property>
+    <addaction name="actionSoat"/>
+   </widget>
+   <widget class="QMenu" name="menuEstado">
+    <property name="title">
+     <string>Estado del Vehículo</string>
+    </property>
+    <addaction name="actionInformaci_n"/>
+   </widget>
+   <widget class="QMenu" name="menuComparador">
+    <property name="title">
+     <string>Comparador Visual</string>
+    </property>
+    <addaction name="actionVS"/>
+   </widget>
+   <widget class="QMenu" name="menuVENTA">
+    <property name="title">
+     <string>VENTA</string>
+    </property>
+    <addaction name="actionComprar"/>
+   </widget>
+   <widget class="QMenu" name="menuVOLVER">
+    <property name="title">
+     <string>VOLVER</string>
+    </property>
+    <addaction name="actionInicio"/>
+   </widget>
+   <addaction name="menudASHBOARD"/>
+   <addaction name="menuCatalogo"/>
+   <addaction name="menuFinanciamiento"/>
+   <addaction name="menuTest"/>
+   <addaction name="menuCertificados"/>
+   <addaction name="menuEstado"/>
+   <addaction name="menuComparador"/>
+   <addaction name="menuVENTA"/>
+   <addaction name="menuVOLVER"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionGRAFICA">
+   <property name="text">
+    <string>GRAFICA</string>
+   </property>
+  </action>
+  <action name="actionCarros">
+   <property name="text">
+    <string>Carros</string>
+   </property>
+  </action>
+  <action name="actionBanco">
+   <property name="text">
+    <string>Banco</string>
+   </property>
+  </action>
+  <action name="actionPetici_n">
+   <property name="text">
+    <string>Petición</string>
+   </property>
+  </action>
+  <action name="actionSoat">
+   <property name="text">
+    <string>Soat</string>
+   </property>
+  </action>
+  <action name="actionInformaci_n">
+   <property name="text">
+    <string>Información</string>
+   </property>
+  </action>
+  <action name="actionVS">
+   <property name="text">
+    <string>VS</string>
+   </property>
+  </action>
+  <action name="actionComprar">
+   <property name="text">
+    <string>Comprar</string>
+   </property>
+  </action>
+  <action name="actionInicio">
+   <property name="text">
+    <string>Inicio</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
