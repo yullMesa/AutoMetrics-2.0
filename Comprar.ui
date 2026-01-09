@@ -91,8 +91,11 @@ QMenu::separator {
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(39, 39, 39);</string>
+       </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="page">
         <widget class="QWidget" name="gridLayoutWidget">
@@ -196,7 +199,7 @@ QMenu::separator {
                <x>0</x>
                <y>0</y>
                <width>1933</width>
-               <height>2000</height>
+               <height>6000</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -217,10 +220,10 @@ QMenu::separator {
                 <x>9</x>
                 <y>9</y>
                 <width>1921</width>
-                <height>1081</height>
+                <height>1991</height>
                </rect>
               </property>
-              <layout class="QGridLayout" name="gridLayout_2">
+              <layout class="QGridLayout" name="gridLayout_carros">
                <item row="0" column="3">
                 <widget class="QToolButton" name="toolButton_4">
                  <property name="sizePolicy">
@@ -304,6 +307,12 @@ QToolButton::menu-indicator { image: none; } /* Quita la flechita si existe */</
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
+                 </property>
+                 <property name="font">
+                  <font>
+                   <pointsize>-1</pointsize>
+                   <bold>true</bold>
+                  </font>
                  </property>
                  <property name="styleSheet">
                   <string notr="true">QToolButton {
@@ -537,27 +546,1380 @@ QToolButton::menu-indicator { image: none; } /* Quita la flechita si existe */</
         <widget class="QLabel" name="label">
          <property name="geometry">
           <rect>
-           <x>770</x>
-           <y>85</y>
-           <width>481</width>
+           <x>680</x>
+           <y>0</y>
+           <width>531</width>
            <height>91</height>
           </rect>
          </property>
          <property name="styleSheet">
           <string notr="true">QLabel {
-    color: #00ffcc;             /* Color cian neón */
-    font-size: 36px;
+    color: #00ffcc; /* Cian neón */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 48px;
     font-weight: bold;
-    font-family: 'Impact', sans-serif; /* O una fuente robusta */
-    text-transform: uppercase;  /* Todo en mayúsculas */
-    background: transparent;
-    /* Sombra que simula el resplandor neón */
-    qproperty-alignment: 'AlignLeft | AlignVCenter';
+    letter-spacing: 5px; /* Espaciado moderno entre letras */
+    text-transform: uppercase;
+    padding: 10px;
+    
+    /* Borde inferior para dar estructura */
+    border-bottom: 3px solid #00ffcc;
+    
+    /* Efecto de sombra para que &quot;flote&quot; */
+    qproperty-alignment: 'AlignCenter';
 }</string>
          </property>
          <property name="text">
           <string>financiamiento</string>
          </property>
+        </widget>
+        <widget class="QWidget" name="verticalLayoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>119</y>
+           <width>1941</width>
+           <height>961</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QScrollArea" name="scrollArea">
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOn</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="widgetResizable">
+             <bool>false</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents_2">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>1935</width>
+               <height>2000</height>
+              </rect>
+             </property>
+             <widget class="QWidget" name="gridLayoutWidget_3">
+              <property name="geometry">
+               <rect>
+                <x>9</x>
+                <y>9</y>
+                <width>1901</width>
+                <height>1441</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_2">
+               <property name="verticalSpacing">
+                <number>20</number>
+               </property>
+               <item row="5" column="3">
+                <widget class="Line" name="line_19">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(255, 255, 255);</string>
+                 </property>
+                 <property name="lineWidth">
+                  <number>15</number>
+                 </property>
+                 <property name="midLineWidth">
+                  <number>15</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="Line" name="line_56">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>10</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(0, 0, 0);
+background-color: rgb(0, 255, 204);</string>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <property name="lineWidth">
+                  <number>30</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="2">
+                <widget class="QLineEdit" name="lineEdit_4">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: #1E1E1E; /* Fondo gris muy oscuro, casi negro */
+    border: 1px solid #3A3A3A; /* Borde sutil para definir el área */
+    border-radius: 5px;
+    color: #FFFFFF; /* Texto blanco puro para lectura clara */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 15px;
+    padding: 8px 12px;
+    selection-background-color: #1A5276; /* Color azul ejecutivo al seleccionar texto */
+}
+
+/* EFECTO CUANDO EL USUARIO HACE CLIC (FOCUS) */
+QLineEdit:focus {
+    border: 1px solid #1A5276; /* Borde azul cobalto (el que elegimos para seriedad) */
+    background-color: #252525; /* Se aclara ligeramente el fondo */
+}
+
+/* ESTILO CUANDO EL CAMPO ESTÁ DESACTIVADO (READ ONLY) */
+QLineEdit:disabled {
+    background-color: #121212;
+    color: #555555;
+    border: 1px solid #222222;
+}
+
+/* PLACEHOLDER (Texto de sugerencia) */
+QLineEdit::placeholder {
+    color: #666666;
+    font-style: italic;
+}</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QComboBox" name="combo_Macar">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QComboBox {
+    background-color: #1E1E1E;
+    border: 1px solid #3A3A3A;
+    border-radius: 5px;
+    padding: 5px;
+    padding-left: 10px;
+    color: #FFFFFF;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 15px;
+    min-width: 150px;
+}
+
+/* EFECTO FOCUS */
+QComboBox:focus {
+    border: 1px solid #1A5276;
+}
+
+/* LA FLECHA HACIA ABAJO */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left-width: 1px;
+    border-left-color: #3A3A3A;
+    border-left-style: solid;
+}
+
+QComboBox::down-arrow {
+    image: url(assets/down_arrow.png); /* Asegúrate de tener un icono o usa uno estándar */
+    width: 12px;
+    height: 12px;
+}
+
+/* LA LISTA DESPLEGABLE */
+QAbstractItemView {
+    background-color: #1E1E1E;
+    color: #FFFFFF;
+    selection-background-color: #1A5276;
+    selection-color: #FFFFFF;
+    border: 1px solid #3A3A3A;
+    outline: none;
+}</string>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Marca</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_7">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">/* Estilo para las etiquetas de las preguntas */
+QLabel {
+    color: #B0B0B0; /* Gris claro profesional */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+    padding: 5px;
+}
+
+/* Estilo para resaltar etiquetas importantes (opcional si usas una clase) */
+QLabel#pregunta_importante {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+QLabel {
+    background-color: #252525; /* Gris oscuro para contrastar con el fondo negro */
+    border: 1px solid #333333; /* Borde sutil para dar estructura */
+    border-left: 4px solid #00FFCC; /* Detalle neón lateral para conectar con tu marca */
+    border-radius: 5px;
+    color: #E0E0E0;
+    font-size: 13px;
+    padding: 10px 15px;
+    margin-bottom: 2px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Que Auto Desea Financiar?</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="2">
+                <widget class="QLineEdit" name="lineEdit_3">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: #1E1E1E; /* Fondo gris muy oscuro, casi negro */
+    border: 1px solid #3A3A3A; /* Borde sutil para definir el área */
+    border-radius: 5px;
+    color: #FFFFFF; /* Texto blanco puro para lectura clara */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 15px;
+    padding: 8px 12px;
+    selection-background-color: #1A5276; /* Color azul ejecutivo al seleccionar texto */
+}
+
+/* EFECTO CUANDO EL USUARIO HACE CLIC (FOCUS) */
+QLineEdit:focus {
+    border: 1px solid #1A5276; /* Borde azul cobalto (el que elegimos para seriedad) */
+    background-color: #252525; /* Se aclara ligeramente el fondo */
+}
+
+/* ESTILO CUANDO EL CAMPO ESTÁ DESACTIVADO (READ ONLY) */
+QLineEdit:disabled {
+    background-color: #121212;
+    color: #555555;
+    border: 1px solid #222222;
+}
+
+/* PLACEHOLDER (Texto de sugerencia) */
+QLineEdit::placeholder {
+    color: #666666;
+    font-style: italic;
+}</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="0">
+                <widget class="Line" name="line_69">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>10</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(0, 255, 204);</string>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <property name="lineWidth">
+                  <number>30</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="Line" name="line">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(255, 255, 255);</string>
+                 </property>
+                 <property name="lineWidth">
+                  <number>15</number>
+                 </property>
+                 <property name="midLineWidth">
+                  <number>15</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QLabel" name="label_14">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">/* Estilo para las etiquetas de las preguntas */
+QLabel {
+    color: #B0B0B0; /* Gris claro profesional */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+    padding: 5px;
+}
+
+/* Estilo para resaltar etiquetas importantes (opcional si usas una clase) */
+QLabel#pregunta_importante {
+    color: #FFFFFF;
+    font-weight: bold;
+}QLabel {
+    background-color: #252525; /* Gris oscuro para contrastar con el fondo negro */
+    border: 1px solid #333333; /* Borde sutil para dar estructura */
+    border-left: 4px solid #00FFCC; /* Detalle neón lateral para conectar con tu marca */
+    border-radius: 5px;
+    color: #E0E0E0;
+    font-size: 13px;
+    padding: 10px 15px;
+    margin-bottom: 2px;
+}
+</string>
+                 </property>
+                 <property name="text">
+                  <string>¿Tiene otras deudas activas actualmente?</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <widget class="QLabel" name="label_15">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">/* Estilo para las etiquetas de las preguntas */
+QLabel {
+    color: #B0B0B0; /* Gris claro profesional */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+    padding: 5px;
+}
+
+/* Estilo para resaltar etiquetas importantes (opcional si usas una clase) */
+QLabel#pregunta_importante {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+QLabel {
+    background-color: #252525; /* Gris oscuro para contrastar con el fondo negro */
+    border: 1px solid #333333; /* Borde sutil para dar estructura */
+    border-left: 4px solid #00FFCC; /* Detalle neón lateral para conectar con tu marca */
+    border-radius: 5px;
+    color: #E0E0E0;
+    font-size: 13px;
+    padding: 10px 15px;
+    margin-bottom: 2px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>¿Desea entregar su vehículo actual como parte de pago?</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="3">
+                <widget class="Line" name="line_68">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>10</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(0, 255, 204);</string>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <property name="lineWidth">
+                  <number>30</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="1">
+                <widget class="QLabel" name="label_17">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">/* Estilo para las etiquetas de las preguntas */
+QLabel {
+    color: #B0B0B0; /* Gris claro profesional */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+    padding: 5px;
+}
+
+/* Estilo para resaltar etiquetas importantes (opcional si usas una clase) */
+QLabel#pregunta_importante {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+QLabel {
+    background-color: #252525; /* Gris oscuro para contrastar con el fondo negro */
+    border: 1px solid #333333; /* Borde sutil para dar estructura */
+    border-left: 4px solid #00FFCC; /* Detalle neón lateral para conectar con tu marca */
+    border-radius: 5px;
+    color: #E0E0E0;
+    font-size: 13px;
+    padding: 10px 15px;
+    margin-bottom: 2px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>¿Tiene comprobantes de ingresos formales?</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="1">
+                <widget class="QLabel" name="label_18">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">/* Estilo para las etiquetas de las preguntas */
+QLabel {
+    color: #B0B0B0; /* Gris claro profesional */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+    padding: 5px;
+}
+
+/* Estilo para resaltar etiquetas importantes (opcional si usas una clase) */
+QLabel#pregunta_importante {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+QLabel {
+    background-color: #252525; /* Gris oscuro para contrastar con el fondo negro */
+    border: 1px solid #333333; /* Borde sutil para dar estructura */
+    border-left: 4px solid #00FFCC; /* Detalle neón lateral para conectar con tu marca */
+    border-radius: 5px;
+    color: #E0E0E0;
+    font-size: 13px;
+    padding: 10px 15px;
+    margin-bottom: 2px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>¿Cuál es su tipo de contrato laboral?</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="2">
+                <widget class="QLineEdit" name="lineEdit_8">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: #1E1E1E; /* Fondo gris muy oscuro, casi negro */
+    border: 1px solid #3A3A3A; /* Borde sutil para definir el área */
+    border-radius: 5px;
+    color: #FFFFFF; /* Texto blanco puro para lectura clara */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 15px;
+    padding: 8px 12px;
+    selection-background-color: #1A5276; /* Color azul ejecutivo al seleccionar texto */
+}
+
+/* EFECTO CUANDO EL USUARIO HACE CLIC (FOCUS) */
+QLineEdit:focus {
+    border: 1px solid #1A5276; /* Borde azul cobalto (el que elegimos para seriedad) */
+    background-color: #252525; /* Se aclara ligeramente el fondo */
+}
+
+/* ESTILO CUANDO EL CAMPO ESTÁ DESACTIVADO (READ ONLY) */
+QLineEdit:disabled {
+    background-color: #121212;
+    color: #555555;
+    border: 1px solid #222222;
+}
+
+/* PLACEHOLDER (Texto de sugerencia) */
+QLineEdit::placeholder {
+    color: #666666;
+    font-style: italic;
+}</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="3">
+                <widget class="Line" name="line_2">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(255, 255, 255);</string>
+                 </property>
+                 <property name="lineWidth">
+                  <number>15</number>
+                 </property>
+                 <property name="midLineWidth">
+                  <number>15</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="Line" name="line_13">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(255, 255, 255);</string>
+                 </property>
+                 <property name="lineWidth">
+                  <number>15</number>
+                 </property>
+                 <property name="midLineWidth">
+                  <number>15</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QComboBox" name="combo_Modelo">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QComboBox {
+    background-color: #1E1E1E;
+    border: 1px solid #3A3A3A;
+    border-radius: 5px;
+    padding: 5px;
+    padding-left: 10px;
+    color: #FFFFFF;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 15px;
+    min-width: 150px;
+}
+
+/* EFECTO FOCUS */
+QComboBox:focus {
+    border: 1px solid #1A5276;
+}
+
+/* LA FLECHA HACIA ABAJO */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left-width: 1px;
+    border-left-color: #3A3A3A;
+    border-left-style: solid;
+}
+
+QComboBox::down-arrow {
+    image: url(assets/down_arrow.png); /* Asegúrate de tener un icono o usa uno estándar */
+    width: 12px;
+    height: 12px;
+}
+
+/* LA LISTA DESPLEGABLE */
+QAbstractItemView {
+    background-color: #1E1E1E;
+    color: #FFFFFF;
+    selection-background-color: #1A5276;
+    selection-color: #FFFFFF;
+    border: 1px solid #3A3A3A;
+    outline: none;
+}</string>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Modelo</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="9" column="2">
+                <widget class="QPushButton" name="pushButton">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: #1A5276; /* Azul Ejecutivo */
+    color: white;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 10px 20px;
+    border: 1px solid #144463;
+}
+
+/* EFECTO HOVER (Al pasar el mouse) */
+QPushButton:hover {
+    background-color: #1F618D; /* Azul un poco más claro */
+    border: 1px solid #2980B9;
+}
+
+/* EFECTO PRESIONADO */
+QPushButton:pressed {
+    background-color: #154360; /* Azul más oscuro para dar profundidad */
+    padding-top: 12px; /* Efecto de hundimiento */
+    padding-bottom: 8px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Evaluar</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="Line" name="line_67">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>10</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(0, 255, 204);
+</string>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <property name="lineWidth">
+                  <number>30</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QLabel" name="label_8">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">/* Estilo para las etiquetas de las preguntas */
+QLabel {
+    color: #B0B0B0; /* Gris claro profesional */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+    padding: 5px;
+}
+
+/* Estilo para resaltar etiquetas importantes (opcional si usas una clase) */
+QLabel#pregunta_importante {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+QLabel {
+    background-color: #252525; /* Gris oscuro para contrastar con el fondo negro */
+    border: 1px solid #333333; /* Borde sutil para dar estructura */
+    border-left: 4px solid #00FFCC; /* Detalle neón lateral para conectar con tu marca */
+    border-radius: 5px;
+    color: #E0E0E0;
+    font-size: 13px;
+    padding: 10px 15px;
+    margin-bottom: 2px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>¿Cuál es su ingreso mensual neto? (Libre de impuestos).</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="2">
+                <widget class="QComboBox" name="comboBox_5">
+                 <property name="styleSheet">
+                  <string notr="true">QComboBox {
+    background-color: #1E1E1E;
+    border: 1px solid #3A3A3A;
+    border-radius: 5px;
+    padding: 5px;
+    padding-left: 10px;
+    color: #FFFFFF;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 15px;
+    min-width: 150px;
+}
+
+/* EFECTO FOCUS */
+QComboBox:focus {
+    border: 1px solid #1A5276;
+}
+
+/* LA FLECHA HACIA ABAJO */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left-width: 1px;
+    border-left-color: #3A3A3A;
+    border-left-style: solid;
+}
+
+QComboBox::down-arrow {
+    image: url(assets/down_arrow.png); /* Asegúrate de tener un icono o usa uno estándar */
+    width: 12px;
+    height: 12px;
+}
+
+/* LA LISTA DESPLEGABLE */
+QAbstractItemView {
+    background-color: #1E1E1E;
+    color: #FFFFFF;
+    selection-background-color: #1A5276;
+    selection-color: #FFFFFF;
+    border: 1px solid #3A3A3A;
+    outline: none;
+}</string>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Con Honestidad Responda</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>Excelente</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Buena</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Regular</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Mala</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="6" column="1">
+                <widget class="QLabel" name="label_16">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">/* Estilo para las etiquetas de las preguntas */
+QLabel {
+    color: #B0B0B0; /* Gris claro profesional */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+    padding: 5px;
+}
+
+/* Estilo para resaltar etiquetas importantes (opcional si usas una clase) */
+QLabel#pregunta_importante {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+QLabel {
+    background-color: #252525; /* Gris oscuro para contrastar con el fondo negro */
+    border: 1px solid #333333; /* Borde sutil para dar estructura */
+    border-left: 4px solid #00FFCC; /* Detalle neón lateral para conectar con tu marca */
+    border-radius: 5px;
+    color: #E0E0E0;
+    font-size: 13px;
+    padding: 10px 15px;
+    margin-bottom: 2px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>¿Desea entregar su vehículo actual como parte de pago?</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="3">
+                <widget class="Line" name="line_66">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>10</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(0, 0, 0);
+background-color: rgb(0, 255, 204);</string>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <property name="lineWidth">
+                  <number>30</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QLineEdit" name="lineEdit">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: #1E1E1E; /* Fondo gris muy oscuro, casi negro */
+    border: 1px solid #3A3A3A; /* Borde sutil para definir el área */
+    border-radius: 5px;
+    color: #FFFFFF; /* Texto blanco puro para lectura clara */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 15px;
+    padding: 8px 12px;
+    selection-background-color: #1A5276; /* Color azul ejecutivo al seleccionar texto */
+}
+
+/* EFECTO CUANDO EL USUARIO HACE CLIC (FOCUS) */
+QLineEdit:focus {
+    border: 1px solid #1A5276; /* Borde azul cobalto (el que elegimos para seriedad) */
+    background-color: #252525; /* Se aclara ligeramente el fondo */
+}
+
+/* ESTILO CUANDO EL CAMPO ESTÁ DESACTIVADO (READ ONLY) */
+QLineEdit:disabled {
+    background-color: #121212;
+    color: #555555;
+    border: 1px solid #222222;
+}
+
+/* PLACEHOLDER (Texto de sugerencia) */
+QLineEdit::placeholder {
+    color: #666666;
+    font-style: italic;
+}</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="3">
+                <widget class="Line" name="line_55">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(255, 255, 255);</string>
+                 </property>
+                 <property name="lineWidth">
+                  <number>15</number>
+                 </property>
+                 <property name="midLineWidth">
+                  <number>15</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <widget class="QToolButton" name="toolButton">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QToolButton {
+    background-color: transparent;
+    border: 1px solid #3A3A3A;
+    border-radius: 4px;
+    color: #E0E0E0;
+    padding: 5px;
+}
+
+QToolButton:hover {
+    background-color: #252525;
+    border: 1px solid #1A5276;
+    color: #FFFFFF;
+}
+
+/* Si el ToolButton tiene texto debajo del icono */
+QToolButton::menu-indicator {
+    image: none; /* Quita la flechita molesta de los menús */
+}</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="toolButtonStyle">
+                  <enum>Qt::ToolButtonStyle::ToolButtonIconOnly</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="2">
+                <widget class="QLineEdit" name="lineEdit_7">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: #1E1E1E; /* Fondo gris muy oscuro, casi negro */
+    border: 1px solid #3A3A3A; /* Borde sutil para definir el área */
+    border-radius: 5px;
+    color: #FFFFFF; /* Texto blanco puro para lectura clara */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 15px;
+    padding: 8px 12px;
+    selection-background-color: #1A5276; /* Color azul ejecutivo al seleccionar texto */
+}
+
+/* EFECTO CUANDO EL USUARIO HACE CLIC (FOCUS) */
+QLineEdit:focus {
+    border: 1px solid #1A5276; /* Borde azul cobalto (el que elegimos para seriedad) */
+    background-color: #252525; /* Se aclara ligeramente el fondo */
+}
+
+/* ESTILO CUANDO EL CAMPO ESTÁ DESACTIVADO (READ ONLY) */
+QLineEdit:disabled {
+    background-color: #121212;
+    color: #555555;
+    border: 1px solid #222222;
+}
+
+/* PLACEHOLDER (Texto de sugerencia) */
+QLineEdit::placeholder {
+    color: #666666;
+    font-style: italic;
+}</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="3">
+                <widget class="Line" name="line_8">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(255, 255, 255);</string>
+                 </property>
+                 <property name="lineWidth">
+                  <number>15</number>
+                 </property>
+                 <property name="midLineWidth">
+                  <number>15</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="2">
+                <widget class="QLineEdit" name="lineEdit_5">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: #1E1E1E; /* Fondo gris muy oscuro, casi negro */
+    border: 1px solid #3A3A3A; /* Borde sutil para definir el área */
+    border-radius: 5px;
+    color: #FFFFFF; /* Texto blanco puro para lectura clara */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 15px;
+    padding: 8px 12px;
+    selection-background-color: #1A5276; /* Color azul ejecutivo al seleccionar texto */
+}
+
+/* EFECTO CUANDO EL USUARIO HACE CLIC (FOCUS) */
+QLineEdit:focus {
+    border: 1px solid #1A5276; /* Borde azul cobalto (el que elegimos para seriedad) */
+    background-color: #252525; /* Se aclara ligeramente el fondo */
+}
+
+/* ESTILO CUANDO EL CAMPO ESTÁ DESACTIVADO (READ ONLY) */
+QLineEdit:disabled {
+    background-color: #121212;
+    color: #555555;
+    border: 1px solid #222222;
+}
+
+/* PLACEHOLDER (Texto de sugerencia) */
+QLineEdit::placeholder {
+    color: #666666;
+    font-style: italic;
+}</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QLabel" name="label_9">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">/* Estilo para las etiquetas de las preguntas */
+QLabel {
+    color: #B0B0B0; /* Gris claro profesional */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+    padding: 5px;
+}
+
+/* Estilo para resaltar etiquetas importantes (opcional si usas una clase) */
+QLabel#pregunta_importante {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+QLabel {
+    background-color: #252525; /* Gris oscuro para contrastar con el fondo negro */
+    border: 1px solid #333333; /* Borde sutil para dar estructura */
+    border-left: 4px solid #00FFCC; /* Detalle neón lateral para conectar con tu marca */
+    border-radius: 5px;
+    color: #E0E0E0;
+    font-size: 13px;
+    padding: 10px 15px;
+    margin-bottom: 2px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>¿Cuál es su antigüedad laboral actual?</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="0">
+                <widget class="Line" name="line_26">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(255, 255, 255);</string>
+                 </property>
+                 <property name="lineWidth">
+                  <number>15</number>
+                 </property>
+                 <property name="midLineWidth">
+                  <number>15</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QLabel" name="label_13">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">/* Estilo para las etiquetas de las preguntas */
+QLabel {
+    color: #B0B0B0; /* Gris claro profesional */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+    padding: 5px;
+}
+
+/* Estilo para resaltar etiquetas importantes (opcional si usas una clase) */
+QLabel#pregunta_importante {
+    color: #FFFFFF;
+    font-weight: bold;
+}
+QLabel {
+    background-color: #252525; /* Gris oscuro para contrastar con el fondo negro */
+    border: 1px solid #333333; /* Borde sutil para dar estructura */
+    border-left: 4px solid #00FFCC; /* Detalle neón lateral para conectar con tu marca */
+    border-radius: 5px;
+    color: #E0E0E0;
+    font-size: 13px;
+    padding: 10px 15px;
+    margin-bottom: 2px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>¿Tiene otras deudas activas actualmente?</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="Line" name="line_7">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(255, 255, 255);</string>
+                 </property>
+                 <property name="lineWidth">
+                  <number>15</number>
+                 </property>
+                 <property name="midLineWidth">
+                  <number>15</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="2">
+                <widget class="QLineEdit" name="lineEdit_6">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: #1E1E1E; /* Fondo gris muy oscuro, casi negro */
+    border: 1px solid #3A3A3A; /* Borde sutil para definir el área */
+    border-radius: 5px;
+    color: #FFFFFF; /* Texto blanco puro para lectura clara */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 15px;
+    padding: 8px 12px;
+    selection-background-color: #1A5276; /* Color azul ejecutivo al seleccionar texto */
+}
+
+/* EFECTO CUANDO EL USUARIO HACE CLIC (FOCUS) */
+QLineEdit:focus {
+    border: 1px solid #1A5276; /* Borde azul cobalto (el que elegimos para seriedad) */
+    background-color: #252525; /* Se aclara ligeramente el fondo */
+}
+
+/* ESTILO CUANDO EL CAMPO ESTÁ DESACTIVADO (READ ONLY) */
+QLineEdit:disabled {
+    background-color: #121212;
+    color: #555555;
+    border: 1px solid #222222;
+}
+
+/* PLACEHOLDER (Texto de sugerencia) */
+QLineEdit::placeholder {
+    color: #666666;
+    font-style: italic;
+}</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="3">
+                <widget class="Line" name="line_83">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>10</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(0, 255, 204);</string>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <property name="lineWidth">
+                  <number>30</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="3">
+                <widget class="Line" name="line_84">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>10</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(0, 255, 204);</string>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <property name="lineWidth">
+                  <number>30</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="0">
+                <widget class="Line" name="line_85">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>10</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(0, 255, 204);</string>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <property name="lineWidth">
+                  <number>30</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </widget>
        <widget class="QWidget" name="page_4">
