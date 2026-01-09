@@ -95,7 +95,7 @@ QMenu::separator {
         <string notr="true">background-color: rgb(39, 39, 39);</string>
        </property>
        <property name="currentIndex">
-        <number>4</number>
+        <number>5</number>
        </property>
        <widget class="QWidget" name="page">
         <widget class="QWidget" name="gridLayoutWidget">
@@ -2011,12 +2011,222 @@ QLabel#pregunta_importante {
          </property>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
-           <widget class="QComboBox" name="comboBox">
+           <widget class="QComboBox" name="combo_marca">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
               <horstretch>0</horstretch>
               <verstretch>0</verstretch>
              </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/* Estilo general del ComboBox */
+QComboBox {
+    background-color: #1e1e2e;
+    border: 2px solid #00f2ff; /* Tu azul cian característico */
+    border-radius: 8px;
+    padding: 5px 15px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    min-height: 35px;
+}
+
+/* Cuando pasas el mouse por encima */
+QComboBox:hover {
+    border: 2px solid #ffffff;
+    background-color: #2a2a3d;
+}
+
+/* Estilo del botón de la flechita */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 1px solid #00f2ff;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* Icono de la flecha (puedes usar un carácter o imagen) */
+QComboBox::down-arrow {
+    image: none; /* Quitamos la flecha fea por defecto */
+    border-top: 5px solid #00f2ff; /* Creamos una flecha minimalista con bordes */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-top: 2px;
+}
+
+/* Estilo de la lista desplegable */
+QComboBox QAbstractItemView {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    selection-background-color: #00f2ff;
+    selection-color: #000000;
+    border: 1px solid #00f2ff;
+    outline: none;
+    border-radius: 5px;
+}
+
+/* Cada item de la lista */
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+    padding-left: 10px;
+}</string>
+            </property>
+            <property name="placeholderText">
+             <string>Marca</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="combo_modelo">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/* Estilo general del ComboBox */
+QComboBox {
+    background-color: #1e1e2e;
+    border: 2px solid #00f2ff; /* Tu azul cian característico */
+    border-radius: 8px;
+    padding: 5px 15px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    min-height: 35px;
+}
+
+/* Cuando pasas el mouse por encima */
+QComboBox:hover {
+    border: 2px solid #ffffff;
+    background-color: #2a2a3d;
+}
+
+/* Estilo del botón de la flechita */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 1px solid #00f2ff;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* Icono de la flecha (puedes usar un carácter o imagen) */
+QComboBox::down-arrow {
+    image: none; /* Quitamos la flecha fea por defecto */
+    border-top: 5px solid #00f2ff; /* Creamos una flecha minimalista con bordes */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-top: 2px;
+}
+
+/* Estilo de la lista desplegable */
+QComboBox QAbstractItemView {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    selection-background-color: #00f2ff;
+    selection-color: #000000;
+    border: 1px solid #00f2ff;
+    outline: none;
+    border-radius: 5px;
+}
+
+/* Cada item de la lista */
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+    padding-left: 10px;
+}</string>
+            </property>
+            <property name="placeholderText">
+             <string>Modelo</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_5">
+         <property name="geometry">
+          <rect>
+           <x>169</x>
+           <y>269</y>
+           <width>1671</width>
+           <height>671</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLabel" name="lblVistaCertificado">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_6">
+         <property name="geometry">
+          <rect>
+           <x>809</x>
+           <y>970</y>
+           <width>461</width>
+           <height>91</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_6">
+          <item>
+           <widget class="QPushButton" name="push_certificar">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/* Estilo general del botón */
+QPushButton {
+    background-color: #1e1e2e;
+    border: 2px solid #00f2ff;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 20px;
+    min-width: 100px;
+}
+
+/* Efecto Hover (cuando pasas el mouse) */
+QPushButton:hover {
+    background-color: #00f2ff;
+    color: #000000; /* El texto cambia a negro para contrastar */
+    border: 2px solid #ffffff;
+    /* Efecto de brillo sutil */
+    outline: none;
+}
+
+/* Efecto Pressed (cuando haces clic) */
+QPushButton:pressed {
+    background-color: #008b94;
+    border: 2px solid #00f2ff;
+    padding-left: 22px; /* Efecto de hundimiento */
+    padding-top: 10px;
+}
+
+/* Estilo para cuando el botón está deshabilitado */
+QPushButton:disabled {
+    background-color: #2d2d2d;
+    border: 2px solid #555555;
+    color: #888888;
+}</string>
+            </property>
+            <property name="text">
+             <string>Certificar</string>
             </property>
            </widget>
           </item>
@@ -2027,8 +2237,8 @@ QLabel#pregunta_importante {
         <widget class="QLabel" name="label_4">
          <property name="geometry">
           <rect>
-           <x>670</x>
-           <y>30</y>
+           <x>840</x>
+           <y>10</y>
            <width>481</width>
            <height>91</height>
           </rect>

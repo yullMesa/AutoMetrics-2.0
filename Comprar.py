@@ -56,7 +56,8 @@ class Comprar(QMainWindow):
         # -------------------------------
 
         #Certificados
-
+        self.cargar_marcas_inicial()
+        self.ui.push_certificar.clicked.connect(self.certificar_vehiculo)
         
 
     def inicializar_test_drive(self):
@@ -460,6 +461,110 @@ class Comprar(QMainWindow):
 
         except ValueError:
             QMessageBox.warning(self, "Datos Inválidos", "Por favor ingresa montos numéricos en ingresos y gastos.")
+    
+
+    #certifiado
+
+    def cargar_marcas_inicial(self):
+        try:
+            conn = sqlite3.connect(r"Ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Obtenemos solo valores únicos de la columna marca
+            cursor.execute("SELECT DISTINCT marca FROM carros ORDER BY marca ASC")
+            marcas = [fila[0] for fila in cursor.fetchall()]
+            conn.close()
+
+            self.ui.combo_marca.clear()
+            self.ui.combo_marca.addItems(marcas)
+            
+            # Conectamos el evento: cuando cambie la marca, actualizamos los modelos
+            self.ui.combo_marca.currentIndexChanged.connect(self.actualizar_modelos_filtrados)
+            
+            # Ejecutamos una vez para cargar los modelos de la primera marca que aparezca
+            self.actualizar_modelos_filtrados()
+            
+        except Exception as e:
+            print(f"Error cargando marcas: {e}")
+
+    def actualizar_modelos_filtrados(self):
+        marca_seleccionada = self.ui.combo_marca.currentText()
+        
+        if not marca_seleccionada:
+            return
+
+        try:
+            # Bloqueamos señales para evitar que se disparen eventos mientras limpiamos
+            self.ui.combo_modelo.blockSignals(True)
+            self.ui.combo_modelo.clear()
+            
+            conn = sqlite3.connect(r"Ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Filtramos modelos que pertenezcan a la marca seleccionada
+            cursor.execute("SELECT modelo FROM carros WHERE marca = ? ORDER BY modelo ASC", (marca_seleccionada,))
+            modelos = [fila[0] for fila in cursor.fetchall()]
+            conn.close()
+
+            self.ui.combo_modelo.addItems(modelos)
+            self.ui.combo_modelo.blockSignals(False)
+            
+            # Opcional: Actualizar la foto y el certificado automáticamente al cambiar el modelo
+            if hasattr(self, 'actualizar_foto_financiamiento'):
+                self.actualizar_foto_financiamiento()
+                
+        except Exception as e:
+            print(f"Error filtrando modelos: {e}")
+
+
+
+
+    def certificar_vehiculo(self):
+        ruta_plantilla = r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\certificado\certificado.png"
+        pixmap = QPixmap(ruta_plantilla)
+        
+        if pixmap.isNull():
+            print("Error: No se encontró la imagen.")
+            return
+
+        painter = QPainter(pixmap)
+        painter.setRenderHint(QPainter.Antialiasing)
+        
+        # 1. Configurar la fuente (ajusté el tamaño a 30 para que quepa bien en el cuadro)
+        font = QFont("Arial", 30, QFont.Bold)
+        painter.setFont(font)
+        painter.setPen(QColor("#1a1a1a")) 
+
+        # 2. Obtener datos
+        marca = self.ui.combo_marca.currentText().upper()
+        modelo = self.ui.combo_modelo.currentText().upper()
+        texto = f"{marca} - {modelo}"
+
+        # 3. DEFINIR EL ÁREA DEL RECUADRO BLANCO
+        # Basado en tu imagen, el cuadro blanco está cerca del final (80% hacia abajo)
+        ancho_img = pixmap.width()
+        alto_img = pixmap.height()
+        
+        # Coordenadas calculadas para el cuadro blanco inferior:
+        # X: 0 (usamos todo el ancho para centrar)
+        # Y: alto_img * 0.82 (Baja el texto al 82% de la altura de la imagen)
+        # Ancho: ancho_img
+        # Alto: 100 (altura del área de escritura)
+        posicion_y = int(alto_img * 0.82) 
+        rectangulo_blanco = QRect(0, posicion_y, ancho_img, 100)
+
+        # 4. Dibujar centrado en ese rectángulo específico
+        painter.drawText(rectangulo_blanco, Qt.AlignCenter, texto)
+        
+        painter.end()
+
+        # 5. Mostrar en la UI
+        pixmap_redimensionado = pixmap.scaled(
+            self.ui.lblVistaCertificado.size(), 
+            Qt.KeepAspectRatio, 
+            Qt.SmoothTransformation
+        )
+        self.ui.lblVistaCertificado.setPixmap(pixmap_redimensionado)
 
 
 
