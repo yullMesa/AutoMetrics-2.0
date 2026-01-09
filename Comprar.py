@@ -5,14 +5,14 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile,Qt, QSize
 from PySide6.QtWidgets import (QTreeWidgetItem,QTableWidgetItem, 
                                QAbstractItemView,QHeaderView,QVBoxLayout,QMessageBox,QToolButton,
-                               QSizePolicy,QDialog,QLabel,QHBoxLayout,QPushButton,QMessageBox)
-from PySide6.QtGui import QColor,QIcon, QPixmap
+                               QSizePolicy,QDialog,QLabel,QHBoxLayout,QPushButton,QMessageBox,QWidget)
+from PySide6.QtGui import QColor,QIcon, QPixmap,QPainter
 import sqlite3
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 from PySide6.QtGui import QPixmap
-from PySide6.QtCore import QFile, Qt , QSize
+from PySide6.QtCore import QFile, Qt , QSize , QTimer , QRect
 import Exportar
 
 class Comprar(QMainWindow):
