@@ -5,14 +5,14 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile,Qt, QSize
 from PySide6.QtWidgets import (QTreeWidgetItem,QTableWidgetItem, 
                                QAbstractItemView,QHeaderView,QVBoxLayout,QMessageBox,QToolButton,
-                               QSizePolicy,QDialog,QLabel,QHBoxLayout,QPushButton)
+                               QSizePolicy,QDialog,QLabel,QHBoxLayout,QPushButton,QMessageBox)
 from PySide6.QtGui import QColor,QIcon, QPixmap
 import sqlite3
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 from PySide6.QtGui import QPixmap
-from PySide6.QtCore import QFile, Qt
+from PySide6.QtCore import QFile, Qt , QSize
 import Exportar
 
 class Comprar(QMainWindow):
@@ -43,7 +43,10 @@ class Comprar(QMainWindow):
 
 
         #Financiamiento
-        self.cargar_combos_financiamiento
+        self.cargar_combos_financiamiento()
+        self.precio_seleccionado = 0
+        self.ui.push_evaluar.clicked.connect(self.evaluar_financiamiento)
+        
             
 
     #pasar paginas
@@ -261,68 +264,174 @@ class Comprar(QMainWindow):
 
 
     #Financiacion
+
     def cargar_combos_financiamiento(self):
+        # 1. CAMBIO DE RUTA AL ARCHIVO CORRECTO
+        ruta_db = r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\Ingenieria.db"
+        
+        if not os.path.exists(ruta_db):
+            print(f"--- ERROR: No se encuentra el archivo {ruta_db} ---")
+            return
+
         try:
-            # 1. Obtener Marcas Únicas
-            # Usamos DISTINCT para no repetir marcas en el combo
-            query_marcas = "SELECT DISTINCT marca FROM carros ORDER BY marca ASC"
-            marcas = self.ejecutar_consulta(query_marcas) 
+            conn = sqlite3.connect(ruta_db)
+            cursor = conn.cursor()
             
-            if marcas:
+            # 2. CONSULTA A LA TABLA 'carros' DENTRO DE 'Ingenieria.db'
+            cursor.execute("SELECT DISTINCT marca FROM carros WHERE marca IS NOT NULL ORDER BY marca ASC")
+            datos = cursor.fetchall()
+            
+            if datos:
                 self.ui.combo_Marca.clear()
-                # Extraemos el primer elemento de cada tupla: (Marca,) -> Marca
-                lista_marcas = [str(m[0]) for m in marcas]
-                self.ui.combo_Marca.addItems(lista_marcas)
-                print(f"DEBUG: Marcas cargadas: {len(lista_marcas)}")
+                # Limpiamos los datos de la tupla
+                marcas = [str(fila[0]) for fila in datos]
+                self.ui.combo_Marca.addItems(marcas)
+                print(f"CONECTADO A Ingenieria.db: {len(marcas)} marcas cargadas.")
+            else:
+                print("Conectado a Ingenieria.db, pero la tabla 'carros' parece estar vacía.")
+
+            conn.close()
             
-            # 2. Conectar el evento para que al cambiar Marca se actualice el Modelo
-            # Importante: Desconectar antes si ya existe para no duplicar llamadas
-            try: self.ui.combo_Marca.currentIndexChanged.disconnect()
-            except: pass
-            
+            # Conectar el evento para actualizar modelos
+            # Usamos try/except para evitar conexiones duplicadas si llamas la función varias veces
+            # Conexión limpia del primer combo (Marca)
+            try:
+                self.ui.combo_Marca.currentIndexChanged.disconnect()
+            except:
+                pass
+                
             self.ui.combo_Marca.currentIndexChanged.connect(self.actualizar_modelos_financiamiento)
             
-            # Cargar modelos de la primera marca por defecto
+            # Forzar la carga inicial de modelos
             self.actualizar_modelos_financiamiento()
+            self.actualizar_foto_financiamiento()
 
-        except Exception as e:
-            print(f"ERROR al cargar combos: {e}")
+        except sqlite3.Error as e:
+            print(f"Error de SQLite: {e}")
 
     def actualizar_modelos_financiamiento(self):
         marca_seleccionada = self.ui.combo_Marca.currentText()
         if not marca_seleccionada:
             return
 
-        query_modelos = f"SELECT modelo FROM carros WHERE marca = '{marca_seleccionada}' ORDER BY modelo ASC"
-        modelos = self.ejecutar_consulta(query_modelos)
+        ruta_db = r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\Ingenieria.db"
         
-        self.ui.combo_Modelo.clear()
-        if modelos:
-            lista_modelos = [str(mo[0]) for mo in modelos]
-            self.ui.combo_Modelo.addItems(lista_modelos)
-            print(f"DEBUG: Modelos cargados para {marca_seleccionada}: {len(lista_modelos)}")
+        try:
+            conn = sqlite3.connect(ruta_db)
+            cursor = conn.cursor()
+            
+            # Filtramos por la marca seleccionada
+            cursor.execute("SELECT modelo FROM carros WHERE marca = ? ORDER BY modelo ASC", (marca_seleccionada,))
+            datos = cursor.fetchall()
+            
+            self.ui.combo_Modelo.clear()
+            if datos:
+                modelos = [str(fila[0]) for fila in datos]
+                self.ui.combo_Modelo.addItems(modelos)
+
+            
+            conn.close()
+            
+            # Una vez que hay modelo, actualizamos la foto en el ToolButton
+            self.actualizar_foto_financiamiento()
+            self.ui.combo_Modelo.currentIndexChanged.disconnect()
+            self.ui.combo_Modelo.currentIndexChanged.connect(self.actualizar_foto_financiamiento)
+            self.actualizar_foto_financiamiento()
+            
+        except sqlite3.Error as e:
+            print(f"Error al cargar modelos: {e}")
 
     #imagen 
+
     def actualizar_foto_financiamiento(self):
         modelo = self.ui.combo_Modelo.currentText()
         if not modelo:
             return
 
-        ruta_base = r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\Carros"
-        nombre_archivo = modelo.lower().strip()
-        archivo_encontrado = None
+        # 1. Obtener Precio de la DB
+        try:
+            conn = sqlite3.connect(r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\Ingenieria.db")
+            cursor = conn.cursor()
+            # Buscamos el precio del modelo seleccionado
+            cursor.execute("SELECT precio FROM carros WHERE modelo = ?", (modelo,))
+            resultado = cursor.fetchone()
+            conn.close()
+            
+            if resultado:
+                self.precio_seleccionado = float(resultado[0])
+                print(f"DEBUG: Modelo {modelo} seleccionado. Precio: ${self.precio_seleccionado}")
+            else:
+                self.precio_seleccionado = 0
+        except Exception as e:
+            print(f"Error al consultar precio: {e}")
 
-        # Buscamos el archivo (igual que en el catálogo)
-        for ext in [".png", ".jpg", ".jpeg"]:
-            ruta_posible = os.path.join(ruta_base, f"{nombre_archivo}{ext}")
-            if os.path.exists(ruta_posible):
-                archivo_encontrado = ruta_posible
-                break
+        # 2. Cargar Imagen (Tu código que ya funciona)
+        ruta_base = r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\Carros"
+        nombre_archivo = modelo.strip()
+        # ... (Aquí va tu lógica de búsqueda de archivo que ya tienes lista) ...
+        
+        archivo_encontrado = None
+        extensiones = [".png", ".jpg", ".jpeg"]
+
+        # Buscamos combinaciones (Exacto, minúsculas, etc.) para asegurar el "match"
+        intentos = [nombre_archivo, nombre_archivo.lower(), nombre_archivo.upper()]
+
+        for intento in intentos:
+            for ext in extensiones:
+                ruta_posible = os.path.join(ruta_base, f"{intento}{ext}")
+                if os.path.exists(ruta_posible):
+                    archivo_encontrado = ruta_posible
+                    break
+            if archivo_encontrado: break
 
         if archivo_encontrado:
             pixmap = QPixmap(archivo_encontrado)
-            # Ajustamos el icono al tamaño del QToolButton (aprox 300x200)
-            self.ui.toolButton_foto_carro.setIcon(QIcon(pixmap))
-            self.ui.toolButton_foto_carro.setIconSize(QSize(300, 200))
+            # IMPORTANTE: Escalar con suavizado para que el carro se vea bien
+            pixmap_escalado = pixmap.scaled(300, 200, Qt.KeepAspectRatio, Qt.SmoothTransformation)
+            self.ui.toolImagen.setIcon(QIcon(pixmap_escalado))
+            self.ui.toolImagen.setIconSize(QSize(300, 200))
+            print(f"DEBUG: Imagen cargada -> {archivo_encontrado}")
         else:
-            self.ui.toolButton_foto_carro.setIcon(QIcon("assets/no_image.png"))
+            print(f"DEBUG: No se encontró imagen para '{modelo}' en la carpeta Carros")
+            self.ui.toolImagen.setIcon(QIcon()) # Limpiar si no hay foto
+
+    #si o no
+
+    def evaluar_financiamiento(self):
+        try:
+            # 1. DEFINIR EL MODELO (Indispensable para el mensaje final)
+            modelo = self.ui.combo_Modelo.currentText()
+            
+            # 2. Extraer datos de la UI
+            ingreso = float(self.ui.lbl_ingreso.text() or 0)
+            gastos = float(self.ui.lbl_gastos.text() or 0)
+            historial = self.ui.combo_crediticio.currentText()
+            
+            # Validación de selección de vehículo
+            if not hasattr(self, 'precio_seleccionado') or self.precio_seleccionado == 0:
+                QMessageBox.warning(self, "Error", "Primero selecciona un vehículo en la imagen.")
+                return
+
+            # 3. Lógica de analista: Cuota y capacidad
+            cuota = (self.precio_seleccionado / 48) + (self.precio_seleccionado * 0.015)
+            sobrante = ingreso - gastos
+            
+            # 4. Configuración del Veredicto (QMessageBox)
+            msg = QMessageBox(self)
+            msg.setWindowTitle("Veredicto AutoMetrics")
+            
+            # Aplicamos la regla de negocio: Historial y capacidad de pago
+            if historial in ["Excelente", "Buena"] and cuota <= (sobrante * 0.35):
+                msg.setIcon(QMessageBox.Information)
+                msg.setText("✅ CRÉDITO PRE-APROBADO")
+                # Aquí ya no dará error porque 'modelo' está definido arriba
+                msg.setInformativeText(f"El cliente aplica para el {modelo}.\n\nCuota mensual: ${cuota:,.2f}")
+            else:
+                msg.setIcon(QMessageBox.Critical)
+                msg.setText("❌ CRÉDITO NO APROBADO")
+                msg.setInformativeText(f"El nivel de riesgo o capacidad de pago para el {modelo} no cumple los requisitos.")
+            
+            msg.exec() # En PySide6 es .exec()
+
+        except ValueError:
+            QMessageBox.warning(self, "Datos Inválidos", "Por favor ingresa montos numéricos en ingresos y gastos.")

@@ -598,7 +598,7 @@ QToolButton::menu-indicator { image: none; } /* Quita la flechita si existe */</
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>0</y>
+               <y>-519</y>
                <width>1935</width>
                <height>2000</height>
               </rect>
@@ -662,7 +662,7 @@ background-color: rgb(0, 255, 204);</string>
                 </widget>
                </item>
                <item row="3" column="2">
-                <widget class="QLineEdit" name="lineEdit_4">
+                <widget class="QLineEdit" name="lbl_contrato">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -703,7 +703,7 @@ QLineEdit::placeholder {
                 </widget>
                </item>
                <item row="0" column="1">
-                <widget class="QComboBox" name="combo_Macar">
+                <widget class="QComboBox" name="combo_Marca">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                    <horstretch>0</horstretch>
@@ -804,7 +804,7 @@ QLabel {
                 </widget>
                </item>
                <item row="2" column="2">
-                <widget class="QLineEdit" name="lineEdit_3">
+                <widget class="QLineEdit" name="lbl_antiguedad">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -888,50 +888,6 @@ QLineEdit::placeholder {
                  </property>
                 </widget>
                </item>
-               <item row="4" column="1">
-                <widget class="QLabel" name="label_14">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">/* Estilo para las etiquetas de las preguntas */
-QLabel {
-    color: #B0B0B0; /* Gris claro profesional */
-    font-family: &quot;Segoe UI&quot;, sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    background: transparent;
-    border: none;
-    padding: 5px;
-}
-
-/* Estilo para resaltar etiquetas importantes (opcional si usas una clase) */
-QLabel#pregunta_importante {
-    color: #FFFFFF;
-    font-weight: bold;
-}QLabel {
-    background-color: #252525; /* Gris oscuro para contrastar con el fondo negro */
-    border: 1px solid #333333; /* Borde sutil para dar estructura */
-    border-left: 4px solid #00FFCC; /* Detalle neón lateral para conectar con tu marca */
-    border-radius: 5px;
-    color: #E0E0E0;
-    font-size: 13px;
-    padding: 10px 15px;
-    margin-bottom: 2px;
-}
-</string>
-                 </property>
-                 <property name="text">
-                  <string>¿Tiene otras deudas activas actualmente?</string>
-                 </property>
-                 <property name="alignment">
-                  <set>Qt::AlignmentFlag::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
                <item row="5" column="1">
                 <widget class="QLabel" name="label_15">
                  <property name="sizePolicy">
@@ -973,28 +929,6 @@ QLabel {
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignmentFlag::AlignCenter</set>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="3">
-                <widget class="Line" name="line_68">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>10</height>
-                  </size>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">background-color: rgb(0, 255, 204);</string>
-                 </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Shadow::Raised</enum>
-                 </property>
-                 <property name="lineWidth">
-                  <number>30</number>
-                 </property>
-                 <property name="orientation">
-                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                 </widget>
                </item>
@@ -1080,7 +1014,7 @@ QLabel {
 }</string>
                  </property>
                  <property name="text">
-                  <string>¿Cuál es su tipo de contrato laboral?</string>
+                  <string>¿A cuánto ascienden sus gastos fijos mensuales (arriendo, servicios, alimentación)?</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -1088,7 +1022,7 @@ QLabel {
                 </widget>
                </item>
                <item row="8" column="2">
-                <widget class="QLineEdit" name="lineEdit_8">
+                <widget class="QLineEdit" name="lbl_gastos">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -1172,6 +1106,28 @@ QLineEdit::placeholder {
                  </property>
                 </widget>
                </item>
+               <item row="8" column="0">
+                <widget class="Line" name="line_85">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>10</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(0, 255, 204);</string>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <property name="lineWidth">
+                  <number>30</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
                <item row="0" column="2">
                 <widget class="QComboBox" name="combo_Modelo">
                  <property name="sizePolicy">
@@ -1229,8 +1185,30 @@ QAbstractItemView {
                  </property>
                 </widget>
                </item>
+               <item row="6" column="3">
+                <widget class="Line" name="line_83">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>10</height>
+                  </size>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">background-color: rgb(0, 255, 204);</string>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <property name="lineWidth">
+                  <number>30</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                </widget>
+               </item>
                <item row="9" column="2">
-                <widget class="QPushButton" name="pushButton">
+                <widget class="QPushButton" name="push_evaluar">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                    <horstretch>0</horstretch>
@@ -1264,29 +1242,6 @@ QPushButton:pressed {
                  </property>
                  <property name="text">
                   <string>Evaluar</string>
-                 </property>
-                </widget>
-               </item>
-               <item row="4" column="0">
-                <widget class="Line" name="line_67">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>10</height>
-                  </size>
-                 </property>
-                 <property name="styleSheet">
-                  <string notr="true">background-color: rgb(0, 255, 204);
-</string>
-                 </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Shadow::Raised</enum>
-                 </property>
-                 <property name="lineWidth">
-                  <number>30</number>
-                 </property>
-                 <property name="orientation">
-                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                 </widget>
                </item>
@@ -1335,7 +1290,7 @@ QLabel {
                 </widget>
                </item>
                <item row="6" column="2">
-                <widget class="QComboBox" name="comboBox_5">
+                <widget class="QComboBox" name="combo_crediticio">
                  <property name="styleSheet">
                   <string notr="true">QComboBox {
     background-color: #1E1E1E;
@@ -1442,7 +1397,7 @@ QLabel {
 }</string>
                  </property>
                  <property name="text">
-                  <string>¿Desea entregar su vehículo actual como parte de pago?</string>
+                  <string>¿Es bueo su historial crediticio ?</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -1473,7 +1428,7 @@ background-color: rgb(0, 255, 204);</string>
                 </widget>
                </item>
                <item row="1" column="2">
-                <widget class="QLineEdit" name="lineEdit">
+                <widget class="QLineEdit" name="lbl_ingreso">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -1536,7 +1491,7 @@ QLineEdit::placeholder {
                 </widget>
                </item>
                <item row="0" column="3">
-                <widget class="QToolButton" name="toolButton">
+                <widget class="QToolButton" name="toolImagen">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
                    <horstretch>0</horstretch>
@@ -1572,7 +1527,7 @@ QToolButton::menu-indicator {
                 </widget>
                </item>
                <item row="7" column="2">
-                <widget class="QLineEdit" name="lineEdit_7">
+                <widget class="QLineEdit" name="lbl_formales">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -1634,44 +1589,25 @@ QLineEdit::placeholder {
                  </property>
                 </widget>
                </item>
-               <item row="4" column="2">
-                <widget class="QLineEdit" name="lineEdit_5">
-                 <property name="sizePolicy">
-                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                   <horstretch>0</horstretch>
-                   <verstretch>0</verstretch>
-                  </sizepolicy>
+               <item row="8" column="3">
+                <widget class="Line" name="line_84">
+                 <property name="minimumSize">
+                  <size>
+                   <width>0</width>
+                   <height>10</height>
+                  </size>
                  </property>
                  <property name="styleSheet">
-                  <string notr="true">QLineEdit {
-    background-color: #1E1E1E; /* Fondo gris muy oscuro, casi negro */
-    border: 1px solid #3A3A3A; /* Borde sutil para definir el área */
-    border-radius: 5px;
-    color: #FFFFFF; /* Texto blanco puro para lectura clara */
-    font-family: &quot;Segoe UI&quot;, sans-serif;
-    font-size: 15px;
-    padding: 8px 12px;
-    selection-background-color: #1A5276; /* Color azul ejecutivo al seleccionar texto */
-}
-
-/* EFECTO CUANDO EL USUARIO HACE CLIC (FOCUS) */
-QLineEdit:focus {
-    border: 1px solid #1A5276; /* Borde azul cobalto (el que elegimos para seriedad) */
-    background-color: #252525; /* Se aclara ligeramente el fondo */
-}
-
-/* ESTILO CUANDO EL CAMPO ESTÁ DESACTIVADO (READ ONLY) */
-QLineEdit:disabled {
-    background-color: #121212;
-    color: #555555;
-    border: 1px solid #222222;
-}
-
-/* PLACEHOLDER (Texto de sugerencia) */
-QLineEdit::placeholder {
-    color: #666666;
-    font-style: italic;
-}</string>
+                  <string notr="true">background-color: rgb(0, 255, 204);</string>
+                 </property>
+                 <property name="frameShadow">
+                  <enum>QFrame::Shadow::Raised</enum>
+                 </property>
+                 <property name="lineWidth">
+                  <number>30</number>
+                 </property>
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
                  </property>
                 </widget>
                </item>
@@ -1778,7 +1714,7 @@ QLabel {
 }</string>
                  </property>
                  <property name="text">
-                  <string>¿Tiene otras deudas activas actualmente?</string>
+                  <string>¿Cuál es su tipo de contrato laboral?</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -1808,7 +1744,7 @@ QLabel {
                 </widget>
                </item>
                <item row="5" column="2">
-                <widget class="QLineEdit" name="lineEdit_6">
+                <widget class="QLineEdit" name="lbl_vehiculo">
                  <property name="sizePolicy">
                   <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                    <horstretch>0</horstretch>
@@ -1848,8 +1784,8 @@ QLineEdit::placeholder {
                  </property>
                 </widget>
                </item>
-               <item row="6" column="3">
-                <widget class="Line" name="line_83">
+               <item row="4" column="3">
+                <widget class="Line" name="line_68">
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -1870,8 +1806,8 @@ QLineEdit::placeholder {
                  </property>
                 </widget>
                </item>
-               <item row="8" column="3">
-                <widget class="Line" name="line_84">
+               <item row="4" column="0">
+                <widget class="Line" name="line_67">
                  <property name="minimumSize">
                   <size>
                    <width>0</width>
@@ -1879,7 +1815,8 @@ QLineEdit::placeholder {
                   </size>
                  </property>
                  <property name="styleSheet">
-                  <string notr="true">background-color: rgb(0, 255, 204);</string>
+                  <string notr="true">background-color: rgb(0, 255, 204);
+</string>
                  </property>
                  <property name="frameShadow">
                   <enum>QFrame::Shadow::Raised</enum>
@@ -1892,25 +1829,88 @@ QLineEdit::placeholder {
                  </property>
                 </widget>
                </item>
-               <item row="8" column="0">
-                <widget class="Line" name="line_85">
-                 <property name="minimumSize">
-                  <size>
-                   <width>0</width>
-                   <height>10</height>
-                  </size>
+               <item row="4" column="2">
+                <widget class="QLineEdit" name="lbl_deudas">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
                  </property>
                  <property name="styleSheet">
-                  <string notr="true">background-color: rgb(0, 255, 204);</string>
+                  <string notr="true">QLineEdit {
+    background-color: #1E1E1E; /* Fondo gris muy oscuro, casi negro */
+    border: 1px solid #3A3A3A; /* Borde sutil para definir el área */
+    border-radius: 5px;
+    color: #FFFFFF; /* Texto blanco puro para lectura clara */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 15px;
+    padding: 8px 12px;
+    selection-background-color: #1A5276; /* Color azul ejecutivo al seleccionar texto */
+}
+
+/* EFECTO CUANDO EL USUARIO HACE CLIC (FOCUS) */
+QLineEdit:focus {
+    border: 1px solid #1A5276; /* Borde azul cobalto (el que elegimos para seriedad) */
+    background-color: #252525; /* Se aclara ligeramente el fondo */
+}
+
+/* ESTILO CUANDO EL CAMPO ESTÁ DESACTIVADO (READ ONLY) */
+QLineEdit:disabled {
+    background-color: #121212;
+    color: #555555;
+    border: 1px solid #222222;
+}
+
+/* PLACEHOLDER (Texto de sugerencia) */
+QLineEdit::placeholder {
+    color: #666666;
+    font-style: italic;
+}</string>
                  </property>
-                 <property name="frameShadow">
-                  <enum>QFrame::Shadow::Raised</enum>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QLabel" name="label_14">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
                  </property>
-                 <property name="lineWidth">
-                  <number>30</number>
+                 <property name="styleSheet">
+                  <string notr="true">/* Estilo para las etiquetas de las preguntas */
+QLabel {
+    color: #B0B0B0; /* Gris claro profesional */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    background: transparent;
+    border: none;
+    padding: 5px;
+}
+
+/* Estilo para resaltar etiquetas importantes (opcional si usas una clase) */
+QLabel#pregunta_importante {
+    color: #FFFFFF;
+    font-weight: bold;
+}QLabel {
+    background-color: #252525; /* Gris oscuro para contrastar con el fondo negro */
+    border: 1px solid #333333; /* Borde sutil para dar estructura */
+    border-left: 4px solid #00FFCC; /* Detalle neón lateral para conectar con tu marca */
+    border-radius: 5px;
+    color: #E0E0E0;
+    font-size: 13px;
+    padding: 10px 15px;
+    margin-bottom: 2px;
+}
+</string>
                  </property>
-                 <property name="orientation">
-                  <enum>Qt::Orientation::Horizontal</enum>
+                 <property name="text">
+                  <string>¿Tiene otras deudas activas actualmente?</string>
+                 </property>
+                 <property name="alignment">
+                  <set>Qt::AlignmentFlag::AlignCenter</set>
                  </property>
                 </widget>
                </item>
