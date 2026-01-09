@@ -6,14 +6,15 @@ from PySide6.QtCore import QFile,Qt, QSize
 from PySide6.QtWidgets import (QTreeWidgetItem,QTableWidgetItem, 
                                QAbstractItemView,QHeaderView,QVBoxLayout,QMessageBox,QToolButton,
                                QSizePolicy,QDialog,QLabel,QHBoxLayout,QPushButton,QMessageBox,QWidget)
-from PySide6.QtGui import QColor,QIcon, QPixmap,QPainter
+from PySide6.QtGui import QColor,QIcon, QPixmap,QPainter , QFont
 import sqlite3
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 from PySide6.QtGui import QPixmap
-from PySide6.QtCore import QFile, Qt , QSize , QTimer , QRect
-import Exportar
+from PySide6.QtCore import QFile, Qt , QSize , QTimer , QRect , QPoint
+import random
+
 
 class Comprar(QMainWindow):
     def __init__(self, *args, **kwargs):
@@ -46,8 +47,32 @@ class Comprar(QMainWindow):
         self.cargar_combos_financiamiento()
         self.precio_seleccionado = 0
         self.ui.push_evaluar.clicked.connect(self.evaluar_financiamiento)
+
+        #test drive
         
-            
+        self.inicializar_test_drive()
+        # Hace que el juego escuche el teclado apenas inicie
+        self.juego.setFocus()
+        # -------------------------------
+
+        #Certificados
+
+        
+
+    def inicializar_test_drive(self):
+        # 1. Creamos un Layout para el QFrame del Designer
+        # Esto sirve para que el juego se estire y ocupe todo el cuadro
+        self.layout_juego = QVBoxLayout(self.ui.frame_juego)
+        self.layout_juego.setContentsMargins(0, 0, 0, 0) # Sin bordes feos
+        
+        # 2. Instanciamos la clase del juego
+        self.juego = MiniJuegoTestDrive()
+        
+        # 3. Metemos el objeto del juego dentro del layout del Frame
+        self.layout_juego.addWidget(self.juego)
+        
+        print("Sistema de Test Drive (Gamificación) cargado en el Frame.")
+
 
     #pasar paginas
     def conectar_menu(self):
@@ -435,3 +460,102 @@ class Comprar(QMainWindow):
 
         except ValueError:
             QMessageBox.warning(self, "Datos Inválidos", "Por favor ingresa montos numéricos en ingresos y gastos.")
+
+
+
+class MiniJuegoTestDrive(QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setFocusPolicy(Qt.StrongFocus)
+        
+        # Estado del jugador
+        self.carro_x = 20
+        self.carro_y = 100
+        self.ancho_carro = 40
+        self.alto_carro = 25
+        
+        # Gestión de Enemigos y Dificultad
+        self.enemigos = []
+        self.velocidad_base = 5
+        self.puntos = 0
+        self.nivel = 1
+        
+        # Timer de actualización
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.actualizar_logica)
+        self.timer.start(20) # 50 FPS aproximadamente
+
+    def paintEvent(self, event):
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.Antialiasing)
+        
+        # Fondo estilo asfalto
+        painter.fillRect(self.rect(), QColor("#1a1a1a"))
+        
+        # Dibujar líneas de carretera (opcional para estética)
+        painter.setPen(QColor("#555555"))
+        for i in range(0, self.height(), 40):
+            painter.drawLine(0, i, self.width(), i)
+
+        # Dibujar Jugador (Color Cian Neón como tu UI)
+        painter.fillRect(self.carro_x, self.carro_y, self.ancho_carro, self.alto_carro, QColor("#00f2ff"))
+        
+        # Dibujar Enemigos (Cuadros Rojos)
+        for enenigo in self.enemigos:
+            painter.fillRect(enenigo['rect'], QColor("#ff4b2b"))
+        
+        # Dibujar UI del juego
+        painter.setPen(Qt.white)
+        painter.setFont(QFont("Arial", 12, QFont.Bold))
+        painter.drawText(10, 25, f"Score: {self.puntos}  |  Nivel: {self.nivel}")
+
+    def actualizar_logica(self):
+        # 1. Aumentar dificultad según puntos
+        self.nivel = (self.puntos // 10) + 1
+        velocidad_actual = self.velocidad_base + self.nivel
+        
+        # 2. Generar enemigos según el nivel
+        # Si hay pocos enemigos en pantalla, creamos uno nuevo
+        max_enemigos = min(2 + self.nivel, 8) # Máximo 8 enemigos para que no sea imposible
+        if len(self.enemigos) < max_enemigos and random.randint(0, 100) < 5:
+            ancho_e = random.randint(20, 40)
+            alto_e = random.randint(20, 40)
+            nuevo_enemigo = {
+                'rect': QRect(self.width(), random.randint(0, self.height() - alto_e), ancho_e, alto_e)
+            }
+            self.enemigos.append(nuevo_enemigo)
+
+        # 3. Mover enemigos y detectar colisiones
+        rect_jugador = QRect(self.carro_x, self.carro_y, self.ancho_carro, self.alto_carro)
+        
+        for enemigo in self.enemigos[:]:
+            # Mover hacia la izquierda
+            enemigo['rect'].translate(-velocidad_actual, 0)
+            
+            # Si sale de la pantalla, sumamos puntos
+            if enemigo['rect'].right() < 0:
+                self.enemigos.remove(enemigo)
+                self.puntos += 1
+            
+            # Detectar colisión
+            if rect_jugador.intersects(enemigo['rect']):
+                self.reset_juego()
+
+        self.update()
+
+    def reset_juego(self):
+        self.puntos = 0
+        self.enemigos = []
+        self.carro_y = self.height() // 2
+        print("Game Over - Reiniciando...")
+
+    def keyPressEvent(self, event):
+        paso = 15
+        if event.key() == Qt.Key_Up and self.carro_y > 0:
+            self.carro_y -= paso
+        if event.key() == Qt.Key_Down and self.carro_y < self.height() - self.alto_carro:
+            self.carro_y += paso
+
+    def resizeEvent(self, event):
+        # Esto asegura que el juego sepa que el QFrame cambió de tamaño
+        super().resizeEvent(event)
