@@ -58,6 +58,11 @@ class Comprar(QMainWindow):
         #Certificados
         self.cargar_marcas_inicial()
         self.ui.push_certificar.clicked.connect(self.certificar_vehiculo)
+
+
+        #Estado del vehiculo
+        self.configurar_combos_estado()
+        self.ui.push_mirar.clicked.connect(self.consultar_estado_vehiculo)
         
 
     def inicializar_test_drive(self):
@@ -565,6 +570,122 @@ class Comprar(QMainWindow):
             Qt.SmoothTransformation
         )
         self.ui.lblVistaCertificado.setPixmap(pixmap_redimensionado)
+
+
+    #estado
+
+    def configurar_combos_estado(self):
+        """Carga inicial de marcas para la pestaña de Estado del Vehículo"""
+        try:
+            conn = sqlite3.connect(r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\Ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Obtenemos las marcas únicas
+            cursor.execute("SELECT DISTINCT marca FROM carros ORDER BY marca ASC")
+            marcas = [fila[0] for fila in cursor.fetchall()]
+            conn.close()
+
+            self.ui.combo_marca_3.clear()
+            self.ui.combo_marca_3.addItems(marcas)
+            
+            # Conectamos el cambio de marca para que filtre los modelos
+            self.ui.combo_marca_3.currentIndexChanged.connect(self.filtrar_modelos_estado)
+            
+            # Cargamos los modelos de la primera marca por defecto
+            self.filtrar_modelos_estado()
+            
+        except Exception as e:
+            print(f"Error en combo_marca_3: {e}")
+
+    def filtrar_modelos_estado(self):
+        """Filtra el combo_modelo_3 según lo que diga combo_marca_3"""
+        marca_sel = self.ui.combo_marca_3.currentText()
+        
+        if not marca_sel:
+            return
+
+        try:
+            # Bloqueamos señales para que no intente disparar otros eventos mientras limpia
+            self.ui.combo_modelo_3.blockSignals(True)
+            self.ui.combo_modelo_3.clear()
+            
+            conn = sqlite3.connect(r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\Ingenieria.db")
+            cursor = conn.cursor()
+            
+            cursor.execute("SELECT modelo FROM carros WHERE marca = ? ORDER BY modelo ASC", (marca_sel,))
+            modelos = [fila[0] for fila in cursor.fetchall()]
+            conn.close()
+
+            self.ui.combo_modelo_3.addItems(modelos)
+            self.ui.combo_modelo_3.blockSignals(False)
+            
+        except Exception as e:
+            print(f"Error en combo_modelo_3: {e}")
+
+    
+    #treewidget
+
+    def consultar_estado_vehiculo(self):
+        marca = self.ui.combo_marca_3.currentText()
+        modelo = self.ui.combo_modelo_3.currentText()
+
+        try:
+            conn = sqlite3.connect(r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\Ingenieria.db")
+            conn.row_factory = sqlite3.Row 
+            cursor = conn.cursor()
+            
+            cursor.execute("SELECT * FROM carros WHERE marca = ? AND modelo = ?", (marca, modelo))
+            carro = cursor.fetchone()
+            conn.close()
+
+            if carro:
+                self.llenar_tree_mirar(carro)
+            else:
+                print("No se encontraron datos para este vehículo.")
+
+        except Exception as e:
+            print(f"Error al consultar estado: {e}")
+
+    def llenar_tree_mirar(self, datos):
+        tree = self.ui.tree_mirar
+        
+        # 1. Configuración de espacio (Solo la primera vez)
+        tree.setColumnCount(2)
+        tree.setHeaderLabels(["Componente / Carro", "Valor Detallado"])
+        # Ajustar columnas al contenido
+        tree.header().setSectionResizeMode(0, QHeaderView.ResizeToContents)
+        
+        # 2. CREAR NODO PADRE (Carpeta del Carro)
+        # Usamos la marca y modelo como título de la carpeta
+        titulo_carro = f"🚗 {datos['marca']} {datos['modelo']}"
+        carro_root = QTreeWidgetItem(tree, [titulo_carro, "Consultado ahora"])
+        
+        # Estilo visual para resaltar el título (opcional)
+        carro_root.setBackground(0, QColor("#00f2ff"))
+        carro_root.setForeground(0, QColor("#000000"))
+
+        # 3. AGREGAR TODA LA DATA DE LA TABLA (Basado en tu imagen de la DB)
+        # Categoría: Especificaciones
+        cat_specs = QTreeWidgetItem(carro_root, ["⚙️ Especificaciones Técnicas"])
+        QTreeWidgetItem(cat_specs, ["Año", str(datos['año'])])
+        QTreeWidgetItem(cat_specs, ["Combustible", str(datos['combustible'])])
+        QTreeWidgetItem(cat_specs, ["Transmisión", str(datos['transmision'])])
+        QTreeWidgetItem(cat_specs, ["Origen", str(datos['origen'])])
+        
+        # Categoría: Estado y Mercado
+        cat_estado = QTreeWidgetItem(carro_root, ["📊 Análisis de Estado"])
+        QTreeWidgetItem(cat_estado, ["Kilometraje", f"{datos['kilometraje']:,} km"])
+        QTreeWidgetItem(cat_estado, ["Estado Certificación", str(datos['estado_certificacion'])])
+        QTreeWidgetItem(cat_estado, ["Stock Disponible", str(datos['stock_disponible'])])
+        
+        # Categoría: Precio
+        cat_money = QTreeWidgetItem(carro_root, ["💰 Información Comercial"])
+        precio_formateado = f"${datos['precio']:,.2f}"
+        QTreeWidgetItem(cat_money, ["Precio de Lista", precio_formateado])
+
+        # 4. Mostrar el nuevo carro arriba de todo
+        tree.insertTopLevelItem(0, carro_root)
+        carro_root.setExpanded(True) # Abrir la carpeta del nuevo automáticamente
 
 
 

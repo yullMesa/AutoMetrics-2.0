@@ -1948,7 +1948,7 @@ QLabel#pregunta_importante {
           <string>test drive</string>
          </property>
          <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
          </property>
         </widget>
         <widget class="QWidget" name="horizontalLayoutWidget_3">
@@ -2257,6 +2257,303 @@ QPushButton:disabled {
          </property>
          <property name="text">
           <string>Estado</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="combo_modelo_3">
+         <property name="geometry">
+          <rect>
+           <x>998</x>
+           <y>130</y>
+           <width>841</width>
+           <height>78</height>
+          </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">/* Estilo general del ComboBox */
+QComboBox {
+    background-color: #1e1e2e;
+    border: 2px solid #00f2ff; /* Tu azul cian característico */
+    border-radius: 8px;
+    padding: 5px 15px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    min-height: 35px;
+}
+
+/* Cuando pasas el mouse por encima */
+QComboBox:hover {
+    border: 2px solid #ffffff;
+    background-color: #2a2a3d;
+}
+
+/* Estilo del botón de la flechita */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 1px solid #00f2ff;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* Icono de la flecha (puedes usar un carácter o imagen) */
+QComboBox::down-arrow {
+    image: none; /* Quitamos la flecha fea por defecto */
+    border-top: 5px solid #00f2ff; /* Creamos una flecha minimalista con bordes */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-top: 2px;
+}
+
+/* Estilo de la lista desplegable */
+QComboBox QAbstractItemView {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    selection-background-color: #00f2ff;
+    selection-color: #000000;
+    border: 1px solid #00f2ff;
+    outline: none;
+    border-radius: 5px;
+}
+
+/* Cada item de la lista */
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+    padding-left: 10px;
+}</string>
+         </property>
+         <property name="placeholderText">
+          <string>Modelo</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="combo_marca_3">
+         <property name="geometry">
+          <rect>
+           <x>150</x>
+           <y>130</y>
+           <width>842</width>
+           <height>78</height>
+          </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">/* Estilo general del ComboBox */
+QComboBox {
+    background-color: #1e1e2e;
+    border: 2px solid #00f2ff; /* Tu azul cian característico */
+    border-radius: 8px;
+    padding: 5px 15px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    min-height: 35px;
+}
+
+/* Cuando pasas el mouse por encima */
+QComboBox:hover {
+    border: 2px solid #ffffff;
+    background-color: #2a2a3d;
+}
+
+/* Estilo del botón de la flechita */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 1px solid #00f2ff;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* Icono de la flecha (puedes usar un carácter o imagen) */
+QComboBox::down-arrow {
+    image: none; /* Quitamos la flecha fea por defecto */
+    border-top: 5px solid #00f2ff; /* Creamos una flecha minimalista con bordes */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-top: 2px;
+}
+
+/* Estilo de la lista desplegable */
+QComboBox QAbstractItemView {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    selection-background-color: #00f2ff;
+    selection-color: #000000;
+    border: 1px solid #00f2ff;
+    outline: none;
+    border-radius: 5px;
+}
+
+/* Cada item de la lista */
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+    padding-left: 10px;
+}</string>
+         </property>
+         <property name="placeholderText">
+          <string>Marca</string>
+         </property>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_12">
+         <property name="geometry">
+          <rect>
+           <x>149</x>
+           <y>259</y>
+           <width>1681</width>
+           <height>691</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_12">
+          <item>
+           <widget class="QTreeWidget" name="tree_mirar">
+            <property name="styleSheet">
+             <string notr="true">/* Contenedor principal del árbol */
+QTreeWidget {
+    background-color: #1a1a1a;
+    border: 1px solid #00f2ff;
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 13px;
+    outline: none; /* Quita el recuadro de puntos al seleccionar */
+}
+
+/* Encabezados de las columnas (Header) */
+QHeaderView::section {
+    background-color: #2d2d3d;
+    color: #00f2ff;
+    padding: 6px;
+    border: none;
+    border-bottom: 2px solid #00f2ff;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Cada fila o ítem del árbol */
+QTreeWidget::item {
+    padding: 8px;
+    border-bottom: 1px solid #2d2d2d;
+}
+
+/* Color alterno para las filas (si activas setAlternatingRowColors) */
+QTreeWidget::item:alternate {
+    background-color: #222222;
+}
+
+/* Cuando pasas el mouse por encima de una fila */
+QTreeWidget::item:hover {
+    background-color: #2a2a3d;
+    color: #00f2ff;
+}
+
+/* Cuando seleccionas una fila */
+QTreeWidget::item:selected {
+    background-color: #00f2ff;
+    color: #000000;
+}
+
+/* Estilo de las flechitas de expansión (Ramas) */
+QTreeView::branch:has-children:!has-siblings:closed,
+QTreeView::branch:closed:has-children:has-siblings {
+    border-image: none;
+    image: url(flecha_cerrada.png); /* Puedes usar una imagen o dejarlo por defecto */
+}
+
+QTreeView::branch:open:has-children:!has-siblings,
+QTreeView::branch:open:has-children:has-siblings  {
+    border-image: none;
+    image: url(flecha_abierta.png);
+}
+
+/* Personalización del Scrollbar dentro del TreeWidget */
+QScrollBar:vertical {
+    border: none;
+    background: #1a1a1a;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #00f2ff;
+    min-height: 20px;
+    border-radius: 5px;
+}</string>
+            </property>
+            <column>
+             <property name="text">
+              <string notr="true">1</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QPushButton" name="push_mirar">
+         <property name="geometry">
+          <rect>
+           <x>790</x>
+           <y>980</y>
+           <width>459</width>
+           <height>89</height>
+          </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">/* Estilo general del botón */
+QPushButton {
+    background-color: #1e1e2e;
+    border: 2px solid #00f2ff;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 20px;
+    min-width: 100px;
+}
+
+/* Efecto Hover (cuando pasas el mouse) */
+QPushButton:hover {
+    background-color: #00f2ff;
+    color: #000000; /* El texto cambia a negro para contrastar */
+    border: 2px solid #ffffff;
+    /* Efecto de brillo sutil */
+    outline: none;
+}
+
+/* Efecto Pressed (cuando haces clic) */
+QPushButton:pressed {
+    background-color: #008b94;
+    border: 2px solid #00f2ff;
+    padding-left: 22px; /* Efecto de hundimiento */
+    padding-top: 10px;
+}
+
+/* Estilo para cuando el botón está deshabilitado */
+QPushButton:disabled {
+    background-color: #2d2d2d;
+    border: 2px solid #555555;
+    color: #888888;
+}</string>
+         </property>
+         <property name="text">
+          <string>Mirar</string>
          </property>
         </widget>
        </widget>
