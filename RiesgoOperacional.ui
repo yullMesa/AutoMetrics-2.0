@@ -13,18 +13,1373 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <property name="styleSheet">
+   <string notr="true">/* Estilo general de la barra de menú */
+QMenuBar {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 13px;
+    border-bottom: 1px solid #3c3c4c;
+    padding: 2px;
+}
+
+/* Estilo de los items del menú (Archivo, Edición, etc.) */
+QMenuBar::item {
+    background-color: transparent;
+    padding: 6px 12px;
+    margin: 2px;
+    border-radius: 4px;
+}
+
+/* Cuando pasas el mouse por encima de los items de la barra principal */
+QMenuBar::item:selected {
+    background-color: rgba(0, 255, 204, 0.1); /* Fondo cian muy suave */
+    color: #00ffcc; /* Texto cian neón */
+}
+
+/* Estilo de los menús desplegables */
+QMenu {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    border: 1px solid #00ffcc; /* Borde neón para destacar el menú */
+    border-radius: 5px;
+    padding: 5px;
+}
+
+/* Estilo de las opciones dentro del menú desplegable */
+QMenu::item {
+    padding: 8px 25px 8px 20px;
+    border-radius: 3px;
+    margin: 2px;
+}
+
+/* Cuando seleccionas una opción dentro del menú */
+QMenu::item:selected {
+    background-color: #00ffcc; /* Fondo cian neón */
+    color: #1e1e2e; /* Texto oscuro para contraste */
+}
+
+/* Separadores dentro del menú */
+QMenu::separator {
+    height: 1px;
+    background: #3c3c4c;
+    margin: 5px 10px;
+}
+
+/* Estilo para las flechas de submenús */
+QMenu::right-arrow {
+    image: url(flecha_derecha.png); /* Si tienes iconos, sino, se ve estándar */
+    padding-right: 5px;
+}
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>9</x>
+      <y>9</y>
+      <width>1941</width>
+      <height>1151</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QStackedWidget" name="stackedWidget">
+       <property name="currentIndex">
+        <number>2</number>
+       </property>
+       <widget class="QWidget" name="page">
+        <widget class="QWidget" name="gridLayoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>19</y>
+           <width>1921</width>
+           <height>1121</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="2">
+           <widget class="QFrame" name="frame_3">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QFrame" name="frame">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QFrame" name="frame_2">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QFrame" name="frame_5">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QFrame" name="frame_4">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QFrame" name="frame_6">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_2">
+        <widget class="QWidget" name="gridLayoutWidget_2">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>9</y>
+           <width>1921</width>
+           <height>1131</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="1" column="1">
+           <widget class="QFrame" name="frame_10">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(30, 30, 46);</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="formLayoutWidget">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>10</y>
+               <width>1231</width>
+               <height>441</height>
+              </rect>
+             </property>
+             <layout class="QFormLayout" name="formLayout">
+              <property name="verticalSpacing">
+               <number>59</number>
+              </property>
+              <property name="topMargin">
+               <number>76</number>
+              </property>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_3">
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+    color: #ffffff;
+    font-family: &quot;Segoe UI Semibold&quot;;
+    font-size: 14px;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo específico para destacar títulos con un borde inferior neón */
+QLabel#label_titulo {
+    color: #00ffcc;
+    font-size: 18px;
+    border-bottom: 2px solid #00ffcc;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>¿El costo acumulado de mantenimiento y seguro supera ya el 5% del valor de venta proyectado?</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QComboBox" name="comboBox_Costo">
+                <property name="styleSheet">
+                 <string notr="true">/* Estilo del ComboBox (Cerrado) */
+QComboBox {
+    background-color: #27293d;
+    border: 1px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: #ffffff;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    min-width: 150px;
+}
+
+/* Cuando pasas el mouse o está enfocado */
+QComboBox:hover, QComboBox:focus {
+    border: 1px solid #00ffcc; /* Borde neón */
+}
+
+/* Estilo del botón de la flechita */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 1px solid #3c3c4c;
+}
+
+/* La flechita (puedes usar un carácter o una imagen) */
+QComboBox::down-arrow {
+    image: url(down_arrow_cyan.png); /* Si tienes icono */
+    width: 12px;
+    height: 12px;
+}
+
+/* --- ESTILO DE LA LISTA DESPLEGABLE --- */
+QComboBox QAbstractItemView {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    border: 1px solid #00ffcc;
+    selection-background-color: #00ffcc;
+    selection-color: #1e1e2e;
+    outline: none;
+    border-radius: 5px;
+}
+
+/* Cada item de la lista */
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+    padding-left: 10px;
+}
+
+/* Item seleccionado en la lista */
+QComboBox QAbstractItemView::item:selected {
+    background-color: #00ffcc;
+    color: #1e1e2e;
+}</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>si</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>no</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_4">
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+    color: #ffffff;
+    font-family: &quot;Segoe UI Semibold&quot;;
+    font-size: 14px;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo específico para destacar títulos con un borde inferior neón */
+QLabel#label_titulo {
+    color: #00ffcc;
+    font-size: 18px;
+    border-bottom: 2px solid #00ffcc;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>¿Ha bajado el precio de mercado de modelos similares más de un 3% desde que se adquirió la unidad?</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QComboBox" name="comboBox_Bajado">
+                <property name="styleSheet">
+                 <string notr="true">/* Estilo del ComboBox (Cerrado) */
+QComboBox {
+    background-color: #27293d;
+    border: 1px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: #ffffff;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    min-width: 150px;
+}
+
+/* Cuando pasas el mouse o está enfocado */
+QComboBox:hover, QComboBox:focus {
+    border: 1px solid #00ffcc; /* Borde neón */
+}
+
+/* Estilo del botón de la flechita */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 1px solid #3c3c4c;
+}
+
+/* La flechita (puedes usar un carácter o una imagen) */
+QComboBox::down-arrow {
+    image: url(down_arrow_cyan.png); /* Si tienes icono */
+    width: 12px;
+    height: 12px;
+}
+
+/* --- ESTILO DE LA LISTA DESPLEGABLE --- */
+QComboBox QAbstractItemView {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    border: 1px solid #00ffcc;
+    selection-background-color: #00ffcc;
+    selection-color: #1e1e2e;
+    outline: none;
+    border-radius: 5px;
+}
+
+/* Cada item de la lista */
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+    padding-left: 10px;
+}
+
+/* Item seleccionado en la lista */
+QComboBox QAbstractItemView::item:selected {
+    background-color: #00ffcc;
+    color: #1e1e2e;
+}</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>si</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>no</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_5">
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+    color: #ffffff;
+    font-family: &quot;Segoe UI Semibold&quot;;
+    font-size: 14px;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo específico para destacar títulos con un borde inferior neón */
+QLabel#label_titulo {
+    color: #00ffcc;
+    font-size: 18px;
+    border-bottom: 2px solid #00ffcc;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>¿El tiempo de permanencia en stock duplica el promedio de rotación de la marca?</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QComboBox" name="comboBox_Tiempo">
+                <property name="styleSheet">
+                 <string notr="true">/* Estilo del ComboBox (Cerrado) */
+QComboBox {
+    background-color: #27293d;
+    border: 1px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: #ffffff;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    min-width: 150px;
+}
+
+/* Cuando pasas el mouse o está enfocado */
+QComboBox:hover, QComboBox:focus {
+    border: 1px solid #00ffcc; /* Borde neón */
+}
+
+/* Estilo del botón de la flechita */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 1px solid #3c3c4c;
+}
+
+/* La flechita (puedes usar un carácter o una imagen) */
+QComboBox::down-arrow {
+    image: url(down_arrow_cyan.png); /* Si tienes icono */
+    width: 12px;
+    height: 12px;
+}
+
+/* --- ESTILO DE LA LISTA DESPLEGABLE --- */
+QComboBox QAbstractItemView {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    border: 1px solid #00ffcc;
+    selection-background-color: #00ffcc;
+    selection-color: #1e1e2e;
+    outline: none;
+    border-radius: 5px;
+}
+
+/* Cada item de la lista */
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+    padding-left: 10px;
+}
+
+/* Item seleccionado en la lista */
+QComboBox QAbstractItemView::item:selected {
+    background-color: #00ffcc;
+    color: #1e1e2e;
+}</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>si</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>no</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_6">
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+    color: #ffffff;
+    font-family: &quot;Segoe UI Semibold&quot;;
+    font-size: 14px;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo específico para destacar títulos con un borde inferior neón */
+QLabel#label_titulo {
+    color: #00ffcc;
+    font-size: 18px;
+    border-bottom: 2px solid #00ffcc;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>¿Existe un sobre-inventario (más de 3 unidades) de este mismo modelo o categoría actualmente?</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QComboBox" name="comboBox_Existe">
+                <property name="styleSheet">
+                 <string notr="true">/* Estilo del ComboBox (Cerrado) */
+QComboBox {
+    background-color: #27293d;
+    border: 1px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: #ffffff;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    min-width: 150px;
+}
+
+/* Cuando pasas el mouse o está enfocado */
+QComboBox:hover, QComboBox:focus {
+    border: 1px solid #00ffcc; /* Borde neón */
+}
+
+/* Estilo del botón de la flechita */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 1px solid #3c3c4c;
+}
+
+/* La flechita (puedes usar un carácter o una imagen) */
+QComboBox::down-arrow {
+    image: url(down_arrow_cyan.png); /* Si tienes icono */
+    width: 12px;
+    height: 12px;
+}
+
+/* --- ESTILO DE LA LISTA DESPLEGABLE --- */
+QComboBox QAbstractItemView {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    border: 1px solid #00ffcc;
+    selection-background-color: #00ffcc;
+    selection-color: #1e1e2e;
+    outline: none;
+    border-radius: 5px;
+}
+
+/* Cada item de la lista */
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+    padding-left: 10px;
+}
+
+/* Item seleccionado en la lista */
+QComboBox QAbstractItemView::item:selected {
+    background-color: #00ffcc;
+    color: #1e1e2e;
+}</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>si</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>no</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="horizontalLayoutWidget_7">
+             <property name="geometry">
+              <rect>
+               <x>140</x>
+               <y>469</y>
+               <width>681</width>
+               <height>71</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_7">
+              <item>
+               <widget class="QPushButton" name="btn_evaluar">
+                <property name="styleSheet">
+                 <string notr="true">/* Estilo base del botón */
+QPushButton {
+    background-color: rgba(0, 255, 204, 0.05); /* Fondo muy sutil */
+    color: #00ffcc;
+    border: 2px solid #00ffcc;
+    border-radius: 10px;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 16px;
+    min-width: 120px;
+}
+
+/* Efecto Hover: Cuando el mouse está encima */
+QPushButton:hover {
+    background-color: #00ffcc;
+    color: #1e1e2e; /* El texto se oscurece para contrastar */
+    /* Efecto de resplandor (solo funciona bien en algunos sistemas, 
+       pero el cambio de color sólido es suficiente) */
+}
+
+/* Efecto Pressed: Cuando se hace clic */
+QPushButton:pressed {
+    background-color: #00ccaa; /* Un cian más oscuro */
+    border-color: #ffffff;
+    padding-left: 10px; /* Efecto de hundimiento */
+    padding-top: 10px;
+}
+
+/* Estilo para un botón de &quot;PELIGRO&quot; o &quot;ELIMINAR&quot; (opcional) */
+QPushButton#btn_peligro {
+    color: #ff4d4d;
+    border: 2px solid #ff4d4d;
+    background-color: rgba(255, 77, 77, 0.05);
+}
+
+QPushButton#btn_peligro:hover {
+    background-color: #ff4d4d;
+    color: #ffffff;
+}</string>
+                </property>
+                <property name="text">
+                 <string>Evaluar</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QFrame" name="frame_9">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(30, 30, 46);</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="horizontalLayoutWidget_6">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>19</y>
+               <width>941</width>
+               <height>521</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <item>
+               <widget class="QPlainTextEdit" name="plainTextEdit">
+                <property name="styleSheet">
+                 <string notr="true">/* Estilo para el cuadro de texto de alertas/riesgo */
+QPlainTextEdit {
+    background-color: #1a1a26; /* Un tono más oscuro para profundidad */
+    color: #ffcc00; /* Amarillo/Naranja Neón (Color de Alerta) */
+    font-family: 'Consolas', 'Courier New', monospace; /* Fuente de terminal */
+    font-size: 13px;
+    border: 1px solid #ffcc00; /* Borde de alerta */
+    border-radius: 5px;
+    padding: 10px;
+    selection-background-color: #ffcc00;
+    selection-color: #1a1a26;
+}
+
+/* Estilo de la barra de desplazamiento para que combine con la alerta */
+QPlainTextEdit QScrollBar:vertical {
+    border: none;
+    background: #1a1a26;
+    width: 8px;
+}
+
+QPlainTextEdit QScrollBar::handle:vertical {
+    background: #ffcc00;
+    border-radius: 4px;
+    min-height: 20px;
+}
+
+/* Estilo cuando el widget tiene el foco (clic del usuario) */
+QPlainTextEdit:focus {
+    border: 2px solid #ffcc00;
+    background-color: #1e1e2e;
+    /* Efecto de resplandor sutil */
+    box-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
+}
+QPlainTextEdit {
+    background-color: #1a1a26;
+    color: #ffcc00; /* Color Ámbar de Alerta */
+    font-family: 'Consolas', monospace;
+    font-size: 18px; /* Tamaño mucho más grande */
+    font-weight: bold;
+    border: 2px solid #ffcc00;
+    border-radius: 10px;
+    padding: 20px;
+    /* Qt no centra texto en PlainText automáticamente, 
+       pero el padding ayuda a la visualización */
+}</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QFrame" name="frame_7">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(21, 21, 21);
+background-color: rgb(30, 30, 46);</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="horizontalLayoutWidget_2">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>9</y>
+               <width>941</width>
+               <height>541</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <widget class="QTreeWidget" name="treeWidget_aprobado">
+                <property name="styleSheet">
+                 <string notr="true">/* Estilo general del TreeWidget */
+QTreeWidget {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 13px;
+    border: 1px solid #3c3c4c;
+    border-radius: 8px;
+    outline: none; /* Quita el borde punteado al hacer clic */
+}
+
+/* Estilo de las cabeceras (Columnas) */
+QHeaderView::section {
+    background-color: #27293d;
+    color: #00ffcc; /* Color cian neón para los títulos */
+    padding: 8px;
+    border: none;
+    border-bottom: 2px solid #3c3c4c;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+/* Estilo de cada fila/item */
+QTreeWidget::item {
+    padding: 10px;
+    border-bottom: 1px solid #2d2d3d;
+}
+
+/* Cuando pasas el mouse por encima de una fila */
+QTreeWidget::item:hover {
+    background-color: rgba(0, 255, 204, 0.05); /* Destello cian muy sutil */
+}
+
+/* Cuando seleccionas una fila */
+QTreeWidget::item:selected {
+    background-color: rgba(0, 255, 204, 0.2);
+    color: #00ffcc;
+    border-left: 3px solid #00ffcc; /* Línea neón a la izquierda para resaltar */
+}
+
+/* Estilo de las flechas de expansión (si tienes jerarquías) */
+QTreeWidget::branch:has-children:!has-siblings:closed,
+QTreeWidget::branch:closed:has-children:has-siblings {
+    image: url(flecha_cerrada.png); /* Opcional: icono de flecha */
+}
+
+QTreeWidget::branch:open:has-children:!has-siblings,
+QTreeWidget::branch:open:has-children:has-siblings {
+    image: url(flecha_abierta.png); /* Opcional: icono de flecha */
+}
+
+/* Personalización del ScrollBar (Barra de desplazamiento) */
+QScrollBar:vertical {
+    border: none;
+    background: #1e1e2e;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #3c3c4c;
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #00ffcc; /* La barra brilla al pasar el mouse */
+}</string>
+                </property>
+                <column>
+                 <property name="text">
+                  <string notr="true">1</string>
+                 </property>
+                </column>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QFrame" name="frame_8">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(30, 30, 46);</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="horizontalLayoutWidget_3">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>9</y>
+               <width>941</width>
+               <height>461</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <item>
+               <widget class="QTableWidget" name="tableWidget_riesgo">
+                <property name="styleSheet">
+                 <string notr="true">/* Estilo general de la tabla */
+QTableWidget {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    gridline-color: #2d2d3d; /* Color de las líneas de la cuadrícula */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 13px;
+    border: 1px solid #3c3c4c;
+    border-radius: 8px;
+    selection-background-color: rgba(0, 255, 204, 0.2);
+    selection-color: #00ffcc;
+}
+
+/* Estilo de las cabeceras (Columnas superiores) */
+QHeaderView::section {
+    background-color: #27293d;
+    color: #00ffcc;
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid #00ffcc; /* Línea neón bajo el título */
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+/* Estilo de las filas */
+QTableWidget::item {
+    padding: 8px;
+    border-bottom: 1px solid #2d2d3d;
+}
+
+/* Hover: Cuando el mouse pasa sobre una celda */
+QTableWidget::item:hover {
+    background-color: rgba(0, 255, 204, 0.05);
+}
+
+/* Cuando una celda o fila está seleccionada */
+QTableWidget::item:selected {
+    background-color: rgba(0, 255, 204, 0.15);
+    color: #00ffcc;
+    font-weight: bold;
+}
+
+/* Estilo del &quot;Corner Button&quot; (el cuadrito arriba a la izquierda) */
+QTableWidget QTableCornerButton::section {
+    background-color: #27293d;
+    border: none;
+}
+
+/* ScrollBar Vertical (Barra de desplazamiento) */
+QScrollBar:vertical {
+    border: none;
+    background: #1e1e2e;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #3c3c4c;
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #00ffcc; /* Brilla al interactuar */
+}</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="horizontalLayoutWidget_4">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>519</y>
+               <width>941</width>
+               <height>31</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QSlider" name="horizontalSlider_2">
+                <property name="styleSheet">
+                 <string notr="true">/* Estilo específico para horizontalSlider_2 */
+QSlider#horizontalSlider_2::groove:horizontal {
+    border: 1px solid #3c3c4c;
+    height: 8px;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, 
+                                stop:0 #00ffcc, 
+                                stop:1 #ff4d4d); /* Gradiente de Verde a Rojo */
+    margin: 2px 0;
+    border-radius: 4px;
+}
+
+QSlider#horizontalSlider_2::handle:horizontal {
+    background: #ffffff;
+    border: 2px solid #00ffcc;
+    width: 20px;
+    height: 20px;
+    margin: -7px 0;
+    border-radius: 10px;
+}
+
+/* Efecto cuando el usuario presiona el manejador */
+QSlider#horizontalSlider_2::handle:horizontal:pressed {
+    background: #00ffcc;
+    border: 2px solid #ffffff;
+}
+
+/* La parte de la barra que queda a la izquierda (ya recorrida) */
+QSlider#horizontalSlider_2::sub-page:horizontal {
+    background: rgba(0, 255, 204, 0.3); /* Un rastro brillante sutil */
+    border-radius: 4px;
+}</string>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Orientation::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="horizontalLayoutWidget_5">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>470</y>
+               <width>941</width>
+               <height>41</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <item>
+               <widget class="QLabel" name="label_2">
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+    color: #ffffff;
+    font-family: &quot;Segoe UI Semibold&quot;;
+    font-size: 14px;
+    background: transparent;
+    padding: 2px;
+}
+
+/* Estilo específico para destacar títulos con un borde inferior neón */
+QLabel#label_titulo {
+    color: #00ffcc;
+    font-size: 18px;
+    border-bottom: 2px solid #00ffcc;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>Maximo Dias</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_3">
+        <widget class="QWidget" name="gridLayoutWidget_3">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>19</y>
+           <width>1921</width>
+           <height>1111</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QFrame" name="frame_11">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para el contenedor principal de la pestaña */
+QFrame{
+    background-color: #0d1117; /* Azul casi negro estilo terminal */
+    border: 2px solid #00ffcc; /* Borde cian neón */
+    border-radius: 15px;
+    
+    /* Efecto de degradado sutil para dar profundidad */
+    background-image: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, 
+        stop:0 rgba(13, 17, 23, 255), 
+        stop:1 rgba(22, 27, 34, 255));
+}
+
+/* Decoración para los títulos dentro de este frame */
+QLabel {
+    color: #00ffcc;
+    font-family: &quot;Consolas&quot;, &quot;Courier New&quot;;
+    font-weight: bold;
+    text-shadow: 0 0 10px #00ffcc; /* Brillo neón (solo si el sistema lo soporta) */
+}
+
+/* Estilo para los campos de entrada dentro del frame (Hashes/Tokens) */
+QLineEdit {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-bottom: 2px solid #00ffcc; /* Línea de acento neón */
+    color: #00ffcc;
+    padding: 5px;
+    font-family: &quot;Consolas&quot;;
+}
+
+/* Efecto cuando pasas el mouse por encima de los botones */
+QPushButton:hover {
+    background-color: #00ffcc;
+    color: #0d1117;
+    border: 1px solid #ffffff;
+}</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="horizontalLayoutWidget_8">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>19</y>
+               <width>941</width>
+               <height>511</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_8"/>
+            </widget>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QFrame" name="frame_12">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para el contenedor principal de la pestaña */
+QFrame{
+    background-color: #0d1117; /* Azul casi negro estilo terminal */
+    border: 2px solid #00ffcc; /* Borde cian neón */
+    border-radius: 15px;
+    
+    /* Efecto de degradado sutil para dar profundidad */
+    background-image: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, 
+        stop:0 rgba(13, 17, 23, 255), 
+        stop:1 rgba(22, 27, 34, 255));
+}
+
+/* Decoración para los títulos dentro de este frame */
+QLabel {
+    color: #00ffcc;
+    font-family: &quot;Consolas&quot;, &quot;Courier New&quot;;
+    font-weight: bold;
+    text-shadow: 0 0 10px #00ffcc; /* Brillo neón (solo si el sistema lo soporta) */
+}
+
+/* Estilo para los campos de entrada dentro del frame (Hashes/Tokens) */
+QLineEdit {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-bottom: 2px solid #00ffcc; /* Línea de acento neón */
+    color: #00ffcc;
+    padding: 5px;
+    font-family: &quot;Consolas&quot;;
+}
+
+/* Efecto cuando pasas el mouse por encima de los botones */
+QPushButton:hover {
+    background-color: #00ffcc;
+    color: #0d1117;
+    border: 1px solid #ffffff;
+}</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="horizontalLayoutWidget_9">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>9</y>
+               <width>941</width>
+               <height>521</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_9"/>
+            </widget>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QFrame" name="frame_13">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para el contenedor principal de la pestaña */
+QFrame{
+    background-color: #0d1117; /* Azul casi negro estilo terminal */
+    border: 2px solid #00ffcc; /* Borde cian neón */
+    border-radius: 15px;
+    
+    /* Efecto de degradado sutil para dar profundidad */
+    background-image: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, 
+        stop:0 rgba(13, 17, 23, 255), 
+        stop:1 rgba(22, 27, 34, 255));
+}
+
+/* Decoración para los títulos dentro de este frame */
+QLabel {
+    color: #00ffcc;
+    font-family: &quot;Consolas&quot;, &quot;Courier New&quot;;
+    font-weight: bold;
+    text-shadow: 0 0 10px #00ffcc; /* Brillo neón (solo si el sistema lo soporta) */
+}
+
+/* Estilo para los campos de entrada dentro del frame (Hashes/Tokens) */
+QLineEdit {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-bottom: 2px solid #00ffcc; /* Línea de acento neón */
+    color: #00ffcc;
+    padding: 5px;
+    font-family: &quot;Consolas&quot;;
+}
+
+/* Efecto cuando pasas el mouse por encima de los botones */
+QPushButton:hover {
+    background-color: #00ffcc;
+    color: #0d1117;
+    border: 1px solid #ffffff;
+}</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="horizontalLayoutWidget_10">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>19</y>
+               <width>941</width>
+               <height>511</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_10"/>
+            </widget>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QFrame" name="frame_14">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo para el contenedor principal de la pestaña */
+QFrame{
+    background-color: #0d1117; /* Azul casi negro estilo terminal */
+    border: 2px solid #00ffcc; /* Borde cian neón */
+    border-radius: 15px;
+    
+    /* Efecto de degradado sutil para dar profundidad */
+    background-image: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1, 
+        stop:0 rgba(13, 17, 23, 255), 
+        stop:1 rgba(22, 27, 34, 255));
+}
+
+/* Decoración para los títulos dentro de este frame */
+QLabel {
+    color: #00ffcc;
+    font-family: &quot;Consolas&quot;, &quot;Courier New&quot;;
+    font-weight: bold;
+    text-shadow: 0 0 10px #00ffcc; /* Brillo neón (solo si el sistema lo soporta) */
+}
+
+/* Estilo para los campos de entrada dentro del frame (Hashes/Tokens) */
+QLineEdit {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-bottom: 2px solid #00ffcc; /* Línea de acento neón */
+    color: #00ffcc;
+    padding: 5px;
+    font-family: &quot;Consolas&quot;;
+}
+
+/* Efecto cuando pasas el mouse por encima de los botones */
+QPushButton:hover {
+    background-color: #00ffcc;
+    color: #0d1117;
+    border: 1px solid #ffffff;
+}</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>1955</width>
-     <height>33</height>
+     <height>38</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuDashboard">
+    <property name="title">
+     <string>DASHBOARD</string>
+    </property>
+    <addaction name="actionGRAF_CA"/>
+   </widget>
+   <widget class="QMenu" name="menuANAL_SIS_DE_ALERTA">
+    <property name="title">
+     <string>Análisis de Liquidez</string>
+    </property>
+    <addaction name="action_iquidez"/>
+   </widget>
+   <widget class="QMenu" name="menuSIMULACIONES">
+    <property name="title">
+     <string>Seguridad de Datos y Accesos</string>
+    </property>
+    <addaction name="action_accesos"/>
+   </widget>
+   <widget class="QMenu" name="menuAUDITORIA_DE_PROCESOS">
+    <property name="title">
+     <string>Inteligencia de Mercado</string>
+    </property>
+    <addaction name="action_inteligencia"/>
+   </widget>
+   <widget class="QMenu" name="menuGesti_n_de_Cumplimiento">
+    <property name="title">
+     <string>Gestión de Cumplimiento</string>
+    </property>
+    <addaction name="action_gestion"/>
+   </widget>
+   <widget class="QMenu" name="menuOptimizaci_n_de_Inventario">
+    <property name="title">
+     <string>Optimización de Inventario</string>
+    </property>
+    <addaction name="action_inventario"/>
+   </widget>
+   <widget class="QMenu" name="menuContinuidad_del_Negocio">
+    <property name="title">
+     <string>Continuidad del Negocio</string>
+    </property>
+    <addaction name="action_negocio"/>
+   </widget>
+   <widget class="QMenu" name="menuVOLVER">
+    <property name="title">
+     <string>VOLVER</string>
+    </property>
+    <addaction name="actioninicio"/>
+   </widget>
+   <addaction name="menuDashboard"/>
+   <addaction name="menuANAL_SIS_DE_ALERTA"/>
+   <addaction name="menuSIMULACIONES"/>
+   <addaction name="menuAUDITORIA_DE_PROCESOS"/>
+   <addaction name="menuGesti_n_de_Cumplimiento"/>
+   <addaction name="menuOptimizaci_n_de_Inventario"/>
+   <addaction name="menuContinuidad_del_Negocio"/>
+   <addaction name="menuVOLVER"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionGRAF_CA">
+   <property name="text">
+    <string>GRAFÍCA</string>
+   </property>
+  </action>
+  <action name="action_iquidez">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+  <action name="action_accesos">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+  <action name="action_inteligencia">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+  <action name="action_gestion">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+  <action name="action_inventario">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+  <action name="action_negocio">
+   <property name="text">
+    <string>Opciones</string>
+   </property>
+  </action>
+  <action name="actioninicio">
+   <property name="text">
+    <string>inicio</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>

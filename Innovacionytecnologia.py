@@ -112,7 +112,6 @@ class InnovacionWidget(QMainWindow):
 
             #logs
             self.cargar_logs_a_tabla()
-            # En tu __init__, justo antes o después de cargar los logs
             self.ui.tableWidget_logs.setStyleSheet("""
                 QTableWidget {
                     background-color: #121212;
@@ -1276,25 +1275,25 @@ class InnovacionWidget(QMainWindow):
       
 
     #logs
-    #def registrar_log(self, evento, modulo="SYSTEM"):
-        #try:
-            #ahora = datetime.now()
-            #fecha = ahora.strftime("%Y-%m-%d")
-            #hora = ahora.strftime("%H:%M:%S")
+    def registrar_log(self, evento, modulo="SYSTEM"):
+        try:
+            ahora = datetime.now()
+            fecha = ahora.strftime("%Y-%m-%d")
+            hora = ahora.strftime("%H:%M:%S")
             
-            #conn = sqlite3.connect("ingenieria.db")
-            #cursor = conn.cursor()
-            #cursor.execute("""
-                #INSERT INTO logs_actividad (fecha, hora, evento, modulo) 
-                #VALUES (?, ?, ?, ?)
-            #""", (fecha, hora, evento, modulo))
-            #conn.commit()
-            #conn.close()
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            cursor.execute("""
+                INSERT INTO logs_actividad (fecha, hora, evento, modulo) 
+                VALUES (?, ?, ?, ?)
+            """, (fecha, hora, evento, modulo))
+            conn.commit()
+            conn.close()
             
-            # Opcional: Refrescar la tabla de la interfaz cada vez que se registra uno
-            #self.cargar_logs_a_tabla() 
-        #except Exception as e:
-            #print(f"Error al guardar log: {e}") 
+            #Opcional: Refrescar la tabla de la interfaz cada vez que se registra uno
+            self.cargar_logs_a_tabla() 
+        except Exception as e:
+            print(f"Error al guardar log: {e}") 
             #activar cuando la app sea funcional en su totalidad
 
 
