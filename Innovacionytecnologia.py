@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 from PySide6.QtGui import QPixmap
-from PySide6.QtCore import QFile, Qt,QUrl
+from PySide6.QtCore import QFile, Qt,QUrl,QTimer
 import Exportar
 import pandas as pd
 from datetime import datetime
@@ -136,6 +136,7 @@ class InnovacionWidget(QMainWindow):
             self.ui.frame_3.setLayout(QVBoxLayout())
 
         self.actualizar_todo_el_dashboard()
+        self.ui.stackedWidget.currentChanged.connect(self.optimizar_vistas_dinamicas)
 
         # En el __init__ o al cargar la pestaña de métricas
     def actualizar_todo_el_dashboard(self):
@@ -146,6 +147,18 @@ class InnovacionWidget(QMainWindow):
         self.graficar_carga_modulos()
         self.graficar_dispersion_carga()
 
+
+    def optimizar_vistas_dinamicas(self, index):
+        # Definimos los índices (ajusta según tu image_9a428e.png)
+        PAGINA_MAPA = 4
+        PAGINA_METRICAS = 5
+
+        if index == PAGINA_MAPA:
+            self.inicializar_globo()
+
+        elif index == PAGINA_METRICAS:
+            print("Cargando métricas con retardo para ajuste de tamaño...")
+            QTimer.singleShot(300, self.cargar_datos_combos)
        
 
     #pasar paginas
@@ -1369,6 +1382,7 @@ class InnovacionWidget(QMainWindow):
         except Exception as e:
             print(f"Error al graficar: {e}")
 
+
     def graficar_proporcion_logs(self):
         try:
             # 1. Obtener conteo de SUCCESS y ERROR
@@ -1412,6 +1426,7 @@ class InnovacionWidget(QMainWindow):
             
         except Exception as e:
             print(f"Error al graficar frame_3: {e}")
+
 
     def graficar_actividad_temporal(self):
         try:
@@ -1504,6 +1519,7 @@ class InnovacionWidget(QMainWindow):
         except Exception as e:
             print(f"Error al graficar el frame principal: {e}")
 
+
     def graficar_carga_modulos(self):
         try:
             # 1. Consultar los 5 módulos con más actividad
@@ -1557,6 +1573,7 @@ class InnovacionWidget(QMainWindow):
             
         except Exception as e:
             print(f"Error al graficar frame_5: {e}")
+            
 
     def graficar_dispersion_carga(self):
         try:

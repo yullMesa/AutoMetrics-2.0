@@ -201,7 +201,6 @@ class VentanaInicio(QDialog):
                     print(f"No se pudo eliminar {archivo}: {e}")
 
 
-    
 
 
 

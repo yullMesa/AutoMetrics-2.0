@@ -95,16 +95,16 @@ QMenu::separator {
         <string notr="true">background-color: rgb(39, 39, 39);</string>
        </property>
        <property name="currentIndex">
-        <number>5</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="page">
         <widget class="QWidget" name="gridLayoutWidget">
          <property name="geometry">
           <rect>
-           <x>9</x>
-           <y>19</y>
+           <x>10</x>
+           <y>0</y>
            <width>1941</width>
-           <height>1071</height>
+           <height>1101</height>
           </rect>
          </property>
          <layout class="QGridLayout" name="gridLayout">
@@ -598,7 +598,7 @@ QToolButton::menu-indicator { image: none; } /* Quita la flechita si existe */</
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>-775</y>
+               <y>0</y>
                <width>1935</width>
                <height>2000</height>
               </rect>
@@ -2561,7 +2561,7 @@ QPushButton:disabled {
         <widget class="QLabel" name="label_5">
          <property name="geometry">
           <rect>
-           <x>690</x>
+           <x>870</x>
            <y>10</y>
            <width>481</width>
            <height>91</height>
@@ -2583,12 +2583,390 @@ QPushButton:disabled {
           <string>comparador</string>
          </property>
         </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_13">
+         <property name="geometry">
+          <rect>
+           <x>39</x>
+           <y>130</y>
+           <width>1881</width>
+           <height>80</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_13">
+          <item>
+           <widget class="QComboBox" name="combo_marca_4">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/* Estilo general del ComboBox */
+QComboBox {
+    background-color: #1e1e2e;
+    border: 2px solid #00f2ff; /* Tu azul cian característico */
+    border-radius: 8px;
+    padding: 5px 15px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    min-height: 35px;
+}
+
+/* Cuando pasas el mouse por encima */
+QComboBox:hover {
+    border: 2px solid #ffffff;
+    background-color: #2a2a3d;
+}
+
+/* Estilo del botón de la flechita */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 1px solid #00f2ff;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* Icono de la flecha (puedes usar un carácter o imagen) */
+QComboBox::down-arrow {
+    image: none; /* Quitamos la flecha fea por defecto */
+    border-top: 5px solid #00f2ff; /* Creamos una flecha minimalista con bordes */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-top: 2px;
+}
+
+/* Estilo de la lista desplegable */
+QComboBox QAbstractItemView {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    selection-background-color: #00f2ff;
+    selection-color: #000000;
+    border: 1px solid #00f2ff;
+    outline: none;
+    border-radius: 5px;
+}
+
+/* Cada item de la lista */
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+    padding-left: 10px;
+}</string>
+            </property>
+            <property name="placeholderText">
+             <string>Marca</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="combo_modelo_4">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/* Estilo general del ComboBox */
+QComboBox {
+    background-color: #1e1e2e;
+    border: 2px solid #00f2ff; /* Tu azul cian característico */
+    border-radius: 8px;
+    padding: 5px 15px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    min-height: 35px;
+}
+
+/* Cuando pasas el mouse por encima */
+QComboBox:hover {
+    border: 2px solid #ffffff;
+    background-color: #2a2a3d;
+}
+
+/* Estilo del botón de la flechita */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 1px solid #00f2ff;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* Icono de la flecha (puedes usar un carácter o imagen) */
+QComboBox::down-arrow {
+    image: none; /* Quitamos la flecha fea por defecto */
+    border-top: 5px solid #00f2ff; /* Creamos una flecha minimalista con bordes */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-top: 2px;
+}
+
+/* Estilo de la lista desplegable */
+QComboBox QAbstractItemView {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    selection-background-color: #00f2ff;
+    selection-color: #000000;
+    border: 1px solid #00f2ff;
+    outline: none;
+    border-radius: 5px;
+}
+
+/* Cada item de la lista */
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+    padding-left: 10px;
+}</string>
+            </property>
+            <property name="placeholderText">
+             <string>Modelo</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="combo_marca_5">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/* Estilo general del ComboBox */
+QComboBox {
+    background-color: #1e1e2e;
+    border: 2px solid #00f2ff; /* Tu azul cian característico */
+    border-radius: 8px;
+    padding: 5px 15px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    min-height: 35px;
+}
+
+/* Cuando pasas el mouse por encima */
+QComboBox:hover {
+    border: 2px solid #ffffff;
+    background-color: #2a2a3d;
+}
+
+/* Estilo del botón de la flechita */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 1px solid #00f2ff;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* Icono de la flecha (puedes usar un carácter o imagen) */
+QComboBox::down-arrow {
+    image: none; /* Quitamos la flecha fea por defecto */
+    border-top: 5px solid #00f2ff; /* Creamos una flecha minimalista con bordes */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-top: 2px;
+}
+
+/* Estilo de la lista desplegable */
+QComboBox QAbstractItemView {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    selection-background-color: #00f2ff;
+    selection-color: #000000;
+    border: 1px solid #00f2ff;
+    outline: none;
+    border-radius: 5px;
+}
+
+/* Cada item de la lista */
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+    padding-left: 10px;
+}</string>
+            </property>
+            <property name="placeholderText">
+             <string>Marca</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="combo_modelo_5">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/* Estilo general del ComboBox */
+QComboBox {
+    background-color: #1e1e2e;
+    border: 2px solid #00f2ff; /* Tu azul cian característico */
+    border-radius: 8px;
+    padding: 5px 15px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    min-height: 35px;
+}
+
+/* Cuando pasas el mouse por encima */
+QComboBox:hover {
+    border: 2px solid #ffffff;
+    background-color: #2a2a3d;
+}
+
+/* Estilo del botón de la flechita */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 1px solid #00f2ff;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+/* Icono de la flecha (puedes usar un carácter o imagen) */
+QComboBox::down-arrow {
+    image: none; /* Quitamos la flecha fea por defecto */
+    border-top: 5px solid #00f2ff; /* Creamos una flecha minimalista con bordes */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-top: 2px;
+}
+
+/* Estilo de la lista desplegable */
+QComboBox QAbstractItemView {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    selection-background-color: #00f2ff;
+    selection-color: #000000;
+    border: 1px solid #00f2ff;
+    outline: none;
+    border-radius: 5px;
+}
+
+/* Cada item de la lista */
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+    padding-left: 10px;
+}</string>
+            </property>
+            <property name="placeholderText">
+             <string>Modelo</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_14">
+         <property name="geometry">
+          <rect>
+           <x>39</x>
+           <y>259</y>
+           <width>1881</width>
+           <height>721</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_14">
+          <item>
+           <widget class="QLabel" name="label_133">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_134">
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_15">
+         <property name="geometry">
+          <rect>
+           <x>829</x>
+           <y>1000</y>
+           <width>331</width>
+           <height>80</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_15">
+          <item>
+           <widget class="QPushButton" name="push_comparar">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">/* Estilo general del botón */
+QPushButton {
+    background-color: #1e1e2e;
+    border: 2px solid #00f2ff;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 20px;
+    min-width: 100px;
+}
+
+/* Efecto Hover (cuando pasas el mouse) */
+QPushButton:hover {
+    background-color: #00f2ff;
+    color: #000000; /* El texto cambia a negro para contrastar */
+    border: 2px solid #ffffff;
+    /* Efecto de brillo sutil */
+    outline: none;
+}
+
+/* Efecto Pressed (cuando haces clic) */
+QPushButton:pressed {
+    background-color: #008b94;
+    border: 2px solid #00f2ff;
+    padding-left: 22px; /* Efecto de hundimiento */
+    padding-top: 10px;
+}
+
+/* Estilo para cuando el botón está deshabilitado */
+QPushButton:disabled {
+    background-color: #2d2d2d;
+    border: 2px solid #555555;
+    color: #888888;
+}</string>
+            </property>
+            <property name="text">
+             <string>Comparar</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </widget>
        <widget class="QWidget" name="page_8">
         <widget class="QLabel" name="label_6">
          <property name="geometry">
           <rect>
-           <x>690</x>
+           <x>870</x>
            <y>20</y>
            <width>481</width>
            <height>91</height>
@@ -2609,6 +2987,1372 @@ QPushButton:disabled {
          <property name="text">
           <string>venta</string>
          </property>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_7">
+         <property name="geometry">
+          <rect>
+           <x>19</x>
+           <y>159</y>
+           <width>821</width>
+           <height>775</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="QTableWidget" name="tableWidget_carros">
+            <property name="styleSheet">
+             <string notr="true">/* Contenedor principal de la tabla */
+QTableWidget {
+    background-color: #1e1e2e; /* Fondo oscuro coherente con tu UI */
+    alternate-background-color: #252535; /* Efecto zebra para filas alternas */
+    border: 1px solid #3c3c4c;
+    gridline-color: #3c3c4c; /* Color de las líneas de la cuadrícula */
+    color: #ffffff;
+    font-size: 13px;
+    selection-background-color: #00f2ff; /* Color Cyan neón al seleccionar */
+    selection-color: #000000;
+    border-radius: 5px;
+}
+
+/* Estilo de las cabeceras (Headers) */
+QHeaderView::section {
+    background-color: #2d2d3d;
+    color: #00f2ff; /* Texto Cyan para resaltar títulos */
+    padding: 6px;
+    border: 1px solid #3c3c4c;
+    font-weight: bold;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    text-transform: uppercase;
+}
+
+/* Estilo de los ítems individuales */
+QTableWidget::item {
+    padding: 5px;
+}
+
+QTableWidget::item:hover {
+    background-color: rgba(0, 242, 255, 0.1); /* Brillo sutil al pasar el mouse */
+}
+
+/* Estilo de las barras de desplazamiento (Scrollbars) */
+QScrollBar:vertical {
+    border: none;
+    background: #1e1e2e;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #3c3c4c;
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #00f2ff; /* El scroll se ilumina al tocarlo */
+}</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_8">
+         <property name="geometry">
+          <rect>
+           <x>859</x>
+           <y>169</y>
+           <width>1081</width>
+           <height>911</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <item>
+           <widget class="QStackedWidget" name="stackedWidget_2">
+            <property name="currentIndex">
+             <number>0</number>
+            </property>
+            <widget class="QWidget" name="page_9"/>
+            <widget class="QWidget" name="page_10">
+             <widget class="QWidget" name="formLayoutWidget">
+              <property name="geometry">
+               <rect>
+                <x>20</x>
+                <y>30</y>
+                <width>1031</width>
+                <height>793</height>
+               </rect>
+              </property>
+              <layout class="QFormLayout" name="formLayout">
+               <property name="verticalSpacing">
+                <number>69</number>
+               </property>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_10">
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #e0e0e0; /* Gris muy claro, casi blanco */
+    font-size: 14px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    background-color: transparent;
+    padding-left: 10px;
+    /* Una línea sutil a la izquierda para guiar el ojo */
+    border-left: 3px solid #00f2ff; 
+    margin-bottom: 5px;
+}
+
+/* Estilo para los labels de resultados (Veredicto) */
+QLabel#lbl_veredicto {
+    background-color: #1a1a26;
+    border: 1px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    border-left: 5px solid #00ff88; /* Verde para el éxito */
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Estado Estético</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_11">
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #e0e0e0; /* Gris muy claro, casi blanco */
+    font-size: 14px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    background-color: transparent;
+    padding-left: 10px;
+    /* Una línea sutil a la izquierda para guiar el ojo */
+    border-left: 3px solid #00f2ff; 
+    margin-bottom: 5px;
+}
+
+/* Estilo para los labels de resultados (Veredicto) */
+QLabel#lbl_veredicto {
+    background-color: #1a1a26;
+    border: 1px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    border-left: 5px solid #00ff88; /* Verde para el éxito */
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Documentación/Papelería</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_12">
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #e0e0e0; /* Gris muy claro, casi blanco */
+    font-size: 14px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    background-color: transparent;
+    padding-left: 10px;
+    /* Una línea sutil a la izquierda para guiar el ojo */
+    border-left: 3px solid #00f2ff; 
+    margin-bottom: 5px;
+}
+
+/* Estilo para los labels de resultados (Veredicto) */
+QLabel#lbl_veredicto {
+    background-color: #1a1a26;
+    border: 1px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    border-left: 5px solid #00ff88; /* Verde para el éxito */
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Historial de Mantenimiento</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_19">
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #e0e0e0; /* Gris muy claro, casi blanco */
+    font-size: 14px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    background-color: transparent;
+    padding-left: 10px;
+    /* Una línea sutil a la izquierda para guiar el ojo */
+    border-left: 3px solid #00f2ff; 
+    margin-bottom: 5px;
+}
+
+/* Estilo para los labels de resultados (Veredicto) */
+QLabel#lbl_veredicto {
+    background-color: #1a1a26;
+    border: 1px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    border-left: 5px solid #00ff88; /* Verde para el éxito */
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Prueba de Ruta (Test Drive)</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QComboBox" name="combo_estado">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QComboBox {
+    background-color: #1e1e2e; /* Fondo oscuro base */
+    border: 2px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: #ffffff; /* Letras blancas */
+    font-size: 13px;
+    min-width: 150px;
+}
+
+/* El estado cuando el combo está enfocado o abierto */
+QComboBox:focus, QComboBox:on {
+    border: 2px solid #00f2ff; /* El &quot;Azulito&quot; neón */
+}
+
+/* Botón de la flecha */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 1px solid #3c3c4c;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+/* Icono de la flecha (Flecha blanca/azul) */
+QComboBox::down-arrow {
+    image: none; /* Quitamos la flecha fea de Windows */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #00f2ff; /* Flecha azul neón */
+    margin-right: 5px;
+}
+
+/* LA LISTA DESPLEGABLE (Lo que se ve gris) */
+QComboBox QAbstractItemView {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    border: 1px solid #00f2ff;
+    selection-background-color: #00f2ff; /* Color al pasar el mouse por los items */
+    selection-color: #000000; /* Texto negro al seleccionar para contraste */
+    outline: none;
+    padding: 10px;
+}</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>Excelente</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Bueno</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Regular</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Malo</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QComboBox" name="combo_papeleria">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QComboBox {
+    background-color: #1e1e2e; /* Fondo oscuro base */
+    border: 2px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: #ffffff; /* Letras blancas */
+    font-size: 13px;
+    min-width: 150px;
+}
+
+/* El estado cuando el combo está enfocado o abierto */
+QComboBox:focus, QComboBox:on {
+    border: 2px solid #00f2ff; /* El &quot;Azulito&quot; neón */
+}
+
+/* Botón de la flecha */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 1px solid #3c3c4c;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+/* Icono de la flecha (Flecha blanca/azul) */
+QComboBox::down-arrow {
+    image: none; /* Quitamos la flecha fea de Windows */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #00f2ff; /* Flecha azul neón */
+    margin-right: 5px;
+}
+
+/* LA LISTA DESPLEGABLE (Lo que se ve gris) */
+QComboBox QAbstractItemView {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    border: 1px solid #00f2ff;
+    selection-background-color: #00f2ff; /* Color al pasar el mouse por los items */
+    selection-color: #000000; /* Texto negro al seleccionar para contraste */
+    outline: none;
+    padding: 10px;
+}</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>Al día</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Pendiente traspaso</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Deudas</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QComboBox" name="combo_historia">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QComboBox {
+    background-color: #1e1e2e; /* Fondo oscuro base */
+    border: 2px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: #ffffff; /* Letras blancas */
+    font-size: 13px;
+    min-width: 150px;
+}
+
+/* El estado cuando el combo está enfocado o abierto */
+QComboBox:focus, QComboBox:on {
+    border: 2px solid #00f2ff; /* El &quot;Azulito&quot; neón */
+}
+
+/* Botón de la flecha */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 1px solid #3c3c4c;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+/* Icono de la flecha (Flecha blanca/azul) */
+QComboBox::down-arrow {
+    image: none; /* Quitamos la flecha fea de Windows */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #00f2ff; /* Flecha azul neón */
+    margin-right: 5px;
+}
+
+/* LA LISTA DESPLEGABLE (Lo que se ve gris) */
+QComboBox QAbstractItemView {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    border: 1px solid #00f2ff;
+    selection-background-color: #00f2ff; /* Color al pasar el mouse por los items */
+    selection-color: #000000; /* Texto negro al seleccionar para contraste */
+    outline: none;
+    padding: 10px;
+}</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>Completo</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Parcial</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>No tiene</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QComboBox" name="combo_prueba">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QComboBox {
+    background-color: #1e1e2e; /* Fondo oscuro base */
+    border: 2px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 5px 10px;
+    color: #ffffff; /* Letras blancas */
+    font-size: 13px;
+    min-width: 150px;
+}
+
+/* El estado cuando el combo está enfocado o abierto */
+QComboBox:focus, QComboBox:on {
+    border: 2px solid #00f2ff; /* El &quot;Azulito&quot; neón */
+}
+
+/* Botón de la flecha */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 30px;
+    border-left: 1px solid #3c3c4c;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+/* Icono de la flecha (Flecha blanca/azul) */
+QComboBox::down-arrow {
+    image: none; /* Quitamos la flecha fea de Windows */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #00f2ff; /* Flecha azul neón */
+    margin-right: 5px;
+}
+
+/* LA LISTA DESPLEGABLE (Lo que se ve gris) */
+QComboBox QAbstractItemView {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    border: 1px solid #00f2ff;
+    selection-background-color: #00f2ff; /* Color al pasar el mouse por los items */
+    selection-color: #000000; /* Texto negro al seleccionar para contraste */
+    outline: none;
+    padding: 10px;
+}</string>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>Sin problemas</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Sin ruidos</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Con ruidos</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>Problemas graves</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_20">
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #e0e0e0; /* Gris muy claro, casi blanco */
+    font-size: 14px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    background-color: transparent;
+    padding-left: 10px;
+    /* Una línea sutil a la izquierda para guiar el ojo */
+    border-left: 3px solid #00f2ff; 
+    margin-bottom: 5px;
+}
+
+/* Estilo para los labels de resultados (Veredicto) */
+QLabel#lbl_veredicto {
+    background-color: #1a1a26;
+    border: 1px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    border-left: 5px solid #00ff88; /* Verde para el éxito */
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Marca</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_21">
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #e0e0e0; /* Gris muy claro, casi blanco */
+    font-size: 14px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    background-color: transparent;
+    padding-left: 10px;
+    /* Una línea sutil a la izquierda para guiar el ojo */
+    border-left: 3px solid #00f2ff; 
+    margin-bottom: 5px;
+}
+
+/* Estilo para los labels de resultados (Veredicto) */
+QLabel#lbl_veredicto {
+    background-color: #1a1a26;
+    border: 1px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    border-left: 5px solid #00ff88; /* Verde para el éxito */
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Modelo</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QLineEdit" name="txt_marca">
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    border: 2px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #00f2ff; /* Color al sombrear texto */
+    selection-color: #000000;
+}
+
+/* Efecto cuando el usuario hace clic para escribir */
+QLineEdit:focus {
+    border: 2px solid #00f2ff; /* Resalte en Cyan */
+    background-color: #252535;
+}
+
+/* Estilo para el texto de sugerencia (Placeholder) */
+QLineEdit::placeholder {
+    color: #6272a4;
+    font-style: italic;
+}
+
+/* Estilo si el campo es de solo lectura (ReadOnly) */
+QLineEdit:read-only {
+    background-color: #16161f;
+    color: #888888;
+    border: 1px dashed #3c3c4c;
+}</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <widget class="QLineEdit" name="txt_modelo">
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    border: 2px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #00f2ff; /* Color al sombrear texto */
+    selection-color: #000000;
+}
+
+/* Efecto cuando el usuario hace clic para escribir */
+QLineEdit:focus {
+    border: 2px solid #00f2ff; /* Resalte en Cyan */
+    background-color: #252535;
+}
+
+/* Estilo para el texto de sugerencia (Placeholder) */
+QLineEdit::placeholder {
+    color: #6272a4;
+    font-style: italic;
+}
+
+/* Estilo si el campo es de solo lectura (ReadOnly) */
+QLineEdit:read-only {
+    background-color: #16161f;
+    color: #888888;
+    border: 1px dashed #3c3c4c;
+}</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="0">
+                <widget class="QLabel" name="label_22">
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #e0e0e0; /* Gris muy claro, casi blanco */
+    font-size: 14px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    background-color: transparent;
+    padding-left: 10px;
+    /* Una línea sutil a la izquierda para guiar el ojo */
+    border-left: 3px solid #00f2ff; 
+    margin-bottom: 5px;
+}
+
+/* Estilo para los labels de resultados (Veredicto) */
+QLabel#lbl_veredicto {
+    background-color: #1a1a26;
+    border: 1px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    border-left: 5px solid #00ff88; /* Verde para el éxito */
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Año</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="1">
+                <widget class="QLineEdit" name="txt_ano">
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    border: 2px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #00f2ff; /* Color al sombrear texto */
+    selection-color: #000000;
+}
+
+/* Efecto cuando el usuario hace clic para escribir */
+QLineEdit:focus {
+    border: 2px solid #00f2ff; /* Resalte en Cyan */
+    background-color: #252535;
+}
+
+/* Estilo para el texto de sugerencia (Placeholder) */
+QLineEdit::placeholder {
+    color: #6272a4;
+    font-style: italic;
+}
+
+/* Estilo si el campo es de solo lectura (ReadOnly) */
+QLineEdit:read-only {
+    background-color: #16161f;
+    color: #888888;
+    border: 1px dashed #3c3c4c;
+}</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="0">
+                <widget class="QLabel" name="label_23">
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #e0e0e0; /* Gris muy claro, casi blanco */
+    font-size: 14px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    background-color: transparent;
+    padding-left: 10px;
+    /* Una línea sutil a la izquierda para guiar el ojo */
+    border-left: 3px solid #00f2ff; 
+    margin-bottom: 5px;
+}
+
+/* Estilo para los labels de resultados (Veredicto) */
+QLabel#lbl_veredicto {
+    background-color: #1a1a26;
+    border: 1px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    border-left: 5px solid #00ff88; /* Verde para el éxito */
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Kilometraje</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="1">
+                <widget class="QLineEdit" name="txt_kilometraje">
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    border: 2px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #00f2ff; /* Color al sombrear texto */
+    selection-color: #000000;
+}
+
+/* Efecto cuando el usuario hace clic para escribir */
+QLineEdit:focus {
+    border: 2px solid #00f2ff; /* Resalte en Cyan */
+    background-color: #252535;
+}
+
+/* Estilo para el texto de sugerencia (Placeholder) */
+QLineEdit::placeholder {
+    color: #6272a4;
+    font-style: italic;
+}
+
+/* Estilo si el campo es de solo lectura (ReadOnly) */
+QLineEdit:read-only {
+    background-color: #16161f;
+    color: #888888;
+    border: 1px dashed #3c3c4c;
+}</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="horizontalLayoutWidget_9">
+              <property name="geometry">
+               <rect>
+                <x>270</x>
+                <y>839</y>
+                <width>511</width>
+                <height>61</height>
+               </rect>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_9">
+               <item>
+                <widget class="QPushButton" name="pushButton_venta">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: #2d2d3d;
+    color: #00f2ff; /* Color Cyan Neón */
+    border: 2px solid #00f2ff;
+    border-radius: 8px;
+    padding: 8px 15px;
+    font-size: 13px;
+    font-weight: bold;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    text-transform: uppercase;
+}
+
+/* Efecto cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #00f2ff;
+    color: #000000; /* Texto negro para contraste */
+    border: 2px solid #ffffff;
+    /* Efecto de resplandor sutil */
+    outline: none;
+}
+
+/* Efecto cuando se hace clic */
+QPushButton:pressed {
+    background-color: #008b94;
+    border: 2px solid #008b94;
+    padding-left: 10px;
+    padding-top: 10px; /* Sensación de hundimiento */
+}
+
+/* Estilo para botones de &quot;Peligro&quot; o &quot;Cancelar&quot; (Opcional) */
+QPushButton#push_rechazar {
+    color: #ff4444;
+    border: 2px solid #ff4444;
+}
+
+QPushButton#push_rechazar:hover {
+    background-color: #ff4444;
+    color: white;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Vender</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+            <widget class="QWidget" name="page_11">
+             <widget class="QWidget" name="formLayoutWidget_2">
+              <property name="geometry">
+               <rect>
+                <x>9</x>
+                <y>19</y>
+                <width>1061</width>
+                <height>761</height>
+               </rect>
+              </property>
+              <layout class="QFormLayout" name="formLayout_2">
+               <property name="verticalSpacing">
+                <number>101</number>
+               </property>
+               <property name="topMargin">
+                <number>57</number>
+               </property>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_24">
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #e0e0e0; /* Gris muy claro, casi blanco */
+    font-size: 14px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    background-color: transparent;
+    padding-left: 10px;
+    /* Una línea sutil a la izquierda para guiar el ojo */
+    border-left: 3px solid #00f2ff; 
+    margin-bottom: 5px;
+}
+
+/* Estilo para los labels de resultados (Veredicto) */
+QLabel#lbl_veredicto {
+    background-color: #1a1a26;
+    border: 1px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    border-left: 5px solid #00ff88; /* Verde para el éxito */
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Marca</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_25">
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #e0e0e0; /* Gris muy claro, casi blanco */
+    font-size: 14px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    background-color: transparent;
+    padding-left: 10px;
+    /* Una línea sutil a la izquierda para guiar el ojo */
+    border-left: 3px solid #00f2ff; 
+    margin-bottom: 5px;
+}
+
+/* Estilo para los labels de resultados (Veredicto) */
+QLabel#lbl_veredicto {
+    background-color: #1a1a26;
+    border: 1px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    border-left: 5px solid #00ff88; /* Verde para el éxito */
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Modelo</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_26">
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #e0e0e0; /* Gris muy claro, casi blanco */
+    font-size: 14px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    background-color: transparent;
+    padding-left: 10px;
+    /* Una línea sutil a la izquierda para guiar el ojo */
+    border-left: 3px solid #00f2ff; 
+    margin-bottom: 5px;
+}
+
+/* Estilo para los labels de resultados (Veredicto) */
+QLabel#lbl_veredicto {
+    background-color: #1a1a26;
+    border: 1px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    border-left: 5px solid #00ff88; /* Verde para el éxito */
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Año</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_27">
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #e0e0e0; /* Gris muy claro, casi blanco */
+    font-size: 14px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    background-color: transparent;
+    padding-left: 10px;
+    /* Una línea sutil a la izquierda para guiar el ojo */
+    border-left: 3px solid #00f2ff; 
+    margin-bottom: 5px;
+}
+
+/* Estilo para los labels de resultados (Veredicto) */
+QLabel#lbl_veredicto {
+    background-color: #1a1a26;
+    border: 1px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    border-left: 5px solid #00ff88; /* Verde para el éxito */
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Combustible</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_28">
+                 <property name="styleSheet">
+                  <string notr="true">QLabel {
+    color: #e0e0e0; /* Gris muy claro, casi blanco */
+    font-size: 14px;
+    font-weight: 600;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    background-color: transparent;
+    padding-left: 10px;
+    /* Una línea sutil a la izquierda para guiar el ojo */
+    border-left: 3px solid #00f2ff; 
+    margin-bottom: 5px;
+}
+
+/* Estilo para los labels de resultados (Veredicto) */
+QLabel#lbl_veredicto {
+    background-color: #1a1a26;
+    border: 1px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 16px;
+    border-left: 5px solid #00ff88; /* Verde para el éxito */
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Precio</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="txt_marca_2">
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    border: 2px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #00f2ff; /* Color al sombrear texto */
+    selection-color: #000000;
+}
+
+/* Efecto cuando el usuario hace clic para escribir */
+QLineEdit:focus {
+    border: 2px solid #00f2ff; /* Resalte en Cyan */
+    background-color: #252535;
+}
+
+/* Estilo para el texto de sugerencia (Placeholder) */
+QLineEdit::placeholder {
+    color: #6272a4;
+    font-style: italic;
+}
+
+/* Estilo si el campo es de solo lectura (ReadOnly) */
+QLineEdit:read-only {
+    background-color: #16161f;
+    color: #888888;
+    border: 1px dashed #3c3c4c;
+}</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QLineEdit" name="txt_modelo_2">
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    border: 2px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #00f2ff; /* Color al sombrear texto */
+    selection-color: #000000;
+}
+
+/* Efecto cuando el usuario hace clic para escribir */
+QLineEdit:focus {
+    border: 2px solid #00f2ff; /* Resalte en Cyan */
+    background-color: #252535;
+}
+
+/* Estilo para el texto de sugerencia (Placeholder) */
+QLineEdit::placeholder {
+    color: #6272a4;
+    font-style: italic;
+}
+
+/* Estilo si el campo es de solo lectura (ReadOnly) */
+QLineEdit:read-only {
+    background-color: #16161f;
+    color: #888888;
+    border: 1px dashed #3c3c4c;
+}</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QLineEdit" name="txt_ano_2">
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    border: 2px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #00f2ff; /* Color al sombrear texto */
+    selection-color: #000000;
+}
+
+/* Efecto cuando el usuario hace clic para escribir */
+QLineEdit:focus {
+    border: 2px solid #00f2ff; /* Resalte en Cyan */
+    background-color: #252535;
+}
+
+/* Estilo para el texto de sugerencia (Placeholder) */
+QLineEdit::placeholder {
+    color: #6272a4;
+    font-style: italic;
+}
+
+/* Estilo si el campo es de solo lectura (ReadOnly) */
+QLineEdit:read-only {
+    background-color: #16161f;
+    color: #888888;
+    border: 1px dashed #3c3c4c;
+}</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QLineEdit" name="txt_coombustibe">
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    border: 2px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #00f2ff; /* Color al sombrear texto */
+    selection-color: #000000;
+}
+
+/* Efecto cuando el usuario hace clic para escribir */
+QLineEdit:focus {
+    border: 2px solid #00f2ff; /* Resalte en Cyan */
+    background-color: #252535;
+}
+
+/* Estilo para el texto de sugerencia (Placeholder) */
+QLineEdit::placeholder {
+    color: #6272a4;
+    font-style: italic;
+}
+
+/* Estilo si el campo es de solo lectura (ReadOnly) */
+QLineEdit:read-only {
+    background-color: #16161f;
+    color: #888888;
+    border: 1px dashed #3c3c4c;
+}</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QLineEdit" name="txt_precio">
+                 <property name="styleSheet">
+                  <string notr="true">QLineEdit {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    border: 2px solid #3c3c4c;
+    border-radius: 5px;
+    padding: 8px;
+    font-size: 13px;
+    selection-background-color: #00f2ff; /* Color al sombrear texto */
+    selection-color: #000000;
+}
+
+/* Efecto cuando el usuario hace clic para escribir */
+QLineEdit:focus {
+    border: 2px solid #00f2ff; /* Resalte en Cyan */
+    background-color: #252535;
+}
+
+/* Estilo para el texto de sugerencia (Placeholder) */
+QLineEdit::placeholder {
+    color: #6272a4;
+    font-style: italic;
+}
+
+/* Estilo si el campo es de solo lectura (ReadOnly) */
+QLineEdit:read-only {
+    background-color: #16161f;
+    color: #888888;
+    border: 1px dashed #3c3c4c;
+}</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="horizontalLayoutWidget_11">
+              <property name="geometry">
+               <rect>
+                <x>309</x>
+                <y>800</y>
+                <width>451</width>
+                <height>80</height>
+               </rect>
+              </property>
+              <layout class="QHBoxLayout" name="horizontalLayout_11">
+               <item>
+                <widget class="QPushButton" name="push_compra">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QPushButton {
+    background-color: #1e2d24; /* Fondo verde oscuro muy sutil */
+    color: #00ff88; /* Verde neón esmeralda */
+    border: 2px solid #00ff88;
+    border-radius: 8px;
+    padding: 8px 15px;
+    font-size: 13px;
+    font-weight: bold;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    text-transform: uppercase;
+}
+
+/* Efecto al pasar el mouse */
+QPushButton:hover {
+    background-color: #00ff88;
+    color: #00331a; /* Texto verde oscuro para contraste */
+    border: 2px solid #ffffff;
+    /* Efecto de sombra para simular brillo neón */
+}
+
+/* Efecto al presionar */
+QPushButton:pressed {
+    background-color: #00cc6a;
+    border: 2px solid #00cc6a;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+/* Estilo desactivado (Poka-Yoke) */
+QPushButton:disabled {
+    background-color: #1a1a1a;
+    color: #2d5a44;
+    border: 2px solid #2d5a44;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string>Comprar</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_10">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>960</y>
+           <width>821</width>
+           <height>81</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_10">
+          <item>
+           <widget class="QPushButton" name="pushButton_3">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: #2d2d3d;
+    color: #00f2ff; /* Color Cyan Neón */
+    border: 2px solid #00f2ff;
+    border-radius: 8px;
+    padding: 8px 15px;
+    font-size: 13px;
+    font-weight: bold;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    text-transform: uppercase;
+}
+
+/* Efecto cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #00f2ff;
+    color: #000000; /* Texto negro para contraste */
+    border: 2px solid #ffffff;
+    /* Efecto de resplandor sutil */
+    outline: none;
+}
+
+/* Efecto cuando se hace clic */
+QPushButton:pressed {
+    background-color: #008b94;
+    border: 2px solid #008b94;
+    padding-left: 10px;
+    padding-top: 10px; /* Sensación de hundimiento */
+}
+
+/* Estilo para botones de &quot;Peligro&quot; o &quot;Cancelar&quot; (Opcional) */
+QPushButton#push_rechazar {
+    color: #ff4444;
+    border: 2px solid #ff4444;
+}
+
+QPushButton#push_rechazar:hover {
+    background-color: #ff4444;
+    color: white;
+}</string>
+            </property>
+            <property name="text">
+             <string>Vender</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton {
+    background-color: #1e2d24; /* Fondo verde oscuro muy sutil */
+    color: #00ff88; /* Verde neón esmeralda */
+    border: 2px solid #00ff88;
+    border-radius: 8px;
+    padding: 8px 15px;
+    font-size: 13px;
+    font-weight: bold;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    text-transform: uppercase;
+}
+
+/* Efecto al pasar el mouse */
+QPushButton:hover {
+    background-color: #00ff88;
+    color: #00331a; /* Texto verde oscuro para contraste */
+    border: 2px solid #ffffff;
+    /* Efecto de sombra para simular brillo neón */
+}
+
+/* Efecto al presionar */
+QPushButton:pressed {
+    background-color: #00cc6a;
+    border: 2px solid #00cc6a;
+    padding-left: 10px;
+    padding-top: 10px;
+}
+
+/* Estilo desactivado (Poka-Yoke) */
+QPushButton:disabled {
+    background-color: #1a1a1a;
+    color: #2d5a44;
+    border: 2px solid #2d5a44;
+}</string>
+            </property>
+            <property name="text">
+             <string>Comprar</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </widget>
       </widget>
