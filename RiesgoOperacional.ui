@@ -88,7 +88,7 @@ QMenu::right-arrow {
      <item>
       <widget class="QStackedWidget" name="stackedWidget">
        <property name="currentIndex">
-        <number>2</number>
+        <number>3</number>
        </property>
        <widget class="QWidget" name="page">
         <widget class="QWidget" name="gridLayoutWidget">
@@ -1095,7 +1095,53 @@ QPushButton:hover {
                <height>511</height>
               </rect>
              </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_8"/>
+             <layout class="QHBoxLayout" name="horizontalLayout_8">
+              <item>
+               <widget class="QPlainTextEdit" name="plainTextEdit_2">
+                <property name="styleSheet">
+                 <string notr="true">QPlainTextEdit {
+    /* Fondo negro profundo estilo OLED */
+    background-color: #050505; 
+    
+    /* Letra verde neón clásica de terminal */
+    color: #00ff41; 
+    
+    /* Fuente tipo hacker: Consolas es la estándar, 
+       pero agregamos alternativas por si no está instalada */
+    font-family: &quot;Consolas&quot;, &quot;Monospace&quot;, &quot;Courier New&quot;, &quot;OCR A Extended&quot;;
+    font-size: 13px;
+    
+    /* Borde neón con bordes redondeados */
+    border: 1px solid #00ff41;
+    border-radius: 8px;
+    
+    /* Espaciado interno para que el texto no pegue al borde */
+    padding: 10px;
+}
+
+/* Estilo para la barra de desplazamiento (Scrollbar) para que combine */
+QScrollBar:vertical {
+    border: none;
+    background: #050505;
+    width: 8px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #00ff41;
+    min-height: 20px;
+    border-radius: 4px;
+}
+
+/* Efecto cuando el mouse entra al cuadro (opcional) */
+QPlainTextEdit:hover {
+    border: 1px solid #ffffff;
+    background-color: #0a0a0a;
+}</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </widget>
           </item>
@@ -1154,7 +1200,65 @@ QPushButton:hover {
                <height>521</height>
               </rect>
              </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_9"/>
+             <layout class="QHBoxLayout" name="horizontalLayout_9">
+              <item>
+               <widget class="QTableWidget" name="tableWidget_persona">
+                <property name="styleSheet">
+                 <string notr="true">/* Estilo General de la Tabla */
+QTableWidget {
+    background-color: rgba(13, 17, 23, 180); /* Fondo oscuro semitransparente */
+    border: 1px solid #00ffcc;               /* Borde cian neón */
+    gridline-color: #1a232e;                 /* Color de las líneas internas muy sutil */
+    color: #ffffff;                          /* Texto principal blanco */
+    font-family: &quot;Consolas&quot;, &quot;Monospace&quot;;
+    font-size: 12px;
+    selection-background-color: rgba(0, 255, 204, 50); /* Resaltado al hacer clic */
+    selection-color: #00ffcc;
+}
+
+/* Estilo de los Encabezados (Marca, Modelo, Hash, etc.) */
+QHeaderView::section {
+    background-color: #0d1117;
+    color: #00ffcc;                          /* Texto del encabezado neón */
+    padding: 6px;
+    border: 1px solid #1a232e;
+    font-weight: bold;
+    text-transform: uppercase;               /* Todo en mayúsculas para estilo pro */
+}
+
+/* Estilo de las Filas al pasar el mouse */
+QTableWidget::item:hover {
+    background-color: rgba(0, 255, 204, 20);
+    color: #00ffcc;
+}
+
+/* Quitar el borde de enfoque (el cuadro de puntos al hacer clic) */
+QTableWidget:focus {
+    outline: none;
+    border: 1px solid #ffffff; /* El borde brilla más al estar activa */
+}
+
+/* Personalización de la Barra de Desplazamiento (Scrollbar) */
+QScrollBar:vertical {
+    border: none;
+    background: #0d1117;
+    width: 10px;
+}
+
+QScrollBar::handle:vertical {
+    background: #00ffcc;
+    border-radius: 5px;
+    min-height: 20px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    border: none;
+    background: none;
+}</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </widget>
           </item>
@@ -1213,7 +1317,65 @@ QPushButton:hover {
                <height>511</height>
               </rect>
              </property>
-             <layout class="QHBoxLayout" name="horizontalLayout_10"/>
+             <layout class="QHBoxLayout" name="horizontalLayout_10">
+              <item>
+               <widget class="QTableWidget" name="tableWidget_Carro">
+                <property name="styleSheet">
+                 <string notr="true">/* Estilo General de la Tabla */
+QTableWidget {
+    background-color: rgba(13, 17, 23, 180); /* Fondo oscuro semitransparente */
+    border: 1px solid #00ffcc;               /* Borde cian neón */
+    gridline-color: #1a232e;                 /* Color de las líneas internas muy sutil */
+    color: #ffffff;                          /* Texto principal blanco */
+    font-family: &quot;Consolas&quot;, &quot;Monospace&quot;;
+    font-size: 12px;
+    selection-background-color: rgba(0, 255, 204, 50); /* Resaltado al hacer clic */
+    selection-color: #00ffcc;
+}
+
+/* Estilo de los Encabezados (Marca, Modelo, Hash, etc.) */
+QHeaderView::section {
+    background-color: #0d1117;
+    color: #00ffcc;                          /* Texto del encabezado neón */
+    padding: 6px;
+    border: 1px solid #1a232e;
+    font-weight: bold;
+    text-transform: uppercase;               /* Todo en mayúsculas para estilo pro */
+}
+
+/* Estilo de las Filas al pasar el mouse */
+QTableWidget::item:hover {
+    background-color: rgba(0, 255, 204, 20);
+    color: #00ffcc;
+}
+
+/* Quitar el borde de enfoque (el cuadro de puntos al hacer clic) */
+QTableWidget:focus {
+    outline: none;
+    border: 1px solid #ffffff; /* El borde brilla más al estar activa */
+}
+
+/* Personalización de la Barra de Desplazamiento (Scrollbar) */
+QScrollBar:vertical {
+    border: none;
+    background: #0d1117;
+    width: 10px;
+}
+
+QScrollBar::handle:vertical {
+    background: #00ffcc;
+    border-radius: 5px;
+    min-height: 20px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    border: none;
+    background: none;
+}</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </widget>
           </item>
@@ -1256,6 +1418,681 @@ QPushButton:hover {
     color: #0d1117;
     border: 1px solid #ffffff;
 }</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="horizontalLayoutWidget_11">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>19</y>
+               <width>941</width>
+               <height>511</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <item>
+               <widget class="QStackedWidget" name="stackedWidget_2">
+                <property name="styleSheet">
+                 <string notr="true">background-color: rgb(13, 17, 23);</string>
+                </property>
+                <property name="currentIndex">
+                 <number>0</number>
+                </property>
+                <widget class="QWidget" name="page_4">
+                 <widget class="QWidget" name="formLayoutWidget_2">
+                  <property name="geometry">
+                   <rect>
+                    <x>9</x>
+                    <y>9</y>
+                    <width>921</width>
+                    <height>492</height>
+                   </rect>
+                  </property>
+                  <layout class="QFormLayout" name="formLayout_2">
+                   <property name="verticalSpacing">
+                    <number>50</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>59</number>
+                   </property>
+                   <item row="0" column="0">
+                    <widget class="QLabel" name="label">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="text">
+                      <string>Usuario</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="1">
+                    <widget class="QLineEdit" name="txt_usuario"/>
+                   </item>
+                   <item row="1" column="0">
+                    <widget class="QLabel" name="label_7">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="text">
+                      <string>Pin Seguridad</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="1">
+                    <widget class="QLineEdit" name="txt_clave"/>
+                   </item>
+                   <item row="2" column="0">
+                    <widget class="QLabel" name="label_8">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="text">
+                      <string>Marca Del Vehículo</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="1">
+                    <widget class="QLineEdit" name="txt_marca"/>
+                   </item>
+                   <item row="3" column="0">
+                    <widget class="QLabel" name="label_9">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="text">
+                      <string>Modelo</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="1">
+                    <widget class="QLineEdit" name="txt_modelo"/>
+                   </item>
+                   <item row="4" column="0">
+                    <widget class="QLabel" name="label_10">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Minimum">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="text">
+                      <string>CarroHash</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="4" column="1">
+                    <widget class="QLineEdit" name="txt_hash"/>
+                   </item>
+                   <item row="5" column="1">
+                    <widget class="QPushButton" name="btn_comprobar">
+                     <property name="styleSheet">
+                      <string notr="true">QPushButton {
+    /* Fondo oscuro para contrastar con el borde neón */
+    background-color: #0d1117;
+    /* Borde cian neón que combine con tus labels */
+    border: 2px solid #00ffcc;
+    border-radius: 5px;
+    /* Texto en cian con fuente estilo consola */
+    color: #00ffcc;
+    font-family: &quot;Consolas&quot;, &quot;Monospace&quot;;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 20px;
+    text-transform: uppercase;
+}
+
+/* EFECTO HOVER: Cuando el usuario pasa el mouse */
+QPushButton:hover {
+    /* El botón se ilumina completamente en cian */
+    background-color: #00ffcc;
+    /* El texto cambia a negro para ser legible sobre el cian */
+    color: #0d1117;
+    /* Añade un resplandor blanco sutil */
+    border: 2px solid #ffffff;
+}
+
+/* EFECTO PRESIONADO: Respuesta visual al hacer clic */
+QPushButton:pressed {
+    background-color: #008a6d; /* Un cian más oscuro */
+    border: 2px solid #00ffcc;
+    padding-left: 22px; /* Pequeño desplazamiento para simular presión */
+    padding-top: 10px;
+}
+
+/* Estilo para cuando el botón está desactivado (ej: si el hash no es válido) */
+QPushButton:disabled {
+    background-color: #1a1a1a;
+    border: 2px solid #333333;
+    color: #555555;
+}</string>
+                     </property>
+                     <property name="text">
+                      <string>Comprobar</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+                <widget class="QWidget" name="page_5">
+                 <widget class="QWidget" name="horizontalLayoutWidget_12">
+                  <property name="geometry">
+                   <rect>
+                    <x>9</x>
+                    <y>19</y>
+                    <width>921</width>
+                    <height>461</height>
+                   </rect>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_12">
+                   <item>
+                    <widget class="QScrollArea" name="scrollArea">
+                     <property name="verticalScrollBarPolicy">
+                      <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOn</enum>
+                     </property>
+                     <property name="horizontalScrollBarPolicy">
+                      <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+                     </property>
+                     <property name="widgetResizable">
+                      <bool>false</bool>
+                     </property>
+                     <widget class="QWidget" name="scrollAreaWidgetContents">
+                      <property name="geometry">
+                       <rect>
+                        <x>0</x>
+                        <y>-408</y>
+                        <width>915</width>
+                        <height>1000</height>
+                       </rect>
+                      </property>
+                      <widget class="QWidget" name="gridLayoutWidget_4">
+                       <property name="geometry">
+                        <rect>
+                         <x>9</x>
+                         <y>9</y>
+                         <width>881</width>
+                         <height>861</height>
+                        </rect>
+                       </property>
+                       <layout class="QGridLayout" name="gridLayout_4">
+                        <item row="13" column="1">
+                         <widget class="QLineEdit" name="txt_ultima"/>
+                        </item>
+                        <item row="7" column="0">
+                         <widget class="QLabel" name="label_21">
+                          <property name="text">
+                           <string>Password</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="1" column="1">
+                         <widget class="QLineEdit" name="txt_modelo_admin"/>
+                        </item>
+                        <item row="8" column="0">
+                         <widget class="QLabel" name="label_22">
+                          <property name="text">
+                           <string>Tarjeta Token</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="3" column="0">
+                         <widget class="QLabel" name="label_17">
+                          <property name="text">
+                           <string>carro Hash</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="5" column="0">
+                         <widget class="QLabel" name="label_19">
+                          <property name="text">
+                           <string>Rol Usuario</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="1">
+                         <widget class="QLineEdit" name="txt_marca_admin"/>
+                        </item>
+                        <item row="14" column="0">
+                         <widget class="QLabel" name="label_29">
+                          <property name="text">
+                           <string>Nivel Riesgo Acceso</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="12" column="0">
+                         <widget class="QLabel" name="label_27">
+                          <property name="text">
+                           <string>Vinculo Estatus</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="4" column="1">
+                         <widget class="QLineEdit" name="txt_usuario_admin"/>
+                        </item>
+                        <item row="1" column="0">
+                         <widget class="QLabel" name="label_12">
+                          <property name="text">
+                           <string>Modelo</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="0" column="0">
+                         <widget class="QLabel" name="label_11">
+                          <property name="text">
+                           <string>Marca</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="10" column="0">
+                         <widget class="QLabel" name="label_23">
+                          <property name="text">
+                           <string>IP Ultimo Acceso</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="11" column="1">
+                         <widget class="QLineEdit" name="txt_fallido"/>
+                        </item>
+                        <item row="9" column="1">
+                         <widget class="QLineEdit" name="txt_pin_admin"/>
+                        </item>
+                        <item row="14" column="1">
+                         <widget class="QLineEdit" name="txt_riesgo_admin"/>
+                        </item>
+                        <item row="2" column="1">
+                         <widget class="QLineEdit" name="txt_anio_admin"/>
+                        </item>
+                        <item row="13" column="0">
+                         <widget class="QLabel" name="label_26">
+                          <property name="text">
+                           <string>Ultima Validación</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="2" column="0">
+                         <widget class="QLabel" name="label_13">
+                          <property name="text">
+                           <string>Año</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="5" column="1">
+                         <widget class="QLineEdit" name="txt_rol"/>
+                        </item>
+                        <item row="9" column="0">
+                         <widget class="QLabel" name="label_24">
+                          <property name="text">
+                           <string>Pin Seguridad</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="7" column="1">
+                         <widget class="QLineEdit" name="txt_password"/>
+                        </item>
+                        <item row="11" column="0">
+                         <widget class="QLabel" name="label_25">
+                          <property name="text">
+                           <string>Intentos fallidos</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="6" column="0">
+                         <widget class="QLabel" name="label_20">
+                          <property name="text">
+                           <string>Correo</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="10" column="1">
+                         <widget class="QLineEdit" name="txt_ip"/>
+                        </item>
+                        <item row="6" column="1">
+                         <widget class="QLineEdit" name="txt_correo"/>
+                        </item>
+                        <item row="4" column="0">
+                         <widget class="QLabel" name="label_18">
+                          <property name="text">
+                           <string>Usuario Asignado</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item row="3" column="1">
+                         <widget class="QLineEdit" name="txt_hash_admin"/>
+                        </item>
+                        <item row="8" column="1">
+                         <widget class="QLineEdit" name="txt_token"/>
+                        </item>
+                        <item row="12" column="1">
+                         <widget class="QLineEdit" name="txt_vinculo"/>
+                        </item>
+                       </layout>
+                      </widget>
+                      <widget class="QWidget" name="horizontalLayoutWidget_13">
+                       <property name="geometry">
+                        <rect>
+                         <x>229</x>
+                         <y>909</y>
+                         <width>451</width>
+                         <height>71</height>
+                        </rect>
+                       </property>
+                       <layout class="QHBoxLayout" name="horizontalLayout_13">
+                        <item>
+                         <widget class="QPushButton" name="pushButton_2">
+                          <property name="sizePolicy">
+                           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                           </sizepolicy>
+                          </property>
+                          <property name="styleSheet">
+                           <string notr="true">QPushButton {
+    /* Fondo oscuro para contrastar con el borde neón */
+    background-color: #0d1117;
+    /* Borde cian neón que combine con tus labels */
+    border: 2px solid #00ffcc;
+    border-radius: 5px;
+    /* Texto en cian con fuente estilo consola */
+    color: #00ffcc;
+    font-family: &quot;Consolas&quot;, &quot;Monospace&quot;;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 20px;
+    text-transform: uppercase;
+}
+
+/* EFECTO HOVER: Cuando el usuario pasa el mouse */
+QPushButton:hover {
+    /* El botón se ilumina completamente en cian */
+    background-color: #00ffcc;
+    /* El texto cambia a negro para ser legible sobre el cian */
+    color: #0d1117;
+    /* Añade un resplandor blanco sutil */
+    border: 2px solid #ffffff;
+}
+
+/* EFECTO PRESIONADO: Respuesta visual al hacer clic */
+QPushButton:pressed {
+    background-color: #008a6d; /* Un cian más oscuro */
+    border: 2px solid #00ffcc;
+    padding-left: 22px; /* Pequeño desplazamiento para simular presión */
+    padding-top: 10px;
+}
+
+/* Estilo para cuando el botón está desactivado (ej: si el hash no es válido) */
+QPushButton:disabled {
+    background-color: #1a1a1a;
+    border: 2px solid #333333;
+    color: #555555;
+}</string>
+                          </property>
+                          <property name="text">
+                           <string>Regresar</string>
+                          </property>
+                         </widget>
+                        </item>
+                        <item>
+                         <widget class="QPushButton" name="push_anadir">
+                          <property name="sizePolicy">
+                           <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                           </sizepolicy>
+                          </property>
+                          <property name="styleSheet">
+                           <string notr="true">QPushButton {
+    /* Fondo oscuro para contrastar con el borde neón */
+    background-color: #0d1117;
+    /* Borde cian neón que combine con tus labels */
+    border: 2px solid #00ffcc;
+    border-radius: 5px;
+    /* Texto en cian con fuente estilo consola */
+    color: #00ffcc;
+    font-family: &quot;Consolas&quot;, &quot;Monospace&quot;;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 8px 20px;
+    text-transform: uppercase;
+}
+
+/* EFECTO HOVER: Cuando el usuario pasa el mouse */
+QPushButton:hover {
+    /* El botón se ilumina completamente en cian */
+    background-color: #00ffcc;
+    /* El texto cambia a negro para ser legible sobre el cian */
+    color: #0d1117;
+    /* Añade un resplandor blanco sutil */
+    border: 2px solid #ffffff;
+}
+
+/* EFECTO PRESIONADO: Respuesta visual al hacer clic */
+QPushButton:pressed {
+    background-color: #008a6d; /* Un cian más oscuro */
+    border: 2px solid #00ffcc;
+    padding-left: 22px; /* Pequeño desplazamiento para simular presión */
+    padding-top: 10px;
+}
+
+/* Estilo para cuando el botón está desactivado (ej: si el hash no es válido) */
+QPushButton:disabled {
+    background-color: #1a1a1a;
+    border: 2px solid #333333;
+    color: #555555;
+}</string>
+                          </property>
+                          <property name="text">
+                           <string>Añadir</string>
+                          </property>
+                         </widget>
+                        </item>
+                       </layout>
+                      </widget>
+                     </widget>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+                <widget class="QWidget" name="page_6">
+                 <widget class="QWidget" name="horizontalLayoutWidget_14">
+                  <property name="geometry">
+                   <rect>
+                    <x>9</x>
+                    <y>19</y>
+                    <width>921</width>
+                    <height>471</height>
+                   </rect>
+                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_14">
+                   <item>
+                    <widget class="QLabel" name="lbl_hackeo">
+                     <property name="text">
+                      <string/>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </widget>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_7">
+        <widget class="QWidget" name="gridLayoutWidget_5">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>9</y>
+           <width>1921</width>
+           <height>1121</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="0" column="1">
+           <widget class="QFrame" name="frame_grafico">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(30, 30, 46);</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QTreeWidget" name="treeWidget">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo general del TreeWidget */
+QTreeWidget {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 13px;
+    border: 1px solid #3c3c4c;
+    border-radius: 8px;
+    outline: none; /* Quita el borde punteado al hacer clic */
+}
+
+/* Estilo de las cabeceras (Columnas) */
+QHeaderView::section {
+    background-color: #27293d;
+    color: #00ffcc; /* Color cian neón para los títulos */
+    padding: 8px;
+    border: none;
+    border-bottom: 2px solid #3c3c4c;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+/* Estilo de cada fila/item */
+QTreeWidget::item {
+    padding: 10px;
+    border-bottom: 1px solid #2d2d3d;
+}
+
+/* Cuando pasas el mouse por encima de una fila */
+QTreeWidget::item:hover {
+    background-color: rgba(0, 255, 204, 0.05); /* Destello cian muy sutil */
+}
+
+/* Cuando seleccionas una fila */
+QTreeWidget::item:selected {
+    background-color: rgba(0, 255, 204, 0.2);
+    color: #00ffcc;
+    border-left: 3px solid #00ffcc; /* Línea neón a la izquierda para resaltar */
+}
+
+/* Estilo de las flechas de expansión (si tienes jerarquías) */
+QTreeWidget::branch:has-children:!has-siblings:closed,
+QTreeWidget::branch:closed:has-children:has-siblings {
+    image: url(flecha_cerrada.png); /* Opcional: icono de flecha */
+}
+
+QTreeWidget::branch:open:has-children:!has-siblings,
+QTreeWidget::branch:open:has-children:has-siblings {
+    image: url(flecha_abierta.png); /* Opcional: icono de flecha */
+}
+
+/* Personalización del ScrollBar (Barra de desplazamiento) */
+QScrollBar:vertical {
+    border: none;
+    background: #1e1e2e;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #3c3c4c;
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #00ffcc; /* La barra brilla al pasar el mouse */
+}</string>
+            </property>
+            <column>
+             <property name="text">
+              <string notr="true">1</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPlainTextEdit" name="plainTextEdit_3">
+            <property name="styleSheet">
+             <string notr="true">QPlainTextEdit {
+    /* Fondo negro profundo estilo OLED */
+    background-color: #050505; 
+    
+    /* Letra verde neón clásica de terminal */
+    color: #00ff41; 
+    
+    /* Fuente tipo hacker: Consolas es la estándar, 
+       pero agregamos alternativas por si no está instalada */
+    font-family: &quot;Consolas&quot;, &quot;Monospace&quot;, &quot;Courier New&quot;, &quot;OCR A Extended&quot;;
+    font-size: 13px;
+    
+    /* Borde neón con bordes redondeados */
+    border: 1px solid #00ff41;
+    border-radius: 8px;
+    
+    /* Espaciado interno para que el texto no pegue al borde */
+    padding: 10px;
+}
+
+/* Estilo para la barra de desplazamiento (Scrollbar) para que combine */
+QScrollBar:vertical {
+    border: none;
+    background: #050505;
+    width: 8px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #00ff41;
+    min-height: 20px;
+    border-radius: 4px;
+}</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QFrame" name="frame_15">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(30, 30, 46);</string>
             </property>
             <property name="frameShape">
              <enum>QFrame::Shape::StyledPanel</enum>

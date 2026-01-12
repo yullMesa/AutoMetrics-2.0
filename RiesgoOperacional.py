@@ -5,18 +5,23 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile,Qt, QSize
 from PySide6.QtWidgets import (QTreeWidgetItem,QTableWidgetItem, 
                                QAbstractItemView,QHeaderView,QVBoxLayout,QMessageBox,QToolButton,
-                               QSizePolicy,QDialog,QLabel,QHBoxLayout,QPushButton,QMessageBox,QWidget)
-from PySide6.QtGui import QColor,QIcon, QPixmap,QPainter , QFont
+                               QSizePolicy,QDialog,QLabel,QHBoxLayout,QPushButton,QMessageBox,QWidget,
+                                 QPlainTextEdit)
+from PySide6.QtGui import QColor,QIcon, QPixmap,QPainter , QFont , QTextCursor
 import sqlite3
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 from PySide6.QtGui import QPixmap
-from PySide6.QtCore import QFile, Qt , QSize , QTimer , QRect , QPoint
+from PySide6.QtCore import QFile, Qt , QSize , QTimer , QRect , QPoint 
 import random
 from datetime import datetime
 import numpy as np
 import hashlib
+from matplotlib.figure import Figure
+import mplfinance as mpf
+import pandas as pd
+from PySide6.QtCore import QTimer, QDateTime 
 
 class riesgo(QMainWindow):
     def __init__(self, *args, **kwargs):
@@ -50,6 +55,37 @@ class riesgo(QMainWindow):
         self.ui_content.horizontalSlider_2.setRange(0, 365)
         self.ui_content.horizontalSlider_2.valueChanged.connect(self.cargar_tabla_riesgo)
         self.ui_content.btn_evaluar.clicked.connect(self.evaluar_descuento_riesgo)
+        self.cargar_tabla_carros()
+
+
+        #CiberSeguridad
+        # 1. Creamos el temporizador y lo vinculamos a la clase
+        self.consola_seguridad = self.ui_content.findChild(QPlainTextEdit, "plainTextEdit_2")
+        self.timer_seguridad = QTimer(self)
+        self.timer_seguridad.timeout.connect(self.generar_flujo_datos)
+        
+        # Iniciar el flujo (100ms es una buena velocidad hacker)
+        self.timer_seguridad.start(2400)
+        # Reemplaza 'btn_comprobar' por el ID real que le pusiste en Qt Designer
+        self.ui_content.btn_comprobar.clicked.connect(self.interceptar_ataque)
+
+        header = self.ui_content.tableWidget_persona.horizontalHeader()
+
+        # Esto obliga a las columnas a estirarse para llenar el cuadro negro
+        header.setSectionResizeMode(QHeaderView.Stretch) 
+
+        # Si quieres que la tabla no tenga scroll horizontal innecesario:
+        self.ui_content.tableWidget_persona.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.cargar_tabla_personas()
+        self.conectar_db()
+        self.ui_content.btn_comprobar.clicked.connect(self.procesar_seguridad)
+        self.ui_content.push_anadir.clicked.connect(self.administrador_anadir_usuario)
+
+
+        #Datos De Mercado Inteligente
+        
+
+        
 
         
 
@@ -342,4 +378,275 @@ class riesgo(QMainWindow):
         # Este es el código que iría en la "Tarjeta" del cliente
         return hash_resultado[:16].upper() # Usamos los primeros 16 caracteres para que sea manejable
     
+
+
+    def generar_flujo_datos(self):
         
+        
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            # Pedimos los datos exactos que manejas en tu formulario/encuesta
+            cursor.execute("SELECT carro_hash, usuario_asignado, ip_ultimo_acceso, nivel_riesgo_acceso FROM seguridad_activos")
+            datos_reales = cursor.fetchall()
+            conn.close()
+
+            if datos_reales:
+                # Seleccionamos un registro para mostrar sus datos
+                h_real, dueño, ip, riesgo = random.choice(datos_reales)
+                
+                # PROBABILIDAD DEL 10% (EL DATO "CORRECTO" O EN PELIGRO)
+                if random.random() < 0.10:
+                    # Este mensaje debe resaltar lo que pide la encuesta (el Hash y el Riesgo)
+                    linea = f">>> [ALERTA] CRÍTICO: {h_real} | USUARIO: {dueño.upper()} | RIESGO: {riesgo}"
+                    self.ultimo_hash_real = h_real 
+                else:
+                    # TRÁFICO NORMAL: Muestra los mismos datos pero como logs de rutina
+                    plantillas = [
+                        f"[LOG] Validando IP: {ip} ... ACCESO OK",
+                        f"[LOG] Usuario: {dueño} | Hash: {h_real[:10]}... | ESTADO: SEGURO",
+                        f"[LOG] Monitoreando Nivel de Riesgo: {riesgo}",
+                        f"[LOG] Hash de seguridad activo: {h_real}"
+                    ]
+                    linea = random.choice(plantillas)
+                    self.ultimo_hash_real = None 
+            else:
+                linea = "[SISTEMA] No hay datos en la base de datos de seguridad..."
+
+            # Mostrar en la consola vinculada
+            if self.consola_seguridad:
+                self.consola_seguridad.appendPlainText(linea)
+                self.consola_seguridad.ensureCursorVisible()
+
+        except Exception as e:
+            print(f"Error en el flujo: {e}")
+    
+    
+    def interceptar_ataque(self):
+        # Verificamos si hay un hash real activo en pantalla
+        if hasattr(self, 'ultimo_hash_real') and self.ultimo_hash_real is not None:
+            # ¡ÉXITO! El usuario atrapó un hash real de la tabla
+            self.ui_content.plainTextEdit_2.appendPlainText(">>> SISTEMA DEFENDIDO: ACCESO BLOQUEADO <<<")
+            
+            # Cambiamos el color del frame a verde (Estilo Ciberseguridad)
+            # Nota: Asegúrate que el frame se llame así en tu .ui o usa el nombre correcto
+        else:
+            # ¡ERROR! El usuario presionó en un momento donde el hash era basura
+            self.ui_content.plainTextEdit_2.appendPlainText(">>> ERROR: FALSA ALARMA - SISTEMA SOBRECARGADO <<<")
+
+    
+    #tablewidget
+
+
+    def cargar_tabla_personas(self):
+        import sqlite3
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Seleccionamos Nombre, Rol y el Hash (que ocultaremos)
+            cursor.execute("SELECT usuario_asignado, nivel_riesgo_acceso, carro_hash FROM seguridad_activos")
+            datos = cursor.fetchall()
+            conn.close()
+
+            # Configurar 3 columnas: Nombre, Rol, y Hash (Censurado)
+            self.ui_content.tableWidget_persona.setRowCount(len(datos))
+            self.ui_content.tableWidget_persona.setColumnCount(3)
+            self.ui_content.tableWidget_persona.setHorizontalHeaderLabels(["NOMBRE", "ROL / RIESGO", "ID DE SEGURIDAD"])
+            # Oculta la cabecera vertical (los números de la izquierda)
+            self.ui_content.tableWidget_persona.verticalHeader().setVisible(False)
+
+            # Hacer que ocupe toda la tabla
+            header = self.ui_content.tableWidget_persona.horizontalHeader()
+            header.setSectionResizeMode(QHeaderView.Stretch)
+
+            for fila, (nombre, rol, hash_real) in enumerate(datos):
+                # Estos se ven normales
+                self.ui_content.tableWidget_persona.setItem(fila, 0, QTableWidgetItem(str(nombre)))
+                self.ui_content.tableWidget_persona.setItem(fila, 1, QTableWidgetItem(str(rol)))
+                
+                # Este se ve con asteriscos para seguridad
+                hash_censurado = "*" * 15 
+                self.ui_content.tableWidget_persona.setItem(fila, 2, QTableWidgetItem(hash_censurado))
+
+        except Exception as e:
+            print(f"Error cargando tabla: {e}")
+
+    def cargar_tabla_carros(self):
+        try:
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Consultamos Modelo y Marca (ajusta los nombres de columna si son distintos en tu DB)
+            cursor.execute("SELECT modelo, marca FROM seguridad_activos")
+            carros = cursor.fetchall()
+            conn.close()
+
+            # Configurar filas y columnas
+            self.ui_content.tableWidget_Carro.setRowCount(len(carros))
+            self.ui_content.tableWidget_Carro.setColumnCount(2)
+            self.ui_content.tableWidget_Carro.setHorizontalHeaderLabels(["MODELO DEL ACTIVO", "MARCA / FABRICANTE"])
+
+            # 1. Ocultar los números de fila (índices verticales)
+            self.ui_content.tableWidget_Carro.verticalHeader().setVisible(False)
+
+            # 2. Estirar columnas para que ocupen todo el ancho
+            header = self.ui_content.tableWidget_Carro.horizontalHeader()
+            header.setSectionResizeMode(QHeaderView.Stretch)
+
+            for fila, (modelo, marca) in enumerate(carros):
+                item_modelo = QTableWidgetItem(str(modelo))
+                item_marca = QTableWidgetItem(str(marca))
+                
+                # Centrar el texto para que se vea ordenado
+                item_modelo.setTextAlignment(Qt.AlignCenter)
+                item_marca.setTextAlignment(Qt.AlignCenter)
+                
+                self.ui_content.tableWidget_Carro.setItem(fila, 0, item_modelo)
+                self.ui_content.tableWidget_Carro.setItem(fila, 1, item_marca)
+
+        except Exception as e:
+            print(f"Error cargando tabla de carros: {e}")
+            
+    
+    #Cambio de indice
+
+
+    def conectar_db(self):
+        try:
+            # Usamos la ruta de tu base de datos
+            self.conn = sqlite3.connect("ingenieria.db")
+            # MUY IMPORTANTE: Asegúrate de que tenga los paréntesis () al final
+            self.cursor = self.conn.cursor() 
+            print("Conexión exitosa a la base de datos")
+        except Exception as e:
+            print(f"Error al conectar: {e}")
+
+    # Llama a esta función al inicio de tu __init__
+    # 
+
+    def procesar_seguridad(self):
+        user = self.ui_content.txt_usuario.text()
+        password = self.ui_content.txt_clave.text()
+        marca = self.ui_content.txt_marca.text()
+        modelo = self.ui_content.txt_modelo.text()
+        carro_hash = self.ui_content.txt_hash.text()
+
+        # --- RUTA 1: EL ADMINISTRADOR (Sebas) ---
+        if user == "sebas" and password == "tian":
+            self.ui_content.stackedWidget_2.setCurrentIndex(1)
+            return
+
+        # --- RUTA 2: EL HACKER (Eliminación, Imagen y Bloqueo) ---
+        try:
+            query = """
+                SELECT id FROM seguridad_activos 
+                WHERE usuario_asignado = ? AND pin_seguridad = ? 
+                AND marca = ? AND modelo = ? AND carro_hash = ?
+            """
+            self.cursor.execute(query, (user, password, marca, modelo, carro_hash))
+            resultado = self.cursor.fetchone()
+
+            if resultado:
+                id_victima = resultado[0]
+                self.cursor.execute("DELETE FROM seguridad_activos WHERE id = ?", (id_victima,))
+                self.conn.commit()
+
+                # --- CARGAR IMAGEN DE HACKEO ---
+                ruta_imagen = r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\hacking\hackeoCompleto.png"
+                pixmap = QPixmap(ruta_imagen)
+                
+                if not pixmap.isNull():
+                    # Ajustamos la imagen al tamaño del label sin perder calidad
+                    self.ui_content.lbl_hackeo.setPixmap(pixmap)
+                    self.ui_content.lbl_hackeo.setScaledContents(True)
+                else:
+                    print("Error: No se pudo encontrar la imagen en la ruta especificada.")
+
+                # --- ALERTA Y CAMBIO DE PANTALLA ---
+                msg = QMessageBox(self)
+                msg.setIcon(QMessageBox.Critical)
+                msg.setWindowTitle("SISTEMA COMPROMETIDO")
+                msg.setText("¡ATAQUE EXITOSO!")
+                msg.setInformativeText(f"Has borrado a {user}. Conexión cerrada.")
+                msg.exec()
+
+                # Bloqueo total: Pasamos al índice 2
+                self.ui_content.stackedWidget_2.setCurrentIndex(2)
+                
+                # Refrescar tablas
+                self.cargar_tabla_personas()
+                self.cargar_tabla_carros()
+            else:
+                self.ui_content.plainTextEdit_2.appendPlainText("[ERROR] Datos incorrectos.")
+
+        except Exception as e:
+            print(f"Error en el núcleo de seguridad: {e}")
+
+    #añadir
+
+    def administrador_anadir_usuario(self):
+        # 1. Datos capturados del formulario del Admin
+        marca = self.ui_content.txt_marca_admin.text()
+        modelo = self.ui_content.txt_modelo_admin.text()
+        anio = self.ui_content.txt_anio_admin.text()
+        carro_hash = self.ui_content.txt_hash_admin.text()
+        usuario = self.ui_content.txt_usuario_admin.text()
+        pin = self.ui_content.txt_pin_admin.text()
+        riesgo = self.ui_content.txt_riesgo_admin.text() # Nivel de riesgo
+
+        # 2. Validación de seguridad mínima
+        if not (usuario and pin and marca and anio):
+            QMessageBox.warning(self, "Campos Obligatorios", "Marca, Año, Usuario y PIN no pueden estar vacíos.")
+            return
+
+        try:
+            # 3. LA QUERY TOTAL (16 COLUMNAS)
+            # El ID no se pone porque es AUTOINCREMENT
+            query = """
+                INSERT INTO seguridad_activos (
+                    marca, modelo, año, carro_hash, usuario_asignado, 
+                    rol_usuario, correo_institucional, password_hash, tarjeta_token, 
+                    pin_seguridad, ip_ultimo_acceso, intentos_fallidos, vinculo_status, 
+                    ultima_validacion, nivel_riesgo_acceso
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """
+
+            # 4. RELLENO AUTOMÁTICO PARA NOT NULL
+            # Aquí asignamos valores a lo que el admin no escribe
+            valores = (
+                marca,                                  # 1. marca
+                modelo,                                 # 2. modelo
+                int(anio),                              # 3. año
+                carro_hash if carro_hash else "PENDIENTE", # 4. carro_hash
+                usuario,                                # 5. usuario_assigned
+                "Operador",                             # 6. rol_usuario (fijo)
+                f"{usuario.lower()}@autometrics.com",   # 7. correo_institucional
+                "pbkdf2:sha256:250000$val",            # 8. password_hash (dummy)
+                f"TK-{random.randint(1000, 9999)}",     # 9. tarjeta_token
+                pin,                                    # 10. pin_seguridad
+                "192.168.1." + str(random.randint(2, 254)), # 11. ip_ultimo_acceso
+                0,                                      # 12. intentos_fallidos
+                "ACTIVO",                               # 13. vinculo_status
+                datetime.now().strftime("%Y-%m-%d"),    # 14. ultima_validacion
+                riesgo                                # 15. nivel_riesgo_accesc
+                                                 
+            )
+
+            # 5. Ejecución
+            self.cursor.execute(query, valores)
+            self.conn.commit()
+
+            QMessageBox.information(self, "Éxito", f"Activo {marca} asignado a {usuario} correctamente.")
+            
+            # Limpiar campos y refrescar tablas
+            self.cargar_tabla_personas()
+            self.cargar_tabla_carros()
+
+        except Exception as e:
+            QMessageBox.critical(self, "Fallo de Inserción", f"Error: {e}\n\nAsegúrate de que todos los campos NOT NULL tengan valor.")
+
+    
+    #mercado Inteligente
+
+    
