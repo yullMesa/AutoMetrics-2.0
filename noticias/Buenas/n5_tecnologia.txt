@@ -1,0 +1,1 @@
+"Avance disruptivo: AutoMetrics logra reducir el tiempo de respuesta ante intrusos a menos de 1 milisegundo."

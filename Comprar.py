@@ -57,6 +57,7 @@ class Comprar(QMainWindow):
         self.juego.setFocus()
         # En tu __init__
         self.ui.stackedWidget.currentChanged.connect(self.gestionar_recursos_pestanas)
+        self.timer_juego = QTimer() # Asegúrate de haber importado QTimer de PySide6.QtCore
 
         #comparador
         self.cargar_combos_excluyentes()
@@ -94,9 +95,10 @@ class Comprar(QMainWindow):
             print("Entrando al Test Drive: Iniciando motor de juego...")
             self.timer_juego.start(16) # 60 FPS aprox
         else:
-            if self.timer_juego.isActive():
-                print("Saliendo: Deteniendo motor de juego para ahorrar CPU.")
-                self.timer_juego.stop()
+            # En gestionar_recursos_pestanas
+            if self.timer_juego and hasattr(self.timer_juego, 'isActive') and self.timer_juego.isActive():
+                pass
+    # ... tu código actual
         # -------------------------------
 
         #Certificados

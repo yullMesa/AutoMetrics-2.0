@@ -22,6 +22,7 @@ from matplotlib.figure import Figure
 import mplfinance as mpf
 import pandas as pd
 from PySide6.QtCore import QTimer, QDateTime 
+import time
 
 class riesgo(QMainWindow):
     def __init__(self, *args, **kwargs):
@@ -84,7 +85,32 @@ class riesgo(QMainWindow):
 
         #Datos De Mercado Inteligente
         
+        self.timer_noticias = QTimer(self)
+        self.timer_noticias.timeout.connect(self.ciclo_inteligencia_mercado)
+        self.timer_noticias.start(4000)
+        self.historial_velas = []
+        self.precio_accion_actual = 50000.0
+        self.acciones_rivales = {}
+        self.mercado_actual = 500000.0  # El mercado empieza en medio millón
+        self.indice_tiempo = 0
+        self.analisis_empresas = {} 
+        # Estructura: {'Nombre': {'ganado': 0, 'perdido': 0, 'sentimiento': 'NEUTRAL'}}
+        self.hora_inicio_mercado = time.time()
+        self.ui_content.treeWidget_sentimiento.itemClicked.connect(self.mostrar_detalle_empresa)
+        self.ui_content.treeWidget_sentimiento.setHeaderLabels(["Empresa", "Ganado", "Perdido", "Sentimiento"])
+        self.ui_content.treeWidget_sentimiento.setColumnCount(4)
+        # 1. Hacer que las columnas se estiren automáticamente
+        header = self.ui_content.treeWidget_sentimiento.header()
+        header.setSectionResizeMode(QHeaderView.Stretch) # Todas las columnas iguales
 
+        # Opcional: Si quieres que la columna "Empresa" sea más ancha que las demás:
+        header.setSectionResizeMode(0, QHeaderView.Stretch)
+        header.setSectionResizeMode(1, QHeaderView.Interactive)
+        header.setSectionResizeMode(2, QHeaderView.Interactive)
+        header.setSectionResizeMode(3, QHeaderView.Interactive)
+       
+        
+        
         
 
         
@@ -648,5 +674,297 @@ class riesgo(QMainWindow):
 
     
     #mercado Inteligente
+    
+    #velas
+
+    def actualizar_grafico_velas(self, impacto):
+        # 1. Calcular valores de la nueva vela
+        open_p = self.mercado_actual
+        close_p = open_p * (1 + impacto)
+        high_p = max(open_p, close_p) + (open_p * 0.01) # Mecha superior
+        low_p = min(open_p, close_p) - (open_p * 0.01)  # Mecha inferior
+        
+        self.mercado_actual = close_p # Actualizar para la siguiente noticia
+        color = '#00ff00' if impacto > 0 else '#ff3131'
+        
+        # 2. Gestionar el desplazamiento (Scroll)
+        self.indice_tiempo += 1
+        self.historial_velas.append((self.indice_tiempo, open_p, high_p, low_p, close_p, color))
+        
+        # Si hay más de 20 velas, borramos la más antigua para que la gráfica "corra"
+        if len(self.historial_velas) > 20:
+            self.historial_velas.pop(0)
+
+        # 3. Configurar Canvas si no existe
+        if not hasattr(self, 'canvas'):
+            self.fig, self.ax = plt.subplots(figsize=(5, 4), facecolor='#0d1117')
+            self.canvas = FigureCanvas(self.fig)
+            layout = QVBoxLayout(self.ui_content.frame_grafico)
+            layout.addWidget(self.canvas)
+        
+        self.ax.clear()
+        self.ax.set_facecolor('#0d1117') # Fondo oscuro tipo trading
+
+        # 4. Dibujar cada vela del historial
+        for t, op, hi, lo, cl, col in self.historial_velas:
+            # Dibujar la mecha (línea fina)
+            self.ax.vlines(t, lo, hi, color=col, linewidth=1)
+            
+            # Dibujar el cuerpo (Diagrama de caja / vela)
+            # Rectangle((x_inferior_izquierda, y_inferior_izquierda), ancho, alto)
+            alto = cl - op
+            rect = plt.Rectangle((t - 0.3, op), 0.6, alto, color=col, alpha=0.9)
+            self.ax.add_patch(rect)
+
+        # 5. Ajustar ejes para el efecto de movimiento
+        self.ax.set_xlim(self.indice_tiempo - 21, self.indice_tiempo + 1)
+        
+        # Ajuste dinámico del eje Y para que siempre se vean las velas
+        precios = [v[2] for v in self.historial_velas] + [v[3] for v in self.historial_velas]
+        if precios:
+            margin = (max(precios) - min(precios)) * 0.1
+            self.ax.set_ylim(min(precios) - margin, max(precios) + margin)
+
+        # Estética final
+        self.ax.tick_params(colors='white', labelsize=8)
+        self.ax.grid(True, color='#1f2937', linestyle='--', alpha=0.3)
+        self.ax.spines['bottom'].set_color('#1f2937')
+        self.ax.spines['left'].set_color('#1f2937')
+        
+        self.canvas.draw()
+
+
+    #plaintext
+    def ciclo_inteligencia_mercado(self):
+        # Rutas (usa la 'r' para evitar problemas con las barras de Windows)
+        ruta_base = r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\noticias"
+        ruta_buenas = os.path.join(ruta_base, "Buenas")
+        ruta_malas = os.path.join(ruta_base, "Malas")
+        if self.ui_content.plainTextEdit_3.blockCount() > 50:
+            # Borra la noticia más vieja si hay más de 50
+            cursor = self.ui_content.plainTextEdit_3.textCursor()
+            cursor.movePosition(QTextCursor.Start)
+            cursor.select(QTextCursor.BlockUnderCursor)
+            cursor.removeSelectedText()
+            cursor.deleteChar() # Borra el salto de línea
+
+        # 1. Lógica de Escasez: 60% Buenas, 40% Malas
+        azar = random.randint(1, 10)
+        if azar <= 6:
+            tipo = "BUENA"
+            color = "#00FF00" # Verde neón
+            carpeta = ruta_buenas
+            impacto_mercado = random.uniform(0.02, 0.08) # Sube 2-8%
+        else:
+            tipo = "MALA"
+            color = "#FF3131" # Rojo brillante
+            carpeta = ruta_malas
+            impacto_mercado = random.uniform(-0.15, -0.05) # Baja 5-15% (caídas fuertes)
+
+        try:
+            # 2. Leer archivo aleatorio
+            archivos = os.listdir(carpeta)
+            if not archivos: return
+            
+            archivo_elegido = random.choice(archivos)
+            with open(os.path.join(carpeta, archivo_elegido), 'r', encoding='utf-8') as f:
+                contenido = f.read().strip()
+
+            # 3. Formatear y mostrar en plainTextEdit_3
+            # Creamos un encabezado con la hora y el tipo de noticia
+            hora = QDateTime.currentDateTime().toString("hh:mm:ss")
+            
+            self.ui_content.plainTextEdit_3.appendHtml(
+                f"<b style='color: white;'>[{hora}]</b> "
+                f"<span style='color: {color}; font-weight: bold;'>FLASH {tipo}:</span> "
+                f"<span style='color: #CCCCCC;'>{contenido}</span>"
+            )
+
+            # Mover el scroll al final automáticamente
+            self.ui_content.plainTextEdit_3.ensureCursorVisible()
+
+            # 4. DISPARAR EL CAMBIO EN EL GRÁFICO Y PRESUPUESTO
+            # Aquí llamarías a tu método de velas pasando el impacto_mercado
+            self.actualizar_grafico_velas(impacto_mercado)
+            self.simular_ia_rivales(tipo)    
+            self.actualizar_tree_competencia()             # IA compra o vende
+    
+            # Mostrar la noticia en la terminal
+            #self.ui_content.plainTextEdit_3.appendHtml(...)
+
+        except Exception as e:
+            print(f"Error cargando noticia: {e}")
 
     
+    #rivales
+
+
+    def simular_ia_rivales(self, tipo_noticia):
+        # 1. Normalizar la noticia (por si acaso viene en minúsculas)
+        noticia = str(tipo_noticia).upper()
+        
+        # Ajuste de precio
+        variacion = 1.05 if noticia == "BUENA" else 0.95
+        self.precio_accion_actual *= variacion
+
+        # 2. Obtener competidores
+        self.cursor.execute("SELECT nombre_empresa, presupuesto_actual FROM inteligencia_mercado WHERE id != 1")
+        rivales_db = self.cursor.fetchall()
+
+        for nombre, presupuesto in rivales_db:
+            # Inicializar diccionarios
+            if nombre not in self.analisis_empresas:
+                self.analisis_empresas[nombre] = {'ganado': 0, 'perdido': 0, 'emocion': 'Neutral'}
+            if nombre not in self.acciones_rivales:
+                self.acciones_rivales[nombre] = 0
+
+            # Lógica de Inteligencia (ahora sí se usa)
+            es_inteligente = random.random() > 0.15 
+            transaccion_realizada = False
+
+            # --- LÓGICA DE COMPRA ---
+            if (noticia == "BUENA" and es_inteligente) or (noticia == "MALA" and not es_inteligente):
+                # FORZAR PRESUPUESTO: Si el rival no tiene dinero, le damos un "crédito" para que la simulación no se detenga
+                if presupuesto < self.precio_accion_actual:
+                    presupuesto += self.precio_accion_actual * 2 
+
+                presupuesto -= self.precio_accion_actual
+                self.acciones_rivales[nombre] += 1
+                self.analisis_empresas[nombre]['perdido'] += self.precio_accion_actual
+                self.analisis_empresas[nombre]['emocion'] = random.choice(["Codicia", "Optimismo", "Confianza"])
+                transaccion_realizada = True
+
+            # --- LÓGICA DE VENTA ---
+            elif (noticia == "MALA" and es_inteligente) or (noticia == "BUENA" and not es_inteligente):
+                if self.acciones_rivales[nombre] > 0:
+                    presupuesto += self.precio_accion_actual
+                    self.acciones_rivales[nombre] -= 1
+                    self.analisis_empresas[nombre]['ganado'] += self.precio_accion_actual
+                    self.analisis_empresas[nombre]['emocion'] = random.choice(["Pánico", "Miedo", "Cautela"])
+                    transaccion_realizada = True
+
+            # Si no hubo transacción, marcamos indiferencia
+            if not transaccion_realizada:
+                self.analisis_empresas[nombre]['emocion'] = "Indiferencia"
+
+            # 3. Actualizar la base de datos
+            self.cursor.execute("UPDATE inteligencia_mercado SET presupuesto_actual = ? WHERE nombre_empresa = ?", 
+                                (presupuesto, nombre))
+        
+        self.conn.commit()
+        print(f"DEBUG: Mercado procesado. Noticia: {noticia} | Precio: {self.precio_accion_actual}")
+        self.actualizar_tree_sentimiento()
+
+    #treewidget
+
+    def actualizar_tree_competencia(self):
+        # 1. Limpiar el widget para refrescar los datos
+        self.ui_content.treeWidget_competencia.clear()
+        
+        # 2. Obtener los datos actuales de la DB (Liquidez de cada empresa)
+        self.cursor.execute("SELECT nombre_empresa, presupuesto_actual FROM inteligencia_mercado")
+        todas_las_empresas = self.cursor.fetchall()
+
+        # 3. Calcular el VALOR TOTAL (Presupuesto + (Acciones * Precio Mercado))
+        # Usamos el diccionario self.acciones_rivales que creamos para no tocar la DB
+        ranking = sorted(
+            todas_las_empresas, 
+            key=lambda x: x[1] + (self.acciones_rivales.get(x[0], 0) * self.precio_accion_actual), 
+            reverse=True
+        )[:10] # Solo tomamos los 10 mejores
+
+        # 4. Insertar en el TreeWidget con formato de Ranking
+        for i, (nombre, presupuesto) in enumerate(ranking):
+            acciones = self.acciones_rivales.get(nombre, 0)
+            valor_total = presupuesto + (acciones * self.precio_accion_actual)
+            
+            # Item de Nivel 1: Posición y Nombre
+            item_principal = QTreeWidgetItem(self.ui_content.treeWidget_competencia)
+            item_principal.setText(0, f"Rank #{i+1} - {nombre}")
+            
+            # Estética: El Rank #1 resaltará más
+            if i == 0:
+                item_principal.setForeground(0, QColor("#FFD700")) # Color Dorado para el líder
+            
+            # Item de Nivel 2: Detalles financieros
+            detalles = QTreeWidgetItem(item_principal)
+            detalles.setText(0, f"📦 Acciones: {acciones} | 💰 Liquidez: ${presupuesto:,.2f}")
+            
+        # Expandir todo para que se vea el ranking completo de inmediato
+        self.ui_content.treeWidget_competencia.expandAll()
+        # Dentro de actualizar_tree_competencia, asegúrate de que el ranking tome a TODOS
+        self.cursor.execute("SELECT nombre_empresa, presupuesto_actual FROM inteligencia_mercado") # Sin el "WHERE id != 1"
+        # Y en el diccionario:
+       
+
+    
+    #Historia
+
+ 
+    def actualizar_tree_sentimiento(self):
+        self.ui_content.treeWidget_sentimiento.clear()
+        
+        # Configurar encabezados si no lo has hecho en el Designer
+        self.ui_content.treeWidget_sentimiento.setHeaderLabels(["EMPRESA", "GANADO", "PERDIDO", "SENTIMIENTO"])
+
+        for nombre, datos in self.analisis_empresas.items():
+            item = QTreeWidgetItem(self.ui_content.treeWidget_sentimiento)
+            
+            # Insertar datos en las 4 columnas
+            item.setText(0, nombre)
+            item.setText(1, f"$ {datos['ganado']:,.2f}")
+            item.setText(2, f"$ {datos['perdido']:,.2f}")
+            item.setText(3, datos['emocion'])
+
+            # Colores de Data Analyst
+            item.setForeground(1, QColor("#00FF00")) # Ganado siempre verde neón
+            item.setForeground(2, QColor("#FF3131")) # Perdido siempre rojo brillante
+            
+            # Centrar los textos de las columnas numéricas
+            item.setTextAlignment(1, Qt.AlignCenter)
+            item.setTextAlignment(2, Qt.AlignCenter)
+            item.setTextAlignment(3, Qt.AlignCenter)
+
+
+    def closeEvent(self, event):
+        # 1. Calcular tiempo transcurrido en segundos
+        tiempo_total = time.time() - self.hora_inicio_mercado
+        un_minuto = 60
+        cinco_minutos = 300
+
+        # 2. Condición: Guardar solo si duró entre 1 y 5 minutos
+        if un_minuto <= tiempo_total <= cinco_minutos:
+            try:
+                ruta_excel = r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\Sentimiento"
+                nombre_archivo = f"analisis_mercado_{datetime.now().strftime('%Y%m%d_%H%M')}.xlsx"
+                path_completo = os.path.join(ruta_excel, nombre_archivo)
+
+                # Convertir el diccionario de análisis a una lista para Pandas
+                data_para_excel = []
+                for nombre, datos in self.analisis_empresas.items():
+                    data_para_excel.append({
+                        'Empresa': nombre,
+                        'Inversión Total (Perdido)': datos['perdido'],
+                        'Retorno Total (Ganado)': datos['ganado'],
+                        'Balance Neto': datos['ganado'] - datos['perdido'],
+                        'Último Sentimiento': datos['emocion']
+                    })
+
+                df = pd.DataFrame(data_para_excel)
+                df.to_excel(path_completo, index=False)
+                print(f"📊 Reporte de Data Analysis guardado: {nombre_archivo}")
+
+            except Exception as e:
+                print(f"Error al guardar Excel: {e}")
+        else:
+            print("⚠️ Sesión fuera de rango (1-5 min). No se generó reporte Excel.")
+
+        event.accept() # Cerrar la ventana definitivamente
+
+    
+
+    def mostrar_detalle_empresa(self, item, column):
+        nombre = item.text(0)
+        datos = self.analisis_empresas.get(nombre)
+        if datos:
+            print(f"Análisis para {nombre}: Ganó {datos['ganado']} | Emoción: {datos['emocion']}")

@@ -1971,7 +1971,7 @@ QPushButton:disabled {
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="QTreeWidget" name="treeWidget">
+           <widget class="QTreeWidget" name="treeWidget_competencia">
             <property name="styleSheet">
              <string notr="true">/* Estilo general del TreeWidget */
 QTreeWidget {
@@ -2100,6 +2100,98 @@ QScrollBar::handle:vertical {
             <property name="frameShadow">
              <enum>QFrame::Shadow::Raised</enum>
             </property>
+            <widget class="QWidget" name="horizontalLayoutWidget_15">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>19</y>
+               <width>931</width>
+               <height>521</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_15">
+              <item>
+               <widget class="QTreeWidget" name="treeWidget_sentimiento">
+                <property name="styleSheet">
+                 <string notr="true">/* Estilo general del TreeWidget */
+QTreeWidget {
+    background-color: #1e1e2e;
+    color: #ffffff;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 13px;
+    border: 1px solid #3c3c4c;
+    border-radius: 8px;
+    outline: none; /* Quita el borde punteado al hacer clic */
+}
+
+/* Estilo de las cabeceras (Columnas) */
+QHeaderView::section {
+    background-color: #27293d;
+    color: #00ffcc; /* Color cian neón para los títulos */
+    padding: 8px;
+    border: none;
+    border-bottom: 2px solid #3c3c4c;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 11px;
+}
+
+/* Estilo de cada fila/item */
+QTreeWidget::item {
+    padding: 10px;
+    border-bottom: 1px solid #2d2d3d;
+}
+
+/* Cuando pasas el mouse por encima de una fila */
+QTreeWidget::item:hover {
+    background-color: rgba(0, 255, 204, 0.05); /* Destello cian muy sutil */
+}
+
+/* Cuando seleccionas una fila */
+QTreeWidget::item:selected {
+    background-color: rgba(0, 255, 204, 0.2);
+    color: #00ffcc;
+    border-left: 3px solid #00ffcc; /* Línea neón a la izquierda para resaltar */
+}
+
+/* Estilo de las flechas de expansión (si tienes jerarquías) */
+QTreeWidget::branch:has-children:!has-siblings:closed,
+QTreeWidget::branch:closed:has-children:has-siblings {
+    image: url(flecha_cerrada.png); /* Opcional: icono de flecha */
+}
+
+QTreeWidget::branch:open:has-children:!has-siblings,
+QTreeWidget::branch:open:has-children:has-siblings {
+    image: url(flecha_abierta.png); /* Opcional: icono de flecha */
+}
+
+/* Personalización del ScrollBar (Barra de desplazamiento) */
+QScrollBar:vertical {
+    border: none;
+    background: #1e1e2e;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #3c3c4c;
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #00ffcc; /* La barra brilla al pasar el mouse */
+}</string>
+                </property>
+                <column>
+                 <property name="text">
+                  <string notr="true">1</string>
+                 </property>
+                </column>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </widget>
           </item>
          </layout>

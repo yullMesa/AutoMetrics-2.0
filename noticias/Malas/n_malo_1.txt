@@ -1,0 +1,1 @@
+"Fallo crítico detectado en el firewall de AutoMetrics permite acceso remoto no autorizado. Acciones en caída."
