@@ -1,0 +1,8 @@
+CLIENTE|A ver, &, muévete. No tengo todo el día para perderlo con un asesor de quinta. ¿Sabes cuántos millones tengo en mi cuenta $?
+ASESOR|Sé exactamente cuánto dinero tiene, &. Pero mi tiempo como profesional $ vale tanto como el suyo. La fila es para todos igual.
+CLIENTE|¡Qué insolencia! ¿Te das cuenta de a quién le hablas, &? Podría comprar esta oficina y echarte a la calle si quisiera.
+ASESOR|Podrá tener mucha plata, &, pero eso no le da derecho a tratarme como si fuera basura. Mi trabajo es asegurar su perfil $, no aguantar sus complejos.
+CLIENTE|¡Eres un igualado, &! Exijo que te disculpes ahora mismo por hablarme así. Mi estatus de $ exige un trato preferencial.
+ASESOR|Su estatus de $ le da beneficios bancarios, no el derecho de pisotear mi dignidad. O bajamos el tono, &, o corto la llamada ahora mismo.
+CLIENTE|¿Te atreves a amenazarme, &? ¡No sabes con quién te has metido!
+ASESOR|Me he metido con un cliente maleducado que está retrasando el proceso de su propia cuenta $. ¿Seguimos con el trámite o prefiere seguir gritando, &?

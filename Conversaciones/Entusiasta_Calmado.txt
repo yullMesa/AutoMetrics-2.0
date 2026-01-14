@@ -1,0 +1,10 @@
+ASESOR|¡Muy buen día! Es un verdadero placer saludarle. Mi nombre es & y estoy aquí para brindarle la mejor atención posible en su requerimiento de hoy.
+CLIENTE|Muchas gracias, &. Le habla &; me comunico porque noto una pequeña discrepancia en mi último estado de cuenta, nada grave, pero como mi perfil es $, me gusta mantener todo en orden.
+ASESOR|¡Entiendo perfectamente, &! Es un honor atender a un cliente con su trayectoria. He verificado en el sistema y efectivamente veo que su perfil es $. Permítame un segundo mientras intento acceder a los detalles de su transacción.
+CLIENTE|Se lo agradezco, &. Sé que estos procesos pueden tomar tiempo, pero confío en que usted podrá darme una respuesta clara sobre este inconveniente.
+ASESOR|Le pido una pequeña disculpa, &. Debido a que soy asesor de nivel 1, el sistema me muestra que su información está bajo una capa de seguridad especial por ser $. Sin embargo, mi entusiasmo por ayudarle es total, ¡así que no se retire!
+CLIENTE|No se preocupe, &. Entiendo que por mi nivel de cuenta $ existan protocolos de seguridad; su actitud es muy buena, solo dígame si usted puede resolverlo o si debemos elevar esto a alguien con más permisos.
+ASESOR|¡Excelente observación, &! Aunque mis accesos son básicos, estoy haciendo una gestión interna manual para no tener que hacerlo esperar un escalamiento. Usted es muy importante para nosotros por ser $.
+CLIENTE|Me agrada su disposición, &. Realmente se nota que disfruta su trabajo. Esperaré un momento más, pero si el sistema se bloquea, por favor no dude en contactar a un supervisor, prefiero la precisión a la velocidad.
+ASESOR|¡Gracias por su paciencia y sabiduría, &! Ya casi lo tengo. Estoy documentando cada detalle de su situación para que, pase lo que pase, su historial de $ quede impecable.
+CLIENTE|Perfecto, &. Quedo atento a su confirmación para cerrar este ciclo y seguir operando con normalidad.

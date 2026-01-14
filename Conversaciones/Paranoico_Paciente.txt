@@ -1,0 +1,8 @@
+CLIENTE|&, te estoy vigilando. He notado que faltan 15 centavos en mi saldo de $. Sé lo que están haciendo, se los roban poco a poco de cada cuenta.
+ASESOR|Le aseguro, &, que no hay ningún robo. Esos 15 centavos corresponden al ajuste de impuestos de su perfil $ que se aplica cada mes.
+CLIENTE|¡Mentira! Eso es lo que te obligan a decir, &. Tú estás metido en esto también. Seguramente tienes un bono por cada cliente $ al que logran estafar.
+ASESOR|Entiendo que cuide su dinero, &, yo haría lo mismo. Pero mi cargo como $ me obliga a ser transparente. Aquí veo el desglose: es una tasa estatal, no un cobro nuestro.
+CLIENTE|No me engañas, &. He leído en internet que los asesores nivel $ tienen acceso a cuentas "fantasma". ¡Devuélveme mis centavos ahora!
+ASESOR|&, por favor, respire. Si yo quisiera robar, no lo haría por 15 centavos arriesgando mi carrera de $. Mire su pantalla, le estoy enviando el comprobante legal del cobro.
+CLIENTE|Ese PDF puede estar falsificado, &. No confío en nadie de este sistema de $. Mañana mismo retiro todo mi dinero.
+ASESOR|Está en su derecho, &. Pero le garantizo que en cualquier otra entidad le cobrarán el mismo impuesto por su estatus de $. ¿Desea que verifiquemos otro movimiento, &?

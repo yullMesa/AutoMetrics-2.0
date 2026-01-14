@@ -1,0 +1,8 @@
+CLIENTE|¡Escúchame bien, &, me importa una mierda tu protocolo! ¡O me das mi dinero o te juro que te busco y te rompo la cara!
+ASESOR|Mire, &, primero que nada, no me hable así porque yo no soy su sirviente. Soy un empleado de esta empresa con perfil $ y merezco respeto.
+CLIENTE|¡Me vale un carajo tu respeto, &! Eres un simple muerto de hambre que no puede ni apretar un botón para ayudar a un cliente $.
+ASESOR|¿Usted cree que si yo pudiera darle el dinero no lo haría para dejar de escucharlo, &? Soy un $, tengo las manos atadas por gente como usted que se cree dueña del mundo por ser $.
+CLIENTE|¡No me digas qué creer, pedazo de idiota! ¡Llama a alguien que tenga los huevos para resolver esto, &!
+ASESOR|¿Sabe qué, &? Con esa actitud, lo único que va a lograr es que su cuenta de $ entre en revisión por conducta hostil. Suerte con eso.
+CLIENTE|¡Vete a la mierda, &! ¡Te voy a hacer despedir, te lo juro por mi vida!
+ASESOR|Que tenga un excelente día, &. Su expediente de $ queda grabado... con todas sus "lindas" palabras.

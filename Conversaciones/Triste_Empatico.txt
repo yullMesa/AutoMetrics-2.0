@@ -1,0 +1,8 @@
+CLIENTE|Por favor, &, te lo suplico... es el dinero para la medicina de mi hijo. Si no se libera hoy, no sé qué voy a hacer. Estoy desesperado.
+ASESOR|Se me parte el alma escucharlo, &. No debería decirle esto, pero yo también soy padre y entiendo perfectamente su angustia.
+CLIENTE|He llamado cinco veces, &. Todos me dicen que por ser un perfil $ no tengo prioridad. Pero es mi vida la que está en juego.
+ASESOR|Malditos sistemas, &. A veces se olvidan de que tratamos con personas y no con números de $. Mire, voy a hacer algo que me va a traer problemas.
+CLIENTE|¿De verdad, &? Dios te lo pague. No quiero causarte líos, pero es que ya no tengo a quién recurrir.
+ASESOR|Voy a usar mi clave de $ para autorizar un adelanto de emergencia. Si me preguntan, diré que fue un error técnico. Usted necesita ese dinero, &.
+CLIENTE|Gracias de todo corazón, &. Eres la única persona humana que me ha contestado en este maldito banco de $.
+ASESOR|No me agradezca a mí, &. Solo prométame que cuidará de su familia. Mi cargo de $ no vale más que la salud de su hijo.

@@ -1,0 +1,10 @@
+CLIENTE|¡Esto es el colmo! ¿Me vas a decir que mi dinero no está disponible, &? ¡Exijo hablar con alguien que no sea un inepto!
+ASESOR|Entiendo perfectamente su malestar, &. Le pido una disculpa por el inconveniente. Mi nombre es & y le aseguro que mi prioridad en este momento es proteger su cuenta, especialmente siendo usted un cliente $.
+CLIENTE|¡Ahorrate los halagos, &! No me importa si soy $ o si soy el rey de Roma. ¡Necesito que liberen mi acceso ahora mismo o esto va a escalar a términos legales!
+ASESOR|Tiene toda la razón en exigir rapidez, &. Sin embargo, el sistema ha detectado una actividad inusual en su perfil $. Por protocolo de seguridad, & , debo realizar una verificación manual para garantizar que nadie más que usted acceda a esos fondos.
+CLIENTE|¡Mentiras! Siempre es la misma excusa técnica. Si tú no puedes hacerlo, &, pásame con tu jefe ahora mismo. No voy a perder mi tiempo con un $.
+ASESOR|&, comprendo que el tiempo es vital para usted. Como asesor $, tengo la facultad de saltar ciertos filtros de espera. Si me permite 30 segundos, realizaré el desbloqueo bajo mi responsabilidad personal para que su estatus $ no se vea más afectado.
+CLIENTE|Más te vale, &. Tienes exactamente esos 30 segundos antes de que cuelgue y llame directamente a mi abogado. Mi paciencia con este servicio $ se terminó.
+ASESOR|Lo tengo casi listo, &. Estoy aplicando el código de excepción para clientes $. Agradezco que mantenga la línea conmigo; su seguridad es lo único que nos detiene por un momento.
+CLIENTE|¡Rápido entonces! Y quiero un reporte por escrito de por qué me bloquearon siendo yo un $. No quiero volver a pasar por esto, &.
+ASESOR|Hecho, &. El acceso está restablecido. He dejado una nota en su perfil de $ para que esto no se repita. ¿Hay algo más en lo que pueda asistirle con la misma prioridad?

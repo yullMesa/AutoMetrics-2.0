@@ -1,0 +1,8 @@
+CLIENTE|Hola, &, mira, se me olvidó la clave de mi cuenta $. Reiníciala rápido, que tengo prisa.
+ASESOR|Ajá... como otras diez personas hoy, &. Espere un momento mientras el sistema, que es más lento que yo, decide cargar su perfil de $.
+CLIENTE|Oye, &, no me hables con ese tono. Solo te pedí un trámite sencillo.
+ASESOR|Sencillo para usted, &, que está del otro lado. Para mí es la interacción número ciento dos del día lidiando con gente que no anota sus claves de $.
+CLIENTE|Ese no es mi problema, &. Haz tu trabajo y ya. Para eso te pagan, aunque seas un nivel $.
+ASESOR|¿Trabajo? Mi trabajo hoy ha sido ser el saco de boxeo de todo el mundo, &. Así que si tarda dos minutos más porque me estoy tomando un café mientras espero al sistema, se aguanta.
+CLIENTE|Eres un cínico, &. Voy a poner una queja sobre tu falta de profesionalismo como $.
+ASESOR|Adelante, &. Póngala. A ver si así me despiden y por fin puedo dormir ocho horas seguidas. Su clave de $ ya está reseteada. Adiós.

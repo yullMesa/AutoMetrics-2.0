@@ -1,0 +1,8 @@
+CLIENTE|Escúchame, &. Tú y yo sabemos cómo funciona esto. Eres una persona inteligente, se nota en tu voz. ¿Para qué tanto papeleo por un simple perfil $?
+ASESOR|Agradezco el cumplido, &, pero las normas de seguridad de mi cargo $ son muy claras. Necesito los documentos completos para proceder.
+CLIENTE|Vamos, &, no seas así. Si me ayudas a pasar esto por alto, te aseguro que sabré recompensar tu "buena voluntad". Todos necesitamos un empujón a veces, ¿no?
+ASESOR|Sinceramente, &, me ofende que piense que mi integridad tiene un precio. Mi responsabilidad es proteger los datos de su cuenta $.
+CLIENTE|No lo veas como algo malo, &. Es solo agilizar las cosas entre amigos. Al final del día, el banco tiene millones y a ti no te pagan lo suficiente como $, ¿verdad?
+ASESOR|Mire, &, podrá ser un cliente $ muy importante, pero mi ética no está en venta. Si vuelve a sugerir algo parecido, tendré que reportar su cuenta a la unidad de delitos financieros.
+CLIENTE|Vaya, &, qué decepción. Pensé que eras alguien con visión, no un simple seguidor de reglas cuadradas.
+ASESOR|Prefiero ser un seguidor de reglas cuadrado, &, que un desempleado procesado por corrupción. Continuemos con el trámite legal de su $ o cerramos la sesión.

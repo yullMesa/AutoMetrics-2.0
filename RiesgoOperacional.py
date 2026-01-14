@@ -6,13 +6,13 @@ from PySide6.QtCore import QFile,Qt, QSize
 from PySide6.QtWidgets import (QTreeWidgetItem,QTableWidgetItem, 
                                QAbstractItemView,QHeaderView,QVBoxLayout,QMessageBox,QToolButton,
                                QSizePolicy,QDialog,QLabel,QHBoxLayout,QPushButton,QMessageBox,QWidget,
-                                 QPlainTextEdit)
+                                 QPlainTextEdit,QStyle)
 from PySide6.QtGui import QColor,QIcon, QPixmap,QPainter , QFont , QTextCursor
 import sqlite3
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QPixmap,QBrush
 from PySide6.QtCore import QFile, Qt , QSize , QTimer , QRect , QPoint 
 import random
 from datetime import datetime
@@ -23,6 +23,8 @@ import mplfinance as mpf
 import pandas as pd
 from PySide6.QtCore import QTimer, QDateTime 
 import time
+from situaciones import DICCIONARIO_BRECHAS , MANIFESTACIONES
+
 
 class riesgo(QMainWindow):
     def __init__(self, *args, **kwargs):
@@ -87,7 +89,7 @@ class riesgo(QMainWindow):
         
         self.timer_noticias = QTimer(self)
         self.timer_noticias.timeout.connect(self.ciclo_inteligencia_mercado)
-        self.timer_noticias.start(4000)
+        self.timer_noticias.start(7000)
         self.historial_velas = []
         self.precio_accion_actual = 50000.0
         self.acciones_rivales = {}
@@ -108,8 +110,34 @@ class riesgo(QMainWindow):
         header.setSectionResizeMode(1, QHeaderView.Interactive)
         header.setSectionResizeMode(2, QHeaderView.Interactive)
         header.setSectionResizeMode(3, QHeaderView.Interactive)
-       
+
+
+        #gestion De Cumplmiento
+        # Configura los títulos de las columnas
+        self.ui_content.treeWidget_empleados.setHeaderLabels(["Empleado", "Cargo", "Velocidad"])
+        # Ajusta el ancho para que el texto no se corte
+        self.ui_content.treeWidget_empleados.setColumnWidth(0, 150)
+        self.ui_content.treeWidget_empleados.setColumnWidth(1, 150)
+        self.cargar_empleados_en_tree()
+
+        self.ui_content.tableWidget_clientes.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.ui_content.tableWidget_clientes.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.cargar_clientes_en_tabla()
+
+        # Si el usuario elige en la tabla, el combo se actualiza
+        self.ui_content.tableWidget_clientes.itemClicked.connect(
+            lambda item: self.ui_content.comboBox_cliente.setCurrentText(
+                self.ui_content.tableWidget_clientes.item(item.row(), 0).text()
+            )
+        )
+        self.cargar_combos_datos()
+        self.cargar_emociones_unicas()
+
+        self.ui_content.push_conversa.clicked.connect(self.iniciar_simulacion_chat)
         
+        
+        
+       
         
         
 
@@ -968,3 +996,252 @@ class riesgo(QMainWindow):
         datos = self.analisis_empresas.get(nombre)
         if datos:
             print(f"Análisis para {nombre}: Ganó {datos['ganado']} | Emoción: {datos['emocion']}")
+
+    
+
+    #Gestion De Cumplimiento
+
+
+    #trewidget
+  
+    def cargar_empleados_en_tree(self):
+        # 1. Limpiar el TreeWidget antes de cargar
+        self.ui_content.treeWidget_empleados.clear()
+        
+        try:
+            # 2. Conexión a la base de datos
+            conn = sqlite3.connect('Ingenieria.db')
+            cursor = conn.cursor()
+            
+            # 3. Consulta de las columnas: nombre, cargo y velocidad_respuesta
+            query = "SELECT nombre, cargo, velocidad_respuesta FROM empleados_cumplimiento"
+            cursor.execute(query)
+            empleados = cursor.fetchall()
+            
+            # 4. Insertar datos en el TreeWidget
+            for fila in empleados:
+                nombre, cargo, velocidad = fila
+                # Crear un nuevo item para el árbol
+                item = QTreeWidgetItem(self.ui_content.treeWidget_empleados)
+                item.setText(0, str(nombre))    # Columna Nombre
+                item.setText(1, str(cargo))     # Columna Cargo
+                item.setText(2, str(velocidad)) # Columna Velocidad de Respuesta
+                
+            conn.close()
+            
+        except Exception as e:
+            print(f"Error al cargar empleados: {e}")
+
+    
+    #tablewwidget
+    def cargar_clientes_en_tabla(self):
+        # 1. Configurar columnas y limpiar la tabla
+        self.ui_content.tableWidget_clientes.setColumnCount(3)
+        self.ui_content.tableWidget_clientes.setHorizontalHeaderLabels(
+            ["Cliente", "Tipo Solicitud", "Perfil"]
+        )
+        self.ui_content.tableWidget_clientes.setRowCount(0)
+        self.ui_content.tableWidget_clientes.verticalHeader().setVisible(False)
+        
+        try:
+            # 2. Conexión a la base de datos
+            conn = sqlite3.connect('Ingenieria.db')
+            cursor = conn.cursor()
+            
+            # 3. Consulta de las columnas especificadas
+            query = """SELECT nombre_cliente, tipo_solicitud, perfil_cliente
+                    FROM casos_clientes"""
+            cursor.execute(query)
+            casos = cursor.fetchall()
+            
+            # 4. Insertar los datos fila por fila
+            for row_number, row_data in enumerate(casos):
+                self.ui_content.tableWidget_clientes.insertRow(row_number)
+                for column_number, data in enumerate(row_data):
+                    item = QTableWidgetItem(str(data))
+                    
+                    # Centrar el texto en las columnas de Prioridad y Emoción
+                    if column_number >= 3:
+                        item.setTextAlignment(Qt.AlignCenter)
+                    
+                    self.ui_content.tableWidget_clientes.setItem(row_number, column_number, item)
+            
+            conn.close()
+            
+            # Ajustar el ancho de las columnas al contenido
+            self.ui_content.tableWidget_clientes.resizeColumnsToContents()
+            
+        except Exception as e:
+            print(f"Error al cargar clientes: {e}")
+
+    
+    #Combobox
+    def cargar_combos_datos(self):
+        try:
+            conn = sqlite3.connect('Ingenieria.db')
+            cursor = conn.cursor()
+
+            # --- Cargar Empleados ---
+            self.ui_content.comboBox_empleado.clear()
+            cursor.execute("SELECT nombre FROM empleados_cumplimiento")
+            empleados = cursor.fetchall()
+            for emp in empleados:
+                self.ui_content.comboBox_empleado.addItem(str(emp[0]))
+
+            # --- Cargar Clientes ---
+            self.ui_content.comboBox_cliente.clear()
+            # Usamos nombre_cliente (corregido)
+            cursor.execute("SELECT nombre_cliente FROM casos_clientes")
+            clientes = cursor.fetchall()
+            for cli in clientes:
+                self.ui_content.comboBox_cliente.addItem(str(cli[0]))
+
+            conn.close()
+            print("ComboBoxes cargados exitosamente.")
+
+        except Exception as e:
+            print(f"Error al cargar ComboBoxes: {e}")
+
+
+    def cargar_emociones_unicas(self):
+        ruta_base = r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\Conversaciones"
+        emociones_lista = set() # Usamos un set para evitar duplicados automáticamente
+
+        try:
+            archivos = [f for f in os.listdir(ruta_base) if f.endswith('.txt')]
+            for archivo in archivos:
+                # Quitamos el .txt y separamos por "_"
+                partes = archivo.replace('.txt', '').split('_')
+                for emocion in partes:
+                    emociones_lista.add(emocion.strip())
+
+            # Convertimos a lista ordenada para los combos
+            opciones = sorted(list(emociones_lista))
+            
+            self.ui_content.comboBox_emocionE.clear()
+            self.ui_content.comboBox_emocionC.clear()
+            self.ui_content.comboBox_emocionE.addItems(opciones)
+            self.ui_content.comboBox_emocionC.addItems(opciones)
+            
+            print(f"Emociones cargadas: {opciones}")
+        except Exception as e:
+            print(f"Error al procesar emociones: {e}")
+
+
+    #conversacion
+
+    def iniciar_simulacion_chat(self):
+        # 1. Obtener datos de identidad y emociones
+        self.registrar_interes_analista()
+        empleado = self.ui_content.comboBox_empleado.currentText()
+        cliente = self.ui_content.comboBox_cliente.currentText()
+        emo_e = self.ui_content.comboBox_emocionE.currentText()
+        emo_c = self.ui_content.comboBox_emocionC.currentText()
+
+        # 2. Lógica de Velocidad (Basada en tu columna 'velocidad')
+        # Obtenemos la velocidad del empleado seleccionado (puedes traerla de la DB o del Tree)
+        # Ejemplo: Si la velocidad es 'Alta' -> 3s, si es 'Baja' -> 10s
+        velocidad_texto = "Alta" # Aquí deberías mapear el valor real de tu tabla empleados
+        ms_espera = 3000 if velocidad_texto == "Alta" else 10000
+
+        # 3. Localizar archivo
+        nombre_archivo = f"{emo_e}_{emo_c}.txt"
+        ruta = os.path.join(r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\Conversaciones", nombre_archivo)
+
+        if not os.path.exists(ruta):
+            self.ui_content.TextEdit_Arbol.setHtml("<b style='color:red;'>Guion no encontrado.</b>")
+            return
+
+        # 4. Preparar el escenario
+        self.ui_content.TextEdit_Arbol.clear()
+        with open(ruta, 'r', encoding='utf-8') as f:
+            self.lineas_chat = [l.strip() for l in f.readlines() if "|" in l]
+
+        self.indice_actual = 0
+        self.inicio_atencion = time.time() # Inicia cronómetro de "chisme"
+
+        # 5. Timer de PySide6 para la carga secuencial
+        if hasattr(self, 'timer_chat'): self.timer_chat.stop() # Limpiar timer previo
+        
+        self.timer_chat = QTimer(self)
+        self.timer_chat.timeout.connect(lambda: self.renderizar_linea(empleado, cliente))
+        self.timer_chat.start(ms_espera)
+        
+
+    def renderizar_linea(self, emp, cli):
+        if self.indice_actual < len(self.lineas_chat):
+            linea = self.lineas_chat[self.indice_actual]
+            rol, texto = linea.split("|")
+            
+            # Ajustes de diseño: Letra grande (18px) y colores de analista
+            font_size = "18px"
+            nombre_display = emp if rol == "ASESOR" else cli
+            texto_final = texto.replace("&", f"<b>{nombre_display}</b>")
+
+            if rol == "ASESOR":
+                # Alineación Izquierda (Empleado)
+                html = f"""
+                <div align="left" style="margin-bottom: 25px;">
+                    <div style="background-color: #313244; color: #cdd6f4; padding: 15px; border-radius: 15px; 
+                                border-left: 10px solid #89b4fa; width: 80%; font-size: {font_size};">
+                        <b style="color: #89b4fa; font-size: 20px;">{emp}:</b><br>{texto_final}
+                    </div>
+                </div>
+                """
+            else:
+                # Alineación Derecha (Cliente)
+                html = f"""
+                <div align="right" style="margin-bottom: 25px;">
+                    <div style="background-color: #45475a; color: #cdd6f4; padding: 15px; border-radius: 15px; 
+                                border-right: 10px solid #fab387; width: 80%; text-align: left; font-size: {font_size};">
+                        <b style="color: #fab387; font-size: 20px;">{cli}:</b><br>{texto_final}
+                    </div>
+                </div>
+                """
+            
+            self.ui_content.TextEdit_Arbol.append(html)
+            self.indice_actual += 1
+        else:
+            self.timer_chat.stop()
+            self.registrar_metrica_chisme()
+
+    def registrar_metrica_chisme(self):
+        tiempo_total = round(time.time() - self.inicio_atencion, 2)
+        emociones = f"{self.ui_content.comboBox_emocionE.currentText()}_{self.ui_content.comboBox_emocionC.currentText()}"
+        print(f"--- REPORTE DE ANALISTA ---")
+        print(f"Escena: {emociones}")
+        print(f"Tiempo de permanencia: {tiempo_total} segundos")
+        # Aquí puedes hacer un INSERT INTO tabla_metricas si lo deseas
+
+    #registrar emociones en sql
+   
+
+    def registrar_interes_analista(self):
+        try:
+            # Extraer datos de los ComboBoxes
+            emp_nom = self.ui_content.comboBox_empleado.currentText()
+            emp_emo = self.ui_content.comboBox_emocionE.currentText()
+            cli_nom = self.ui_content.comboBox_cliente.currentText()
+            cli_emo = self.ui_content.comboBox_emocionC.currentText()
+
+            # Añadimos timeout=10 para esperar si la DB está ocupada
+            conn = sqlite3.connect('Ingenieria.db', timeout=10) 
+            cursor = conn.cursor()
+            
+            query = '''INSERT INTO metricas_analisis 
+                    (empleado_nombre, emocion_empleado, cliente_nombre, emocion_cliente) 
+                    VALUES (?, ?, ?, ?)'''
+            
+            cursor.execute(query, (emp_nom, emp_emo, cli_nom, cli_emo))
+            
+            conn.commit()
+            # Es vital cerrar siempre la conexión para liberar el bloqueo
+            conn.close() 
+            print(f"Métrica guardada exitosamente: {emp_emo} vs {cli_emo}")
+            
+        except sqlite3.OperationalError as e:
+            print(f"Error de SQLite (posible bloqueo): {e}")
+        except Exception as e:
+            print(f"Error general: {e}")
+
+    
