@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1947</width>
+    <height>1238</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1947</width>
+     <height>33</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuDASHBOARD">
+    <property name="title">
+     <string>DASHBOARD</string>
+    </property>
+    <addaction name="actionGRAFICO"/>
+   </widget>
+   <widget class="QMenu" name="menuCalculadora_de_Valor_Futuro_ROI">
+    <property name="title">
+     <string>Calculadora de Valor Futuro (ROI)</string>
+    </property>
+    <addaction name="action_CALCULADORA"/>
+   </widget>
+   <widget class="QMenu" name="menuRanking_de_Rentabilidad">
+    <property name="title">
+     <string>Ranking de Rentabilidad</string>
+    </property>
+    <addaction name="action_RANKING"/>
+   </widget>
+   <widget class="QMenu" name="menuSimulador_de_Escenarios">
+    <property name="title">
+     <string>Simulador de Escenarios</string>
+    </property>
+    <addaction name="action_SIMULADOR"/>
+   </widget>
+   <widget class="QMenu" name="menuBalance_de_Activos">
+    <property name="title">
+     <string>Balance de Activos</string>
+    </property>
+    <addaction name="action_BALANCE"/>
+   </widget>
+   <widget class="QMenu" name="menuVOLVER">
+    <property name="title">
+     <string>VOLVER</string>
+    </property>
+   </widget>
+   <addaction name="menuDASHBOARD"/>
+   <addaction name="menuCalculadora_de_Valor_Futuro_ROI"/>
+   <addaction name="menuRanking_de_Rentabilidad"/>
+   <addaction name="menuSimulador_de_Escenarios"/>
+   <addaction name="menuBalance_de_Activos"/>
+   <addaction name="menuVOLVER"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionGRAFICO">
+   <property name="text">
+    <string>GRAFICO</string>
+   </property>
+  </action>
+  <action name="action_CALCULADORA">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+  <action name="action_RANKING">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+  <action name="action_SIMULADOR">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+  <action name="action_BALANCE">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

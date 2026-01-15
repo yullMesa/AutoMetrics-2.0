@@ -17,6 +17,7 @@ import sqlite3
 import datetime
 from Comprar import Comprar
 from RiesgoOperacional import riesgo
+from InteligenciaFinanciera import InteligenciaFinanciera
 
 
 
@@ -62,6 +63,8 @@ class VentanaInicio(QDialog):
             self.ui.toolComprar.clicked.connect(self.abrir_Comprar)
 
             self.ui.toolRiesgo.clicked.connect(self.abrir_RiesgoOperacional)
+
+            self.ui.toolFinanciera.clicked.connect(self.abrir_InteligenciaFinanciera)
 
             self.respaldo_automatico_inicio()
             self.reset_sistema_versiones() #activar cuando se necesita reiniciar la base de datos
@@ -133,6 +136,21 @@ class VentanaInicio(QDialog):
             
             # Instanciar y guardar como atributo de clase para que no desaparezca de memoria
             self.ventana_gestion = riesgo() 
+            self.ventana_gestion.show()
+            self.hide()
+            
+            # No ocultes la principal todavía hasta confirmar que la otra abrió
+            # self.hide() 
+            
+        except Exception as e:
+            print(f"Error al intentar abrir Innovación: {e}")
+
+
+    def abrir_InteligenciaFinanciera(self):
+        try:
+            
+            # Instanciar y guardar como atributo de clase para que no desaparezca de memoria
+            self.ventana_gestion = InteligenciaFinanciera() 
             self.ventana_gestion.show()
             self.hide()
             

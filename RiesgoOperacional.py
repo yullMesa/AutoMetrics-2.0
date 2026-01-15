@@ -25,6 +25,7 @@ from PySide6.QtCore import QTimer, QDateTime
 import time
 from situaciones import DICCIONARIO_BRECHAS , MANIFESTACIONES
 from matplotlib.backends.backend_pdf import PdfPages
+from PIL import Image, ImageDraw, ImageFont
 
 
 class riesgo(QMainWindow):
@@ -176,8 +177,25 @@ class riesgo(QMainWindow):
         self.historial_gastos = []
     
         
-        
+        #continuacion empresa
        
+        self.cargar_empresas_banco() 
+        # Conecta el cambio de selección para que las cantidades se actualicen solas
+        self.ui_content.comboBox_empresa.currentIndexChanged.connect(self.actualizar_opciones_prestamo)
+        # Llama una vez al inicio para llenar el primer valor
+        self.actualizar_opciones_prestamo()
+       
+        self.ui_content.pushButton_evaluar.clicked.connect(self.evaluar_prestamo_bancario)
+
+
+        #Dashboard
+        self.obtener_datos_liquidez_db()
+        self.refrescar_dashboard_liquidez()
+        self.graficar_confianza_mercado()
+        self.graficar_frecuencia_compras_db()
+        self.graficar_seguridad_activos_db()
+        self.graficar_eficiencia_empleados_db()
+        self.graficar_analisis_casos_clientes()
         
         
 
@@ -1421,4 +1439,539 @@ class riesgo(QMainWindow):
         print(f"Reporte PDF generado exitosamente en: {ruta_pdf}")
         event.accept()
 
+
+    #continuacion Empresa
+    def cargar_empresas_banco(self):
+        try:
+            # Conexión a tu base de datos (usando la ruta de tus imágenes)
+            conn = sqlite3.connect('Ingenieria.db') 
+            cursor = conn.cursor()
+            
+            # Seleccionamos solo los nombres de la tabla inteligencia_mercado
+            cursor.execute("SELECT nombre_empresa FROM inteligencia_mercado")
+            empresas = cursor.fetchall()
+            
+            self.ui_content.comboBox_empresa.clear()
+            self.ui_content.comboBox_empresa.addItem("--- Seleccione Empresa ---")
+            
+            for emp in empresas:
+                self.ui_content.comboBox_empresa.addItem(emp[0])
+                
+            conn.close()
+        except Exception as e:
+            print(f"Error al cargar empresas: {e}")
+
+    def actualizar_opciones_prestamo(self):
+        empresa_seleccionada = self.ui_content.comboBox_empresa.currentText()
+        
+        # Validación: Si no hay selección real, no continuar
+        if not empresa_seleccionada or empresa_seleccionada == "--- Seleccione Empresa ---":
+            self.ui_content.comboBox_cantidad.clear()
+            return
+
+        try:
+            conn = sqlite3.connect('Ingenieria.db')
+            cursor = conn.cursor()
+            cursor.execute("SELECT presupuesto_actual FROM inteligencia_mercado WHERE nombre_empresa=?", (empresa_seleccionada,))
+            resultado = cursor.fetchone()
+            conn.close()
+
+            # AQUÍ ESTABA EL ERROR: Verificar si 'resultado' no es None antes de usar [0]
+            if resultado:
+                presupuesto = resultado[0]
+                self.ui_content.comboBox_cantidad.clear()
+                
+                escalas = [
+                    ("Crédito Operativo (10%)", 0.10),
+                    ("Inyección de Stock (25%)", 0.25),
+                    ("Expansión de Flota (50%)", 0.50),
+                    ("Rescate Total (100%)", 1.00)
+                ]
+
+                for nombre, porcentaje in escalas:
+                    monto = int(presupuesto * porcentaje)
+                    # Almacenamos el monto numérico como userData para usarlo luego en el banco
+                    self.ui_content.comboBox_cantidad.addItem(f"{nombre}: ${monto:,}", monto)
+            else:
+                print(f"Advertencia: No se encontró presupuesto para {empresa_seleccionada}")
+                
+        except Exception as e:
+            print(f"Error en base de datos: {e}")
+
     
+
+    def evaluar_prestamo_bancario(self):
+        # VALIDACIÓN INICIAL: Evita el error si el combo está vacío
+        if self.ui_content.comboBox_cantidad.currentIndex() == -1:
+            print("Error: Seleccione primero una empresa y una cantidad válida.")
+            return
+
+        empresa = self.ui_content.comboBox_empresa.currentText()
+        # Aquí es donde fallaba si el combo estaba vacío
+        monto_solicitado = self.ui_content.comboBox_cantidad.currentData()
+        
+        if not empresa or empresa == "--- Seleccione Empresa ---" or monto_solicitado is None:
+            return
+
+        try:
+            conn = sqlite3.connect('Ingenieria.db')
+            cursor = conn.cursor()
+            # Traemos los signos vitales de la empresa desde inteligencia_mercado
+            cursor.execute("""
+                SELECT presupuesto_actual, sentimiento_mercado, nivel_confianza 
+                FROM inteligencia_mercado WHERE nombre_empresa=?
+            """, (empresa,))
+            datos = cursor.fetchone()
+            conn.close()
+
+            if datos:
+                presupuesto, sentimiento, confianza = datos
+                
+                # --- LÓGICA DE DECISIÓN DEL BANCO ---
+                es_aprobado = True
+                
+                # El banco rechaza si la confianza es muy baja o si pide mucho en mercado Bearish
+                if confianza < 40:
+                    es_aprobado = False
+                elif sentimiento == "BEARISH" and monto_solicitado > (presupuesto * 0.3):
+                    es_aprobado = False
+                elif monto_solicitado > (presupuesto * 0.8) and confianza < 60:
+                    es_aprobado = False
+
+                # Ejecutar la magia visual
+                self.procesar_imagen_certificado(empresa, es_aprobado)
+                
+        except Exception as e:
+            print(f"Error en la lógica del banco: {e}")
+                
+     
+            
+
+    def procesar_imagen_certificado(self, nombre_empresa, aprobado):
+        # 1. Rutas (Asegúrate de que sean .png como mencionaste)
+        base_path = r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\certificado"
+        archivo_base = "Aprobado.png" if aprobado else "Denegado.png"
+        ruta_imagen = os.path.join(base_path, archivo_base)
+        ruta_salida = os.path.join(base_path, "Certificado_Temporal.png")
+
+        try:
+            # Abrir la imagen original
+            img = Image.open(ruta_imagen)
+            # Si el PNG tiene transparencia (RGBA), lo convertimos a RGB para evitar errores al guardar
+            if img.mode == 'RGBA':
+                img = img.convert('RGB')
+                
+            draw = ImageDraw.Draw(img)
+            
+            # 2. Configuración de la fuente (Arial 50 para buena visibilidad)
+            try:
+                font = ImageFont.truetype("arial.ttf", 50)
+            except:
+                font = ImageFont.load_default()
+
+            # 3. AJUSTE DE COORDENADAS (Más a la derecha y más abajo)
+            # Antes: (ancho // 5, alto // 2.8)
+            # Ahora: Aumentamos el primer valor (X) y el segundo divisor (Y) para bajarlo
+            ancho_img, alto_img = img.size
+            
+            # X: ancho_img // 3.5 (lo mueve a la derecha)
+            # Y: alto_img // 2.5 (lo mueve hacia abajo)
+            posicion = (int(ancho_img // 3.5), int(alto_img // 2.5)) 
+            
+            # Color profesional: Azul oscuro para éxito, Gris oscuro/Rojo para denegado
+            color_texto = (26, 35, 126) if aprobado else (60, 60, 60)
+            
+            # Dibujar nombre
+            draw.text(posicion, nombre_empresa.upper(), fill=color_texto, font=font)
+
+            # 4. Guardar y mostrar
+            img.save(ruta_salida)
+
+            pixmap = QPixmap(ruta_salida)
+            pixmap_escalado = pixmap.scaled(
+                self.ui_content.label_38.width(), 
+                self.ui_content.label_38.height(), 
+                Qt.KeepAspectRatio, 
+                Qt.SmoothTransformation
+            )
+            
+            self.ui_content.label_38.setPixmap(pixmap_escalado)
+            self.ui_content.label_38.setAlignment(Qt.AlignCenter)
+            
+            print(f"Certificado generado para: {nombre_empresa}")
+            
+        except Exception as e:
+            print(f"Error en el proceso visual del certificado: {e}")
+
+
+    #dashboard
+    def obtener_datos_liquidez_db(self):
+        """Obtiene el resumen de inversión por marca de la base de datos."""
+        try:
+            # Conexión exacta a tu DB
+            conn = sqlite3.connect('Ingenieria.db')
+            cursor = conn.cursor()
+            
+            # Consultamos la tabla de compras aprobadas
+            query = "SELECT marca, SUM(valor_pagado) FROM compras_aprobadas GROUP BY marca"
+            cursor.execute(query)
+            datos = cursor.fetchall()
+            conn.close()
+            
+            return datos # Retorna lista de tuplas [(Marca, Total), ...]
+        except Exception as e:
+            print(f"Error al leer liquidez de DB: {e}")
+            return []
+
+    def refrescar_dashboard_liquidez(self):
+        """Limpia el frame_n y dibuja la nueva gráfica basada en la DB."""
+        datos = self.obtener_datos_liquidez_db()
+        
+        if not datos:
+            print("No hay datos para graficar en el Dashboard.")
+            return
+
+        marcas = [fila[0] for fila in datos]
+        valores = [fila[1] for fila in datos]
+
+        # Gestión del layout en frame_n
+        frame = self.ui_content.frame_n
+        if frame.layout() is None:
+            layout = QVBoxLayout(frame)
+            frame.setLayout(layout)
+        
+        # Limpiar contenido previo para evitar sobreposición
+        for i in reversed(range(frame.layout().count())): 
+            frame.layout().itemAt(i).widget().setParent(None)
+
+        # Configuración del estilo del gráfico
+        fig, ax = plt.subplots(figsize=(5, 3), dpi=80)
+        fig.patch.set_facecolor('#1a1b26') # Fondo oscuro
+        ax.set_facecolor('#1a1b26')
+
+        # Gráfico de barras horizontales
+        ax.barh(marcas, valores, color='#7aa2f7', edgecolor='white')
+        
+        # Estética de Dashboard profesional
+        ax.set_title("RESUMEN DE INVERSIÓN (LIQUIDEZ)", color='white', fontweight='bold')
+        ax.tick_params(colors='white', labelsize=9)
+        ax.xaxis.grid(True, color='#414868', linestyle='--', alpha=0.5)
+        
+        for spine in ax.spines.values():
+            spine.set_visible(False)
+
+        plt.tight_layout()
+
+        # Integración final
+        canvas = FigureCanvas(fig)
+        frame.layout().addWidget(canvas)
+        plt.close(fig)
+
+    def graficar_confianza_mercado(self):
+        try:
+            # 1. Conexión y extracción de datos
+            conn = sqlite3.connect('Ingenieria.db')
+            cursor = conn.cursor()
+            # Traemos el nombre y la confianza de las primeras 10 empresas
+            cursor.execute("SELECT nombre_empresa, nivel_confianza FROM inteligencia_mercado LIMIT 10")
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos: return
+
+            empresas = [d[0] for d in datos]
+            confianza = [d[1] for d in datos]
+
+            # 2. Configuración del frame_2
+            frame = self.ui_content.frame_2
+            if frame.layout() is None:
+                layout = QVBoxLayout(frame)
+                frame.setLayout(layout)
+            
+            for i in reversed(range(frame.layout().count())): 
+                frame.layout().itemAt(i).widget().setParent(None)
+
+            # 3. Creación del gráfico
+            fig, ax = plt.subplots(figsize=(5, 3), dpi=80)
+            fig.patch.set_facecolor('#1a1b26') # Fondo oscuro
+            ax.set_facecolor('#1a1b26')
+
+            # Generar colores dinámicos: Verde > 70, Amarillo > 40, Rojo el resto
+            colores = ['#4fd6be' if c > 70 else '#ff9e64' if c > 40 else '#f7768e' for c in confianza]
+
+            # Gráfico de barras
+            bars = ax.bar(empresas, confianza, color=colores)
+            
+            # Estética
+            ax.set_title("NIVEL DE CONFIANZA DEL MERCADO (%)", color='white', fontweight='bold', fontsize=10)
+            ax.tick_params(axis='x', rotation=45, colors='white', labelsize=7)
+            ax.tick_params(axis='y', colors='white')
+            ax.set_ylim(0, 100) # La confianza es de 0 a 100
+            
+            for spine in ax.spines.values():
+                spine.set_visible(False)
+
+            plt.tight_layout()
+
+            canvas = FigureCanvas(fig)
+            frame.layout().addWidget(canvas)
+            plt.close(fig)
+
+        except Exception as e:
+            print(f"Error al graficar confianza: {e}")
+
+    def graficar_frecuencia_compras_db(self):
+        try:
+            # 1. Conexión y consulta SQL
+            conn = sqlite3.connect('Ingenieria.db')
+            cursor = conn.cursor()
+            
+            # Seleccionamos las fechas de todas las compras aprobadas
+            query = "SELECT fecha_compra FROM compras_aprobadas"
+            cursor.execute(query)
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                print("No hay datos de fechas para graficar en frame_3.")
+                return
+
+            # 2. Procesamiento de datos (Contar compras por día)
+            fechas = [fila[0] for fila in datos]
+            from collections import Counter
+            conteo_fechas = Counter(fechas)
+            
+            # Ordenar por fecha para que la línea tenga sentido cronológico
+            fechas_ordenadas = sorted(conteo_fechas.keys())
+            cantidades = [conteo_fechas[f] for f in fechas_ordenadas]
+
+            # 3. Configuración del frame_3
+            frame = self.ui_content.frame_3
+            if frame.layout() is None:
+                layout = QVBoxLayout(frame)
+                frame.setLayout(layout)
+            
+            for i in reversed(range(frame.layout().count())): 
+                frame.layout().itemAt(i).widget().setParent(None)
+
+            # 4. Creación del gráfico de líneas (Series de Tiempo)
+            fig, ax = plt.subplots(figsize=(5, 3), dpi=80)
+            fig.patch.set_facecolor('#1a1b26') # Estilo dark
+            ax.set_facecolor('#1a1b26')
+
+            ax.plot(fechas_ordenadas, cantidades, color='#bb9af7', linewidth=2, marker='o', markersize=4)
+            ax.fill_between(fechas_ordenadas, cantidades, color='#bb9af7', alpha=0.1)
+
+            # Estética profesional
+            ax.set_title("HISTORIAL CRONOLÓGICO DE COMPRAS", color='white', fontweight='bold', fontsize=10)
+            ax.tick_params(axis='x', rotation=30, colors='white', labelsize=7)
+            ax.tick_params(axis='y', colors='white')
+            
+            # Grid tenue
+            ax.grid(True, color='#414868', linestyle=':', alpha=0.3)
+            
+            for spine in ax.spines.values():
+                spine.set_visible(False)
+
+            plt.tight_layout()
+
+            canvas = FigureCanvas(fig)
+            frame.layout().addWidget(canvas)
+            plt.close(fig)
+
+        except Exception as e:
+            print(f"Error al graficar frecuencia en frame_3: {e}")
+    
+    def graficar_seguridad_activos_db(self):
+        try:
+            # 1. Conexión y consulta a seguridad_activos
+            conn = sqlite3.connect("ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Consultamos los niveles de riesgo registrados
+            query = "SELECT nivel_riesgo_acceso FROM seguridad_activos"
+            cursor.execute(query)
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                print("No hay datos de seguridad para graficar en frame_4.")
+                return
+
+            # 2. Procesamiento: Contar frecuencias de cada nivel
+            niveles = [fila[0] for fila in datos]
+            from collections import Counter
+            conteo = Counter(niveles)
+            
+            labels = list(conteo.keys())
+            sizes = list(conteo.values())
+
+            # 3. Configuración del frame_4
+            frame = self.ui_content.frame_4
+            if frame.layout() is None:
+                layout = QVBoxLayout(frame)
+                frame.setLayout(layout)
+            
+            for i in reversed(range(frame.layout().count())): 
+                frame.layout().itemAt(i).widget().setParent(None)
+
+            # 4. Creación del gráfico circular (Estilo Dashboard)
+            fig, ax = plt.subplots(figsize=(5, 3), dpi=80)
+            fig.patch.set_facecolor('#1a1b26') # Fondo oscuro coherente
+            
+            # Colores temáticos: Rojo para Alto, Amarillo para Medio, Verde para Bajo
+            colores_map = {'Alto': '#f7768e', 'Medio': '#e0af68', 'Bajo': '#9ece6a'}
+            colores = [colores_map.get(label, '#7aa2f7') for label in labels]
+
+            # Dibujar Pie Chart
+            wedges, texts, autotexts = ax.pie(
+                sizes, 
+                labels=labels, 
+                autopct='%1.1f%%', 
+                startangle=140, 
+                colors=colores,
+                textprops={'color':"w", 'fontsize': 8},
+                pctdistance=0.85
+            )
+
+            # Convertir en "Donut Chart" para un look más moderno
+            centre_circle = plt.Circle((0,0), 0.70, fc='#1a1b26')
+            fig.gca().add_artist(centre_circle)
+
+            ax.set_title("DISTRIBUCIÓN DE RIESGO TÉCNICO", color='white', fontweight='bold', fontsize=10)
+            
+            plt.tight_layout()
+
+            # Integración en la interfaz
+            canvas = FigureCanvas(fig)
+            frame.layout().addWidget(canvas)
+            plt.close(fig)
+
+        except Exception as e:
+            print(f"Error al graficar seguridad en frame_4: {e}")
+
+    def graficar_eficiencia_empleados_db(self):
+        try:
+            # 1. Conexión y consulta a empleados_cumplimiento
+            conn = sqlite3.connect("Ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Consultamos el promedio de velocidad por cargo
+            query = """
+                SELECT cargo, AVG(velocidad_respuesta) 
+                FROM empleados_cumplimiento 
+                GROUP BY cargo
+            """
+            cursor.execute(query)
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                print("No hay datos en empleados_cumplimiento para graficar.")
+                return
+
+            cargos = [fila[0] for fila in datos]
+            velocidades = [fila[1] for fila in datos]
+
+            # 2. Configuración del frame_5
+            frame = self.ui_content.frame_5
+            if frame.layout() is None:
+                layout = QVBoxLayout(frame)
+                frame.setLayout(layout)
+            
+            for i in reversed(range(frame.layout().count())): 
+                frame.layout().itemAt(i).widget().setParent(None)
+
+            # 3. Creación del gráfico de barras horizontales (Estilo Dashboard)
+            fig, ax = plt.subplots(figsize=(5, 3), dpi=80)
+            fig.patch.set_facecolor('#1a1b26')
+            ax.set_facecolor('#1a1b26')
+
+            # Usamos un color púrpura/neón para representar el factor humano
+            bars = ax.barh(cargos, velocidades, color='#9ece6a', edgecolor='white')
+            
+            # Añadir etiquetas de valor al final de cada barra
+            for bar in bars:
+                width = bar.get_width()
+                ax.text(width + 0.5, bar.get_y() + bar.get_height()/2, 
+                        f'{width:.1f}ms', color='white', va='center', fontsize=8)
+
+            # Estética
+            ax.set_title("VELOCIDAD DE RESPUESTA POR CARGO", color='white', fontweight='bold', fontsize=10)
+            ax.tick_params(axis='both', colors='white', labelsize=8)
+            
+            # Quitar bordes
+            for spine in ax.spines.values():
+                spine.set_visible(False)
+
+            plt.tight_layout()
+
+            # 4. Integrar en la UI
+            canvas = FigureCanvas(fig)
+            frame.layout().addWidget(canvas)
+            plt.close(fig)
+
+        except Exception as e:
+            print(f"Error al graficar empleados en frame_5: {e}")
+
+    def graficar_analisis_casos_clientes(self):
+        try:
+            # 1. Conexión y consulta a la tabla casos_clientes
+            conn = sqlite3.connect("Ingenieria.db")
+            cursor = conn.cursor()
+            
+            # Consultamos el tipo de solicitud para ver la carga de trabajo
+            query = "SELECT tipo_solicitud, COUNT(*) FROM casos_clientes GROUP BY tipo_solicitud"
+            cursor.execute(query)
+            datos = cursor.fetchall()
+            conn.close()
+
+            if not datos:
+                print("No hay datos en casos_clientes para el frame_6.")
+                return
+
+            tipos = [fila[0] for fila in datos]
+            cantidades = [fila[1] for fila in datos]
+
+            # 2. Configuración del frame_6
+            frame = self.ui_content.frame_6
+            if frame.layout() is None:
+                layout = QVBoxLayout(frame)
+                frame.setLayout(layout)
+            
+            for i in reversed(range(frame.layout().count())): 
+                frame.layout().itemAt(i).widget().setParent(None)
+
+            # 3. Creación del gráfico de barras (Estilo Dashboard Moderno)
+            fig, ax = plt.subplots(figsize=(5, 3), dpi=80)
+            fig.patch.set_facecolor('#1a1b26')
+            ax.set_facecolor('#1a1b26')
+
+            # Usamos una paleta de colores vibrante para distinguir los tipos
+            colores = ['#7aa2f7', '#bb9af7', '#e0af68', '#f7768e', '#9ece6a']
+            bars = ax.bar(tipos, cantidades, color=colores, edgecolor='white', linewidth=0.5)
+
+            # Añadir etiquetas de cantidad sobre las barras
+            for bar in bars:
+                height = bar.get_height()
+                ax.text(bar.get_x() + bar.get_width()/2., height + 0.1,
+                        f'{int(height)}', ha='center', va='bottom', color='white', fontsize=8)
+
+            # Estética de cierre del Dashboard
+            ax.set_title("DISTRIBUCIÓN POR TIPO DE SOLICITUD", color='white', fontweight='bold', fontsize=10)
+            ax.tick_params(axis='x', rotation=30, colors='white', labelsize=8)
+            ax.tick_params(axis='y', colors='white')
+            
+            # Eliminar bordes para minimalismo
+            for spine in ax.spines.values():
+                spine.set_visible(False)
+
+            plt.tight_layout()
+
+            # 4. Integrar en la UI
+            canvas = FigureCanvas(fig)
+            frame.layout().addWidget(canvas)
+            plt.close(fig)
+
+        except Exception as e:
+            print(f"Error al graficar casos en frame_6: {e}")
