@@ -24,6 +24,7 @@ import pandas as pd
 from PySide6.QtCore import QTimer, QDateTime 
 import time
 from situaciones import DICCIONARIO_BRECHAS , MANIFESTACIONES
+from matplotlib.backends.backend_pdf import PdfPages
 
 
 class riesgo(QMainWindow):
@@ -134,7 +135,46 @@ class riesgo(QMainWindow):
         self.cargar_emociones_unicas()
 
         self.ui_content.push_conversa.clicked.connect(self.iniciar_simulacion_chat)
+
+
+        #stock
+        # --- NUEVA LÓGICA DE SIMULACIÓN FINANCIERA ---
+        self.presupuesto = 50000.0  # Dinero inicial
+        self.mes_multiplicador = 1.0
         
+        # Mapeo exacto de tus Sliders de Designer
+        self.mapa_sliders = {
+            1: self.ui_content.verticalSlider_vehiculo,
+            2: self.ui_content.verticalSlider_repuestos,
+            3: self.ui_content.verticalSlider_ti,
+            4: self.ui_content.verticalSlider_oficina,
+            5: self.ui_content.verticalSlider_flota,
+            6: self.ui_content.verticalSlider_aseo,
+            7: self.ui_content.verticalSlider_epp,
+            8: self.ui_content.verticalSlider_marketing
+        }
+
+        # Timer para el "latido" de la empresa (cada 3 segundos)
+        self.timer_simulador = QTimer(self)
+        self.timer_simulador.timeout.connect(self.ejecutar_ciclo_empresarial)
+        self.timer_simulador.start(3000)
+
+        # Mapeo de los LCDNumbers de Designer
+        self.mapa_lcds = {
+            1: self.ui_content.lcdNumber_vehiculo,
+            2: self.ui_content.lcdNumber_repuestos,
+            3: self.ui_content.lcdNumber_ti,
+            4: self.ui_content.lcdNumber_oficina,
+            5: self.ui_content.lcdNumber_flota,
+            6: self.ui_content.lcdNumber_aseo,
+            7: self.ui_content.lcdNumber_epp,
+            8: self.ui_content.lcdNumber_marketing
+        }
+        
+        # Historial para gráficos
+        self.historial_ganancias = []
+        self.historial_gastos = []
+    
         
         
        
@@ -1243,5 +1283,142 @@ class riesgo(QMainWindow):
             print(f"Error de SQLite (posible bloqueo): {e}")
         except Exception as e:
             print(f"Error general: {e}")
+
+    
+    #optimizacion de stock
+
+
+    def ejecutar_ciclo_empresarial(self):
+        try:
+            conn = sqlite3.connect('Ingenieria.db')
+            cursor = conn.cursor()
+            cursor.execute("SELECT * FROM finanzas_inventario")
+            sectores = cursor.fetchall()
+            
+            total_ingresos = 0
+            # Variabilidad económica: 25% de probabilidad de cambio de clima
+            if random.random() < 0.25:
+                # Multiplicadores que van desde crisis (0.6) hasta super bonanza (3.0)
+                self.mes_multiplicador = random.choice([0.6, 1.0, 1.5, 2.2, 3.0])
+                
+            # Parámetros de gestión para evitar la muerte súbita
+            objetivo_stock = 90  # La empresa intentará reponer hasta este nivel
+            presupuesto_reserva = 5000 # Solo compra stock si tiene este fondo mínimo
+
+            for fila in sectores:
+                id_inv, nombre, stock_db, prioridad, costo, roi, caida = fila
+                slider = self.mapa_sliders.get(id_inv)
+                lcd = self.mapa_lcds.get(id_inv) # Sincronización con LCD
+                
+                if slider and lcd:
+                    valor_actual = slider.value()
+                    
+                    # 1. DESGASTE: Se reduce a la mitad en meses buenos
+                    factor_desgaste = 0.5 if self.mes_multiplicador > 1 else 1.0
+                    desgaste = random.randint(0, int(caida * factor_desgaste))
+                    nuevo_stock = max(0, valor_actual - desgaste)
+                    
+                    # 2. REPOSICIÓN AUTOMÁTICA: Si hay dinero, el stock SUBE
+                    if nuevo_stock < objetivo_stock and self.presupuesto > presupuesto_reserva:
+                        cantidad_compra = 5 # Incremento por ciclo
+                        costo_total = cantidad_compra * costo * 0.4 
+                        
+                        if self.presupuesto >= costo_total:
+                            self.presupuesto -= costo_total
+                            nuevo_stock = min(100, nuevo_stock + cantidad_compra)
+
+                    # 3. EVENTO DE STOCK DEFECTUOSO (2% de probabilidad)
+                    if random.random() < 0.02: 
+                        nuevo_stock = int(nuevo_stock * 0.98) 
+                    
+                    # 4. INGRESOS: El ROI premia el stock alto
+                    ganancia = (nuevo_stock * roi) * self.mes_multiplicador
+                    total_ingresos += ganancia
+                    
+                    # Actualización visual simultánea
+                    slider.setValue(nuevo_stock)
+                    lcd.display(nuevo_stock)
+            
+            # Actualización del presupuesto general
+            self.presupuesto += total_ingresos
+            
+            if hasattr(self.ui_content, 'lcdNumber_presupuesto'):
+                self.ui_content.lcdNumber_presupuesto.display(int(self.presupuesto))
+
+            # CONDICIÓN DE QUIEBRA
+            if self.presupuesto <= 0:
+                self.timer_simulador.stop()
+                self.ui_content.lcdNumber_presupuesto.display(0)
+                print("LA EMPRESA QUEBRÓ: Fondos insuficientes para operar.")
+                # Opcional: Mostrar mensaje en la consola de la UI si existe
+                if hasattr(self, 'consola_seguridad'):
+                    self.consola_seguridad.appendPlainText(">>> ESTADO: QUIEBRA TOTAL.")
+            # Al final de ejecutar_ciclo_empresarial, antes de conn.close()
+            self.historial_ganancias.append(total_ingresos)
+            # Calcula el gasto total del ciclo (mantenimiento + reposición)
+            gasto_total = sum((slider.value() * costo) * 0.0005 for id_inv, _, _, _, costo, _, _ in sectores)
+            self.historial_gastos.append(gasto_total)
+
+            # Llamar a la función de dibujo (necesitas importar matplotlib)
+            self.actualizar_graficos_ui()
+
+            conn.close()
+        except Exception as e:
+            print(f"Error en simulación: {e}")
+
+    
+    #graficas
+
+
+    def actualizar_graficos_ui(self):
+        # Función simplificada para graficar en los frames
+        for frame, datos, titulo, color in [
+            (self.ui_content.frame_ganancia, self.historial_ganancias, "Ingresos", "green"),
+            (self.ui_content.frame_perdida, self.historial_gastos, "Egresos", "red")
+        ]:
+            # Limpiar frame y añadir canvas
+            if frame.layout() is None:
+                layout = QVBoxLayout(frame)
+                frame.setLayout(layout)
+            
+            # Eliminar gráfico viejo
+            for i in reversed(range(frame.layout().count())): 
+                frame.layout().itemAt(i).widget().setParent(None)
+
+            fig, ax = plt.subplots(figsize=(4, 2), dpi=80)
+            fig.patch.set_facecolor('#1e1e2e') # Color oscuro de tu UI
+            ax.plot(datos, color=color, linewidth=2)
+            ax.set_title(titulo, color='white')
+            ax.axis('off') # Estética limpia
+            
+            canvas = FigureCanvas(fig)
+            frame.layout().addWidget(canvas)
+
+    #pdf
+    def closeEvent(self, event):
+        ruta_pdf = r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\PDF\Reporte_Final.pdf"
+        
+        # Asegurar que la carpeta existe
+        os.makedirs(os.path.dirname(ruta_pdf), exist_ok=True)
+
+        with PdfPages(ruta_pdf) as pdf:
+            # Gráfico de Ganancias
+            plt.figure(figsize=(8, 6))
+            plt.plot(self.historial_ganancias, color='green')
+            plt.title("Reporte de Ganancias Totales - AutoMetrics 2.0")
+            plt.grid(True)
+            pdf.savefig()
+            plt.close()
+
+            # Gráfico de Gastos
+            plt.figure(figsize=(8, 6))
+            plt.plot(self.historial_gastos, color='red')
+            plt.title("Reporte de Gastos Operativos")
+            plt.grid(True)
+            pdf.savefig()
+            plt.close()
+
+        print(f"Reporte PDF generado exitosamente en: {ruta_pdf}")
+        event.accept()
 
     
