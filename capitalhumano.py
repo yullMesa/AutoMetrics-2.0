@@ -65,6 +65,14 @@ class capitalhumano(QMainWindow):
             self.ui_content.pushButton_exportar.clicked.connect(self.exportar_pdf)
 
         #Datos De Nomina
+        self.cargar_clasificacion_por_cargo()
+        self.actualizar_vista_nomina()
+        self.dibujar_dona_presupuesto(0, 500000)  # Inicializamos la gráfica con 0 gastado
+
+        #Evaluar desempeño
+        
+
+
 
     #pasar paginas
     def conectar_menu(self):
@@ -456,6 +464,27 @@ class capitalhumano(QMainWindow):
         # 1. Limpiar el TreeWidget antes de cargar
         self.ui_content.treeWidget_clasificacion.clear()
         self.ui_content.treeWidget_clasificacion.setHeaderLabels(["CARGOS / EMPLEADOS", "ID", "SALARIO"])
+        self.ui_content.treeWidget_clasificacion.setIndentation(25) # Más espacio de sangría para hijos
+        # Obtener el encabezado
+        header = self.ui_content.treeWidget_clasificacion.header()
+        
+        # 1. Distribución de espacio:
+        # La columna 0 (Nombre) se expande para ocupar todo el espacio sobrante
+        header.setSectionResizeMode(0, QHeaderView.Stretch)
+        
+        # Las columnas 1 (ID) y 2 (Salario) se ajustan a su contenido + un margen
+        header.setSectionResizeMode(1, QHeaderView.Fixed)
+        header.resizeSection(1, 100) # Ancho fijo para el ID
+        
+        header.setSectionResizeMode(2, QHeaderView.Fixed)
+        header.resizeSection(2, 120) # Ancho fijo para el Salario
+        
+        # 2. Alineación y espacio visual
+        header.setDefaultAlignment(Qt.AlignCenter) # Centra los títulos
+        self.ui_content.treeWidget_clasificacion.setIndentation(30) # Más espacio para la jerarquía
+        
+        # 3. Quitar los puntos de las líneas para un look más moderno
+        self.ui_content.treeWidget_clasificacion.setRootIsDecorated(True)
         
         # 2. Conectar a la base de datos para obtener los empleados
         conn = sqlite3.connect('ingenieria.db')
@@ -492,3 +521,87 @@ class capitalhumano(QMainWindow):
 
         # Expandir todas las carpetas al iniciar
         self.ui_content.treeWidget_clasificacion.expandAll()
+
+    #gráfica
+    def actualizar_vista_nomina(self):
+        # Obtener datos financieros reales
+        presupuesto, gasto = self.calcular_balance_presupuesto()
+        disponible = presupuesto - gasto
+        
+        # Obtener empleados para el análisis de aumento
+        conn = sqlite3.connect('ingenieria.db')
+        cursor = conn.cursor()
+        cursor.execute("SELECT nombre, f_tecnica, f_ventas, f_analisis, f_servicio, f_liderazgo FROM empleados")
+        empleados = cursor.fetchall()
+        conn.close()
+
+        informe = "<h2 style='color: #7aa2f7;'>ANÁLISIS DE MÉRITOS Y PRESUPUESTO</h2>"
+        informe += f"<p style='color: #cfc9c2;'>Presupuesto Restante: <b>${disponible:,.2f}</b></p><br>"
+        informe += "<hr style='border: 1px solid #414868;'><br>"
+
+        candidatos = []
+        for emp in empleados:
+            nombre = emp[0]
+            # Promedio de las 5 fortalezas
+            promedio = sum(emp[1:]) / 5
+            
+            if promedio >= 90:
+                candidatos.append(f"<li><b style='color: #73daca;'>{nombre}</b>: Promedio {promedio:.1f}% (Digno de aumento)</li>")
+            elif promedio >= 80:
+                candidatos.append(f"<li><b style='color: #e0af68;'>{nombre}</b>: Promedio {promedio:.1f}% (Bono recomendado)</li>")
+
+        if candidatos:
+            informe += "<ul style='color: #a9b1d6;'>" + "".join(candidatos) + "</ul>"
+        else:
+            informe += "<p style='color: #f7768e;'>No se identifican candidatos para aumento bajo los criterios actuales.</p>"
+
+        # Insertar como HTML para colores y negritas
+        self.ui_content.textEdit_x.setHtml(informe)
+        
+    def dibujar_dona_presupuesto(self, gastado, total):
+        if not hasattr(self, 'canvas_p'):
+            self.fig_p, self.ax_p = plt.subplots(figsize=(4, 4))
+            self.fig_p.patch.set_facecolor('#1a1b26')
+            self.canvas_p = FigureCanvas(self.fig_p)
+            layout = QVBoxLayout(self.ui_content.frame_12)
+            layout.addWidget(self.canvas_p)
+        
+        self.ax_p.clear()
+        restante = max(0, total - gastado)
+        
+        self.ax_p.pie([gastado, restante], labels=['Gastado', 'Disponible'], 
+                    colors=['#f7768e', '#73daca'], autopct='%1.1f%%', 
+                    startangle=90, textprops={'color':"w"}, pctdistance=0.8)
+        
+        centro = plt.Circle((0,0), 0.70, fc='#1a1b26')
+        self.ax_p.add_artist(centro)
+        self.canvas_p.draw()
+
+    def calcular_balance_presupuesto(self):
+        try:
+            conn = sqlite3.connect('ingenieria.db')
+            cursor = conn.cursor()
+
+            # 1. Obtener el presupuesto total configurado
+            cursor.execute("SELECT monto_total FROM presupuesto_empresa WHERE id = 1")
+            resultado_p = cursor.fetchone()
+            presupuesto_total = resultado_p[0] if resultado_p else 500000.0
+
+            # 2. Sumar todos los salarios de la nómina
+            cursor.execute("SELECT SUM(salario_base) FROM empleados")
+            gasto_total = cursor.fetchone()[0] or 0.0
+            
+            conn.close()
+
+            # 3. Actualizar la gráfica de dona con valores reales
+            self.dibujar_dona_presupuesto(gasto_total, presupuesto_total)
+            
+            return presupuesto_total, gasto_total
+
+        except Exception as e:
+            print(f"Error financiero: {e}")
+            return 500000.0, 0.0
+        
+    
+    
+    #Evaluar desempeño

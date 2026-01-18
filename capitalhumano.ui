@@ -76,7 +76,7 @@ QMenu::separator {
         <string notr="true">background-color: rgb(47, 47, 47);</string>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>3</number>
        </property>
        <widget class="QWidget" name="page">
         <widget class="QWidget" name="gridLayoutWidget">
@@ -1009,65 +1009,51 @@ QLineEdit:read-only {
            <widget class="QTreeWidget" name="treeWidget_clasificacion">
             <property name="styleSheet">
              <string notr="true">QTreeWidget {
-    background-color: #1a1b26;        /* Fondo oscuro principal */
+    background-color: #1a1b26;
     alternate-background-color: #24283b;
-    color: #c0caf5;                   /* Texto blanco azulado */
+    color: #c0caf5;
     border: 1px solid #414868;
     border-radius: 8px;
     font-family: 'Segoe UI', sans-serif;
-    font-size: 13px;
+    font-size: 14px; /* Un poco más grande para mejor lectura */
     outline: none;
-    padding: 5px;
+    padding: 10px; /* Margen interno general */
 }
 
-/* Estilo para los ítems (filas) */
+/* ESPACIADO CRÍTICO: Controla la altura y separación de cada fila */
 QTreeWidget::item {
-    padding: 6px;
-    border-bottom: 1px solid #24283b;
+    padding-top: 12px;    /* Espacio arriba del texto */
+    padding-bottom: 12px; /* Espacio abajo del texto */
+    padding-left: 10px;
+    border-bottom: 1px solid #24283b; /* Línea sutil para separar visualmente */
 }
 
-/* Cuando pasas el mouse por encima de una rama o empleado */
+/* Espaciado para las carpetas (nodos padre) */
+QTreeWidget::item:has-children {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-weight: bold;
+    color: #bb9af7;
+}
+
 QTreeWidget::item:hover {
     background-color: rgba(122, 162, 247, 0.1);
-    color: #7aa2f7;
 }
 
-/* Cuando seleccionas un elemento */
 QTreeWidget::item:selected {
     background-color: #7aa2f7;
     color: #1a1b26;
-    font-weight: bold;
-    border-radius: 4px;
+    border-radius: 6px;
 }
 
-/* Estilo de la flechita (indicador de expansión) */
-QTreeWidget::branch:has-children:!has-siblings:closed,
-QTreeWidget::branch:closed:has-children:has-siblings {
-    image: url(none); /* Aquí podrías poner un icono de flecha propia */
-    border-image: none;
-}
-
-/* Encabezado del TreeWidget (si lo usas) */
+/* Espaciado en el encabezado */
 QHeaderView::section {
     background-color: #16161e;
-    color: #bb9af7;                   /* Color purpura para distinguir de la tabla */
-    padding: 8px;
+    color: #7aa2f7;
+    padding: 12px; /* Encabezados más altos */
     border: none;
     font-weight: bold;
-    text-transform: uppercase;
-    border-bottom: 2px solid #bb9af7;
-}
-
-/* Personalización de la barra de scroll */
-QScrollBar:vertical {
-    border: none;
-    background: #1a1b26;
-    width: 8px;
-}
-
-QScrollBar::handle:vertical {
-    background: #414868;
-    border-radius: 4px;
+    border-bottom: 2px solid #7aa2f7;
 }</string>
             </property>
             <column>
@@ -1094,11 +1080,76 @@ QScrollBar::handle:vertical {
             <property name="frameShadow">
              <enum>QFrame::Shadow::Raised</enum>
             </property>
+            <widget class="QWidget" name="horizontalLayoutWidget_5">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>9</y>
+               <width>951</width>
+               <height>731</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <widget class="QFrame" name="frame_12">
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="horizontalLayoutWidget_6">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>769</y>
+               <width>951</width>
+               <height>391</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <item>
+               <widget class="QTextEdit" name="textEdit_x">
+                <property name="styleSheet">
+                 <string notr="true">QTextEdit {
+    background-color: #1a1b26;      /* Fondo oscuro */
+    color: #a9b1d6;                /* Texto gris azulado */
+    border: 2px solid #414868;     /* Borde discreto */
+    border-radius: 10px;
+    padding: 15px;
+    font-family: 'Consolas', 'Monospace'; /* Fuente tipo código para reportes */
+    font-size: 13px;
+    selection-background-color: #7aa2f7;
+    selection-color: #1a1b26;
+}
+
+/* Scrollbar personalizada para que combine */
+QScrollBar:vertical {
+    border: none;
+    background: #16161e;
+    width: 10px;
+    margin: 0px;
+}
+QScrollBar::handle:vertical {
+    background: #414868;
+    min-height: 20px;
+    border-radius: 5px;
+}</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
            </widget>
           </item>
          </layout>
         </widget>
        </widget>
+       <widget class="QWidget" name="page_4"/>
       </widget>
      </item>
     </layout>
