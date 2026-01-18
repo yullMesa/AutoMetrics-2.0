@@ -76,7 +76,7 @@ QMenu::separator {
         <string notr="true">background-color: rgb(47, 47, 47);</string>
        </property>
        <property name="currentIndex">
-        <number>3</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="page">
         <widget class="QWidget" name="gridLayoutWidget">
@@ -100,7 +100,7 @@ QMenu::separator {
            </widget>
           </item>
           <item row="0" column="0">
-           <widget class="QFrame" name="frame">
+           <widget class="QFrame" name="frame_x">
             <property name="frameShape">
              <enum>QFrame::Shape::StyledPanel</enum>
             </property>
@@ -1149,7 +1149,240 @@ QScrollBar::handle:vertical {
          </layout>
         </widget>
        </widget>
-       <widget class="QWidget" name="page_4"/>
+       <widget class="QWidget" name="page_4">
+        <widget class="QWidget" name="horizontalLayoutWidget_7">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>9</y>
+           <width>851</width>
+           <height>1151</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <item>
+           <widget class="QTableWidget" name="tableWidget_EMPLEADOS_2">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo general de la tabla */
+QTableWidget {
+    background-color: #1a1b26;        /* Fondo oscuro */
+    alternate-background-color: #24283b; /* Color para filas alternas (cebreado) */
+    color: #c0caf5;                   /* Color de texto */
+    gridline-color: #414868;          /* Color de las líneas de la cuadrícula */
+    border: 1px solid #414868;
+    border-radius: 8px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 12px;
+    outline: none;                    /* Quita el borde de enfoque al hacer clic */
+}
+
+/* Estilo de la fila seleccionada */
+QTableWidget::item:selected {
+    background-color: #7aa2f7;        /* Azul neón al seleccionar */
+    color: #1a1b26;                   /* Texto oscuro para contraste */
+    font-weight: bold;
+}
+
+/* Encabezados (Cabecera de la tabla) */
+QHeaderView::section {
+    background-color: #16161e;        /* Un tono más oscuro que el fondo */
+    color: #7aa2f7;                   /* Títulos en azul neón */
+    padding: 6px;
+    border: none;
+    border-bottom: 2px solid #7aa2f7; /* Línea neón bajo el título */
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Estilo de las barras de desplazamiento (Scrollbars) */
+QScrollBar:vertical {
+    border: none;
+    background: #1a1b26;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #414868;              /* Color de la barra que se mueve */
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #7aa2f7;              /* Brilla al pasar el mouse */
+}</string>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="horizontalScrollMode">
+             <enum>QAbstractItemView::ScrollMode::ScrollPerPixel</enum>
+            </property>
+            <attribute name="horizontalHeaderDefaultSectionSize">
+             <number>300</number>
+            </attribute>
+            <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>true</bool>
+            </attribute>
+            <column>
+             <property name="text">
+              <string>NOMBRE</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>CARGO</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>SALARIO</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_8">
+         <property name="geometry">
+          <rect>
+           <x>869</x>
+           <y>19</y>
+           <width>1081</width>
+           <height>821</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <item>
+           <widget class="QFrame" name="frame_13">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_9">
+         <property name="geometry">
+          <rect>
+           <x>869</x>
+           <y>859</y>
+           <width>1081</width>
+           <height>291</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <item>
+           <widget class="QTextEdit" name="textEdit_x_2">
+            <property name="styleSheet">
+             <string notr="true">QTextEdit {
+    background-color: #1a1b26;      /* Fondo oscuro */
+    color: #a9b1d6;                /* Texto gris azulado */
+    border: 2px solid #414868;     /* Borde discreto */
+    border-radius: 10px;
+    padding: 15px;
+    font-family: 'Consolas', 'Monospace'; /* Fuente tipo código para reportes */
+    font-size: 13px;
+    selection-background-color: #7aa2f7;
+    selection-color: #1a1b26;
+}
+
+/* Scrollbar personalizada para que combine */
+QScrollBar:vertical {
+    border: none;
+    background: #16161e;
+    width: 10px;
+    margin: 0px;
+}
+QScrollBar::handle:vertical {
+    background: #414868;
+    min-height: 20px;
+    border-radius: 5px;
+}</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_5">
+        <widget class="QWidget" name="horizontalLayoutWidget_10">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>9</y>
+           <width>1941</width>
+           <height>1141</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_10">
+          <item>
+           <widget class="QTreeWidget" name="treeWidget_clasificacion_2">
+            <property name="styleSheet">
+             <string notr="true">QTreeWidget {
+    background-color: #1a1b26;
+    alternate-background-color: #24283b;
+    color: #c0caf5;
+    border: 1px solid #414868;
+    border-radius: 8px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 14px; /* Un poco más grande para mejor lectura */
+    outline: none;
+    padding: 10px; /* Margen interno general */
+}
+
+/* ESPACIADO CRÍTICO: Controla la altura y separación de cada fila */
+QTreeWidget::item {
+    padding-top: 12px;    /* Espacio arriba del texto */
+    padding-bottom: 12px; /* Espacio abajo del texto */
+    padding-left: 10px;
+    border-bottom: 1px solid #24283b; /* Línea sutil para separar visualmente */
+}
+
+/* Espaciado para las carpetas (nodos padre) */
+QTreeWidget::item:has-children {
+    padding-top: 15px;
+    padding-bottom: 15px;
+    font-weight: bold;
+    color: #bb9af7;
+}
+
+QTreeWidget::item:hover {
+    background-color: rgba(122, 162, 247, 0.1);
+}
+
+QTreeWidget::item:selected {
+    background-color: #7aa2f7;
+    color: #1a1b26;
+    border-radius: 6px;
+}
+
+/* Espaciado en el encabezado */
+QHeaderView::section {
+    background-color: #16161e;
+    color: #7aa2f7;
+    padding: 12px; /* Encabezados más altos */
+    border: none;
+    font-weight: bold;
+    border-bottom: 2px solid #7aa2f7;
+}</string>
+            </property>
+            <column>
+             <property name="text">
+              <string notr="true">1</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
       </widget>
      </item>
     </layout>

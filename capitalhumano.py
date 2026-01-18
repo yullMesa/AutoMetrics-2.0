@@ -70,6 +70,10 @@ class capitalhumano(QMainWindow):
         self.dibujar_dona_presupuesto(0, 500000)  # Inicializamos la gráfica con 0 gastado
 
         #Evaluar desempeño
+        self.ui_content.tableWidget_EMPLEADOS_2.itemClicked.connect(self.seleccionar_empleado_evaluacion)
+
+        #jornada laboral 
+        self.cargar_horarios_semanales()
         
 
 
@@ -119,35 +123,45 @@ class capitalhumano(QMainWindow):
 
     #Directorio De Empleados
     def cargar_tabla_empleados(self):
+        # 1. Conexión y Limpieza
         conn = sqlite3.connect('ingenieria.db')
         cursor = conn.cursor()
         cursor.execute("SELECT id_empleado, nombre, cargo, departamento, salario_base, f_tecnica, f_ventas, f_analisis, f_servicio, f_liderazgo FROM empleados")
         self.datos_empleados = cursor.fetchall()
-        
+        conn.close()
+
         self.ui_content.tableWidget_EMPLEADOS.setRowCount(0)
-        # Ocultar los índices de las filas (1, 2, 3...)
-        self.ui_content.tableWidget_EMPLEADOS.verticalHeader().setVisible(False)
+        self.ui_content.tableWidget_EMPLEADOS_2.setRowCount(0)
         
+        # Ocultar índices feos
+        self.ui_content.tableWidget_EMPLEADOS.verticalHeader().setVisible(False)
+        self.ui_content.tableWidget_EMPLEADOS_2.verticalHeader().setVisible(False)
+
         for row_number, row_data in enumerate(self.datos_empleados):
             self.ui_content.tableWidget_EMPLEADOS.insertRow(row_number)
-            
-            # Datos básicos
+            self.ui_content.tableWidget_EMPLEADOS_2.insertRow(row_number)
+
+            # 2. Procesamiento Seguro de Salario
+            try:
+                # Quitamos cualquier símbolo para convertir a float antes de formatear
+                dato_sucio = str(row_data[4]).replace('$', '').replace(',', '').strip()
+                salario_num = float(dato_sucio)
+                salario_formateado = f"$ {salario_num:,.0f}" # Aquí daba el error si era str
+            except (ValueError, TypeError):
+                salario_formateado = str(row_data[4])
+
+            # 3. Llenado de Tabla 1
             self.ui_content.tableWidget_EMPLEADOS.setItem(row_number, 0, QTableWidgetItem(str(row_data[1])))
             self.ui_content.tableWidget_EMPLEADOS.setItem(row_number, 1, QTableWidgetItem(str(row_data[2])))
-            
-            # --- LIMPIEZA DE SALARIO ---
-            try:
-                # Si el dato viene como '$ 2,500', quitamos el '$' y la ',' para que float() no falle
-                dato_limpio = str(row_data[4]).replace('$', '').replace(',', '').strip()
-                salario_num = float(dato_limpio)
-                salario_formateado = f"$ {salario_num:,.0f}"
-            except:
-                # Si falla la conversión, mostramos el dato crudo para no romper el programa
-                salario_formateado = str(row_data[4])
-                
             self.ui_content.tableWidget_EMPLEADOS.setItem(row_number, 2, QTableWidgetItem(salario_formateado))
-        
-        conn.close()
+
+            # 4. Llenado de Tabla 2
+            self.ui_content.tableWidget_EMPLEADOS_2.setItem(row_number, 0, QTableWidgetItem(str(row_data[1])))
+            self.ui_content.tableWidget_EMPLEADOS_2.setItem(row_number, 1, QTableWidgetItem(str(row_data[2])))
+            self.ui_content.tableWidget_EMPLEADOS_2.setItem(row_number, 2, QTableWidgetItem(salario_formateado))
+
+        # IMPORTANTE: Saca las funciones de graficar fuera del bucle 'for'
+        # No deben ejecutarse mientras se llena la tabla.
             
 
 
@@ -605,3 +619,115 @@ class capitalhumano(QMainWindow):
     
     
     #Evaluar desempeño
+    def configurar_tabla_evaluacion(self):
+        # Definir columnas: Nombre, Cargo, Salario
+        self.ui_content.tableWidget_EMPLEADOS_2.setColumnCount(3)
+        self.ui_content.tableWidget_EMPLEADOS_2.setHorizontalHeaderLabels(["NOMBRE", "CARGO", "SALARIO"])
+        
+        # Estética profesional
+        self.ui_content.tableWidget_EMPLEADOS_2.verticalHeader().setVisible(False)
+        header = self.ui_content.tableWidget_EMPLEADOS_2.horizontalHeader()
+        header.setSectionResizeMode(QHeaderView.Stretch)
+        
+        # Activar selección de fila completa
+        self.ui_content.tableWidget_EMPLEADOS_2.setSelectionBehavior(QAbstractItemView.SelectRows)
+
+    def graficar_cumplimiento_cargo(self, nombre, fortalezas):
+        # 1. Gestionar el Layout para evitar el error de duplicidad
+        if not hasattr(self, 'canvas_cumplimiento'):
+            self.fig_c, self.ax_c = plt.subplots(figsize=(5, 3))
+            self.fig_c.patch.set_facecolor('#1a1b26')
+            self.canvas_c = FigureCanvas(self.fig_c)
+            
+            # Crear layout solo la primera vez
+            layout = QVBoxLayout(self.ui_content.frame_13)
+            layout.addWidget(self.canvas_c)
+            self.canvas_cumplimiento = True # Bandera para no repetir el proceso
+        
+        # 2. Limpiar y redibujar
+        self.ax_c.clear()
+        categorias = ['Técnica', 'Ventas', 'Análisis', 'Servicio', 'Liderazgo']
+        umbral = 70 
+        colores = ['#73daca' if v >= umbral else '#f7768e' for v in fortalezas]
+
+        self.ax_c.barh(categorias, fortalezas, color=colores, alpha=0.8)
+        self.ax_c.axvline(umbral, color='#bb9af7', linestyle='--')
+        
+        # Estética y refresco del lienzo
+        self.ax_c.set_title(f"Métricas de Retención: {nombre}", color='white')
+        self.ax_c.tick_params(axis='both', colors='white')
+        self.fig_c.tight_layout()
+        self.canvas_c.draw()
+
+    def analizar_permanencia(self, nombre, fortalezas):
+        promedio = sum(fortalezas) / len(fortalezas)
+        bajo_el_umbral = [f for f in fortalezas if f < 70]
+        
+        # 1. Definir el veredicto con formato HTML para colores
+        if promedio >= 75 and not bajo_el_umbral:
+            resultado = f"<b style='color: #73daca;'>✅ APTO:</b> {nombre} cumple con todas las métricas."
+        elif promedio >= 70:
+            resultado = f"<b style='color: #e0af68;'>⚠️ EN OBSERVACIÓN:</b> {nombre} tiene promedio aceptable pero debilidades puntuales."
+        else:
+            resultado = f"<b style='color: #f7768e;'>❌ NO APTO:</b> {nombre} no alcanza las métricas mínimas del cargo."
+            
+        # 2. Enviar el mensaje al widget correcto
+        self.ui_content.textEdit_x_2.setHtml(f"<div style='font-size: 14px;'>{resultado}</div>")
+
+
+    def seleccionar_empleado_evaluacion(self):
+        fila = self.ui_content.tableWidget_EMPLEADOS_2.currentRow()
+        if fila != -1:
+            emp = self.datos_empleados[fila]
+            nombre = emp[1]
+            # Índices correctos de fortalezas según tu SELECT
+            fortalezas = [emp[5], emp[6], emp[7], emp[8], emp[9]]
+            
+            # Ahora sí, llamamos a las funciones con sus datos
+            self.graficar_cumplimiento_cargo(nombre, fortalezas)
+            self.analizar_permanencia(nombre, fortalezas)
+
+
+    #jornada laboral
+
+    def cargar_horarios_semanales(self):
+        # 1. Limpiar y configurar encabezados
+        self.ui_content.treeWidget_clasificacion_2.clear()
+        self.ui_content.treeWidget_clasificacion_2.setHeaderLabels(["DÍA / EMPLEADO", "HORARIO", "ESTADO"])
+        
+        # --- SOLUCIÓN PARA EL ESPACIO ---
+        header = self.ui_content.treeWidget_clasificacion_2.header()
+        header.setSectionResizeMode(QHeaderView.Stretch) 
+        # --------------------------------
+        
+        dias_semana = ["LUNES", "MARTES", "MIÉRCOLES", "JUEVES", "VIERNES", "SÁBADO"]
+        carpetas = {}
+
+        # 2. Crear las carpetas de los días
+        for dia in dias_semana:
+            parent = QTreeWidgetItem(self.ui_content.treeWidget_clasificacion_2)
+            parent.setText(0, dia)
+            parent.setForeground(0, QColor("#7aa2f7"))
+            carpetas[dia] = parent
+
+        # 3. Distribuir empleados
+        for i, emp in enumerate(self.datos_empleados):
+            nombre = str(emp[1])
+            cargo = str(emp[2])
+            
+            for dia in dias_semana:
+                item_emp = QTreeWidgetItem(carpetas[dia])
+                item_emp.setText(0, f"{nombre} ({cargo})")
+                
+                # Horario Colombia
+                if dia == "SÁBADO":
+                    item_emp.setText(1, "08:00 AM - 12:00 PM")
+                    item_emp.setForeground(1, QColor("#e0af68"))
+                else:
+                    item_emp.setText(1, "08:00 AM - 05:00 PM")
+                
+                item_emp.setText(2, "ACTIVO")
+                item_emp.setForeground(2, QColor("#73daca"))
+
+        self.ui_content.treeWidget_clasificacion_2.setIndentation(20)
+        # self.ui_content.treeWidget_clasificacion_2.expandAll() # Opcional
