@@ -74,6 +74,12 @@ class capitalhumano(QMainWindow):
 
         #jornada laboral 
         self.cargar_horarios_semanales()
+
+        #dashboard
+        self.graficar_analisis_competencias()
+        self.graficar_salarios_por_cargo()
+        self.graficar_estado_financiero_real()
+        self.graficar_viabilidad_contratacion()
         
 
 
@@ -731,3 +737,199 @@ class capitalhumano(QMainWindow):
 
         self.ui_content.treeWidget_clasificacion_2.setIndentation(20)
         # self.ui_content.treeWidget_clasificacion_2.expandAll() # Opcional
+
+    #dashboard
+    def graficar_analisis_competencias(self):
+        # 1. Obtener los datos
+        conn = sqlite3.connect('ingenieria.db')
+        cursor = conn.cursor()
+        # Query solicitada
+        cursor.execute("SELECT nombre, f_tecnica, f_ventas, f_analisis, f_servicio, f_liderazgo FROM empleados LIMIT 10")
+        datos = cursor.fetchall()
+        conn.close()
+
+        if not datos: return
+
+        # 2. Preparar el Canvas en frame_x
+        if not hasattr(self, 'canvas_analisis'):
+            self.fig_a, self.ax_a = plt.subplots(figsize=(8, 4))
+            self.fig_a.patch.set_facecolor('#1a1b26')
+            self.canvas_a = FigureCanvas(self.fig_a)
+            layout = QVBoxLayout(self.ui_content.frame_x)
+            layout.addWidget(self.canvas_a)
+        
+        self.ax_a.clear()
+
+        # 3. Estructurar datos para las barras
+        nombres = [d[0] for d in datos]
+        f_tec = [d[1] for d in datos]
+        f_ven = [d[2] for d in datos]
+        f_ana = [d[3] for d in datos]
+        f_ser = [d[4] for d in datos]
+        f_lid = [d[5] for d in datos]
+
+        x = np.arange(len(nombres))
+        width = 0.15  # Ancho de las barras
+
+        # 4. Dibujar las 5 barras por empleado
+        self.ax_a.bar(x - 2*width, f_tec, width, label='Técnica', color='#7aa2f7')
+        self.ax_a.bar(x - width, f_ven, width, label='Ventas', color='#73daca')
+        self.ax_a.bar(x, f_ana, width, label='Análisis', color='#e0af68')
+        self.ax_a.bar(x + width, f_ser, width, label='Servicio', color='#f7768e')
+        self.ax_a.bar(x + 2*width, f_lid, width, label='Liderazgo', color='#bb9af7')
+
+        # 5. Estética Tokyo Night
+        self.ax_a.set_title("Comparativa de Competencias por Empleado", color='white', pad=15)
+        self.ax_a.set_xticks(x)
+        self.ax_a.set_xticklabels(nombres, rotation=45, ha='right', color='white', fontsize=8)
+        self.ax_a.tick_params(axis='y', colors='white')
+        self.ax_a.legend(loc='upper right', fontsize='small', framealpha=0.3)
+        
+        self.fig_a.tight_layout()
+        self.canvas_a.draw()
+
+    def graficar_salarios_por_cargo(self):
+        # 1. Obtener los datos según tu query específica
+        conn = sqlite3.connect('ingenieria.db')
+        cursor = conn.cursor()
+        query = "SELECT nombre, cargo, salario_base FROM empleados ORDER BY cargo ASC LIMIT 15"
+        cursor.execute(query)
+        datos = cursor.fetchall()
+        conn.close()
+
+        if not datos: return
+
+        # 2. Configurar el Canvas en frame_2
+        if not hasattr(self, 'canvas_salarios'):
+            self.fig_s, self.ax_s = plt.subplots(figsize=(7, 5))
+            self.fig_s.patch.set_facecolor('#1a1b26') # Fondo Tokyo Night
+            self.canvas_s = FigureCanvas(self.fig_s)
+            layout = QVBoxLayout(self.ui_content.frame_2)
+            layout.addWidget(self.canvas_s)
+        
+        self.ax_s.clear()
+
+        # 3. Preparar etiquetas combinadas (Nombre + Cargo)
+        nombres_cargos = [f"{d[0]}\n({d[1]})" for d in datos]
+        salarios = [d[2] for d in datos]
+        
+        # 4. Crear barras horizontales con gradiente de color
+        y_pos = np.arange(len(nombres_cargos))
+        bars = self.ax_s.barh(y_pos, salarios, color='#bb9af7', edgecolor='#7aa2f7', alpha=0.8)
+
+        # 5. Estética y Formato
+        self.ax_s.set_yticks(y_pos)
+        self.ax_s.set_yticklabels(nombres_cargos, color='white', fontsize=8)
+        self.ax_s.set_title("Distribución Salarial por Cargo", color='#73daca', pad=15, fontweight='bold')
+        self.ax_s.invert_yaxis()  # El primer cargo arriba
+        
+        # Añadir el valor del salario al final de cada barra
+        for bar in bars:
+            width = bar.get_width()
+            self.ax_s.text(width, bar.get_y() + bar.get_height()/2, f' ${width:,.0f}', 
+                        va='center', color='#cfc9c2', fontsize=8)
+
+        self.ax_s.tick_params(axis='x', colors='white')
+        self.ax_s.spines['bottom'].set_color('#414868')
+        self.ax_s.spines['left'].set_color('#414868')
+        self.ax_s.set_facecolor('#16161e')
+
+        self.fig_s.tight_layout()
+        self.canvas_s.draw()
+
+    def graficar_estado_financiero_real(self):
+        # 1. Obtener datos de la base de datos
+        conn = sqlite3.connect('ingenieria.db')
+        cursor = conn.cursor()
+        
+        # Obtener el presupuesto (Ej: 500,000,000)
+        cursor.execute("SELECT monto_total FROM presupuesto_empresa WHERE id = 1")
+        presupuesto_total = cursor.fetchone()[0]
+        
+        # Obtener la suma de todos los salarios
+        cursor.execute("SELECT SUM(salario_base) FROM empleados")
+        gasto_nomina = cursor.fetchone()[0] or 0
+        conn.close()
+
+        # --- OPERACIÓN CLAVE: CÁLCULO DEL RESTANTE ---
+        presupuesto_restante = presupuesto_total - gasto_nomina
+
+        # 2. Configurar Canvas en frame_4
+        if not hasattr(self, 'canvas_financiero'):
+            self.fig_f, self.ax_f = plt.subplots(figsize=(5, 4))
+            self.fig_f.patch.set_facecolor('#1a1b26')
+            self.canvas_f = FigureCanvas(self.fig_f)
+            layout = QVBoxLayout(self.ui_content.frame_4)
+            layout.addWidget(self.canvas_f)
+        
+        self.ax_f.clear()
+
+        # 3. Graficar: Presupuesto vs Gasto vs Restante
+        labels = ['Presupuesto', 'Gasto Nómina', 'Disponible']
+        valores = [presupuesto_total, gasto_nomina, presupuesto_restante]
+        # El disponible cambia a rojo si es negativo
+        colores = ['#7aa2f7', '#f7768e', '#73daca' if presupuesto_restante > 0 else '#ff0033']
+
+        self.ax_f.bar(labels, valores, color=colores, alpha=0.8)
+        
+        # Estética y Etiquetas
+        self.ax_f.set_title("Balance Mensual de Nómina", color='white', fontweight='bold')
+        self.ax_f.tick_params(axis='both', colors='white', labelsize=8)
+        
+        # Añadir los números sobre las barras con formato de moneda
+        for i, v in enumerate(valores):
+            self.ax_f.text(i, v + (presupuesto_total * 0.01), f'${v:,.0f}', 
+                        ha='center', color='white', fontsize=7, fontweight='bold')
+
+        self.fig_f.tight_layout()
+        self.canvas_f.draw()
+
+    def graficar_viabilidad_contratacion(self):
+        # 1. Obtener datos financieros
+        conn = sqlite3.connect('ingenieria.db')
+        cursor = conn.cursor()
+        
+        # Presupuesto total
+        cursor.execute("SELECT monto_total FROM presupuesto_empresa WHERE id = 1")
+        presupuesto = cursor.fetchone()[0]
+        
+        # Gasto actual y salario promedio
+        cursor.execute("SELECT SUM(salario_base), AVG(salario_base) FROM empleados")
+        datos_nomina = cursor.fetchone()
+        gasto_actual = datos_nomina[0] or 0
+        salario_promedio = datos_nomina[1] or 1 # Evitar división por cero
+        conn.close()
+
+        # 2. Cálculos de viabilidad
+        disponible = presupuesto - gasto_actual
+        # Cuántos empleados "promedio" caben en lo que sobra
+        vacantes_posibles = max(0, int(disponible / salario_promedio))
+
+        # 3. Configurar el Canvas en frame_3
+        if not hasattr(self, 'canvas_viabilidad'):
+            self.fig_v, self.ax_v = plt.subplots(figsize=(5, 4))
+            self.fig_v.patch.set_facecolor('#1a1b26')
+            self.canvas_v = FigureCanvas(self.fig_v)
+            layout = QVBoxLayout(self.ui_content.frame_3)
+            layout.addWidget(self.canvas_v)
+        
+        self.ax_v.clear()
+
+        # 4. Crear visualización (Donut Chart con texto central)
+        labels = ['Ocupado', 'Disponible']
+        porcentaje_uso = (gasto_actual / presupuesto) * 100
+        porcentaje_libre = 100 - porcentaje_uso if presupuesto > gasto_actual else 0
+        
+        colores = ['#f7768e', '#73daca'] if porcentaje_uso < 90 else ['#f7768e', '#e0af68']
+        if porcentaje_uso >= 100: colores = ['#ff0033', '#414868']
+
+        self.ax_v.pie([porcentaje_uso, porcentaje_libre], colors=colores, 
+                    startangle=90, counterclock=False, wedgeprops={'width': 0.3})
+        
+        # Texto central con la decisión
+        color_texto = '#73daca' if vacantes_posibles > 0 else '#f7768e'
+        self.ax_v.text(0, 0, f"{vacantes_posibles}\nVacantes", ha='center', va='center', 
+                    fontsize=18, fontweight='bold', color=color_texto)
+        
+        self.ax_v.set_title("Capacidad de Contratación", color='white', pad=10)
+        self.canvas_v.draw()
