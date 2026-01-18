@@ -18,6 +18,7 @@ import datetime
 from Comprar import Comprar
 from RiesgoOperacional import riesgo
 from InteligenciaFinanciera import InteligenciaFinanciera
+from capitalhumano import capitalhumano
 
 
 
@@ -65,6 +66,8 @@ class VentanaInicio(QDialog):
             self.ui.toolRiesgo.clicked.connect(self.abrir_RiesgoOperacional)
 
             self.ui.toolFinanciera.clicked.connect(self.abrir_InteligenciaFinanciera)
+
+            self.ui.toolCapital.clicked.connect(self.abrir_capitalHumano)
 
             self.respaldo_automatico_inicio()
             self.reset_sistema_versiones() #activar cuando se necesita reiniciar la base de datos
@@ -159,6 +162,20 @@ class VentanaInicio(QDialog):
             
         except Exception as e:
             print(f"Error al intentar abrir Innovación: {e}")
+
+    def abrir_capitalHumano(self):
+        try:
+            
+            # Instanciar y guardar como atributo de clase para que no desaparezca de memoria
+            self.ventana_gestion = capitalhumano() 
+            self.ventana_gestion.show()
+            self.hide()
+            
+            # No ocultes la principal todavía hasta confirmar que la otra abrió
+            # self.hide() 
+            
+        except Exception as e:
+            print(f"Error al intentar abrir capital humano: {e}")
 
 
     def respaldo_automatico_inicio(self):

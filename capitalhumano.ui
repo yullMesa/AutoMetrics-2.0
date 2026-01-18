@@ -13,18 +13,1192 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <property name="styleSheet">
+   <string notr="true">/* El fondo de la barra de menú superior */
+QMenuBar {
+    background-color: #1a1b26; /* Fondo oscuro Tokyo Night */
+    color: #a9b1d6;            /* Texto gris azulado suave */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 13px;
+    padding: 4px;
+    border-bottom: 1px solid #414868; /* Línea sutil divisoria */
+}
+
+/* Estilo cuando pasas el mouse por encima de los menús (Capital Humano, etc.) */
+QMenuBar::item:selected {
+    background-color: #24283b;
+    color: #7aa2f7;           /* Azul neón al seleccionar */
+    border-radius: 4px;
+}
+
+/* Estilo de los menús desplegables */
+QMenu {
+    background-color: #1a1b26;
+    color: #a9b1d6;
+    border: 1px solid #414868;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+/* Estilo de las acciones dentro del menú (las opciones internas) */
+QMenu::item {
+    padding: 6px 25px 6px 20px;
+    border-radius: 3px;
+}
+
+/* Cuando pasas el mouse sobre una opción específica (ej: Directorio) */
+QMenu::item:selected {
+    background-color: #7aa2f7; /* Fondo azul brillante */
+    color: #1a1b26;            /* Texto oscuro para contraste */
+}
+
+/* Estilo de los separadores entre opciones */
+QMenu::separator {
+    height: 1px;
+    background: #414868;
+    margin: 5px 10px;
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>-1</x>
+      <y>-1</y>
+      <width>1961</width>
+      <height>1191</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QStackedWidget" name="stackedWidget">
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(47, 47, 47);</string>
+       </property>
+       <property name="currentIndex">
+        <number>2</number>
+       </property>
+       <widget class="QWidget" name="page">
+        <widget class="QWidget" name="gridLayoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>9</y>
+           <width>1941</width>
+           <height>1161</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="1" column="1">
+           <widget class="QFrame" name="frame_3">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QFrame" name="frame">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QFrame" name="frame_4">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QFrame" name="frame_2">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QFrame" name="frame_5">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QFrame" name="frame_6">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_2">
+        <widget class="QWidget" name="gridLayoutWidget_2">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>9</y>
+           <width>1941</width>
+           <height>1151</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="1">
+           <widget class="QFrame" name="frame_7">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="horizontalLayoutWidget_2">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>9</y>
+               <width>951</width>
+               <height>491</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <item>
+               <widget class="QFrame" name="frame_10">
+                <property name="frameShape">
+                 <enum>QFrame::Shape::StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                 <enum>QFrame::Shadow::Raised</enum>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="horizontalLayoutWidget_3">
+             <property name="geometry">
+              <rect>
+               <x>20</x>
+               <y>510</y>
+               <width>931</width>
+               <height>51</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QPushButton" name="pushButton_anadir">
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+    background-color: #7aa2f7;        /* Azul neón */
+    color: #1a1b26;                   /* Texto oscuro para contraste */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 8px 16px;
+    border: none;
+}
+
+/* Cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #89b4fa;        /* Azul un poco más claro */
+}
+
+/* Cuando se mantiene presionado */
+QPushButton:pressed {
+    background-color: #565f89;        /* Se oscurece para dar efecto de hundido */
+    color: #ffffff;
+}
+
+/* Si el botón está desactivado */
+QPushButton:disabled {
+    background-color: #24283b;
+    color: #414868;
+}</string>
+                </property>
+                <property name="text">
+                 <string>AÑADIR</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="btn_eliminar">
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+    background-color: rgba(247, 118, 142, 0.1); /* Fondo rojizo transparente */
+    color: #f7768e;                            /* Texto rojo neón */
+    border: 2px solid #f7768e;                 /* Borde sólido */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 8px 16px;
+}
+
+/* Cuando el mouse pasa por encima */
+QPushButton#btn_eliminar:hover {
+    background-color: #f7768e;                 /* Se llena de color rojo */
+    color: #1a1b26;                            /* Texto cambia a oscuro */
+}
+
+/* Cuando se mantiene presionado */
+QPushButton#btn_eliminar:pressed {
+    background-color: #db4b4b;                 /* Rojo más intenso */
+    border: 2px solid #db4b4b;
+}</string>
+                </property>
+                <property name="text">
+                 <string>ELIMINAR</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_actualizar">
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+    background-color: #7aa2f7;        /* Azul neón */
+    color: #1a1b26;                   /* Texto oscuro para contraste */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 8px 16px;
+    border: none;
+}
+
+/* Cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #89b4fa;        /* Azul un poco más claro */
+}
+
+/* Cuando se mantiene presionado */
+QPushButton:pressed {
+    background-color: #565f89;        /* Se oscurece para dar efecto de hundido */
+    color: #ffffff;
+}
+
+/* Si el botón está desactivado */
+QPushButton:disabled {
+    background-color: #24283b;
+    color: #414868;
+}</string>
+                </property>
+                <property name="text">
+                 <string>ACTUALIZAR</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="pushButton_exportar">
+                <property name="styleSheet">
+                 <string notr="true">QPushButton {
+    background-color: #7aa2f7;        /* Azul neón */
+    color: #1a1b26;                   /* Texto oscuro para contraste */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    border-radius: 6px;
+    padding: 8px 16px;
+    border: none;
+}
+
+/* Cuando el mouse pasa por encima */
+QPushButton:hover {
+    background-color: #89b4fa;        /* Azul un poco más claro */
+}
+
+/* Cuando se mantiene presionado */
+QPushButton:pressed {
+    background-color: #565f89;        /* Se oscurece para dar efecto de hundido */
+    color: #ffffff;
+}
+
+/* Si el botón está desactivado */
+QPushButton:disabled {
+    background-color: #24283b;
+    color: #414868;
+}</string>
+                </property>
+                <property name="text">
+                 <string>EXPORTAR</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QFrame" name="frame_9">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="horizontalLayoutWidget_4">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>19</y>
+               <width>951</width>
+               <height>521</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <item>
+               <widget class="QTableWidget" name="tableWidget_EMPLEADOS">
+                <property name="styleSheet">
+                 <string notr="true">/* Estilo general de la tabla */
+QTableWidget {
+    background-color: #1a1b26;        /* Fondo oscuro */
+    alternate-background-color: #24283b; /* Color para filas alternas (cebreado) */
+    color: #c0caf5;                   /* Color de texto */
+    gridline-color: #414868;          /* Color de las líneas de la cuadrícula */
+    border: 1px solid #414868;
+    border-radius: 8px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 12px;
+    outline: none;                    /* Quita el borde de enfoque al hacer clic */
+}
+
+/* Estilo de la fila seleccionada */
+QTableWidget::item:selected {
+    background-color: #7aa2f7;        /* Azul neón al seleccionar */
+    color: #1a1b26;                   /* Texto oscuro para contraste */
+    font-weight: bold;
+}
+
+/* Encabezados (Cabecera de la tabla) */
+QHeaderView::section {
+    background-color: #16161e;        /* Un tono más oscuro que el fondo */
+    color: #7aa2f7;                   /* Títulos en azul neón */
+    padding: 6px;
+    border: none;
+    border-bottom: 2px solid #7aa2f7; /* Línea neón bajo el título */
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Estilo de las barras de desplazamiento (Scrollbars) */
+QScrollBar:vertical {
+    border: none;
+    background: #1a1b26;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #414868;              /* Color de la barra que se mueve */
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #7aa2f7;              /* Brilla al pasar el mouse */
+}</string>
+                </property>
+                <attribute name="horizontalHeaderDefaultSectionSize">
+                 <number>300</number>
+                </attribute>
+                <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+                 <bool>false</bool>
+                </attribute>
+                <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>true</bool>
+                </attribute>
+                <column>
+                 <property name="text">
+                  <string>NOMBRE</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>CARGO</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>SALARIO</string>
+                 </property>
+                </column>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_pictograma">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QFrame" name="frame_8">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="formLayoutWidget">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>9</y>
+               <width>951</width>
+               <height>541</height>
+              </rect>
+             </property>
+             <layout class="QFormLayout" name="formLayout">
+              <property name="verticalSpacing">
+               <number>22</number>
+              </property>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_2">
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+    color: #7aa2f7;                /* Azul neón Tokyo Night */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    background: transparent;
+    padding: 5px;
+    letter-spacing: 1px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>ID EMPLEADO</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLineEdit" name="txt_empleado">
+                <property name="styleSheet">
+                 <string notr="true">QLineEdit {
+    background-color: #1a1b26;        /* Fondo oscuro igual al dashboard */
+    color: #c0caf5;                   /* Texto blanco azulado */
+    border: 2px solid #414868;        /* Borde gris azulado discreto */
+    border-radius: 6px;               /* Bordes suavemente redondeados */
+    padding: 8px 12px;                /* Espaciado interno para el texto */
+    font-size: 13px;
+    font-family: 'Segoe UI', sans-serif;
+    selection-background-color: #7aa2f7; /* Color al resaltar texto */
+}
+
+/* Efecto cuando el usuario hace clic para escribir (Focus) */
+QLineEdit:focus {
+    border: 2px solid #7aa2f7;        /* Borde brilla en azul neón */
+    background-color: #24283b;        /* Se aclara sutilmente el fondo */
+    color: #ffffff;                   /* El texto resalta más */
+}
+
+/* Estilo para el texto de ayuda (Placeholder) */
+QLineEdit::placeholder {
+    color: #565f89;                   /* Gris oscuro para que no distraiga */
+    font-style: italic;
+}
+
+/* Estilo si el campo está desactivado (Read Only) */
+QLineEdit:read-only {
+    background-color: #16161e;
+    color: #414868;
+    border: 1px dashed #24283b;
+}</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_9">
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+    color: #7aa2f7;                /* Azul neón Tokyo Night */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    background: transparent;
+    padding: 5px;
+    letter-spacing: 1px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>NOMBRE</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="txt_nombre">
+                <property name="styleSheet">
+                 <string notr="true">QLineEdit {
+    background-color: #1a1b26;        /* Fondo oscuro igual al dashboard */
+    color: #c0caf5;                   /* Texto blanco azulado */
+    border: 2px solid #414868;        /* Borde gris azulado discreto */
+    border-radius: 6px;               /* Bordes suavemente redondeados */
+    padding: 8px 12px;                /* Espaciado interno para el texto */
+    font-size: 13px;
+    font-family: 'Segoe UI', sans-serif;
+    selection-background-color: #7aa2f7; /* Color al resaltar texto */
+}
+
+/* Efecto cuando el usuario hace clic para escribir (Focus) */
+QLineEdit:focus {
+    border: 2px solid #7aa2f7;        /* Borde brilla en azul neón */
+    background-color: #24283b;        /* Se aclara sutilmente el fondo */
+    color: #ffffff;                   /* El texto resalta más */
+}
+
+/* Estilo para el texto de ayuda (Placeholder) */
+QLineEdit::placeholder {
+    color: #565f89;                   /* Gris oscuro para que no distraiga */
+    font-style: italic;
+}
+
+/* Estilo si el campo está desactivado (Read Only) */
+QLineEdit:read-only {
+    background-color: #16161e;
+    color: #414868;
+    border: 1px dashed #24283b;
+}</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_8">
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+    color: #7aa2f7;                /* Azul neón Tokyo Night */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    background: transparent;
+    padding: 5px;
+    letter-spacing: 1px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>CARGO</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_7">
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+    color: #7aa2f7;                /* Azul neón Tokyo Night */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    background: transparent;
+    padding: 5px;
+    letter-spacing: 1px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>SALARIO BASE</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="label_6">
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+    color: #7aa2f7;                /* Azul neón Tokyo Night */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    background: transparent;
+    padding: 5px;
+    letter-spacing: 1px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>F-TÉCNICA</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="label_5">
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+    color: #7aa2f7;                /* Azul neón Tokyo Night */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    background: transparent;
+    padding: 5px;
+    letter-spacing: 1px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>F-VENTAS</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="0">
+               <widget class="QLabel" name="label_4">
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+    color: #7aa2f7;                /* Azul neón Tokyo Night */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    background: transparent;
+    padding: 5px;
+    letter-spacing: 1px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>F-ANALÍSIS</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="0">
+               <widget class="QLabel" name="label_3">
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+    color: #7aa2f7;                /* Azul neón Tokyo Night */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    background: transparent;
+    padding: 5px;
+    letter-spacing: 1px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>F-SERVICIO</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QLabel" name="label_10">
+                <property name="styleSheet">
+                 <string notr="true">QLabel {
+    color: #7aa2f7;                /* Azul neón Tokyo Night */
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    background: transparent;
+    padding: 5px;
+    letter-spacing: 1px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>F-LIDERAZGO</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLineEdit" name="txt_cargo">
+                <property name="styleSheet">
+                 <string notr="true">QLineEdit {
+    background-color: #1a1b26;        /* Fondo oscuro igual al dashboard */
+    color: #c0caf5;                   /* Texto blanco azulado */
+    border: 2px solid #414868;        /* Borde gris azulado discreto */
+    border-radius: 6px;               /* Bordes suavemente redondeados */
+    padding: 8px 12px;                /* Espaciado interno para el texto */
+    font-size: 13px;
+    font-family: 'Segoe UI', sans-serif;
+    selection-background-color: #7aa2f7; /* Color al resaltar texto */
+}
+
+/* Efecto cuando el usuario hace clic para escribir (Focus) */
+QLineEdit:focus {
+    border: 2px solid #7aa2f7;        /* Borde brilla en azul neón */
+    background-color: #24283b;        /* Se aclara sutilmente el fondo */
+    color: #ffffff;                   /* El texto resalta más */
+}
+
+/* Estilo para el texto de ayuda (Placeholder) */
+QLineEdit::placeholder {
+    color: #565f89;                   /* Gris oscuro para que no distraiga */
+    font-style: italic;
+}
+
+/* Estilo si el campo está desactivado (Read Only) */
+QLineEdit:read-only {
+    background-color: #16161e;
+    color: #414868;
+    border: 1px dashed #24283b;
+}</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QLineEdit" name="txt_salario">
+                <property name="styleSheet">
+                 <string notr="true">QLineEdit {
+    background-color: #1a1b26;        /* Fondo oscuro igual al dashboard */
+    color: #c0caf5;                   /* Texto blanco azulado */
+    border: 2px solid #414868;        /* Borde gris azulado discreto */
+    border-radius: 6px;               /* Bordes suavemente redondeados */
+    padding: 8px 12px;                /* Espaciado interno para el texto */
+    font-size: 13px;
+    font-family: 'Segoe UI', sans-serif;
+    selection-background-color: #7aa2f7; /* Color al resaltar texto */
+}
+
+/* Efecto cuando el usuario hace clic para escribir (Focus) */
+QLineEdit:focus {
+    border: 2px solid #7aa2f7;        /* Borde brilla en azul neón */
+    background-color: #24283b;        /* Se aclara sutilmente el fondo */
+    color: #ffffff;                   /* El texto resalta más */
+}
+
+/* Estilo para el texto de ayuda (Placeholder) */
+QLineEdit::placeholder {
+    color: #565f89;                   /* Gris oscuro para que no distraiga */
+    font-style: italic;
+}
+
+/* Estilo si el campo está desactivado (Read Only) */
+QLineEdit:read-only {
+    background-color: #16161e;
+    color: #414868;
+    border: 1px dashed #24283b;
+}</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QLineEdit" name="txt_tecnica">
+                <property name="styleSheet">
+                 <string notr="true">QLineEdit {
+    background-color: #1a1b26;        /* Fondo oscuro igual al dashboard */
+    color: #c0caf5;                   /* Texto blanco azulado */
+    border: 2px solid #414868;        /* Borde gris azulado discreto */
+    border-radius: 6px;               /* Bordes suavemente redondeados */
+    padding: 8px 12px;                /* Espaciado interno para el texto */
+    font-size: 13px;
+    font-family: 'Segoe UI', sans-serif;
+    selection-background-color: #7aa2f7; /* Color al resaltar texto */
+}
+
+/* Efecto cuando el usuario hace clic para escribir (Focus) */
+QLineEdit:focus {
+    border: 2px solid #7aa2f7;        /* Borde brilla en azul neón */
+    background-color: #24283b;        /* Se aclara sutilmente el fondo */
+    color: #ffffff;                   /* El texto resalta más */
+}
+
+/* Estilo para el texto de ayuda (Placeholder) */
+QLineEdit::placeholder {
+    color: #565f89;                   /* Gris oscuro para que no distraiga */
+    font-style: italic;
+}
+
+/* Estilo si el campo está desactivado (Read Only) */
+QLineEdit:read-only {
+    background-color: #16161e;
+    color: #414868;
+    border: 1px dashed #24283b;
+}</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QLineEdit" name="txt_ventas">
+                <property name="styleSheet">
+                 <string notr="true">QLineEdit {
+    background-color: #1a1b26;        /* Fondo oscuro igual al dashboard */
+    color: #c0caf5;                   /* Texto blanco azulado */
+    border: 2px solid #414868;        /* Borde gris azulado discreto */
+    border-radius: 6px;               /* Bordes suavemente redondeados */
+    padding: 8px 12px;                /* Espaciado interno para el texto */
+    font-size: 13px;
+    font-family: 'Segoe UI', sans-serif;
+    selection-background-color: #7aa2f7; /* Color al resaltar texto */
+}
+
+/* Efecto cuando el usuario hace clic para escribir (Focus) */
+QLineEdit:focus {
+    border: 2px solid #7aa2f7;        /* Borde brilla en azul neón */
+    background-color: #24283b;        /* Se aclara sutilmente el fondo */
+    color: #ffffff;                   /* El texto resalta más */
+}
+
+/* Estilo para el texto de ayuda (Placeholder) */
+QLineEdit::placeholder {
+    color: #565f89;                   /* Gris oscuro para que no distraiga */
+    font-style: italic;
+}
+
+/* Estilo si el campo está desactivado (Read Only) */
+QLineEdit:read-only {
+    background-color: #16161e;
+    color: #414868;
+    border: 1px dashed #24283b;
+}</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="QLineEdit" name="txt_analisis">
+                <property name="styleSheet">
+                 <string notr="true">QLineEdit {
+    background-color: #1a1b26;        /* Fondo oscuro igual al dashboard */
+    color: #c0caf5;                   /* Texto blanco azulado */
+    border: 2px solid #414868;        /* Borde gris azulado discreto */
+    border-radius: 6px;               /* Bordes suavemente redondeados */
+    padding: 8px 12px;                /* Espaciado interno para el texto */
+    font-size: 13px;
+    font-family: 'Segoe UI', sans-serif;
+    selection-background-color: #7aa2f7; /* Color al resaltar texto */
+}
+
+/* Efecto cuando el usuario hace clic para escribir (Focus) */
+QLineEdit:focus {
+    border: 2px solid #7aa2f7;        /* Borde brilla en azul neón */
+    background-color: #24283b;        /* Se aclara sutilmente el fondo */
+    color: #ffffff;                   /* El texto resalta más */
+}
+
+/* Estilo para el texto de ayuda (Placeholder) */
+QLineEdit::placeholder {
+    color: #565f89;                   /* Gris oscuro para que no distraiga */
+    font-style: italic;
+}
+
+/* Estilo si el campo está desactivado (Read Only) */
+QLineEdit:read-only {
+    background-color: #16161e;
+    color: #414868;
+    border: 1px dashed #24283b;
+}</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="QLineEdit" name="txt_servicio">
+                <property name="styleSheet">
+                 <string notr="true">QLineEdit {
+    background-color: #1a1b26;        /* Fondo oscuro igual al dashboard */
+    color: #c0caf5;                   /* Texto blanco azulado */
+    border: 2px solid #414868;        /* Borde gris azulado discreto */
+    border-radius: 6px;               /* Bordes suavemente redondeados */
+    padding: 8px 12px;                /* Espaciado interno para el texto */
+    font-size: 13px;
+    font-family: 'Segoe UI', sans-serif;
+    selection-background-color: #7aa2f7; /* Color al resaltar texto */
+}
+
+/* Efecto cuando el usuario hace clic para escribir (Focus) */
+QLineEdit:focus {
+    border: 2px solid #7aa2f7;        /* Borde brilla en azul neón */
+    background-color: #24283b;        /* Se aclara sutilmente el fondo */
+    color: #ffffff;                   /* El texto resalta más */
+}
+
+/* Estilo para el texto de ayuda (Placeholder) */
+QLineEdit::placeholder {
+    color: #565f89;                   /* Gris oscuro para que no distraiga */
+    font-style: italic;
+}
+
+/* Estilo si el campo está desactivado (Read Only) */
+QLineEdit:read-only {
+    background-color: #16161e;
+    color: #414868;
+    border: 1px dashed #24283b;
+}</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="QLineEdit" name="txt_iderazgo">
+                <property name="styleSheet">
+                 <string notr="true">QLineEdit {
+    background-color: #1a1b26;        /* Fondo oscuro igual al dashboard */
+    color: #c0caf5;                   /* Texto blanco azulado */
+    border: 2px solid #414868;        /* Borde gris azulado discreto */
+    border-radius: 6px;               /* Bordes suavemente redondeados */
+    padding: 8px 12px;                /* Espaciado interno para el texto */
+    font-size: 13px;
+    font-family: 'Segoe UI', sans-serif;
+    selection-background-color: #7aa2f7; /* Color al resaltar texto */
+}
+
+/* Efecto cuando el usuario hace clic para escribir (Focus) */
+QLineEdit:focus {
+    border: 2px solid #7aa2f7;        /* Borde brilla en azul neón */
+    background-color: #24283b;        /* Se aclara sutilmente el fondo */
+    color: #ffffff;                   /* El texto resalta más */
+}
+
+/* Estilo para el texto de ayuda (Placeholder) */
+QLineEdit::placeholder {
+    color: #565f89;                   /* Gris oscuro para que no distraiga */
+    font-style: italic;
+}
+
+/* Estilo si el campo está desactivado (Read Only) */
+QLineEdit:read-only {
+    background-color: #16161e;
+    color: #414868;
+    border: 1px dashed #24283b;
+}</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_3">
+        <widget class="QWidget" name="gridLayoutWidget_3">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>-1</y>
+           <width>1941</width>
+           <height>1171</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QTreeWidget" name="treeWidget_clasificacion">
+            <property name="styleSheet">
+             <string notr="true">QTreeWidget {
+    background-color: #1a1b26;        /* Fondo oscuro principal */
+    alternate-background-color: #24283b;
+    color: #c0caf5;                   /* Texto blanco azulado */
+    border: 1px solid #414868;
+    border-radius: 8px;
+    font-family: 'Segoe UI', sans-serif;
+    font-size: 13px;
+    outline: none;
+    padding: 5px;
+}
+
+/* Estilo para los ítems (filas) */
+QTreeWidget::item {
+    padding: 6px;
+    border-bottom: 1px solid #24283b;
+}
+
+/* Cuando pasas el mouse por encima de una rama o empleado */
+QTreeWidget::item:hover {
+    background-color: rgba(122, 162, 247, 0.1);
+    color: #7aa2f7;
+}
+
+/* Cuando seleccionas un elemento */
+QTreeWidget::item:selected {
+    background-color: #7aa2f7;
+    color: #1a1b26;
+    font-weight: bold;
+    border-radius: 4px;
+}
+
+/* Estilo de la flechita (indicador de expansión) */
+QTreeWidget::branch:has-children:!has-siblings:closed,
+QTreeWidget::branch:closed:has-children:has-siblings {
+    image: url(none); /* Aquí podrías poner un icono de flecha propia */
+    border-image: none;
+}
+
+/* Encabezado del TreeWidget (si lo usas) */
+QHeaderView::section {
+    background-color: #16161e;
+    color: #bb9af7;                   /* Color purpura para distinguir de la tabla */
+    padding: 8px;
+    border: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 2px solid #bb9af7;
+}
+
+/* Personalización de la barra de scroll */
+QScrollBar:vertical {
+    border: none;
+    background: #1a1b26;
+    width: 8px;
+}
+
+QScrollBar::handle:vertical {
+    background: #414868;
+    border-radius: 4px;
+}</string>
+            </property>
+            <column>
+             <property name="text">
+              <string notr="true">1</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QFrame" name="frame_11">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(26, 27, 38);</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
      <width>1966</width>
-     <height>33</height>
+     <height>41</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuDASHBOARD">
+    <property name="title">
+     <string>DASHBOARD</string>
+    </property>
+    <addaction name="actionGRAFICA"/>
+   </widget>
+   <widget class="QMenu" name="menuDirectorio_de_Personal">
+    <property name="title">
+     <string>Directorio de Personal</string>
+    </property>
+    <addaction name="action_directorio"/>
+   </widget>
+   <widget class="QMenu" name="menuGesti_n_de_N_mina">
+    <property name="title">
+     <string>Gestión de Nómina</string>
+    </property>
+    <addaction name="action_nomina"/>
+   </widget>
+   <widget class="QMenu" name="menuEvaluaci_n_de_Desempe_o">
+    <property name="title">
+     <string>Evaluación de Desempeño</string>
+    </property>
+    <addaction name="action_desempeno"/>
+   </widget>
+   <widget class="QMenu" name="menuAsignaci_n_de_Turnos">
+    <property name="title">
+     <string>Asignación de Turnos</string>
+    </property>
+    <addaction name="action_turnos"/>
+   </widget>
+   <widget class="QMenu" name="menuRegistro_de_Nuevo_Empleado">
+    <property name="title">
+     <string>Registro de Nuevo Empleado</string>
+    </property>
+    <addaction name="action_registro"/>
+   </widget>
+   <widget class="QMenu" name="menuVOLVER">
+    <property name="title">
+     <string>VOLVER</string>
+    </property>
+    <addaction name="actionINICIO"/>
+   </widget>
+   <addaction name="menuDASHBOARD"/>
+   <addaction name="menuDirectorio_de_Personal"/>
+   <addaction name="menuGesti_n_de_N_mina"/>
+   <addaction name="menuEvaluaci_n_de_Desempe_o"/>
+   <addaction name="menuAsignaci_n_de_Turnos"/>
+   <addaction name="menuRegistro_de_Nuevo_Empleado"/>
+   <addaction name="menuVOLVER"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionGRAFICA">
+   <property name="text">
+    <string>GRAFICA</string>
+   </property>
+  </action>
+  <action name="action_directorio">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+  <action name="actionINICIO">
+   <property name="text">
+    <string>INICIO</string>
+   </property>
+  </action>
+  <action name="action_registro">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+  <action name="action_turnos">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+  <action name="action_desempeno">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
+  <action name="action_nomina">
+   <property name="text">
+    <string>CRUD</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
