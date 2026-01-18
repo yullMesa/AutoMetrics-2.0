@@ -1013,19 +1013,22 @@ class riesgo(QMainWindow):
 
 
     def closeEvent(self, event):
-        # 1. Calcular tiempo transcurrido en segundos
+
+        print("--- Ejecutando protocolos de guardado antes de cerrar ---")
+
+        # 1. LÓGICA DEL EXCEL (Sentimiento del Mercado)
         tiempo_total = time.time() - self.hora_inicio_mercado
         un_minuto = 60
         cinco_minutos = 300
 
-        # 2. Condición: Guardar solo si duró entre 1 y 5 minutos
+        # Guardar solo si la sesión duró entre 1 y 5 minutos
         if un_minuto <= tiempo_total <= cinco_minutos:
             try:
                 ruta_excel = r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\Sentimiento"
+                os.makedirs(ruta_excel, exist_ok=True)
                 nombre_archivo = f"analisis_mercado_{datetime.now().strftime('%Y%m%d_%H%M')}.xlsx"
                 path_completo = os.path.join(ruta_excel, nombre_archivo)
 
-                # Convertir el diccionario de análisis a una lista para Pandas
                 data_para_excel = []
                 for nombre, datos in self.analisis_empresas.items():
                     data_para_excel.append({
@@ -1035,17 +1038,43 @@ class riesgo(QMainWindow):
                         'Balance Neto': datos['ganado'] - datos['perdido'],
                         'Último Sentimiento': datos['emocion']
                     })
-
+                
                 df = pd.DataFrame(data_para_excel)
                 df.to_excel(path_completo, index=False)
-                print(f"📊 Reporte de Data Analysis guardado: {nombre_archivo}")
-
+                print(f"✅ Excel generado: {nombre_archivo}")
             except Exception as e:
-                print(f"Error al guardar Excel: {e}")
+                print(f"❌ Error al guardar Excel: {e}")
         else:
-            print("⚠️ Sesión fuera de rango (1-5 min). No se generó reporte Excel.")
+            print("⚠️ Sesión fuera de rango de tiempo. No se generó reporte Excel.")
 
-        event.accept() # Cerrar la ventana definitivamente
+        # 2. LÓGICA DEL PDF (Reportes de Gráficas)
+        try:
+            ruta_pdf = r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\PDF\Reporte_Final.pdf"
+            os.makedirs(os.path.dirname(ruta_pdf), exist_ok=True)
+
+            with PdfPages(ruta_pdf) as pdf:
+                # Gráfico de Ganancias
+                plt.figure(figsize=(8, 6))
+                plt.plot(self.historial_ganancias, color='green')
+                plt.title("Reporte de Ganancias Totales - AutoMetrics 2.0")
+                plt.grid(True)
+                pdf.savefig()
+                plt.close() # Vital para la memoria
+
+                # Gráfico de Gastos
+                plt.figure(figsize=(8, 6))
+                plt.plot(self.historial_gastos, color='red')
+                plt.title("Reporte de Gastos Operativos")
+                plt.grid(True)
+                pdf.savefig()
+                plt.close() # Libera la figura
+            
+            print(f"✅ PDF generado exitosamente en: {ruta_pdf}")
+        except Exception as e:
+            print(f"❌ Error al guardar PDF: {e}")
+
+        # 3. Finalizar el evento
+        event.accept()
 
     
 
@@ -1412,32 +1441,8 @@ class riesgo(QMainWindow):
             canvas = FigureCanvas(fig)
             frame.layout().addWidget(canvas)
 
-    #pdf
-    def closeEvent(self, event):
-        ruta_pdf = r"C:\Users\yulls\Documents\youtube\AutoMetrics 2.0\PDF\Reporte_Final.pdf"
-        
-        # Asegurar que la carpeta existe
-        os.makedirs(os.path.dirname(ruta_pdf), exist_ok=True)
-
-        with PdfPages(ruta_pdf) as pdf:
-            # Gráfico de Ganancias
-            plt.figure(figsize=(8, 6))
-            plt.plot(self.historial_ganancias, color='green')
-            plt.title("Reporte de Ganancias Totales - AutoMetrics 2.0")
-            plt.grid(True)
-            pdf.savefig()
-            plt.close()
-
-            # Gráfico de Gastos
-            plt.figure(figsize=(8, 6))
-            plt.plot(self.historial_gastos, color='red')
-            plt.title("Reporte de Gastos Operativos")
-            plt.grid(True)
-            pdf.savefig()
-            plt.close()
-
-        print(f"Reporte PDF generado exitosamente en: {ruta_pdf}")
-        event.accept()
+    
+    
 
 
     #continuacion Empresa
@@ -1883,7 +1888,8 @@ class riesgo(QMainWindow):
                 frame.layout().itemAt(i).widget().setParent(None)
 
             # 3. Creación del gráfico de barras horizontales (Estilo Dashboard)
-            fig, ax = plt.subplots(figsize=(5, 3), dpi=80)
+            # Cambia el figsize a uno más pequeño si el error persiste
+            fig, ax = plt.subplots(figsize=(4, 2.5), dpi=80)
             fig.patch.set_facecolor('#1a1b26')
             ax.set_facecolor('#1a1b26')
 

@@ -6,21 +6,2044 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1947</width>
+    <width>1968</width>
     <height>1238</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <property name="styleSheet">
+   <string notr="true">/* Estilo general de la barra de menú */
+QMenuBar {
+    background-color: #1a1b26; /* Fondo oscuro a juego con los frames */
+    color: #a9b1d6;            /* Texto gris azulado suave */
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 13px;
+    padding: 4px;
+    border-bottom: 1px solid #414868; /* Línea sutil de separación */
+}
+
+/* Estilo de los items principales (Archivo, Herramientas, etc.) */
+QMenuBar::item {
+    background-color: transparent;
+    padding: 6px 12px;
+    margin: 2px;
+    border-radius: 4px;
+}
+
+/* Efecto cuando pasas el mouse por encima o seleccionas */
+QMenuBar::item:selected {
+    background-color: #24283b;
+    color: #7aa2f7; /* Azul brillante */
+}
+
+QMenuBar::item:pressed {
+    background-color: #414868;
+    color: #ffffff;
+}
+
+/* Estilo de los menús desplegables */
+QMenu {
+    background-color: #1a1b26;
+    color: #a9b1d6;
+    border: 1px solid #414868;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+/* Items dentro del menú desplegable */
+QMenu::item {
+    padding: 8px 25px 8px 20px;
+    border-radius: 3px;
+    margin: 1px;
+}
+
+/* Hover en los items del menú desplegable */
+QMenu::item:selected {
+    background-color: #7aa2f7; /* Fondo azul brillante */
+    color: #1a1b26;            /* Texto oscuro para contraste */
+}
+
+/* Separadores dentro del menú */
+QMenu::separator {
+    height: 1px;
+    background-color: #414868;
+    margin: 5px 10px;
+}
+
+/* Estilo para los atajos de teclado (Shortcuts) dentro del menú */
+QMenu::item:disabled {
+    color: #565f89;
+}</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1961</width>
+      <height>1181</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QStackedWidget" name="stackedWidget">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="page">
+        <widget class="QWidget" name="gridLayoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>9</y>
+           <width>1941</width>
+           <height>1161</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="1">
+           <widget class="QFrame" name="frame_2">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QFrame" name="frame_aprobado">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QFrame" name="frame_3">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QFrame" name="frame_4">
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_2">
+        <widget class="QWidget" name="gridLayoutWidget_2">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>9</y>
+           <width>1941</width>
+           <height>1161</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="1">
+           <widget class="QFrame" name="frame_6">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(26, 27, 38);</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="horizontalLayoutWidget_3">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>70</y>
+               <width>951</width>
+               <height>381</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_3">
+              <property name="spacing">
+               <number>100</number>
+              </property>
+              <item>
+               <widget class="QSlider" name="verticalSlider_2">
+                <property name="styleSheet">
+                 <string notr="true">/* Contenedor del Slider Vertical */
+QSlider::groove:vertical {
+    border: 1px solid #414868;
+    width: 6px;
+    background: #1a1b26;
+    margin: 0 2px;
+    border-radius: 3px;
+}
+
+/* Parte recorrida (Abajo hacia el Handle) */
+QSlider::sub-page:vertical {
+    background: qlineargradient(x1:0, y1:1, x2:0, y2:0, 
+                                stop:0 #7aa2f7, stop:1 #bb9af7);
+    border: 1px solid #414868;
+    width: 6px;
+    border-radius: 3px;
+}
+
+/* Parte por recorrer (Arriba del Handle) */
+QSlider::add-page:vertical {
+    background: #24283b;
+    border: 1px solid #414868;
+    width: 6px;
+    border-radius: 3px;
+}
+
+/* El botón circular (Handle) */
+QSlider::handle:vertical {
+    background: #c0caf5;
+    border: 2px solid #7aa2f7;
+    height: 16px;
+    width: 16px;
+    margin: 0 -6px; /* Centrado horizontal */
+    border-radius: 8px;
+}
+
+QSlider::handle:vertical:hover {
+    background: #ffffff;
+    border: 2px solid #bb9af7;
+}</string>
+                </property>
+                <property name="value">
+                 <number>0</number>
+                </property>
+                <property name="sliderPosition">
+                 <number>0</number>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Orientation::Vertical</enum>
+                </property>
+                <property name="invertedAppearance">
+                 <bool>false</bool>
+                </property>
+                <property name="invertedControls">
+                 <bool>false</bool>
+                </property>
+                <property name="tickInterval">
+                 <number>0</number>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSlider" name="verticalSlider">
+                <property name="styleSheet">
+                 <string notr="true">/* Contenedor del Slider Vertical */
+QSlider::groove:vertical {
+    border: 1px solid #414868;
+    width: 6px;
+    background: #1a1b26;
+    margin: 0 2px;
+    border-radius: 3px;
+}
+
+/* Parte recorrida (Abajo hacia el Handle) */
+QSlider::sub-page:vertical {
+    background: qlineargradient(x1:0, y1:1, x2:0, y2:0, 
+                                stop:0 #7aa2f7, stop:1 #bb9af7);
+    border: 1px solid #414868;
+    width: 6px;
+    border-radius: 3px;
+}
+
+/* Parte por recorrer (Arriba del Handle) */
+QSlider::add-page:vertical {
+    background: #24283b;
+    border: 1px solid #414868;
+    width: 6px;
+    border-radius: 3px;
+}
+
+/* El botón circular (Handle) */
+QSlider::handle:vertical {
+    background: #c0caf5;
+    border: 2px solid #7aa2f7;
+    height: 16px;
+    width: 16px;
+    margin: 0 -6px; /* Centrado horizontal */
+    border-radius: 8px;
+}
+
+QSlider::handle:vertical:hover {
+    background: #ffffff;
+    border: 2px solid #bb9af7;
+}</string>
+                </property>
+                <property name="orientation">
+                 <enum>Qt::Orientation::Vertical</enum>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="horizontalLayoutWidget_6">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>459</y>
+               <width>951</width>
+               <height>111</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_6">
+              <property name="spacing">
+               <number>11</number>
+              </property>
+              <item>
+               <widget class="QLCDNumber" name="lcd_rojo">
+                <property name="styleSheet">
+                 <string notr="true">/* Estilo Base para ambos (Fondo y Bordes) */
+color: rgb(255, 30, 82);
+QLCDNumber {
+    background-color: #16161e; /* Un tono más oscuro que el fondo general */
+    border: 2px solid #414868;
+    border-radius: 6px;
+    padding: 5px;
+}
+
+/* Estado VERDE (Ganancia / ROI Positivo) */
+QLCDNumber#lcd_verde {
+    color: #9ece6a; /* Verde neón */
+    border-color: #9ece6a;
+}
+
+/* Estado ROJO (Depreciación / Gasto) */
+QLCDNumber#lcd_rojo {
+    color: #f7768e; /* Rojo/Rosa neón */
+    border-color: #f7768e;
+}</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLCDNumber" name="lcd_verde">
+                <property name="styleSheet">
+                 <string notr="true">/* Estilo Base para ambos (Fondo y Bordes) */
+color: rgb(85, 255, 127);
+QLCDNumber {
+    background-color: #16161e; /* Un tono más oscuro que el fondo general */
+    border: 2px solid #414868;
+    border-radius: 6px;
+    padding: 5px;
+}
+
+/* Estado VERDE (Ganancia / ROI Positivo) */
+QLCDNumber#lcd_verde {
+    color: #9ece6a; /* Verde neón */
+    border-color: #9ece6a;
+}
+
+/* Estado ROJO (Depreciación / Gasto) */
+QLCDNumber#lcd_rojo {
+    color: #f7768e; /* Rojo/Rosa neón */
+    border-color: #f7768e;
+}</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="horizontalLayoutWidget_7">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>9</y>
+               <width>951</width>
+               <height>61</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_7">
+              <item>
+               <widget class="QLabel" name="label">
+                <property name="styleSheet">
+                 <string notr="true">/* Label para montos de dinero (Resultados) */
+QLabel {
+    color: #9ece6a; /* Verde neón (Ganancia) */
+    font-family: &quot;Segoe UI Semibold&quot;;
+    font-size: 18px;
+    font-weight: bold;
+    background: transparent;
+}
+
+QLabel#resultado_negativo {
+    color: #f7768e; /* Rojo/Rosa neón (Depreciación/Gasto) */
+    font-family: &quot;Segoe UI Semibold&quot;;
+    font-size: 18px;
+    font-weight: bold;
+    background: transparent;
+}
+
+/* Label para el valor que cambia con el Slider */
+QLabel#valor_dinamico {
+    color: #7aa2f7; /* Azul neón */
+    font-family: &quot;Consolas&quot;, monospace; /* Estilo código/financiero */
+    font-size: 14px;
+    background: #24283b;
+    border: 1px solid #414868;
+    border-radius: 4px;
+    padding: 2px 8px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>perdida de dinero por Carro en stock</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_2">
+                <property name="styleSheet">
+                 <string notr="true">/* Label para montos de dinero (Resultados) */
+QLabel {
+    color: #9ece6a; /* Verde neón (Ganancia) */
+    font-family: &quot;Segoe UI Semibold&quot;;
+    font-size: 18px;
+    font-weight: bold;
+    background: transparent;
+}
+
+QLabel#resultado_negativo {
+    color: #f7768e; /* Rojo/Rosa neón (Depreciación/Gasto) */
+    font-family: &quot;Segoe UI Semibold&quot;;
+    font-size: 18px;
+    font-weight: bold;
+    background: transparent;
+}
+
+/* Label para el valor que cambia con el Slider */
+QLabel#valor_dinamico {
+    color: #7aa2f7; /* Azul neón */
+    font-family: &quot;Consolas&quot;, monospace; /* Estilo código/financiero */
+    font-size: 14px;
+    background: #24283b;
+    border: 1px solid #414868;
+    border-radius: 4px;
+    padding: 2px 8px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>Ganancia de uso del dinero en otra inversión</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignmentFlag::AlignCenter</set>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QFrame" name="frame_8">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(10, 0, 62);
+background-color: rgb(26, 27, 38);</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="horizontalLayoutWidget_5">
+             <property name="geometry">
+              <rect>
+               <x>10</x>
+               <y>10</y>
+               <width>951</width>
+               <height>551</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_5">
+              <item>
+               <widget class="QTextEdit" name="textEdit_mercado"/>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QFrame" name="frame_5">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(10, 0, 62);
+background-color: rgb(26, 27, 38);</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="horizontalLayoutWidget_2">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>9</y>
+               <width>951</width>
+               <height>551</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_2">
+              <item>
+               <widget class="QTableWidget" name="tableWidget_carros">
+                <property name="styleSheet">
+                 <string notr="true">QTableWidget {
+    background-color: #1a1b26;
+    alternate-background-color: #24283b; /* Efecto Zebra */
+    color: #a9b1d6;
+    gridline-color: #414868;
+    border: 1px solid #414868;
+    border-radius: 5px;
+    font-size: 12px;
+    selection-background-color: #7aa2f7;
+    selection-color: #1a1b26;
+}
+
+/* Encabezados (Columnas) */
+QHeaderView::section {
+    background-color: #16161e;
+    color: #7aa2f7; /* Azul neón para los títulos */
+    padding: 6px;
+    border: none;
+    border-bottom: 2px solid #7aa2f7;
+    font-weight: bold;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+}
+
+/* Estilo de las celdas al pasar el mouse */
+QTableWidget::item:hover {
+    background-color: #2f334d;
+    color: #ffffff;
+}
+
+/* Scrollbars para el TableWidget */
+QScrollBar:vertical {
+    border: none;
+    background: #1a1b26;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #414868;
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #7aa2f7;
+}</string>
+                </property>
+                <attribute name="horizontalHeaderDefaultSectionSize">
+                 <number>150</number>
+                </attribute>
+                <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+                 <bool>false</bool>
+                </attribute>
+                <attribute name="horizontalHeaderStretchLastSection">
+                 <bool>true</bool>
+                </attribute>
+                <column>
+                 <property name="text">
+                  <string>Marca</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Modelo</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Año</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Kilometraje</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Valor Pagado</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Fecha</string>
+                 </property>
+                </column>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QFrame" name="frame_7">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(10, 0, 62);
+background-color: rgb(26, 27, 38);</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="horizontalLayoutWidget_4">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>20</y>
+               <width>961</width>
+               <height>61</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_4">
+              <item>
+               <widget class="QComboBox" name="comboBox_carro">
+                <property name="styleSheet">
+                 <string notr="true">/* El botón del ComboBox cuando está cerrado */
+QComboBox {
+    background-color: #1a1b26;
+    border: 1px solid #414868;
+    border-radius: 4px;
+    padding: 5px 15px;
+    color: #a9b1d6;
+    font-size: 13px;
+    min-width: 150px;
+}
+
+QComboBox:hover {
+    border: 1px solid #7aa2f7; /* Brillo azul al pasar el mouse */
+}
+
+/* El botón de la flechita */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left: 1px solid #414868;
+}
+
+/* El ícono de la flechita (puedes usar un caracter o imagen) */
+QComboBox::down-arrow {
+    image: none; /* Si quieres usar una imagen propia ponla aquí */
+    border-top: 5px solid #7aa2f7; /* Flecha creada con bordes */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-top: 2px;
+}
+
+/* La lista que aparece al hacer clic */
+QComboBox QAbstractItemView {
+    background-color: #1a1b26;
+    color: #a9b1d6;
+    selection-background-color: #7aa2f7;
+    selection-color: #1a1b26;
+    border: 1px solid #414868;
+    outline: none; /* Quita el recuadro de puntos al seleccionar */
+}
+
+/* Estilo de los items dentro de la lista */
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+    padding-left: 10px;
+}</string>
+                </property>
+                <property name="placeholderText">
+                 <string>Escoja el carro que desea evaluar</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="formLayoutWidget">
+             <property name="geometry">
+              <rect>
+               <x>-1</x>
+               <y>89</y>
+               <width>961</width>
+               <height>371</height>
+              </rect>
+             </property>
+             <layout class="QFormLayout" name="formLayout">
+              <property name="verticalSpacing">
+               <number>50</number>
+              </property>
+              <property name="topMargin">
+               <number>20</number>
+              </property>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_3">
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(255, 255, 255);
+/* Estilo base para todos los Labels */
+QLabel {
+    color: #a9b1d6;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    background: transparent;
+}
+
+/* Label para Títulos de sección */
+QLabel#titulo_seccion {
+    color: #bb9af7; /* Morado neón */
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Label para mostrar el valor actual de los Sliders */
+QLabel#valor_slider {
+    color: #7aa2f7; /* Azul brillante */
+    font-family: &quot;Consolas&quot;, monospace;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #24283b;
+    border-radius: 4px;
+    padding: 2px 10px;
+    border: 1px solid #414868;
+}
+
+/* Label para advertencias o estados (ej: &quot;VENDER&quot;) */
+QLabel#status_alerta {
+    color: #f7768e; /* Rojo neón */
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid #f7768e;
+    border-radius: 5px;
+    padding: 10px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>Tiempo de la inversión</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QComboBox" name="comboBox_tiempo">
+                <property name="styleSheet">
+                 <string notr="true">QComboBox {
+    background-color: #1a1b26;
+    border: 1px solid #414868;
+    border-radius: 4px;
+    padding: 5px 15px;
+    color: #a9b1d6;
+    font-size: 13px;
+}
+
+QComboBox:hover {
+    border: 1px solid #7aa2f7; /* Brillo azul al pasar el mouse */
+}
+
+/* El botón de la flecha */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left: 1px solid #414868;
+}
+
+/* La flecha (dibujada con bordes) */
+QComboBox::down-arrow {
+    border-top: 5px solid #7aa2f7;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-top: 2px;
+}
+
+/* La lista desplegable */
+QComboBox QAbstractItemView {
+    background-color: #1a1b26;
+    color: #a9b1d6;
+    selection-background-color: #7aa2f7; /* Color de selección azul */
+    selection-color: #1a1b26;            /* Texto oscuro al seleccionar */
+    border: 1px solid #7aa2f7;
+    outline: none;
+}</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>3 meses</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>6 meses</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>1 año</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>2 años</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>3 años</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="label_4">
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(255, 255, 255);
+/* Estilo base para todos los Labels */
+QLabel {
+    color: #a9b1d6;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    background: transparent;
+}
+
+/* Label para Títulos de sección */
+QLabel#titulo_seccion {
+    color: #bb9af7; /* Morado neón */
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Label para mostrar el valor actual de los Sliders */
+QLabel#valor_slider {
+    color: #7aa2f7; /* Azul brillante */
+    font-family: &quot;Consolas&quot;, monospace;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #24283b;
+    border-radius: 4px;
+    padding: 2px 10px;
+    border: 1px solid #414868;
+}
+
+/* Label para advertencias o estados (ej: &quot;VENDER&quot;) */
+QLabel#status_alerta {
+    color: #f7768e; /* Rojo neón */
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid #f7768e;
+    border-radius: 5px;
+    padding: 10px;
+}</string>
+                </property>
+                <property name="text">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_5">
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(255, 255, 255);
+/* Estilo base para todos los Labels */
+QLabel {
+    color: #a9b1d6;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    background: transparent;
+}
+
+/* Label para Títulos de sección */
+QLabel#titulo_seccion {
+    color: #bb9af7; /* Morado neón */
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Label para mostrar el valor actual de los Sliders */
+QLabel#valor_slider {
+    color: #7aa2f7; /* Azul brillante */
+    font-family: &quot;Consolas&quot;, monospace;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #24283b;
+    border-radius: 4px;
+    padding: 2px 10px;
+    border: 1px solid #414868;
+}
+
+/* Label para advertencias o estados (ej: &quot;VENDER&quot;) */
+QLabel#status_alerta {
+    color: #f7768e; /* Rojo neón */
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid #f7768e;
+    border-radius: 5px;
+    padding: 10px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>Tasa de Depreciación Anual</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QComboBox" name="comboBox_tasa">
+                <property name="styleSheet">
+                 <string notr="true">QComboBox {
+    background-color: #1a1b26;
+    border: 1px solid #414868;
+    border-radius: 4px;
+    padding: 5px 15px;
+    color: #a9b1d6;
+    font-size: 13px;
+}
+
+QComboBox:hover {
+    border: 1px solid #7aa2f7; /* Brillo azul al pasar el mouse */
+}
+
+/* El botón de la flecha */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left: 1px solid #414868;
+}
+
+/* La flecha (dibujada con bordes) */
+QComboBox::down-arrow {
+    border-top: 5px solid #7aa2f7;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-top: 2px;
+}
+
+/* La lista desplegable */
+QComboBox QAbstractItemView {
+    background-color: #1a1b26;
+    color: #a9b1d6;
+    selection-background-color: #7aa2f7; /* Color de selección azul */
+    selection-color: #1a1b26;            /* Texto oscuro al seleccionar */
+    border: 1px solid #7aa2f7;
+    outline: none;
+}</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>5% (Clásicos/Lujo)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>10% (Estándar)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>15% (Comercial)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>20% (Alta depreciación)</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="label_6">
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(255, 255, 255);
+/* Estilo base para todos los Labels */
+QLabel {
+    color: #a9b1d6;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    background: transparent;
+}
+
+/* Label para Títulos de sección */
+QLabel#titulo_seccion {
+    color: #bb9af7; /* Morado neón */
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Label para mostrar el valor actual de los Sliders */
+QLabel#valor_slider {
+    color: #7aa2f7; /* Azul brillante */
+    font-family: &quot;Consolas&quot;, monospace;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #24283b;
+    border-radius: 4px;
+    padding: 2px 10px;
+    border: 1px solid #414868;
+}
+
+/* Label para advertencias o estados (ej: &quot;VENDER&quot;) */
+QLabel#status_alerta {
+    color: #f7768e; /* Rojo neón */
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid #f7768e;
+    border-radius: 5px;
+    padding: 10px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>Tasa de Inflación Proyectada</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QComboBox" name="comboBox_inflacion">
+                <property name="styleSheet">
+                 <string notr="true">QComboBox {
+    background-color: #1a1b26;
+    border: 1px solid #414868;
+    border-radius: 4px;
+    padding: 5px 15px;
+    color: #a9b1d6;
+    font-size: 13px;
+}
+
+QComboBox:hover {
+    border: 1px solid #7aa2f7; /* Brillo azul al pasar el mouse */
+}
+
+/* El botón de la flecha */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left: 1px solid #414868;
+}
+
+/* La flecha (dibujada con bordes) */
+QComboBox::down-arrow {
+    border-top: 5px solid #7aa2f7;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-top: 2px;
+}
+
+/* La lista desplegable */
+QComboBox QAbstractItemView {
+    background-color: #1a1b26;
+    color: #a9b1d6;
+    selection-background-color: #7aa2f7; /* Color de selección azul */
+    selection-color: #1a1b26;            /* Texto oscuro al seleccionar */
+    border: 1px solid #7aa2f7;
+    outline: none;
+}</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>2% (Estable)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>4% (Moderada)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>8% (Alta)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>12% (Crítica)</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="label_7">
+                <property name="styleSheet">
+                 <string notr="true">color: rgb(255, 255, 255);
+/* Estilo base para todos los Labels */
+QLabel {
+    color: #a9b1d6;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    background: transparent;
+}
+
+/* Label para Títulos de sección */
+QLabel#titulo_seccion {
+    color: #bb9af7; /* Morado neón */
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Label para mostrar el valor actual de los Sliders */
+QLabel#valor_slider {
+    color: #7aa2f7; /* Azul brillante */
+    font-family: &quot;Consolas&quot;, monospace;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #24283b;
+    border-radius: 4px;
+    padding: 2px 10px;
+    border: 1px solid #414868;
+}
+
+/* Label para advertencias o estados (ej: &quot;VENDER&quot;) */
+QLabel#status_alerta {
+    color: #f7768e; /* Rojo neón */
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid #f7768e;
+    border-radius: 5px;
+    padding: 10px;
+}</string>
+                </property>
+                <property name="text">
+                 <string>Costo de Almacenamiento/Seguro Mensual</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QComboBox" name="comboBox_costo">
+                <property name="styleSheet">
+                 <string notr="true">QComboBox {
+    background-color: #1a1b26;
+    border: 1px solid #414868;
+    border-radius: 4px;
+    padding: 5px 15px;
+    color: #a9b1d6;
+    font-size: 13px;
+}
+
+QComboBox:hover {
+    border: 1px solid #7aa2f7; /* Brillo azul al pasar el mouse */
+}
+
+/* El botón de la flecha */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left: 1px solid #414868;
+}
+
+/* La flecha (dibujada con bordes) */
+QComboBox::down-arrow {
+    border-top: 5px solid #7aa2f7;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-top: 2px;
+}
+
+/* La lista desplegable */
+QComboBox QAbstractItemView {
+    background-color: #1a1b26;
+    color: #a9b1d6;
+    selection-background-color: #7aa2f7; /* Color de selección azul */
+    selection-color: #1a1b26;            /* Texto oscuro al seleccionar */
+    border: 1px solid #7aa2f7;
+    outline: none;
+}</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>$50</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>$100</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>$200</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>$500</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="horizontalLayoutWidget_8">
+             <property name="geometry">
+              <rect>
+               <x>230</x>
+               <y>480</y>
+               <width>501</width>
+               <height>80</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_9">
+              <item>
+               <widget class="QPushButton" name="pushButton_evaluar">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">/* Estilo general del botón */
+QPushButton {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, 
+                                stop:0 #24283b, stop:1 #1a1b26);
+    color: #7aa2f7; /* Azul neón */
+    border: 1px solid #414868;
+    border-radius: 5px;
+    padding: 8px 15px;
+    font-size: 13px;
+    font-weight: bold;
+    min-width: 100px;
+}
+
+/* Cuando pasas el mouse (Hover) */
+QPushButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, 
+                                stop:0 #2f334d, stop:1 #24283b);
+    border: 1px solid #7aa2f7;
+    color: #ffffff; /* El texto brilla en blanco */
+}
+
+/* Cuando haces clic (Pressed) */
+QPushButton:pressed {
+    background-color: #7aa2f7;
+    color: #1a1b26; /* Inversión de colores para feedback táctil */
+    border: 1px solid #bb9af7;
+    padding-top: 10px; /* Efecto de hundimiento */
+    padding-left: 17px;
+}
+
+/* Botón especial para &quot;Calcular&quot; o &quot;Vender&quot; (Acento Verde) */
+QPushButton#btn_principal {
+    color: #9ece6a;
+    border: 1px solid #9ece6a;
+}
+
+QPushButton#btn_principal:hover {
+    background-color: #9ece6a;
+    color: #1a1b26;
+}
+
+/* Botón de Peligro o Reset (Acento Rojo) */
+QPushButton#btn_peligro {
+    color: #f7768e;
+    border: 1px solid #f7768e;
+}
+
+QPushButton#btn_peligro:hover {
+    background-color: #f7768e;
+    color: #1a1b26;
+}</string>
+                </property>
+                <property name="text">
+                 <string>Evaluar</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_3">
+        <widget class="QWidget" name="horizontalLayoutWidget_9">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>9</y>
+           <width>1941</width>
+           <height>1161</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <item>
+           <widget class="QTableWidget" name="tableWidget_ranking">
+            <property name="styleSheet">
+             <string notr="true">/* Contenedor principal de la tabla */
+QTableWidget {
+    background-color: #1a1b26;
+    alternate-background-color: #24283b; /* Efecto cebra para lectura rápida */
+    color: #a9b1d6;
+    gridline-color: #414868;
+    border: 1px solid #414868;
+    border-radius: 8px;
+    font-family: &quot;Segoe UI&quot;, sans-serif;
+    font-size: 13px;
+    outline: none;
+}
+
+/* Encabezados de las columnas */
+QHeaderView::section {
+    background-color: #16161e;
+    color: #7aa2f7; /* Azul neón para los títulos */
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid #7aa2f7;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Estilo de las celdas individuales */
+QTableWidget::item {
+    padding: 5px;
+    border: none;
+}
+
+/* Color cuando seleccionas una fila */
+QTableWidget::item:selected {
+    background-color: #2f334d;
+    color: #9ece6a; /* Verde neón al seleccionar (Éxito/Rentabilidad) */
+}
+
+/* Efecto al pasar el mouse sobre las filas */
+QTableWidget::item:hover {
+    background-color: #292e42;
+}
+
+/* Estilo de la barra de desplazamiento (Scrollbar) para que no rompa la estética */
+QScrollBar:vertical {
+    border: none;
+    background: #1a1b26;
+    width: 8px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #414868;
+    min-height: 20px;
+    border-radius: 4px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #7aa2f7;
+}</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_4">
+        <widget class="QWidget" name="gridLayoutWidget_3">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>9</y>
+           <width>1941</width>
+           <height>1151</height>
+          </rect>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QFrame" name="frame_9">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(38, 38, 38);</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="horizontalLayoutWidget_10">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>19</y>
+               <width>951</width>
+               <height>531</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_10">
+              <item>
+               <widget class="QTreeWidget" name="treeWidget_eleccion">
+                <property name="styleSheet">
+                 <string notr="true">QTreeWidget {
+        background-color: #1a1b26;
+        color: #a9b1d6;
+        border: 1px solid #414868;
+        border-radius: 8px;
+        font-size: 13px;
+        outline: none;
+    }
+    QTreeWidget::item {
+        padding: 8px;
+        border-bottom: 1px solid #24283b;
+    }
+    QTreeWidget::item:selected {
+        background-color: #24283b;
+        color: #7aa2f7;
+    }
+    QHeaderView::section {
+        background-color: #16161e;
+        color: #7aa2f7;
+        padding: 6px;
+        border: none;
+        font-weight: bold;
+        border-bottom: 2px solid #7aa2f7;
+    }
+    QTreeWidget::branch:has-children:!has-siblings:closed,
+    QTreeWidget::branch:closed:has-children:has-siblings {
+        image: url(expand_icon.png); /* Opcional: si tienes iconos */
+    }</string>
+                </property>
+                <column>
+                 <property name="text">
+                  <string notr="true">1</string>
+                 </property>
+                </column>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QFrame" name="frame_10">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(38, 38, 38);</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="horizontalLayoutWidget_11">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>19</y>
+               <width>951</width>
+               <height>531</height>
+              </rect>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_11">
+              <item>
+               <widget class="QTextEdit" name="textEdit_texto">
+                <property name="styleSheet">
+                 <string notr="true">QTextEdit {
+        background-color: #1a1b26;
+        color: #a9b1d6;
+        border: 2px solid #414868;
+        border-radius: 12px;
+        padding: 10px;
+        font-family: 'Segoe UI', Arial;
+        font-size: 14px;
+        selection-background-color: #33467c;
+    }
+    
+    /* Personalización de la barra de desplazamiento (Scrollbar) */
+    QScrollBar:vertical {
+        border: none;
+        background: #16161e;
+        width: 10px;
+        margin: 0px;
+        border-radius: 5px;
+    }
+    QScrollBar::handle:vertical {
+        background: #414868;
+        min-height: 20px;
+        border-radius: 5px;
+    }
+    QScrollBar::handle:vertical:hover {
+        background: #7aa2f7;
+    }
+    QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+        height: 0px;
+    }</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QFrame" name="frame_11">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(38, 38, 38);</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+            <widget class="QWidget" name="verticalLayoutWidget">
+             <property name="geometry">
+              <rect>
+               <x>9</x>
+               <y>29</y>
+               <width>941</width>
+               <height>521</height>
+              </rect>
+             </property>
+             <layout class="QVBoxLayout" name="verticalLayout">
+              <item>
+               <widget class="QComboBox" name="cb_autos">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">/* El botón del ComboBox cuando está cerrado */
+QComboBox {
+    background-color: #1a1b26;
+    border: 1px solid #414868;
+    border-radius: 4px;
+    padding: 5px 10px;
+    color: #a9b1d6;
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 13px;
+    min-width: 120px;
+}
+
+QComboBox:hover {
+    border: 1px solid #7aa2f7; /* Brillo azul al pasar el mouse */
+}
+
+/* El botón de la flecha a la derecha */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 25px;
+    border-left: 1px solid #414868;
+}
+
+/* Ícono de la flecha */
+QComboBox::down-arrow {
+    image: none; 
+    border-top: 5px solid #7aa2f7; /* Triángulo azul */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-top: 2px;
+}
+
+/* La lista que aparece al hacer clic (El menú desplegable) */
+QComboBox QAbstractItemView {
+    background-color: #1a1b26;
+    color: #a9b1d6;
+    selection-background-color: #2f334d; /* Fondo de selección */
+    selection-color: #9ece6a;            /* Texto verde al seleccionar */
+    border: 1px solid #7aa2f7;
+    outline: none;
+    padding: 5px;
+}
+
+/* Estilo de los elementos individuales en la lista */
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+    padding-left: 10px;
+}
+
+QComboBox QAbstractItemView::item:hover {
+    background-color: #24283b;
+    color: #ffffff;
+}</string>
+                </property>
+                <property name="placeholderText">
+                 <string>escoja su auto</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="cb_tiempo">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">/* El botón del ComboBox cuando está cerrado */
+QComboBox {
+    background-color: #1a1b26;
+    border: 1px solid #414868;
+    border-radius: 4px;
+    padding: 5px 10px;
+    color: #a9b1d6;
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 13px;
+    min-width: 120px;
+}
+
+QComboBox:hover {
+    border: 1px solid #7aa2f7; /* Brillo azul al pasar el mouse */
+}
+
+/* El botón de la flecha a la derecha */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 25px;
+    border-left: 1px solid #414868;
+}
+
+/* Ícono de la flecha */
+QComboBox::down-arrow {
+    image: none; 
+    border-top: 5px solid #7aa2f7; /* Triángulo azul */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-top: 2px;
+}
+
+/* La lista que aparece al hacer clic (El menú desplegable) */
+QComboBox QAbstractItemView {
+    background-color: #1a1b26;
+    color: #a9b1d6;
+    selection-background-color: #2f334d; /* Fondo de selección */
+    selection-color: #9ece6a;            /* Texto verde al seleccionar */
+    border: 1px solid #7aa2f7;
+    outline: none;
+    padding: 5px;
+}
+
+/* Estilo de los elementos individuales en la lista */
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+    padding-left: 10px;
+}
+
+QComboBox QAbstractItemView::item:hover {
+    background-color: #24283b;
+    color: #ffffff;
+}</string>
+                </property>
+                <property name="placeholderText">
+                 <string>Tiempo de Retención</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>1 mes</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>3 meses</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>6 meses</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>12 meses</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="cb_mercado">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">/* El botón del ComboBox cuando está cerrado */
+QComboBox {
+    background-color: #1a1b26;
+    border: 1px solid #414868;
+    border-radius: 4px;
+    padding: 5px 10px;
+    color: #a9b1d6;
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 13px;
+    min-width: 120px;
+}
+
+QComboBox:hover {
+    border: 1px solid #7aa2f7; /* Brillo azul al pasar el mouse */
+}
+
+/* El botón de la flecha a la derecha */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 25px;
+    border-left: 1px solid #414868;
+}
+
+/* Ícono de la flecha */
+QComboBox::down-arrow {
+    image: none; 
+    border-top: 5px solid #7aa2f7; /* Triángulo azul */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-top: 2px;
+}
+
+/* La lista que aparece al hacer clic (El menú desplegable) */
+QComboBox QAbstractItemView {
+    background-color: #1a1b26;
+    color: #a9b1d6;
+    selection-background-color: #2f334d; /* Fondo de selección */
+    selection-color: #9ece6a;            /* Texto verde al seleccionar */
+    border: 1px solid #7aa2f7;
+    outline: none;
+    padding: 5px;
+}
+
+/* Estilo de los elementos individuales en la lista */
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+    padding-left: 10px;
+}
+
+QComboBox QAbstractItemView::item:hover {
+    background-color: #24283b;
+    color: #ffffff;
+}</string>
+                </property>
+                <property name="placeholderText">
+                 <string>Estado del Mercado</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>Alta Demanda (+5%)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Normal</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Baja Demanda (-10%)</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="cb_mantenimiento">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">/* El botón del ComboBox cuando está cerrado */
+QComboBox {
+    background-color: #1a1b26;
+    border: 1px solid #414868;
+    border-radius: 4px;
+    padding: 5px 10px;
+    color: #a9b1d6;
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 13px;
+    min-width: 120px;
+}
+
+QComboBox:hover {
+    border: 1px solid #7aa2f7; /* Brillo azul al pasar el mouse */
+}
+
+/* El botón de la flecha a la derecha */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 25px;
+    border-left: 1px solid #414868;
+}
+
+/* Ícono de la flecha */
+QComboBox::down-arrow {
+    image: none; 
+    border-top: 5px solid #7aa2f7; /* Triángulo azul */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-top: 2px;
+}
+
+/* La lista que aparece al hacer clic (El menú desplegable) */
+QComboBox QAbstractItemView {
+    background-color: #1a1b26;
+    color: #a9b1d6;
+    selection-background-color: #2f334d; /* Fondo de selección */
+    selection-color: #9ece6a;            /* Texto verde al seleccionar */
+    border: 1px solid #7aa2f7;
+    outline: none;
+    padding: 5px;
+}
+
+/* Estilo de los elementos individuales en la lista */
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+    padding-left: 10px;
+}
+
+QComboBox QAbstractItemView::item:hover {
+    background-color: #24283b;
+    color: #ffffff;
+}</string>
+                </property>
+                <property name="placeholderText">
+                 <string>Inversión en Alistamiento</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>$0 (As-is)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>$500 (Básico)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>$1,500 (Premium)</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="cb_canal">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="styleSheet">
+                 <string notr="true">/* El botón del ComboBox cuando está cerrado */
+QComboBox {
+    background-color: #1a1b26;
+    border: 1px solid #414868;
+    border-radius: 4px;
+    padding: 5px 10px;
+    color: #a9b1d6;
+    font-family: &quot;Segoe UI&quot;;
+    font-size: 13px;
+    min-width: 120px;
+}
+
+QComboBox:hover {
+    border: 1px solid #7aa2f7; /* Brillo azul al pasar el mouse */
+}
+
+/* El botón de la flecha a la derecha */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 25px;
+    border-left: 1px solid #414868;
+}
+
+/* Ícono de la flecha */
+QComboBox::down-arrow {
+    image: none; 
+    border-top: 5px solid #7aa2f7; /* Triángulo azul */
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    margin-top: 2px;
+}
+
+/* La lista que aparece al hacer clic (El menú desplegable) */
+QComboBox QAbstractItemView {
+    background-color: #1a1b26;
+    color: #a9b1d6;
+    selection-background-color: #2f334d; /* Fondo de selección */
+    selection-color: #9ece6a;            /* Texto verde al seleccionar */
+    border: 1px solid #7aa2f7;
+    outline: none;
+    padding: 5px;
+}
+
+/* Estilo de los elementos individuales en la lista */
+QComboBox QAbstractItemView::item {
+    min-height: 30px;
+    padding-left: 10px;
+}
+
+QComboBox QAbstractItemView::item:hover {
+    background-color: #24283b;
+    color: #ffffff;
+}</string>
+                </property>
+                <property name="placeholderText">
+                 <string>Canal de Venta</string>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>Venta Directa (100%)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Concesionario (-5% comisión)</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Subasta (-15% urgencia)</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="push_observar">
+                <property name="styleSheet">
+                 <string notr="true">/* Estilo general del botón */
+QPushButton {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, 
+                                stop:0 #24283b, stop:1 #1a1b26);
+    color: #7aa2f7; /* Azul neón */
+    border: 1px solid #414868;
+    border-radius: 5px;
+    padding: 8px 15px;
+    font-size: 13px;
+    font-weight: bold;
+    min-width: 100px;
+}
+
+/* Cuando pasas el mouse (Hover) */
+QPushButton:hover {
+    background: qlineargradient(x1:0, y1:0, x2:0, y2:1, 
+                                stop:0 #2f334d, stop:1 #24283b);
+    border: 1px solid #7aa2f7;
+    color: #ffffff; /* El texto brilla en blanco */
+}
+
+/* Cuando haces clic (Pressed) */
+QPushButton:pressed {
+    background-color: #7aa2f7;
+    color: #1a1b26; /* Inversión de colores para feedback táctil */
+    border: 1px solid #bb9af7;
+    padding-top: 10px; /* Efecto de hundimiento */
+    padding-left: 17px;
+}
+
+/* Botón especial para &quot;Calcular&quot; o &quot;Vender&quot; (Acento Verde) */
+QPushButton#btn_principal {
+    color: #9ece6a;
+    border: 1px solid #9ece6a;
+}
+
+QPushButton#btn_principal:hover {
+    background-color: #9ece6a;
+    color: #1a1b26;
+}
+
+/* Botón de Peligro o Reset (Acento Rojo) */
+QPushButton#btn_peligro {
+    color: #f7768e;
+    border: 1px solid #f7768e;
+}
+
+QPushButton#btn_peligro:hover {
+    background-color: #f7768e;
+    color: #1a1b26;
+}</string>
+                </property>
+                <property name="text">
+                 <string>Evaluar</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QFrame" name="frame_12">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(38, 38, 38);
+background-color: rgb(26, 27, 38);</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_5">
+        <widget class="QWidget" name="horizontalLayoutWidget_12">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>9</y>
+           <width>1941</width>
+           <height>1151</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_12">
+          <item>
+           <widget class="QFrame" name="frame_13">
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(38, 38, 38);</string>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1947</width>
-     <height>33</height>
+     <width>1968</width>
+     <height>42</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDASHBOARD">
@@ -57,6 +2080,7 @@
     <property name="title">
      <string>VOLVER</string>
     </property>
+    <addaction name="actioninicio"/>
    </widget>
    <addaction name="menuDASHBOARD"/>
    <addaction name="menuCalculadora_de_Valor_Futuro_ROI"/>
@@ -89,6 +2113,11 @@
   <action name="action_BALANCE">
    <property name="text">
     <string>CRUD</string>
+   </property>
+  </action>
+  <action name="actioninicio">
+   <property name="text">
+    <string>inicio</string>
    </property>
   </action>
  </widget>
