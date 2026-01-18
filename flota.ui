@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1973</width>
+    <height>1240</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">/* Barra de menú principal */
+QMenuBar {
+    background-color: #1a1b26;        /* Fondo oscuro principal */
+    color: #a9b1d6;                   /* Texto gris azulado */
+    padding: 5px;
+    font-size: 13px;
+    border-bottom: 1px solid #414868; /* Línea separadora sutil */
+}
+
+/* Items individuales de la barra (Archivo, Edición, etc.) */
+QMenuBar::item {
+    background-color: transparent;
+    padding: 8px 15px;
+    border-radius: 4px;
+    margin: 2px;
+}
+
+QMenuBar::item:selected {
+    background-color: #24283b;        /* Un tono más claro al pasar el mouse */
+    color: #7aa2f7;                   /* Texto azul brillante */
+}
+
+/* El menú desplegable (lo que sale al hacer clic) */
+QMenu {
+    background-color: #16161e;        /* Fondo aún más oscuro para profundidad */
+    border: 1px solid #7aa2f7;        /* Borde neón azul */
+    color: #a9b1d6;
+    padding: 5px;
+}
+
+QMenu::item {
+    padding: 8px 25px 8px 20px;
+    border-radius: 2px;
+}
+
+QMenu::item:selected {
+    background-color: #7aa2f7;        /* Fondo azul neón al seleccionar */
+    color: #1a1b26;                   /* Texto oscuro para contraste */
+}
+
+/* Separadores dentro del menú */
+QMenu::separator {
+    height: 1px;
+    background: #414868;
+    margin: 5px 10px;
+}
+
+/* Iconos de flecha para submenús */
+QMenu::right-arrow {
+    image: url(path/to/right_arrow.png); /* Asegúrate de tener una flecha blanca o azul */
+    padding-right: 5px;
+}background-color: rgb(34, 34, 34);
+background-color: rgb(49, 49, 49);</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="horizontalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>9</x>
+      <y>-1</y>
+      <width>1951</width>
+      <height>1181</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QStackedWidget" name="stackedWidget">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="page">
+        <widget class="QWidget" name="verticalLayoutWidget">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>9</y>
+           <width>641</width>
+           <height>1151</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QTreeWidget" name="treeWidget_flota">
+            <property name="styleSheet">
+             <string notr="true">QTreeWidget {
+    background-color: #1a1b26;        /* Fondo oscuro profundo */
+    border: 1px solid #414868;        /* Borde sutil */
+    border-radius: 8px;
+    color: #a9b1d6;                   /* Texto gris azulado */
+    font-size: 13px;
+    outline: none;                    /* Quita el borde punteado al hacer clic */
+}
+
+QTreeWidget::item {
+    padding: 8px;                     /* Espacio entre elementos */
+    border-bottom: 1px solid #24283b; /* Línea divisoria suave */
+}
+
+QTreeWidget::item:selected {
+    background-color: rgba(122, 162, 247, 0.2); /* Fondo azul traslúcido */
+    color: #7aa2f7;                             /* Texto azul brillante */
+    border-left: 3px solid #7aa2f7;             /* Indicador lateral */
+}
+
+QTreeWidget::item:hover {
+    background-color: #24283b;
+}
+
+/* Estilo para las flechitas de expansión */
+QTreeWidget::branch:has-children:!has-siblings:closed,
+QTreeWidget::branch:closed:has-children:has-siblings {
+    image: url(path/to/arrow_right.png); /* Opcional: poner tu icono */
+}
+
+QTreeWidget::branch:open:has-children:!has-siblings,
+QTreeWidget::branch:open:has-children:has-siblings  {
+    image: url(path/to/arrow_down.png);
+}QTreeWidget#treeWidget_flota {
+    background-color: #1a1b26;
+    border: 1px solid #414868;
+    border-radius: 8px;
+    outline: none;
+}
+
+/* Espaciado de las filas */
+QTreeWidget#treeWidget_flota::item {
+    padding: 12px;                    /* Más espacio vertical y horizontal */
+    height: 40px;                     /* Altura fija para mayor orden */
+    border-bottom: 1px solid #24283b; /* Línea divisoria muy sutil */
+}
+
+/* Encabezados más claros */
+QHeaderView::section {
+    background-color: #24283b;
+    color: #7aa2f7;
+    padding: 10px;
+    font-weight: bold;
+    border: none;
+    border-bottom: 2px solid #7aa2f7;
+}
+
+/* Estilo para las carpetas (Categorías) */
+QTreeWidget#treeWidget_flota::item:has-children {
+    background-color: #24283b;
+    font-weight: bold;
+    color: #bb9af7;                   /* Púrpura para categorías */
+}
+
+/* Hover y Selección */
+QTreeWidget#treeWidget_flota::item:hover {
+    background-color: #2e3344;
+}
+
+QTreeWidget#treeWidget_flota::item:selected {
+    background-color: rgba(115, 218, 202, 0.2);
+    color: #73daca;
+    border-left: 4px solid #73daca;
+}</string>
+            </property>
+            <column>
+             <property name="text">
+              <string notr="true">1</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="tableWidget_empleados">
+            <property name="styleSheet">
+             <string notr="true">/* Estilo general de la tabla */
+QTableWidget {
+    background-color: #1a1b26;        /* Fondo oscuro Tokyo Night */
+    alternate-background-color: #1f2335; /* Color ligeramente distinto para filas pares */
+    gridline-color: #414868;          /* Color de las líneas de la cuadrícula */
+    border: 1px solid #414868;
+    border-radius: 10px;
+    color: #a9b1d6;
+    font-size: 13px;
+    selection-background-color: rgba(122, 162, 247, 0.3); /* Fondo de selección neón */
+    selection-color: #ffffff;
+}
+
+/* Estilo de los encabezados (Nombres de columnas) */
+QHeaderView::section {
+    background-color: #24283b;
+    color: #73daca;                   /* Verde neón para los títulos */
+    padding: 10px;
+    border: none;
+    border-bottom: 2px solid #7aa2f7; /* Línea azul neón bajo el encabezado */
+    font-weight: bold;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+/* Estilo de las celdas individuales */
+QTableWidget::item {
+    padding: 5px;
+    border: none;
+}
+
+/* Efecto al pasar el mouse sobre una fila */
+QTableWidget::item:hover {
+    background-color: #292e42;
+    color: #bb9af7;                   /* El texto se vuelve púrpura al pasar el mouse */
+}
+
+/* Estilo de las barras de desplazamiento (ScrollBars) para que combinen */
+QScrollBar:vertical {
+    border: none;
+    background: #16161e;
+    width: 10px;
+    margin: 0px;
+}
+
+QScrollBar::handle:vertical {
+    background: #414868;
+    min-height: 20px;
+    border-radius: 5px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #7aa2f7;             /* El scroll brilla en azul al tocarlo */
+}</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="horizontalLayoutWidget_2">
+         <property name="geometry">
+          <rect>
+           <x>659</x>
+           <y>19</y>
+           <width>1281</width>
+           <height>1131</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <widget class="QScrollArea" name="scrollArea">
+            <property name="verticalScrollBarPolicy">
+             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOn</enum>
+            </property>
+            <property name="horizontalScrollBarPolicy">
+             <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+            </property>
+            <property name="widgetResizable">
+             <bool>false</bool>
+            </property>
+            <widget class="QWidget" name="scrollAreaWidgetContents">
+             <property name="geometry">
+              <rect>
+               <x>0</x>
+               <y>0</y>
+               <width>1263</width>
+               <height>2500</height>
+              </rect>
+             </property>
+             <widget class="QWidget" name="gridLayoutWidget">
+              <property name="geometry">
+               <rect>
+                <x>9</x>
+                <y>19</y>
+                <width>1251</width>
+                <height>1091</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_catalogo">
+               <item row="0" column="0">
+                <widget class="QToolButton" name="toolButton_main">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QToolButton {
+    background-color: #24283b;        /* Fondo un poco más claro que el principal */
+    color: #73daca;                   /* Texto verde esmeralda (neón) */
+    border: 2px solid #414868;
+    border-radius: 12px;
+    padding: 10px;
+    font-weight: bold;
+    icon-size: 24px;                  /* Tamaño de los iconos de vehículos */
+}
+
+QToolButton:hover {
+    background-color: #414868;
+    border: 2px solid #7aa2f7;        /* Cambia a azul al pasar el mouse */
+    color: #ffffff;
+}
+
+QToolButton:pressed {
+    background-color: #7aa2f7;
+    color: #1a1b26;
+}
+
+/* Si usas ToolButtons con texto abajo del icono */
+QToolButton[toolButtonStyle=&quot;ToolButtonTextUnderIcon&quot;] {
+    padding-top: 15px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="toolButtonStyle">
+                  <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QToolButton" name="tool_main_3">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QToolButton {
+    background-color: #24283b;        /* Fondo un poco más claro que el principal */
+    color: #73daca;                   /* Texto verde esmeralda (neón) */
+    border: 2px solid #414868;
+    border-radius: 12px;
+    padding: 10px;
+    font-weight: bold;
+    icon-size: 24px;                  /* Tamaño de los iconos de vehículos */
+}
+
+QToolButton:hover {
+    background-color: #414868;
+    border: 2px solid #7aa2f7;        /* Cambia a azul al pasar el mouse */
+    color: #ffffff;
+}
+
+QToolButton:pressed {
+    background-color: #7aa2f7;
+    color: #1a1b26;
+}
+
+/* Si usas ToolButtons con texto abajo del icono */
+QToolButton[toolButtonStyle=&quot;ToolButtonTextUnderIcon&quot;] {
+    padding-top: 15px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="toolButtonStyle">
+                  <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QToolButton" name="tool_main_4">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QToolButton {
+    background-color: #24283b;        /* Fondo un poco más claro que el principal */
+    color: #73daca;                   /* Texto verde esmeralda (neón) */
+    border: 2px solid #414868;
+    border-radius: 12px;
+    padding: 10px;
+    font-weight: bold;
+    icon-size: 24px;                  /* Tamaño de los iconos de vehículos */
+}
+
+QToolButton:hover {
+    background-color: #414868;
+    border: 2px solid #7aa2f7;        /* Cambia a azul al pasar el mouse */
+    color: #ffffff;
+}
+
+QToolButton:pressed {
+    background-color: #7aa2f7;
+    color: #1a1b26;
+}
+
+/* Si usas ToolButtons con texto abajo del icono */
+QToolButton[toolButtonStyle=&quot;ToolButtonTextUnderIcon&quot;] {
+    padding-top: 15px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="toolButtonStyle">
+                  <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QToolButton" name="tool_main_2">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QToolButton {
+    background-color: #24283b;        /* Fondo un poco más claro que el principal */
+    color: #73daca;                   /* Texto verde esmeralda (neón) */
+    border: 2px solid #414868;
+    border-radius: 12px;
+    padding: 10px;
+    font-weight: bold;
+    icon-size: 24px;                  /* Tamaño de los iconos de vehículos */
+}
+
+QToolButton:hover {
+    background-color: #414868;
+    border: 2px solid #7aa2f7;        /* Cambia a azul al pasar el mouse */
+    color: #ffffff;
+}
+
+QToolButton:pressed {
+    background-color: #7aa2f7;
+    color: #1a1b26;
+}
+
+/* Si usas ToolButtons con texto abajo del icono */
+QToolButton[toolButtonStyle=&quot;ToolButtonTextUnderIcon&quot;] {
+    padding-top: 15px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="toolButtonStyle">
+                  <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QToolButton" name="tool_main_5">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QToolButton {
+    background-color: #24283b;        /* Fondo un poco más claro que el principal */
+    color: #73daca;                   /* Texto verde esmeralda (neón) */
+    border: 2px solid #414868;
+    border-radius: 12px;
+    padding: 10px;
+    font-weight: bold;
+    icon-size: 24px;                  /* Tamaño de los iconos de vehículos */
+}
+
+QToolButton:hover {
+    background-color: #414868;
+    border: 2px solid #7aa2f7;        /* Cambia a azul al pasar el mouse */
+    color: #ffffff;
+}
+
+QToolButton:pressed {
+    background-color: #7aa2f7;
+    color: #1a1b26;
+}
+
+/* Si usas ToolButtons con texto abajo del icono */
+QToolButton[toolButtonStyle=&quot;ToolButtonTextUnderIcon&quot;] {
+    padding-top: 15px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="toolButtonStyle">
+                  <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QToolButton" name="tool_main_6">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="styleSheet">
+                  <string notr="true">QToolButton {
+    background-color: #24283b;        /* Fondo un poco más claro que el principal */
+    color: #73daca;                   /* Texto verde esmeralda (neón) */
+    border: 2px solid #414868;
+    border-radius: 12px;
+    padding: 10px;
+    font-weight: bold;
+    icon-size: 24px;                  /* Tamaño de los iconos de vehículos */
+}
+
+QToolButton:hover {
+    background-color: #414868;
+    border: 2px solid #7aa2f7;        /* Cambia a azul al pasar el mouse */
+    color: #ffffff;
+}
+
+QToolButton:pressed {
+    background-color: #7aa2f7;
+    color: #1a1b26;
+}
+
+/* Si usas ToolButtons con texto abajo del icono */
+QToolButton[toolButtonStyle=&quot;ToolButtonTextUnderIcon&quot;] {
+    padding-top: 15px;
+}</string>
+                 </property>
+                 <property name="text">
+                  <string/>
+                 </property>
+                 <property name="toolButtonStyle">
+                  <enum>Qt::ToolButtonStyle::ToolButtonTextUnderIcon</enum>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_2">
+        <widget class="QWidget" name="horizontalLayoutWidget_3">
+         <property name="geometry">
+          <rect>
+           <x>9</x>
+           <y>19</y>
+           <width>1931</width>
+           <height>1141</height>
+          </rect>
+         </property>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QFrame" name="frame">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="frame_2">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Raised</enum>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1973</width>
+     <height>48</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuCatalogo">
+    <property name="title">
+     <string>Catalogo</string>
+    </property>
+    <addaction name="actionVista"/>
+   </widget>
+   <widget class="QMenu" name="menuVolver">
+    <property name="title">
+     <string>Volver</string>
+    </property>
+    <addaction name="actioninicio"/>
+   </widget>
+   <addaction name="menuCatalogo"/>
+   <addaction name="menuVolver"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionVista">
+   <property name="text">
+    <string>Vista</string>
+   </property>
+  </action>
+  <action name="actioninicio">
+   <property name="text">
+    <string>inicio</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
